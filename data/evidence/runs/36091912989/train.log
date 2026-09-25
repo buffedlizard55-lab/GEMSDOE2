@@ -1,0 +1,17 @@
+device=cpu  config=configs/config_ci_smoke.yaml
+features (3730, 3292, 19) labels (3730, 3292)  bands=["Magnetic anomaly - deviation from expected Earth's magnetic field", 'Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects', 'Total magnetic intensity horizontal gradient - rate of change in horizontal direction', 'Geodetic second invariant - measure of strain rate tensor magnitude']...
+
+=== MC split 1 (fold 1/1) ===
+patches: {'n_train': 311, 'n_test': 234, 'n_pos': 233, 'n_neg_kept': 78, 'patch': 128, 'train_step': 128, 'seed': 42, 'H': 3840, 'W': 3328, 'C': 19, 'holdout': {'mode': 'random', 'test_proportion': 0.3}, 'pseudo': {'enabled': False}}
+arch=unet encoder=mobilenet_v2 in_ch=19 params=6,633,553
+/home/runner/work/GEMSDOE2/GEMSDOE2/src/train.py:228: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  tot += float(loss)
+epoch 1/2  loss=0.6207  DTI_raw=0.0321  DTI_shaped=0.1022 (t0=0.0924,thin=True)  TP=989 FP=82514 FN=16684  select_on=in_domain(=0.1022)  [27s]
+epoch 2/2  loss=0.5770  DTI_raw=0.0283  DTI_shaped=0.0800 (t0=0.02961,thin=False)  TP=773 FP=65107 FN=16900  select_on=in_domain(=0.0800)  [27s]
+saved outputs/model_mc0_unet_mobilenet_v2.pt (best DTI 0.1022 @ epoch 1)
+
+pooled shaping: t0=0.0924 thin=True -> held-out DTI 0.1022 (raw probabilities: 0.0399)
+
+Training done. manifest -> outputs/manifest.json
+mean best DTI across splits: 0.1022  (local, test-window stitched)
