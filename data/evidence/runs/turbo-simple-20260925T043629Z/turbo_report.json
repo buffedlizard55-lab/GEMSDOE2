@@ -1,0 +1,16 @@
+{
+  "strategy": "GEMSDOE2-TURBO-SIMPLE",
+  "timestamp": "20260925T043629Z",
+  "file": "data/evidence/runs/turbo-simple-20260925T043629Z/submission.tif",
+  "sha256": "044379b4d43b231ba16f7c87899302be0d71641d66713e449d15f5ea6a177df0",
+  "short_sha": "044379b4d43b",
+  "bytes": 17089117,
+  "statistics": {
+    "valid_pixels": 5167373,
+    "nonzero_pixels": 5167373,
+    "mean_probability": 0.9691944122314453,
+    "nan_pixels": 7111787
+  },
+  "unique_name": "turbo-simple-20260925T043629Z-044379b4.tif",
+  "note": "GEMSDOE2-TURBO-SIMPLE: Multi-Scale Edge \u00b7 build 044379b4 \u00b7 20260925T043629Z"
+}
