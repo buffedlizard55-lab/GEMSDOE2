@@ -7,4 +7,4 @@ verdict: REFUSED - catalogue B is NOT independent of the training labels: 60,938
 
 no DTI is reported: a 1-pixel truth population cannot support a transfer claim.
 
-wrote data/evidence/xcat/transfer_report.json (4,473 bytes)
+wrote data/evidence/xcat/transfer_report.json (4,472 bytes)

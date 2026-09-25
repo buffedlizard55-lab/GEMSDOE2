@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-19T01:39:02+00:00",
+ "generated_utc": "2026-09-25T03:54:02+00:00",
  "generated_by": "scripts/measure_cross_catalogue_transfer.py",
  "purpose": "REFUSED cross-catalogue transfer measurement: catalogue B turned out not to be independent of the training labels, so there is no 'new fault' population to score against and no transfer claim is possible",
  "sources": {
@@ -83,10 +83,10 @@
      -100.0,
      4508550.0
     ],
-    "nodata": null,
+    "nodata": NaN,
     "dtype": "float32",
-    "sha256": "a3dcd6d51303f312fd3e13667a1890d8eeab0752483432ddd46bc74231168009",
-    "bytes": 569531
+    "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+    "bytes": 570890
    }
   }
  },
