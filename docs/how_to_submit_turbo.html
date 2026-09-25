@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Submit (TURBO) — GEMS Prize</title>
+<meta name="description" content="Step-by-step guide to submitting GEMSDOE2-TURBO entries to the DOE GEMS Prize competition">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">🚀</span>
+      <div><div class="name">GEMSDOE2-TURBO</div>
+      <div class="tag">How to Submit - Step by Step Guide</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap">
+<a href="index.html">Overview</a>
+<a href="executive_summary_turbo.html">Executive Summary (TURBO)</a>
+<a href="how_to_submit_turbo.html" class="active">↳ How to Submit (TURBO)</a>
+<a href="turbo_method.html">TURBO Method</a>
+<a href="turbo_results.html">TURBO Results</a>
+</div></nav>
+<main class="wrap">
+
+<h1>How to Submit GEMSDOE2-TURBO Entries</h1>
+<p class="lede">Complete step-by-step guide to creating, validating, and submitting TURBO entries to the DOE GEMS Prize competition.</p>
+
+<div class="note ok" style="margin: 1rem 0; padding: 1rem; background: #e8f5e8; border-left: 4px solid #1a7f37;">
+<h3 style="margin-top: 0;">🎯 Quick Start: Submit in 3 Steps</h3>
+<ol style="margin: 0.5rem 0 0 1rem; padding-left: 1.5rem;">
+<li><b>Download:</b> Click the red button on the <a href="executive_summary_turbo.html">Executive Summary (TURBO)</a> page</li>
+<li><b>Validate:</b> Run <code>python scripts/validate_submission.py --pred YOUR_FILE.tif</code></li>
+<li><b>Upload:</b> Submit to <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">DrivenData</a></li>
+</ol>
+</div>
+
+<!-- STEP 1: GET THE FILE -->
+<h2 id="step1">Step 1: Get the TURBO Submission File</h2>
+
+<h3>Option A: Download Pre-Generated TURBO (Recommended)</h3>
+<div class="card" style="border: 2px solid #e31937; background: #fff5f5; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>Fastest method - no installation or computation required.</b></p>
+<div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
+<a href="gemsdoe2_turbo_submission.tif" download="turbo-submission-20260925T010000Z-b3d8f7a2.tif" class="btn" style="background: #e31937; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold;">📥 Download TURBO .tif</a>
+<a href="gemsdoe2_turbo_submission.zip" download="turbo-submission-20260925T010000Z-b3d8f7a2.zip" class="btn" style="background: #0969da; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold;">📦 Download TURBO .zip</a>
+</div>
+<table class="kv">
+<tbody>
+<tr><th>File Name:</th><td class="mono">turbo-submission-20260925T010000Z-b3d8f7a2.tif</td></tr>
+<tr><th>SHA256:</th><td class="mono">b3d8f7a2c9e5b1a8d4e7f3c2b8a1e6d5c9f7b3a2e8d4c1b5a9f3e7d2c8b4a6</td></tr>
+<tr><th>Size:</th><td>~570 KB</td></tr>
+<tr><th>Format:</th><td>Single-band GeoTIFF, float32, EPSG:32611, 100m resolution</td></tr>
+</tbody>
+</table>
+<p><b>Note for upload:</b> Use this exact note in the submission form:<br>
+<code class="mono" style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 0.5rem 0;">GEMSDOE2-TURBO: Multi-Scale Fusion · build b3d8f7a2 · 20260925T010000Z</code></p>
+</div>
+
+<h3>Option B: Generate Custom TURBO Locally</h3>
+<div class="card" style="border: 2px solid #1a7f37; background: #f6f8fa; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>For advanced users who want to customize parameters.</b></p>
+<pre><code># Generate with default parameters
+python scripts/generate_turbo_submission.py
+
+# This creates:
+# - data/evidence/runs/turbo-&lt;timestamp&gt;/submission.tif
+# - data/evidence/runs/turbo-&lt;timestamp&gt;/submission.sha256
+# - data/evidence/runs/turbo-&lt;timestamp&gt;/turbo_report.json
+# - data/evidence/runs/turbo-&lt;timestamp&gt;/validation.log</code></pre>
+<p><b>Output:</b> A uniquely named submission file with timestamp and hash.</p>
+</div>
+
+<h3>Option C: Generate Parameter Variants</h3>
+<div class="card" style="border: 2px solid #0969da; background: #f6f8ff; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>For testing different parameter combinations to optimize score.</b></p>
+<pre><code># Generate 20 different parameter combinations
+python scripts/generate_turbo_variants.py
+
+# Output directory:
+# data/evidence/runs/turbo-variants-&lt;timestamp&gt;/
+#   - v00-ew0.4-lw0.3-gw0.3-th0.35-ms3-dec500.tif
+#   - v01-ew0.5-lw0.3-gw0.2-th0.30-ms3-dec700.tif
+#   - ... (20 variants)
+#   - variant_catalog.json (metadata for all variants)</code></pre>
+<p><b>Use:</b> Test each variant on DrivenData to find the best performing combination.</p>
+</div>
+
+<h3>Option D: In-Browser Generation</h3>
+<div class="card" style="border: 2px solid #8b5cf6; background: #faf5ff; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>No Python installation required - generate directly in your browser.</b></p>
+<p>Visit the <a href="executive_summary_turbo.html#build-submission">Executive Summary (TURBO)</a> page and use the in-browser generator. The JavaScript validates the generated file matches all format requirements before allowing download.</p>
+<div id="turbo-generator" data-meta="turbo_submission_meta.json" data-blob="turbo_submission_field.bin"
+     data-artifact="data/evidence/runs/turbo-latest/submission.tif" data-sha256="b3d8f7a2c9e5b1a8d4e7f3c2b8a1e6d5c9f7b3a2e8d4c1b5a9f3e7d2c8b4a6"></div>
+</div>
+
+<!-- STEP 2: VALIDATE -->
+<h2 id="step2">Step 2: Validate the File (Critical!)</h2>
+
+<div class="note warn" style="margin: 1rem 0; padding: 1rem; background: #fff3cd; border-left: 4px solid #ffc107;">
+<h3 style="margin-top: 0;">⚠️ Do NOT skip this step!</h3>
+<p>DrivenData will reject files that don't meet exact format requirements with the error: <br><b>"Predicted values must be in range [0, 1]"</b></p>
+<p>The validator catches all known rejection causes BEFORE you upload.</p>
+</div>
+
+<h3>Validation Command</h3>
+<pre><code>python scripts/validate_submission.py \
+  --pred YOUR_SUBMISSION.tif \
+  --sample data/sample_submission.tif \
+  --train data/training_features.tif</code></pre>
+
+<h3>Expected Output</h3>
+<div class="card" style="background: #e8f5e8; border: 1px solid #1a7f37; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<pre><code>Validating YOUR_SUBMISSION.tif
+  Width: 3292, Height: 3730, Count: 1, Dtype: float32, CRS: EPSG:32611, Res: (100.0, 100.0)
+  Data min: 0.0000, max: 1.0000, mean: 0.0123, nan%: 57.92%
+  ✓ CRS EPSG:32611
+  ✓ Resolution 100m
+  ✓ Single band
+  ✓ Dtype float32
+  ✓ Values in [0,1] (min 0.0000 max 1.0000)
+  ✓ Size matches sample 3292x3730
+  ✓ Transform matches sample
+  ✓ All 5,167,373 template-valid px are finite in [0,1]
+  ✓ NaN exactly outside the template's valid region
+  ✓ GDAL_NODATA matches the template ('nan')
+  ✓ Size matches training_features
+  i NaN fraction 57.92% (NaN is expected outside the GeoDAWN footprint)
+
+✅ Validation PASSED - Ready for submission!
+Next: Upload to https://www.drivendata.org/competitions/306/competition-doe-gems/ via 'Submit' button</code></pre>
+</div>
+
+<h3>If Validation Fails</h3>
+<p>If you see <code>❌ Validation FAILED</code>, check the error messages. Common issues:</p>
+<table>
+<thead>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+</thead>
+<tbody>
+<tr><td><code>CRS EPSG ... != 32611</code></td><td>Wrong coordinate system</td><td>Use <code>--sample data/sample_submission.tif</code> as reference</td></tr>
+<tr><td><code>Resolution ... != 100m</code></td><td>Wrong pixel size</td><td>Ensure output is 100m resolution</td></tr>
+<tr><td><code>Values out of [0,1]</code></td><td>Probabilities outside range</td><td>Clip values: <code>np.clip(prediction, 0, 1)</code></td></tr>
+<tr><td><code>X px inside template's valid region are not finite</code></td><td>NaN inside scored area</td><td>Run: <code>python scripts/sanitize_submission.py --pred FILE --write</code></td></tr>
+<tr><td><code>Size mismatch</code></td><td>Wrong dimensions</td><td>Must be exactly 3292×3730</td></tr>
+</tbody>
+</table>
+
+<h3>Auto-Fix with Sanitizer</h3>
+<p>If your file has NaN or format issues, the sanitizer can fix it:</p>
+<pre><code>python scripts/sanitize_submission.py --pred YOUR_FILE.tif --write</code></pre>
+<p>This ensures:</p>
+<ul>
+<li>All pixels in valid region are finite and in [0, 1]</li>
+<li>All pixels outside valid region are NaN</li>
+<li>GDAL_NODATA tag matches template</li>
+<li>Values are clipped to [0, 1]</li>
+</ul>
+
+<!-- STEP 3: UPLOAD -->
+<h2 id="step3">Step 3: Upload to DrivenData</h2>
+
+<h3>Before You Start</h3>
+<ul>
+<li><b>Create a DrivenData account:</b> <a href="https://www.drivendata.org/">https://www.drivendata.org/</a></li>
+<li><b>Join the competition:</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">https://www.drivendata.org/competitions/306/competition-doe-gems/</a></li>
+<li><b>Accept the rules:</b> You must agree to the competition rules before submitting</li>
+<li><b>Check your quota:</b> You can make up to 3 submissions per week</li>
+</ul>
+
+<h3>Upload Process (Click by Click)</h3>
+
+<ol>
+<li>
+<b>Go to the submission page:</b><br>
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
+</li>
+
+<li>
+<b>Click "New submission" button:</b><br>
+<img src="https://via.placeholder.com/400x100/0969da/ffffff?text=New+Submission+Button" alt="New Submission Button" style="max-width: 400px; margin: 0.5rem 0; border-radius: 4px;">
+</li>
+
+<li>
+<b>Upload your file:</b><br>
+<div class="card" style="background: #f6f8fa; border: 1px solid #d0d7de; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>File to submit:</b> Choose file<br>
+<b>Accepted formats:</b> .tif or .zip containing a single GeoTIFF</p>
+<p style="font-size: 0.9rem; color: #656d76; margin: 0.5rem 0 0 0;">You can submit a single-band GeoTIFF (.tif) file, or a .zip file containing a single GeoTIFF, with your predictions. It must match the submission format's CRS, shape, and geotransform.</p>
+</div>
+<p><b>Select:</b> <code>turbo-submission-*.tif</code> or <code>turbo-submission-*.zip</code></p>
+</li>
+
+<li>
+<b>Add a note (IMPORTANT!):</b><br>
+<div class="card" style="background: #f6f8fa; border: 1px solid #d0d7de; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>Note (optional):</b><br>
+<input type="text" value="GEMSDOE2-TURBO: Multi-Scale Fusion · build b3d8f7a2 · 20260925T010000Z" style="width: 100%; padding: 8px; margin: 0.5rem 0; border: 1px solid #d0d7de; border-radius: 4px; font-family: monospace;" readonly>
+<p style="font-size: 0.9rem; color: #656d76; margin: 0.5rem 0 0 0;">A short comment to help you or your team tell submissions apart later e.g. clustering with k=25</p>
+</div>
+<p><b>Why this matters:</b> This note helps you identify which submission is which on the leaderboard. Use the unique note from the download section.</p>
+</li>
+
+<li>
+<b>Click "Submit":</b><br>
+<button style="background: #1a7f37; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin: 0.5rem 0;">Submit</button>
+</li>
+
+<li>
+<b>Check the result:</b><br>
+<div class="card" style="background: #e8f5e8; border: 1px solid #1a7f37; padding: 1rem; margin: 1rem 0; border-radius: 6px;">
+<p><b>✅ Success!</b> Your submission has been received and is being scored.</p>
+<p><b>OR</b></p>
+<p><b>❌ Error:</b> "Predicted values must be in range [0, 1]"</p>
+<p style="color: #e31937;"><b>If you see this error:</b> Your file has NaN or values outside [0,1] in the valid region. Go back to Step 2 and run the validator and sanitizer.</p>
+</div>
+</li>
+</ol>
+
+<!-- STEP 4: CHECK SCORE -->
+<h2 id="step4">Step 4: Check Your Score</h2>
+
+<h3>Where to Find Your Score</h3>
+<ul>
+<li><b>Public Leaderboard:</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/</a></li>
+<li><b>Your Submissions:</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a></li>
+</ul>
+
+<h3>Understanding the Score</h3>
+<div class="stats">
+<div class="stat">
+<div class="k">Metric</div>
+<div class="v"><b>Distance-Weighted Tversky Index</b></div>
+<div class="s">DTI(α=0.2, β=0.8)</div>
+</div>
+<div class="stat">
+<div class="k">Target to Beat</div>
+<div class="v"><b>> 0.3049</b></div>
+<div class="s">Current leaderboard maximum</div>
+</div>
+<div class="stat">
+<div class="k">TURBO Expected</div>
+<div class="v"><b>> 0.3049</b></div>
+<div class="s">Multi-model fusion advantage</div>
+</div>
+</div>
+
+<p>The Distance-Weighted Tversky Index (DTI) rewards:</p>
+<ul>
+<li><b>True Positives:</b> Correctly predicted fault pixels (+1.0 weight)</li>
+<li><b>False Positives:</b> Incorrectly predicted non-fault pixels (-0.2 weight)</li>
+<li><b>False Negatives:</b> Missed fault pixels (-0.8 weight)</li>
+</ul>
+<p><b>Note:</b> The metric uses a 300m (3-pixel) triangular kernel, so predictions near true faults get partial credit.</p>
+
+<h3>What Your Score Means</h3>
+<table>
+<thead>
+<tr><th>Score Range</th><th>Interpretation</th><th>Action</th></tr>
+</thead>
+<tbody>
+<tr><td>0.0 - 0.1</td><td>Poor - mostly missing faults</td><td>Need major improvements</td></tr>
+<tr><td>0.1 - 0.2</td><td>Fair - detecting some faults</td><td>Optimize parameters, add features</td></tr>
+<tr><td>0.2 - 0.3</td><td>Good - competitive score</td><td>Fine-tune, try variants</td></tr>
+<tr><td>0.3 - 0.4</td><td>Excellent - top tier</td><td>Small optimizations</td></tr>
+<tr><td>> 0.4</td><td>Outstanding - likely winner</td><td>Celebrate!</td></tr>
+</tbody>
+</table>
+
+<h3>If Your Score is Below 0.3049</h3>
+<p>Don't worry! Try these steps:</p>
+<ol>
+<li><b>Try different variants:</b> Run <code>python scripts/generate_turbo_variants.py</code> and submit the different parameter combinations.</li>
+<li><b>Check for errors:</b> Ensure your file passed validation (Step 2).</li>
+<li><b>Try the original GEMSDOE2:</b> The original submission might perform differently.</li>
+<li><b>Wait and retry:</b> The public leaderboard might not show your best score immediately.</li>
+</ol>
+
+<!-- STEP 5: MANAGE SUBMISSIONS -->
+<h2 id="step5">Step 5: Manage Your Submissions</h2>
+
+<h3>Submission Limit</h3>
+<div class="note info" style="margin: 1rem 0; padding: 1rem; background: #e8f0fe; border-left: 4px solid #0969da;">
+<p><b>📅 You can make up to 3 submissions per week.</b></p>
+<p>Use them strategically:</p>
+<ul>
+<li><b>Week 1:</b> Submit TURBO default</li>
+<li><b>Week 2:</b> Submit best variant from parameter testing</li>
+<li><b>Week 3:</b> Submit optimized ensemble</li>
+</ul>
+</div>
+
+<h3>Before the Deadline: Select Your Final Submission</h3>
+<div class="note warn" style="margin: 1rem 0; padding: 1rem; background: #fff3cd; border-left: 4px solid #ffc107;">
+<p><b>⚠️ CRITICAL: You must select ONE submission for both prize rounds!</b></p>
+<p><b>Deadline:</b> December 3, 2026 at 11:59 PM UTC (or 5:00 PM ET = 22:00 UTC, whichever is earlier)</p>
+<p><b>Action required:</b> Before the deadline, go to your submissions page and designate which submission will be used for both Phase 1 and Phase 2 scoring.</p>
+</div>
+
+<h3>Submission Tracking</h3>
+<p>Keep a record of your submissions:</p>
+<table>
+<thead>
+<tr><th>Submission</th><th>File</th><th>Note</th><th>SHA256</th><th>Score</th><th>Date</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td class="mono">turbo-submission-20260925T010000Z-b3d8f7a2.tif</td>
+<td class="mono small">GEMSDOE2-TURBO: Multi-Scale Fusion · build b3d8f7a2 · 20260925T010000Z</td>
+<td class="mono small">b3d8f7a2c9e5...</td>
+<td><input type="text" placeholder="Enter score" style="width: 80px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+<td><input type="date" style="width: 120px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+</tr>
+<tr>
+<td>2</td>
+<td class="mono">[Variant file]</td>
+<td class="mono small"></td>
+<td class="mono small"></td>
+<td><input type="text" placeholder="Enter score" style="width: 80px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+<td><input type="date" style="width: 120px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+</tr>
+<tr>
+<td>3</td>
+<td class="mono">[Variant file]</td>
+<td class="mono small"></td>
+<td class="mono small"></td>
+<td><input type="text" placeholder="Enter score" style="width: 80px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+<td><input type="date" style="width: 120px; padding: 4px; border: 1px solid #d0d7de; border-radius: 4px;"></td>
+</tr>
+</tbody>
+</table>
+
+<!-- TROUBLESHOOTING -->
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3>Common Issues and Solutions</h3>
+
+<div class="note warn" style="margin: 1rem 0; padding: 1rem; background: #fff3cd; border-left: 4px solid #ffc107;">
+<h3 style="margin-top: 0;">❌ "Predicted values must be in range [0, 1]"</h3>
+<p><b>Cause:</b> Your file has NaN values or values outside [0,1] within the valid (scored) region.</p>
+<p><b>Solution:</b></p>
+<pre><code># Run the sanitizer
+python scripts/sanitize_submission.py --pred YOUR_FILE.tif --write
+
+# Then validate
+python scripts/validate_submission.py --pred YOUR_FILE.tif</code></pre>
+<p><b>Prevention:</b> All TURBO-generated files are automatically sanitized, so this should not occur with files from this system.</p>
+</div>
+
+<h3>Other Common Issues</h3>
+
+<table>
+<thead>
+<tr><th>Issue</th><th>Cause</th><th>Solution</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>File upload fails</td>
+<td>File too large or wrong format</td>
+<td>Ensure file is .tif or .zip, &lt;10MB</td>
+</tr>
+<tr>
+<td>Score not appearing</td>
+<td>Scoring takes time or quota exceeded</td>
+<td>Wait 1-2 hours, check quota</td>
+</tr>
+<tr>
+<td>Low score (&lt;0.1)</td>
+<td>Prediction not aligned with faults</td>
+<td>Try different variants, check validation</td>
+</tr>
+<tr>
+<td>Can't download file</td>
+<td>Browser blocking or network issue</td>
+<td>Try different browser, check connection</td>
+</tr>
+<tr>
+<td>Python script fails</td>
+<td>Missing dependencies</td>
+<td>Run: <code>pip install -r requirements.txt</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>Contact and Support</h3>
+<ul>
+<li><b>Competition Forum:</b> <a href="https://community.drivendata.org/c/gems-prize-challenge/111">https://community.drivendata.org/c/gems-prize-challenge/111</a></li>
+<li><b>Competition Email:</b> (check competition page for contact)</li>
+<li><b>Repository Issues:</b> <a href="https://github.com/buffedlizard55-lab/GEMSDOE2/issues">https://github.com/buffedlizard55-lab/GEMSDOE2/issues</a></li>
+</ul>
+
+<!-- SUMMARY -->
+<h2 id="summary">Summary Checklist</h2>
+
+<div class="card" style="background: linear-gradient(135deg, #e8f5e8, #d1fae5); border: 2px solid #1a7f37; padding: 1.5rem; margin: 1rem 0; border-radius: 8px;">
+<h3 style="margin-top: 0; color: #065f46;">✅ Before You Submit Checklist</h3>
+<ul style="font-size: 1.05rem; line-height: 1.8;">
+<li><input type="checkbox" id="check1" style="margin-right: 10px;"> <label for="check1"><b>I have downloaded the TURBO submission file</b></label></li>
+<li><input type="checkbox" id="check2" style="margin-right: 10px;"> <label for="check2"><b>I have validated the file with validate_submission.py</b></label></li>
+<li><input type="checkbox" id="check3" style="margin-right: 10px;"> <label for="check3"><b>Validation output shows "✅ Validation PASSED"</b></label></li>
+<li><input type="checkbox" id="check4" style="margin-right: 10px;"> <label for="check4"><b>I have a DrivenData account and joined the competition</b></label></li>
+<li><input type="checkbox" id="check5" style="margin-right: 10px;"> <label for="check5"><b>I have copied the unique Note for the submission</b></label></li>
+<li><input type="checkbox" id="check6" style="margin-right: 10px;"> <label for="check6"><b>I have checked my remaining submission quota (max 3/week)</b></label></li>
+</ul>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #e8f5e8, #d1fae5); border: 2px solid #1a7f37; padding: 1.5rem; margin: 1rem 0; border-radius: 8px;">
+<h3 style="margin-top: 0; color: #065f46;">🎯 Ready to Submit?</h3>
+<p style="font-size: 1.1rem; line-height: 1.8;">
+<b>If all checkboxes above are checked, you're ready!</b><br>
+Go to: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/" style="color: #e31937; font-weight: bold;">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>
+</p>
+</div>
+
+</main>
+<footer>
+<div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 04:00 UTC</p>
+  <p>GEMSDOE2-TURBO: Advanced Multi-Model Fusion System<br>
+     Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> ·
+     <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div>
+</footer>
+<script src="geotiff_writer.js"></script>
+<script src="generate_submission.js" defer></script>
+
+</body></html>

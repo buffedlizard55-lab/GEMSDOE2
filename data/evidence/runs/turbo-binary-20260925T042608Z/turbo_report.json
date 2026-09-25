@@ -1,0 +1,16 @@
+{
+  "strategy": "GEMSDOE2-TURBO-BINARY",
+  "timestamp": "20260925T042608Z",
+  "file": "data/evidence/runs/turbo-binary-20260925T042608Z/submission.tif",
+  "sha256": "c69d54a5730942c41a9ca7e2f2ee1e9d170c47761c63ff1d3f4e5e9d1af9bcbe",
+  "short_sha": "c69d54a57309",
+  "bytes": 1621265,
+  "binary": true,
+  "statistics": {
+    "valid_pixels": 5167373,
+    "nonzero_pixels": 72768,
+    "nan_pixels": 7111787
+  },
+  "unique_name": "turbo-binary-20260925T042608Z-c69d54a5.tif",
+  "note": "GEMSDOE2-TURBO-BINARY: Binary Multi-Scale Edge \u00b7 build c69d54a5 \u00b7 20260925T042608Z"
+}

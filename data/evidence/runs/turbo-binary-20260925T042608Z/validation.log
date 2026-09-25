@@ -1,0 +1,18 @@
+Validating /home/user/GEMSDOE2/data/evidence/runs/turbo-binary-20260925T042608Z/submission.tif
+  Width: 3292, Height: 3730, Count: 1, Dtype: ('float32',), CRS: EPSG:32611, Res: (100.0, 100.0), Nodata: nan
+  Data min: 0.0000, max: 1.0000, mean: 0.0141, nan%: 57.92%
+  ✓ CRS EPSG:32611
+  ✓ Resolution 100m
+  ✓ Single band
+  ✓ Dtype float32
+  ✓ Values in [0,1] (min 0.0000 max 1.0000)
+  ✓ Size matches sample 3292x3730
+  ✓ Transform matches sample
+  ✓ All 5,167,373 template-valid px are finite in [0,1]
+  ✓ NaN exactly outside the template's valid region
+  ✓ GDAL_NODATA matches the template ('nan')
+  ✓ Size matches training_features
+  i NaN fraction 57.92% (NaN is expected outside the GeoDAWN footprint)
+
+✅ Validation PASSED - Ready for submission!
+Next: Upload to https://www.drivendata.org/competitions/306/competition-doe-gems/ via 'Submit' button
