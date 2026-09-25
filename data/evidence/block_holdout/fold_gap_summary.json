@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-24T22:11:57+00:00",
+ "generated_utc": "2026-09-25T04:07:49+00:00",
  "generated_by": "scripts/read_landed_reports.py",
  "purpose": "the distribution of the memorisation-vs-transfer gap over the committed block-holdout folds: trained_on DTI minus held-out DTI on the same candidate, the same partition and the same metric",
  "n_folds_committed": 4,
