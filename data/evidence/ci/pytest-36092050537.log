@@ -1,0 +1,54 @@
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 40%]
+........................................................................ [ 54%]
+........................................................................ [ 68%]
+...................................................................s.... [ 81%]
+................F..................................................s...s [ 95%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+E   AssertionError: the committed pages are stale against a rebuild: ['how_to_submit.html', 'index.html', 'metric.html', 'submission.html']
+    assert not ['how_to_submit.html', 'index.html', 'metric.html', 'submission.html']
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_pages.py:128: AssertionError: the committed pages are stale against a rebuild: ['how_to_submit.html', 'index.html', 'metric.html', 'submission.html']
+=============================== warnings summary ===============================
+../../../../../opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: 3 warnings
+tests/test_adopted_policy.py: 11 warnings
+tests/test_baseline_submission.py: 5 warnings
+tests/test_ensemble.py: 3 warnings
+tests/test_external_data.py: 2 warnings
+tests/test_fetch_qfaults.py: 12 warnings
+tests/test_metric.py: 1 warning
+tests/test_miss_distance.py: 15 warnings
+tests/test_package_submission.py: 5 warnings
+tests/test_proxy_catalogue.py: 9 warnings
+tests/test_submission_writer.py: 4 warnings
+tests/test_template_conformance.py: 10 warnings
+tests/test_union_selection.py: 1 warning
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    return Affine.translation(west, north) * Affine.scale(xsize, -ysize)
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:366: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = writer(
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_ensemble.py::test_save_ensemble_writes_the_pre_shaping_input
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_ensemble.py:416: RuntimeWarning: Mean of empty slice
+    expect = np.nanmean(np.stack([p for _, p in folds]), axis=0)
+
+tests/test_proxy_catalogue.py: 54 warnings
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_proxy_catalogue.py:63: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    x, y = transform * (col + 0.5, r)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_site_pages.py::test_the_build_reproduces_the_committed_pages - AssertionError: the committed pages are stale against a rebuild: ['how_to_submit.html', 'index.html', 'metric.html', 'submission.html']
+assert not ['how_to_submit.html', 'index.html', 'metric.html', 'submission.html']
+1 failed, 523 passed, 3 skipped, 142 warnings in 91.05s (0:01:31)
