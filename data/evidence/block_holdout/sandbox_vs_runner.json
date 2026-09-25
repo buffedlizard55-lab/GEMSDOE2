@@ -2,7 +2,7 @@
  "purpose": "the runner is an independent environment; agreement on the reference policy's DTI, its three metric components, the support size and the bootstrap interval is what makes the committed numbers reproducible rather than machine-specific",
  "runner_report": "data/evidence/block_holdout/runner_block_stratified.json",
  "sandbox_report": "data/evidence/block_holdout/block_stratified.json",
- "runner_generated_utc": "2026-09-25T03:51:13+00:00",
+ "runner_generated_utc": "2026-09-25T03:53:44+00:00",
  "sandbox_generated_utc": "2026-09-19T00:57:48+00:00",
  "checks": [
   {

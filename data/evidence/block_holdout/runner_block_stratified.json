@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-25T03:51:13+00:00",
+ "generated_utc": "2026-09-25T03:53:44+00:00",
  "generated_by": "scripts/block_holdout_eval.py",
  "purpose": "block-stratified error bars on the emission policy, on the catalogue and on the new-fault-like proxy population, from an exact additive decomposition of the official metric plus a block bootstrap",
  "inputs": {
