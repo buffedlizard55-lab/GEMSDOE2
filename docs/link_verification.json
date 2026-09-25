@@ -1,20 +1,40 @@
 {
-  "generated_utc": "2026-09-21T12:53:52+00:00",
-  "generated_by": "scripts/verify_links.py on a host with live HTTP (72 of 84 URLs answered)",
-  "n_urls_reached": 72,
+  "generated_utc": "2026-09-25T03:55:39+00:00",
+  "generated_by": "scripts/verify_links.py on a host with live HTTP (69 of 84 URLs answered)",
+  "n_urls_reached": 69,
   "catalog": "docs/data_catalog.csv",
   "n_rows": 92,
   "n_unique_urls": 84,
   "summary_counts": {
     "BOT_BLOCKED_403": 10,
     "AUTH_REQUIRED": 1,
-    "OK_200": 61,
-    "OK_REDIRECTED": 10,
+    "OK_200": 59,
+    "UNREACHABLE": 3,
+    "OK_REDIRECTED": 9,
     "OK_202": 1,
     "LOGIN_REQUIRED": 1
   },
-  "n_problems": 0,
-  "problems": [],
+  "n_problems": 3,
+  "problems": [
+    {
+      "url": "https://doi.org/10.15121/1881483",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
+    },
+    {
+      "url": "https://www.osti.gov/biblio/1881483",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
+    },
+    {
+      "url": "https://www.osti.gov/dataexplorer/biblio/dataset/1987556",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
+    }
+  ],
   "n_expected_non_ok": 12,
   "expected_non_ok": [
     {
@@ -141,7 +161,7 @@
       "status": 200,
       "final_url": "https://community.drivendata.org/c/gems-prize-challenge/111",
       "content_type": "text/html",
-      "content_length": 23158,
+      "content_length": 27309,
       "title": "GEMS Prize Challenge - DrivenData Community",
       "redirected": false,
       "redirected_offsite": false,
@@ -177,14 +197,9 @@
     },
     {
       "url": "https://doi.org/10.15121/1881483",
-      "status": 200,
-      "final_url": "https://gdr.openei.org/submissions/1391",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
-      "redirected": true,
-      "redirected_offsite": true,
-      "result": "OK_REDIRECTED_TO_gdr.openei.org"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
     },
     {
       "url": "https://doi.org/10.5066/F7WH2N65",
@@ -439,11 +454,11 @@
     {
       "url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
       "status": 200,
-      "final_url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
+      "final_url": "https://link.springer.com/article/10.1007/s12145-026-02224-5?error=cookies_not_supported&code=eadf3a60-6385-45bd-833e-d78ad31ca95f",
       "content_type": "text/html",
-      "content_length": 3038,
-      "title": "Client Challenge",
-      "redirected": false,
+      "content_length": null,
+      "title": "A U-Net-based human-in-the-loop semi-supervised iterative approach to vectorizing linear features on archived geological maps | Earth Science Informatics | Springer Nature Link",
+      "redirected": true,
       "redirected_offsite": false,
       "result": "OK_200"
     },
@@ -601,8 +616,8 @@
       "status": 200,
       "final_url": "https://pypi.org/project/torch/",
       "content_type": "text/html",
-      "content_length": 290956,
-      "title": "torch \u00b7 PyPI",
+      "content_length": 3038,
+      "title": "Client Challenge",
       "redirected": false,
       "redirected_offsite": false,
       "result": "OK_200"
@@ -744,7 +759,7 @@
       "status": 200,
       "final_url": "https://www.energy.gov/hgeo/geothermal/office-geothermal",
       "content_type": "text/html",
-      "content_length": null,
+      "content_length": 171363,
       "title": "Office of Geothermal | Department of Energy",
       "redirected": false,
       "redirected_offsite": false,
@@ -755,7 +770,7 @@
       "status": 200,
       "final_url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2025.1635344/full",
       "content_type": "text/html",
-      "content_length": 602061,
+      "content_length": 596878,
       "title": "Frontiers | 3D fault detection method using TransVNet",
       "redirected": false,
       "redirected_offsite": false,
@@ -766,7 +781,7 @@
       "status": 200,
       "final_url": "https://www.herox.com/GEMSPrize/resource/2274",
       "content_type": "text/html",
-      "content_length": 93976,
+      "content_length": 93954,
       "title": "GEMS Prize Official Rules",
       "redirected": false,
       "redirected_offsite": false,
@@ -781,11 +796,11 @@
     {
       "url": "https://www.nature.com/articles/s41598-025-90823-5",
       "status": 200,
-      "final_url": "https://www.nature.com/articles/s41598-025-90823-5",
+      "final_url": "https://www.nature.com/articles/s41598-025-90823-5?error=cookies_not_supported&code=97e9f3f9-efad-44d7-a38f-ffd5d4a7bae8",
       "content_type": "text/html",
-      "content_length": 3038,
-      "title": "Client Challenge",
-      "redirected": false,
+      "content_length": null,
+      "title": "The intelligent fault identification method based on multi-source information fusion and deep learning | Scientific Reports",
+      "redirected": true,
       "redirected_offsite": false,
       "result": "OK_200"
     },
@@ -812,25 +827,15 @@
     },
     {
       "url": "https://www.osti.gov/biblio/1881483",
-      "status": 200,
-      "final_url": "https://www.osti.gov/biblio/1881483",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "INGENIOUS - Great Basin Regional Dataset Compilation (Dataset) | OSTI.GOV",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
     },
     {
       "url": "https://www.osti.gov/dataexplorer/biblio/dataset/1987556",
-      "status": 200,
-      "final_url": "https://www.osti.gov/dataexplorer/biblio/dataset/1987556",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "GBCGE Subsurface Database Explorer and APIs (Dataset) | DOE Data Explorer",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "RemoteDisconnected('Remote end closed connection without response')"
     },
     {
       "url": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
