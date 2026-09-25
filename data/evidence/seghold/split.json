@@ -1,0 +1,16 @@
+{
+ "protocol": "gems-eval held-out-segment",
+ "reference": "https://github.com/Gameassassin777/gems-eval",
+ "labels_sha_input": "data/labels.tif",
+ "frac": 0.3,
+ "seed": 0,
+ "buffer_px": 3,
+ "held_out_px": 17339,
+ "buffer_px_total": 307149,
+ "scoreable_background_px": 4842885,
+ "nodata_px": 7111787,
+ "held_out_segments": 960,
+ "train_fault_px": 43649,
+ "train_labels": "data/evidence/seghold/train_labels.tif",
+ "eval_labels": "data/evidence/seghold/eval_labels.tif"
+}

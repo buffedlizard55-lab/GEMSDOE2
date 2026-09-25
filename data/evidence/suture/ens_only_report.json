@@ -1,0 +1,171 @@
+{
+ "strategy": "SUTURE v1 - structure-tensor lineament response fused with the shipped deep ensemble, skeletonised, policy selected under the organizers' rule",
+ "generated_utc": "2026-09-25T15:05:04Z",
+ "inputs": {
+  "features": "data/training_features.tif",
+  "features_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+  "labels": "data/labels.tif",
+  "labels_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "ensemble": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+  "ensemble_sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15"
+ },
+ "field": {
+  "bands_used": [],
+  "bands_missing": [],
+  "sigmas": [
+   2.0,
+   4.0,
+   8.0
+  ],
+  "components": [
+   "ensemble"
+  ],
+  "per_band_mean_scaled_response": [],
+  "footprint_px": 5167373,
+  "template": "data/sample_submission.tif",
+  "ensemble_fused": true
+ },
+ "split": {
+  "frac": 0.3,
+  "seed": 0,
+  "buffer_px": 3,
+  "independent_px": 5.0,
+  "truth_dropped_within_independent_px": 4142,
+  "held_out_px": 17339,
+  "tune_truth_px": 6776,
+  "measure_truth_px": 6421
+ },
+ "policy_selection": {
+  "population": "organizer-faithful: footprint minus supplied-catalogue pixels; truth = held-out segments (forum 11516 #2/#4)",
+  "tuned_on": "tune half of the held-out segments",
+  "measured_on": "the other half, scored once",
+  "sweep": [
+   {
+    "support_fraction": 0.002,
+    "emitted_px": 9957,
+    "emitted_fraction_of_footprint": 0.0019268978647370724,
+    "dti_S": 0.03572346821968496,
+    "tp_w": 265.08935546875,
+    "fp_w": 9733.880859375,
+    "fn_w": 6510.91064453125,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.004,
+    "emitted_px": 19921,
+    "emitted_fraction_of_footprint": 0.003855150382989577,
+    "dti_S": 0.040197846631352,
+    "tp_w": 378.33148193359375,
+    "fp_w": 19576.34375,
+    "fn_w": 6397.668518066406,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.008,
+    "emitted_px": 40082,
+    "emitted_fraction_of_footprint": 0.007756746029365405,
+    "dti_S": 0.043587185697225125,
+    "tp_w": 585.8751831054688,
+    "fp_w": 39517.3984375,
+    "fn_w": 6190.124816894531,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.015,
+    "emitted_px": 75555,
+    "emitted_fraction_of_footprint": 0.014621549479784023,
+    "dti_S": 0.045763615463068015,
+    "tp_w": 939.5079345703125,
+    "fp_w": 74604.40625,
+    "fn_w": 5836.4920654296875,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.025,
+    "emitted_px": 125930,
+    "emitted_fraction_of_footprint": 0.02437021674262725,
+    "dti_S": 0.049729642272053544,
+    "tp_w": 1521.4439697265625,
+    "fp_w": 124346.09375,
+    "fn_w": 5254.5560302734375,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.04,
+    "emitted_px": 167302,
+    "emitted_fraction_of_footprint": 0.032376606062693755,
+    "dti_S": 0.05463288111548058,
+    "tp_w": 2122.9208984375,
+    "fp_w": 165062.75,
+    "fn_w": 4653.0791015625,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.06,
+    "emitted_px": 164808,
+    "emitted_fraction_of_footprint": 0.0318939623673383,
+    "dti_S": 0.05141997615711945,
+    "tp_w": 1971.98095703125,
+    "fp_w": 162676.4375,
+    "fn_w": 4804.01904296875,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.09,
+    "emitted_px": 161882,
+    "emitted_fraction_of_footprint": 0.03132771719788759,
+    "dti_S": 0.05018888033310008,
+    "tp_w": 1895.386474609375,
+    "fp_w": 159825.953125,
+    "fn_w": 4880.613525390625,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.12,
+    "emitted_px": 156191,
+    "emitted_fraction_of_footprint": 0.030226383889841123,
+    "dti_S": 0.04923154942823013,
+    "tp_w": 1803.196044921875,
+    "fp_w": 154227.0,
+    "fn_w": 4972.803955078125,
+    "n_truth": 6776
+   }
+  ],
+  "winner": {
+   "support_fraction": 0.04,
+   "emitted_px": 167302,
+   "emitted_fraction_of_footprint": 0.032376606062693755,
+   "dti_S": 0.05463288111548058,
+   "tp_w": 2122.9208984375,
+   "fp_w": 165062.75,
+   "fn_w": 4653.0791015625,
+   "n_truth": 6776
+  },
+  "measurement_on_untouched_half": {
+   "support_fraction": 0.04,
+   "emitted_px": 167302,
+   "emitted_fraction_of_footprint": 0.032376606062693755,
+   "dti_S": 0.0522216289467,
+   "tp_w": 2014.0322265625,
+   "fp_w": 165137.03125,
+   "fn_w": 4406.9677734375,
+   "n_truth": 6421
+  }
+ },
+ "submission": {
+  "path": "data/evidence/suture/ens_only.tif",
+  "sha256": "94eaa16e806ef85000dd896dc94a684971a056d2e1b0989e0ff3b889456946c6",
+  "bytes": 557783,
+  "support_fraction": 0.04,
+  "emitted_px": 167302,
+  "unique_name": "suture-v1-20260925T150504Z-94eaa16e.tif",
+  "note": "SUTURE v1 | structure-tensor lineaments + ensemble | s=0.040 | build 94eaa16e",
+  "format": {
+   "crs": "EPSG:32611",
+   "dtype": "float32",
+   "nodata": "nan (outside the footprint)",
+   "values": "[0, 1]"
+  }
+ },
+ "honesty": "Local numbers are an imitation of the board: the held-out segments are pixels of the supplied catalogue.  Only DrivenData can score against the private new-fault set; no claim of beating 0.3049 is made here."
+}

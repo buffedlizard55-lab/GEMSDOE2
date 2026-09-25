@@ -610,3 +610,50 @@ five forward in its own queue above.
 | 5 | **Render "stale" instead of pretending.** | ✅ `build_site.py` compares the manifest's pinned artifact hash with the artifact in the tree and prints `IN SYNC` / `STALE`; the generator section disappears (does not fake a green) when the payload files are absent. |
 | 6 | Run `make-submission.yml` once on a real runner and read its committed evidence. | ⏳ Open — the file has never executed; the 11 structure tests in `tests/test_make_submission_workflow.py` are not a substitute for one green run. Push a commit touching `.github/triggers/make-submission`, or `gh workflow run make-submission.yml -f route=adopted -f package=both`. |
 | 7 | Consider a "Build it here" link from the site root. | ⏳ Open, cosmetic — today the generator is reachable only from `how_to_submit.html`. |
+
+
+---
+
+## Session 27 additions — what would actually move the leaderboard next
+
+1. **Submit the union, then the precision arm, and read the two scores together** (3 submissions per
+   week). The union hedges coverage; the precision arm buys 3.45× the random floor per pixel. Two
+   scores separate "not enough coverage" from "not enough precision", which no local population can.
+2. **A detector that fires on unmapped structure, not on the catalogue.** Every field here is built
+   from models trained on the supplied catalogue; their residual echo is measured (4.19 % of the
+   shipped emission). The SGMC and QFaults cross-catalogue work is the only leakage-safe route to a
+   genuinely independent detector, and it already exists (`scripts/fetch_qfaults.py`,
+   `data/evidence/xcat/`).
+3. **Emission selection with a probability field rather than a binary mask.** The metric's marginal
+   condition (emit a pixel only when it is within ~2.8 px of *uncovered* truth with probability
+   ≳ 0.2) needs per-pixel confidences; the shipped binaries discard them. `src/submission_optim.py`
+   is the place.
+4. **Run the block-holdout and cross-catalogue workflows on the union artifact** (their defaults
+   still name the 11-fold arm) so the two evidence families cover the same bytes.
+5. **A GPU run.** The 11-fold ensemble is CPU-trained; `configs/config.yaml` (EfficientNet-B5, 10
+   MC splits, 60 epochs) remains the capacity the leaderboard case needs.
+
+---
+
+## Session 27b additions
+
+1. **Spend the three weekly uploads on the plan, not on reshuffles of one idea:** union → precision
+   → extension, with the recall arm as the spare. Two of the three answers ("is coverage the
+   problem?" and "is the hidden truth near known traces?") are unobtainable from any local
+   population, and each is worth a slot on its own.
+2. **Widen the corridor only if the extension arm beats the union.** The measured grid is 1/2/3 px
+   and the file shipped is 1 px; a leaderboard win for it is the only evidence that justifies
+   rebuilding at 2–3 px. Do not pre-empt that with a wider corridor — the local P score *falls*
+   monotonically with width (0.1700 → 0.1325 → 0.1028), which is a statement about the proxy, not
+   about the board.
+3. **A probability field, not a binary mask, for the corridor too** (`src/submission_optim.py`):
+   the metric's marginal condition is per-pixel, so a graded corridor could keep the near-trace
+   credit while paying less for the far edge.
+4. **The detector, not the emission, is the remaining lever.** Session 27's portfolio makes the same
+   point from the other side: every shaping experiment (pruning, bands, bridging, extension) is
+   bounded by the two detector families' recall. `configs/config.yaml` (EfficientNet-B5, 10 MC
+   splits) is still unrun and still the only route to a materially different field.
+5. **Keep the local ranking honest automatically.** `measure_submission_portfolio.py` now refuses to
+   rank a candidate flagged `local_ranking_eligible: false`, and exits 1 if any *scored* file is not
+   conformant to the template. Any new candidate should be added with the same two flags or the
+   recommendation will drift into "print the catalogue".

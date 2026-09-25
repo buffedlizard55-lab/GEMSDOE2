@@ -27,35 +27,88 @@
 | **Raster Data Type** | **Single-band 32-bit float (`float32`)** | Values in `[0.0, 1.0]` representing fault presence probability |
 | **NoData Mask** | **NaN / null** outside GeoDAWN survey footprint | **57.92% NaN**; finite values strictly inside valid survey area |
 | **Shipped Winning Policy** | **Floor 0.1, thin, width 0 px** | Pre-registered decision rule; Rank 1 of 132 candidates |
-| **GEMSDOE2 Breakthrough Artifact** | `data/evidence/runs/gemsdoe2-fusion-v2/submission.tif` | sha256 `a8dc50f3b0b2c77c9829da8875ae23007d5efbdfe1b3c2b8c1535790c9982f95` (1.40 MB; union surrogate DTI **0.6367** vs 0.2074 baseline, targeting >0.3049 top LB score) |
-| **Historical Baseline Artifact** | `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif` | sha256 `7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15` (570.9 KB; scored 0.1563 on public leaderboard) |
+| ~~GEMSDOE2 Breakthrough Artifact~~ **RETRACTED 2026-09-25** | `data/evidence/runs/gemsdoe2-fusion-v2/submission.tif` | This row used to claim "union surrogate DTI **0.6367**, comfortably exceeding the 0.3049 competition benchmark". The population behind that number counted the 60,988 supplied-catalogue pixels the organizers mask out of scoring; measured from the same bytes with the mask applied the field scores **0.0499** = **0.77×** a uniformly random emission of the same size (`data/evidence/submission_portfolio.json`). The claim is withdrawn, not re-worded |
+| **Shipped Artifact (2026-09-25)** | `data/evidence/union/submission.tif` | sha256 `f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2` (568,065 B; union of the 11-fold ensemble and the 6-fold blend; best of every measured candidate under the organizers' mask, P 0.0903 vs 1.39× random) |
+| **Historical Baseline Artifact** | `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif` | sha256 `7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15` (570.9 KB; the file submitted before this session, scored **0.1563** on the public leaderboard as `extradr19`; kept as the recall arm) |
+| **Superseded Claim (retracted 2026-09-25)** | `data/evidence/runs/gemsdoe2-fusion-v2/submission.tif` | The "union surrogate DTI 0.6367" quoted here earlier is **not comparable to the leaderboard**: that population counted the 60,988 supplied-catalogue pixels the organizers mask out. Under the mask the same bytes score **0.0499** = 0.77× random (`data/evidence/submission_portfolio.json`) |
 
 ---
 
 ## 0. TL;DR — 1-Click Submission & Verified Execution Path
 
-### 🚀 Recommended Breakthrough: GEMSDOE2 Dual-Component Fault Backbone + Multiscale Geophysical Fusion
+### 🚀 Shipped 2026-09-25: GEMSDOE2 Dual-Family Fault Union — `data/evidence/union/submission.tif`
 
-> **Targeting >0.3049 Public Leaderboard Top Score:**
-> The previous baseline submission scored `0.1563` (`extradr19`). The highest score on the DrivenData leaderboard is `0.3049`. 
-> GEMSDOE2 introduces a new strategy combining:
-> 1. **Tectonic Backbone (1.0):** Preserves all 60,988 known USGS Quaternary fault pixels from `data/labels.tif`. Known fault DTI reaches **0.6409** (vs 0.2298 baseline).
-> 2. **Deep Lineament Ensemble (1.0):** 11-fold deep neural network predictions capturing regional structural trends.
-> 3. **Gradient-Boosted Geophysics (1.0):** Novel fault edge indicators from 19 geophysical bands (aeromagnetic horizontal gradient, isostatic gravity slope, tilt curvature, detrended elevation).
-> 4. **Connected-Component Noise Filtering ($\ge 3$ px):** Prunes isolated single/double-pixel noise that severely depresses the precision-weighted DW-Tversky metric ($\alpha=0.2, \beta=0.8$).
-> 5. **Template Conformance:** Strictly matches `data/sample_submission.tif` valid footprint (5,167,373 finite float32 pixels in $[0, 1]$, NaN outside, with `GDAL_NODATA=nan`).
-> 
-> **Measured Performance:**
-> - Known Faults DTI: **0.6409** (vs 0.2298 baseline)
-> - Novel Proxy Faults DTI: **0.2000** (vs 0.0998 baseline)
-> - **Full Union Surrogate DTI: 0.6367** (vs 0.2074 baseline, comfortably exceeding the 0.3049 competition benchmark).
+> **What changed, and why an earlier headline number on this page was wrong.** The artifact this
+> summary used to call the breakthrough (`data/evidence/runs/gemsdoe2-fusion-v2/submission.tif`,
+> claimed *union surrogate DTI 0.6367*) **paints the supplied catalogue**: it emits on all 60,988
+> known USGS fault pixels. Organizers state on the competition forum that pixels of known
+> USGS/INGENIOUS faults are **masked out of scoring** — a prediction there earns **nothing**
+> (thread `community.drivendata.org/raw/11516`, quoted verbatim in
+> `data/evidence/rules_quotes.json`). Measured from its own bytes with that mask applied
+> (`scripts/measure_submission_portfolio.py`), the fusion field scores **DTI 0.0499**: **0.77×**
+> what a uniformly random emission of the same size scores. The same check collapses the binary
+> field the `TURBO_README` calls the best local model (L 0.4666 → **P 0.0081**, 0.21×, because
+> 33,623 of its 62,908 pixels sit on the catalogue) and the site's previous primary candidate
+> (`gemsdoe2_recall_union_submission.tif`, P 0.0626 = 0.97× random).
+>
+> The shipped artifact is therefore a **new field**: the pixelwise union of the two independent
+> detector families this repository holds —
+> 1. the **11-fold U-Net++/DeepLabV3+ ensemble** (`ens12-adopted`, 172,974 px, widest coverage:
+>    58 % of held-out segments within 300 m), and
+> 2. the **6-fold blend of a different model set** (`35042805806`, 21,492 px, 3.45× the random
+>    floor per pixel).
+> Neither arm alone is best under the platform's mask; their union (183,642 px) is, and it stays
+> best once the hidden new-fault set is at least about the size of this repository's local
+> stand-in (the crossover is computed from the measured weighted terms in
+> `scripts/build_site.py:_union_crossover`).
+>
+> **Measured on the four populations this repository can see** (one script, one machine, from the
+> bytes; `P` applies the organizers' pixel-exact mask to the prediction):
+>
+> | field | L (third party) | S (catalogue charged) | I (truth > 5 px from catalogue) | **P (mask applied)** | random floor, same support |
+> |---|---|---|---|---|---|
+> | **dual-family union (shipped)** | **0.1222** | **0.1128** | 0.0955 | **0.0903** | 0.0648 → **1.39×** |
+> | 11-fold arm alone | 0.1189 | 0.1110 | 0.0939 | 0.0887 | 0.0660 → 1.34× |
+> | 6-fold arm alone | 0.1188 | 0.1119 | **0.1173** | 0.0831 | 0.0241 → **3.45×** |
+> | fusion v2 (previous "breakthrough") | 0.3480 | 0.3290 | 0.2674 | 0.0499 | 0.0646 → **0.77×** |
+> | turbo-binary (best local number in the repo) | 0.4666 | 0.4573 | 0.4128 | 0.0081 | 0.0377 → **0.21×** |
+>
+> **None of these is a leaderboard score.** Only the organizers' hidden new-fault labels can
+> produce one; the local stand-in truth is 30 % of the supplied catalogue, so it can rank fields
+> and cannot calibrate them. The purpose of the table is to stop a catalogue echo being mistaken
+> for progress — which is exactly what happened on this page before 2026-09-25.
 
-**One-Click Download & Submission Identity:**
-- **Direct GeoTIFF Download:** [`docs/gemsdoe2_fusion_submission.tif`](docs/gemsdoe2_fusion_submission.tif)
-- **Direct Zip Archive Download:** [`docs/gemsdoe2_fusion_submission.zip`](docs/gemsdoe2_fusion_submission.zip)
-- **Suggested Unique File Name:** `gems-submission-20260925T010000Z-a8dc50f3.tif`
-- **Suggested Copyable Note:** `GEMSDOE2: Fault Backbone + 11-Fold Ensemble + Edge Fusion · build a8dc50f3 · 20260925T010000Z`
-- **SHA256 Checksum:** `a8dc50f3b0b2c77c9829da8875ae23007d5efbdfe1b3c2b8c1535790c9982f95`
+**One-Click Download & Submission Identity (download → *File to submit* → paste the Note):**
+- **Direct GeoTIFF Download:** [`docs/gemsdoe2-dual-family-union-f68e590f.tif`](docs/gemsdoe2-dual-family-union-f68e590f.tif)
+- **Direct Zip Archive Download:** [`docs/gemsdoe2-dual-family-union-f68e590f.zip`](docs/gemsdoe2-dual-family-union-f68e590f.zip)
+- **The rest of the week's three submissions** (rules §3.4) are packaged beside it, each with its
+  own Note and its own hypothesis written down in advance — see the upload plan in the landing hero
+  of `docs/index.html` / `docs/executive_summary.html`, or the same table in `STATUS.md` §8:
+
+  | # | arm | file (committed, content-addressed) | what it tests |
+  |---|---|---|---|
+  | 1 | dual-family union | `docs/gemsdoe2-dual-family-union-f68e590f.tif` | is the current detector above the 0.1563 baseline at all? |
+  | 2 | precision arm | `docs/gemsdoe2-precision-arm-8bce5dfe.tif` | coverage vs per-pixel value: much lower ⇒ the union's extra pixels earn their keep |
+  | 3 | **extension arm (new)** | `docs/gemsdoe2-extension-arm-ad5ba911.tif` | does the hidden new-fault set hug known traces? (organizers: corrections/extensions of existing traces are an explicit target) |
+  | 4 | recall arm (spare) | `docs/gemsdoe2-recall-arm-7f00890a.tif` | what did the second family add? |
+
+- **Extension arm, honestly framed.** It is the union plus a one-pixel (300 m) corridor along the
+  supplied catalogue. Local stand-in truth is carved out of that catalogue, so *every* local
+  population rewards the corridor for the wrong reason — all 17,339 held-out truth pixels lie within
+  3 px of it — and the portfolio flags it `local_ranking_eligible: false` so it cannot decide the
+  local recommendation. Its local scores (L 0.2549 / S 0.1800 / I 0.1429 /
+  P 0.1700 for the 1 px corridor) are reported for completeness only. It is
+  built, format-gated (292,190 px, 486,705 B, sha256
+  `ad5ba91174b637bb77f399ae35506bebfa920a2e159ab593492f9baa64f3389f`) and packaged exactly like the other arms; whether it beats the union is a question only
+  a DrivenData score can answer, with H1/H2 pre-registered in
+  `data/evidence/extension/extension_report.json`.
+- **Suggested Unique File Name:** `gemsdoe2-dual-family-union-<UTC stamp>-f68e590f.tif` — the packaging
+  instant is stamped in per run and printed by `scripts/package_portfolio.py`; the committed file is
+  content-addressed (`docs/gemsdoe2-dual-family-union-f68e590f.tif`) so links do not rot. As of the
+  last packaging run: `gemsdoe2-dual-family-union-20260925T155058Z-f68e590f.tif` (`2026-09-25T15:50:58Z`)
+- **Suggested Copyable Note:** `GEMSDOE2 dual-family fault union | 11-fold ensemble union 6-fold blend, catalogue-masked | f68e590f`
+- **SHA256 Checksum:** `f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2` (568,065 B, 183,642 emitted px)
+- **Alternate arms, same format gate:** precision arm [`docs/gemsdoe2-precision-arm-8bce5dfe.tif`](docs/gemsdoe2-precision-arm-8bce5dfe.tif) (best on the strictest local population I 0.1173, 3.45× lift) · recall arm [`docs/gemsdoe2-recall-arm-7f00890a.tif`](docs/gemsdoe2-recall-arm-7f00890a.tif) (widest coverage)
 
 **Resolution of the Platform Error: "Predicted values must be in range [0, 1]":**
 DrivenData's server evaluates predictions on the non-masked grid. When previous submissions contained unmasked NaN values inside the valid survey area (e.g. 3,061 pixels) or non-finite numbers, the platform validator's range check `pred >= 0.0 and pred <= 1.0` evaluated to False and threw the generic error: *"Predicted values must be in range [0, 1]"*. In GEMSDOE2, all 5,167,373 valid footprint pixels are strictly finite float32 numbers in $[0.0, 1.0]$, exactly matching `data/sample_submission.tif`, with nodata set to `nan`. This error is completely eliminated and verified by `scripts/validate_submission.py`.
@@ -68,12 +121,15 @@ DrivenData's server evaluates predictions on the non-masked grid. When previous 
 git pull
 python scripts/assemble_data_bridge.py   # re-verify & place 418 MB feature stack (sha256 pinned)
 python scripts/prepare_data.py           # PASS: 3292×3730, 19 bands, EPSG:32611, 100 m
-python scripts/validate_submission.py --pred data/evidence/runs/gemsdoe2-fusion-v2/submission.tif --sample data/sample_submission.tif --train data/training_features.tif
+python scripts/union_submission.py               # builds the shipped union + writes its report
+python scripts/measure_submission_portfolio.py   # scores every candidate from its own bytes (4 populations)
+python scripts/package_portfolio.py              # format-gates the files and copies them into docs/
+python scripts/validate_submission.py --pred data/evidence/union/submission.tif --sample data/sample_submission.tif --train data/training_features.tif
 # → ✅ Validation PASSED — upload the .tif below
 ```
 
-**Pre-computed, validated submission artifact (11-fold ensemble, adopted winning policy `floor 0.1, thin, width 0 px` — rank 1 of 132):**
-- **Path:** `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif`
+**Pre-computed, validated submission artifact (union of both detector families; the 11-fold arm's adopted policy remains `floor 0.1, thin, width 0 px`):**
+- **Path:** `data/evidence/union/submission.tif` (the 11-fold arm alone: `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif`)
 - **sha256:** `7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15` (570,890 bytes)
 - **Format:** 3292×3730, single-band float32, EPSG:32611, 100 m, NaN outside GeoDAWN footprint (57.92%), values in [0,1], finite on **every** pixel of the sample submission's valid region (template conformance, enforced by `scripts/validate_submission.py` since 2026-09-25)
 
@@ -201,12 +257,14 @@ python scripts/prepare_data.py
 
 ### Step 3: Select or Generate Your Submission Raster
 
-#### Route A: Use the Pre-Computed Winning Ensemble Raster (Fastest & Fully Verified)
-The repository contains an already generated, 11-fold ensemble mean submission with the adopted policy applied:
-- **Path:** `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif`
-- **sha256:** `7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15`
-- **Size:** 570,890 bytes
-- **Status:** Format verified, ready for immediate upload.
+#### Route A: Use the Pre-Computed Shipped Raster (Fastest & Fully Verified)
+The repository contains the shipped field — the union of the 11-fold ensemble mean and the 6-fold
+blend, both with their adopted policies applied — plus the two arms it is built from:
+- **Shipped (use this):** `data/evidence/union/submission.tif` — sha256 `f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2`, 568,065 bytes
+- **Recall arm:** `data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif` — sha256 `7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15`, 570,890 bytes
+- **Precision arm (sanitized twin of the 6-fold blend):** `data/evidence/runs/35042805806/submission_conformant.tif` — sha256 `8bce5dfe7302…`, 284,520 bytes
+- **Prepackaged for download:** `docs/gemsdoe2-dual-family-union-f68e590f.tif` (+ `.zip`), `docs/gemsdoe2-precision-arm-8bce5dfe.tif`, `docs/gemsdoe2-recall-arm-7f00890a.tif`
+- **Status:** format verified from the bytes at build time (`data/evidence/portfolio_files.json`), ready for immediate upload.
 
 #### Route B: Run Local Pipeline Inference
 ```bash
@@ -241,15 +299,16 @@ says so — but it makes a valid entry possible from any machine.
 Run the automated validation check:
 ```bash
 python scripts/validate_submission.py \
-    --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif \
+    --pred data/evidence/union/submission.tif \
     --sample data/sample_submission.tif \
     --train data/training_features.tif
 ```
-**Expected Output:**
+**Expected Output:** (measured on the shipped bytes, 2026-09-25)
+
 ```text
-Validating data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif
-  Width: 3292, Height: 3730, Count: 1, Dtype: ('float32',), CRS: EPSG:32611, Res: (100.0, 100.0), Nodata: None
-  Data min: 0.0000, max: 1.0000, mean: 0.0335, nan%: 57.93%
+Validating data/evidence/union/submission.tif
+  Width: 3292, Height: 3730, Count: 1, Dtype: ('float32',), CRS: EPSG:32611, Res: (100.0, 100.0), Nodata: nan
+  Data min: 0.0000, max: 1.0000, mean: 0.0355, nan%: 57.92%
   ✓ CRS EPSG:32611
   ✓ Resolution 100m
   ✓ Single band
@@ -257,8 +316,11 @@ Validating data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif
   ✓ Values in [0,1] (min 0.0000 max 1.0000)
   ✓ Size matches sample 3292x3730
   ✓ Transform matches sample
+  ✓ All 5,167,373 template-valid px are finite in [0,1]
+  ✓ NaN exactly outside the template's valid region
+  ✓ GDAL_NODATA matches the template ('nan')
   ✓ Size matches training_features
-  i NaN fraction 57.93% (NaN is expected outside the GeoDAWN footprint)
+  i NaN fraction 57.92% (NaN is expected outside the GeoDAWN footprint)
 
 ✅ Validation PASSED - Ready for submission!
 Next: Upload to https://www.drivendata.org/competitions/306/competition-doe-gems/ via 'Submit' button

@@ -23,7 +23,27 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-SHIPPED = "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+def _shipped_artifact():
+    """The artifact the site and the payload pin, derived - never a hardcoded run directory.
+
+    Session 27 moved the shipped artifact from an 11-fold run to the measured union of the two
+    detector families; the tests that hardcoded the old path kept passing against bytes the site no
+    longer offered, which is exactly the drift they exist to catch.  The payload manifest
+    (docs/submission_meta.json, written by scripts/build_submission_payload.py from its ARTIFACT
+    constant) is the single source of truth, which is itself the constant build_site.py uses.
+    """
+    meta = ROOT / "docs/submission_meta.json"
+    if meta.exists():
+        try:
+            rel = json.loads(meta.read_text()).get("artifact", {}).get("path")
+            if rel and (ROOT / rel).exists():
+                return ROOT / rel
+        except Exception:
+            pass
+    return ROOT / "data/evidence/union/submission.tif"
+
+
+SHIPPED = str(_shipped_artifact().relative_to(ROOT))
 
 
 def _site_mod():

@@ -20,27 +20,95 @@
 <h1>Results</h1>
 <p class="lede">Measured outcomes, including the ones that did not work.</p>
 
-<div class="card candidate-card" style="border: 2px solid #8250df; background: #fbf8ff; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
-  <h3 style="margin-top:0; color:#6639ba;">New candidate: Recall-Union v1</h3>
-  <p><b>New-fault-first strategy:</b> this is the pixelwise union of the independent 11-fold
-  deep-ensemble field and the CPU classical baseline. It intentionally does <em>not</em> copy
-  <code>labels.tif</code> and does not remove small components. That is a deliberate recall-first
-  response to the official DTI weights (α=0.2, β=0.8), not a claim that a local proxy is the
-  leaderboard.</p>
+<div class="card candidate-card" style="border: 2px solid #1a7f37; background: #f2fbf4; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
+  <h3 style="margin-top:0; color:#116329;">Start here &mdash; the file to submit</h3>
+  <p><b>Download &rarr; <em>File to submit</em> &rarr; paste the Note.</b> That is the whole
+  procedure; the long version is <a href="how_to_submit.html">How to submit</a>. The downloaded
+  file is already in the competition's format &mdash; every gate below was re-measured from these
+  bytes when this page was built.</p>
   <div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
-    <a href="gemsdoe2_recall_union_submission.tif" download="gems-recall-union-v1-8fc82777.tif" class="btn" style="background:#8250df; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download Recall-Union GeoTIFF (.tif)</a>
-    <a href="gemsdoe2_recall_union_submission.zip" download="gems-recall-union-v1-8fc82777.zip" class="btn" style="background:#0969da; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download single-file ZIP</a>
+    <a href="gemsdoe2-dual-family-union-f68e590f.tif" download="gemsdoe2-dual-family-union-20260925T160406Z-f68e590f.tif" class="btn" style="background:#1a7f37; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#128229; Download gemsdoe2-dual-family-union-20260925T160406Z-f68e590f.tif</a>
+    <a href="gemsdoe2-dual-family-union-f68e590f.zip" download="gemsdoe2-dual-family-union-20260925T160406Z-f68e590f.zip" class="btn" style="background:#0969da; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#128230; Download the ZIP</a>
+    <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/" class="btn" style="background:#8250df; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#8599; Open the submissions page</a>
+    <a href="how_to_submit.html" class="btn" style="background:#57606a; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">Step-by-step</a>
   </div>
+  <ol style="margin:.25rem 0 1rem 1.25rem;">
+    <li><b>Download</b> the GeoTIFF above (or the ZIP containing it; a single-member ZIP is accepted).</li>
+    <li><b>Open</b> <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> while signed in, choose this competition, and click <b>New submission</b> / <em>File to submit</em>.</li>
+    <li><b>Upload</b> the file, paste the <b>Note</b> below into the comment box, and submit. The
+        submission name is the file name; the Note is what tells your submissions apart on the
+        leaderboard's history.</li>
+  </ol>
   <table class="kv" style="font-size:.88rem"><tbody>
-    <tr><th>File</th><td class="mono">docs/gemsdoe2_recall_union_submission.tif · 1,982,553 B</td></tr>
-    <tr><th>SHA256</th><td class="mono">8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</td></tr>
-    <tr><th>Suggested unique name</th><td class="mono">gems-recall-union-v1-8fc82777.tif</td></tr>
-    <tr><th>Suggested Note</th><td class="mono">Recall-Union v1 · deep+classical union · build 8fc82777</td></tr>
-    <tr><th>Local diagnostics</th><td>SGMC proxy-only DTI <b>0.1479</b> · labels∪proxy DTI <b>0.2391</b> · these are surrogates, not leaderboard scores</td></tr>
-    <tr><th>Integrity</th><td><span class="pill ok">BYTES MATCH REPORT</span> · validate again with <code>scripts/validate_submission.py</code> before upload</td></tr>
+    <tr><th>Unique submission name (what you upload)</th><td class="mono">gemsdoe2-dual-family-union-20260925T160406Z-f68e590f.tif</td></tr>
+    <tr><th>File committed in this site</th><td class="mono"><a href="gemsdoe2-dual-family-union-f68e590f.tif">gemsdoe2-dual-family-union-f68e590f.tif</a></td></tr>
+    <tr><th>Copy-paste Note for the dialog</th><td class="mono" style="background:#fffbe6; padding:6px 8px; border-radius:4px;">GEMSDOE2 dual-family fault union | 11-fold ensemble union 6-fold blend, catalogue-masked | f68e590f</td></tr>
+    <tr><th>Size &middot; sha256</th><td class="mono">568,065 B &middot; f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2</td></tr>
+    <tr><th>What it is</th><td>the pixelwise <b>union of two independent detector families</b>:
+        the 11-fold U-Net++/DeepLabV3+ ensemble (172,974 px, widest coverage) and the 6-fold blend
+        of a different model set (21,492 px, 3.45&times; the random floor per pixel). Built by
+        <code>scripts/union_submission.py</code>. The union is the best of the three on the
+        third-party protocol (L 0.1222 vs 0.1189/0.1188), on the held-out segments with the
+        catalogue charged (S 0.1128) and under the organizers' mask (P 0.0903 vs 0.0887/0.0831),
+        and it stays the best of the three once the hidden new-fault set is at least
+        <b>0.99&times;</b> the size of the local stand-in (the ratio is computed from the
+        measured weighted terms, not typed). It is <em>not</em> the best on the strictest local
+        truth population (I), where the 6-fold arm alone wins 0.1173 to 0.0955 &mdash; which is why
+        that arm is offered below as an alternate rather than hidden. No other candidate this
+        repository holds, including the one the site used to lead with, beats either arm under the
+        organizers' mask.</td></tr>
+    <tr><th>Measured on the local stand-in populations</th><td>L <b>0.1222</b> · S <b>0.1128</b> · I <b>0.0955</b> · <b>P (organizers&rsquo; mask applied) 0.0903</b> against a same-size uniform random emission at 0.0648 (1.39&times; lift) · 183,642 emitted px, 7,693 of them on the supplied catalogue, where the platform pays nothing.</td></tr>
+    <tr><th>Format gate, re-measured from these bytes</th><td><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; single band</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; float32</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; crs matches template</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; transform matches template</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; shape matches template</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; finite inside valid region</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; values in 0 1 inside</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; nan outside valid region</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; nodata is nan</span><span class="pill ok" style="margin:2px 4px 2px 0;">&#10004; no nonfinite inside</span>
+        <div class="small">all 10 checks pass</div></td></tr>
+    <tr><th>Integrity versus the packaged record</th><td><span class="pill ok">BYTES MATCH</span>
+        · the ZIP's single member re-hashes to the same sha256 (f68e590f8534d036&hellip;)</td></tr>
+    <tr><th>What it is not</th><td>a leaderboard score. The only labels that can score it are the
+        organizers' hidden new-fault labels; every DTI on this page is a local stand-in, measured
+        on populations this repository can see. <a href="results.html#portfolio">Results</a> ranks
+        every candidate, including the ones that failed.</td></tr>
   </tbody></table>
 </div>
 
+<h2 id="portfolio">Every downloadable candidate, scored from its own bytes</h2>
+<table><thead><tr><th>candidate, scored from its own bytes</th><th>emitted px</th>
+<th>on the catalogue</th><th>L<br><span class="small">third party</span></th>
+<th>S<br><span class="small">catalogue off</span></th><th>I<br><span class="small">truth &gt; 5 px</span></th>
+<th>P<br><span class="small">mask applied</span></th><th>random<br><span class="small">same support</span></th>
+<th>lift</th></tr></thead><tbody><tr><td><code class="mono small">dual-family union (the shipped artifact)</code> <span class="pill ok">SHIPPED</span></td><td class="num">183,642</td><td class="num">7,693</td><td class="num">0.1222</td><td class="num">0.1128</td><td class="num">0.0955</td><td class="num"><b>0.0903</b></td><td class="num">0.0648</td><td class="num">1.39&times;</td></tr><tr><td><code class="mono small">11-fold ensemble (ens12-adopted, the recall arm)</code></td><td class="num">172,974</td><td class="num">6,455</td><td class="num">0.1189</td><td class="num">0.1110</td><td class="num">0.0939</td><td class="num"><b>0.0887</b></td><td class="num">0.0660</td><td class="num">1.34&times;</td></tr><tr><td><code class="mono small">6-fold blend (35042805806, the precision arm)</code></td><td class="num">21,492</td><td class="num">2,593</td><td class="num">0.1188</td><td class="num">0.1119</td><td class="num">0.1173</td><td class="num"><b>0.0831</b></td><td class="num">0.0241</td><td class="num">3.45&times;</td></tr><tr><td><code class="mono small">suture-v1 (structure-tensor lineaments, this session)</code></td><td class="num">146,136</td><td class="num">4,038</td><td class="num">0.0820</td><td class="num">0.0783</td><td class="num">0.0670</td><td class="num"><b>0.0632</b></td><td class="num">0.0627</td><td class="num">1.01&times;</td></tr><tr><td><code class="mono small">ens-only skeleton (suture ablation)</code></td><td class="num">171,952</td><td class="num">6,401</td><td class="num">0.1186</td><td class="num">0.1105</td><td class="num">0.0941</td><td class="num"><b>0.0884</b></td><td class="num">0.0632</td><td class="num">1.40&times;</td></tr><tr><td><code class="mono small">recall-union v1 (the site&#x27;s previous primary)</code></td><td class="num">325,165</td><td class="num">7,681</td><td class="num">0.0820</td><td class="num">0.0780</td><td class="num">0.0638</td><td class="num"><b>0.0626</b></td><td class="num">0.0642</td><td class="num">0.97&times;</td></tr><tr><td><code class="mono small">extension arm (union + 1 px catalogue corridor, this session)</code> <span class="pill warn" title="the local populations cannot rank this arm: they are built out of the supplied catalogue, and this arm is a corridor along it">PRE-REGISTERED BET</span></td><td class="num">292,190</td><td class="num">7,693</td><td class="num">0.2549</td><td class="num">0.1800</td><td class="num">0.1429</td><td class="num"><b>0.1700</b></td><td class="num">0.0644</td><td class="num">2.64&times;</td></tr><tr><td><code class="mono small">structure-consensus v1</code></td><td class="num">73,679</td><td class="num">1,334</td><td class="num">0.0218</td><td class="num">0.0213</td><td class="num">0.0201</td><td class="num"><b>0.0173</b></td><td class="num">0.0519</td><td class="num">0.33&times;</td></tr><tr><td><code class="mono small">fusion v2</code></td><td class="num">240,138</td><td class="num">60,988</td><td class="num">0.3480</td><td class="num">0.3290</td><td class="num">0.2674</td><td class="num"><b>0.0499</b></td><td class="num">0.0662</td><td class="num">0.75&times;</td></tr><tr><td><code class="mono small">turbo-binary (the run the TURBO README cites)</code></td><td class="num">72,768</td><td class="num">33,623</td><td class="num">0.4666</td><td class="num">0.4573</td><td class="num">0.4128</td><td class="num"><b>0.0081</b></td><td class="num">0.0377</td><td class="num">0.21&times;</td></tr><tr><td><code class="mono small">turbo (the file the site&#x27;s TURBO button downloads)</code></td><td class="num">5,167,373</td><td class="num">60,988</td><td class="num">0.0183</td><td class="num">0.0173</td><td class="num">0.0132</td><td class="num"><b>0.0115</b></td><td class="num">0.0608</td><td class="num">0.19&times;</td></tr><tr><td><code class="mono small">cpu baseline (histogram gradient boosting)</code></td><td class="num">155,889</td><td class="num">1,364</td><td class="num">0.0298</td><td class="num">0.0296</td><td class="num">0.0250</td><td class="num"><b>0.0239</b></td><td class="num">0.0649</td><td class="num">0.37&times;</td></tr></tbody></table>
+<p class="small">Recommended by that column: <b>dual-family union (the shipped artifact)</b>.
+<div class="note warn"><b>The single most important row is the one that collapses.</b> The binary field the <code>TURBO_README</code> cites as the best local model scores <b>L 0.4666</b> and <b>P 0.0081</b> &mdash; because 33,623 of its 62,908 emitted pixels sit on the supplied catalogue. Under the third-party protocol those pixels are forgiven (they are inside the training buffer) and under the organizers' mask they are worth nothing; a uniform random emission of the same size scores 0.0393 where it scores 0.0081. <code>scripts/generate_turbo_variants.py</code> built it with a proximity boost <code>exp(-d/decay)</code> plus a forced 0.95 on known-fault pixels: 50.9 % of its pixels lie within 3 px of the supplied catalogue. It is a label echo, and every table on this site that ranked it first was ranking the echo. The site's previous primary candidate (<code>gemsdoe2_recall_union_submission.tif</code>) sits at P 0.0626 with a 0.97&times; lift &mdash; i.e. <em>at the random floor</em>.</div>
+<p class="small">Controls on the same population, so the columns can be read:
+<b>perfect_field</b> 1.0000 · <b>truth_dilated_1px</b> 0.8814 · <b>supplied_catalogue_echo</b> 1.0000 · 
+a uniform random emission of the same size is the floor, not zero, because the metric's TP term is
+a max over the 300 m cone. Source: <code>data/evidence/submission_portfolio.json</code>, written by
+<code>scripts/measure_submission_portfolio.py</code>.</p>
+<h3>Two things that did not work, measured</h3>
+<p><b>Pruning the emission does not help.</b> The metric's loss is dominated by emission that earns
+nothing (on the canonical 11-fold field: TP 4,146 against 0.2&times;FP 32,778), so the obvious move is
+to keep only the pixels another signal corroborates — the second model family, long components, or
+the label-free structure-tensor lineament field. Every one of those policies was scored on a tune
+half and the winner measured once on the other half
+(<code>scripts/prune_submission_emission.py</code>, grid pre-registered in the script):</p>
+<table><thead><tr><th>policy (best six on the tune half)</th><th>emitted px</th>
+<th>coverage of the tune truth</th><th>P on the tune half</th></tr></thead><tbody><tr><td>G (6-fold blend alone)</td><td class="num">19,637</td><td class="num">0.30</td><td class="num">0.0905</td></tr><tr><td>E0 (A0 union 6-fold)</td><td class="num">19,637</td><td class="num">0.30</td><td class="num">0.0905</td></tr><tr><td>D1B32 (A1 and B32)</td><td class="num">19,694</td><td class="num">0.29</td><td class="num">0.0898</td></tr><tr><td>D1B4 (A1 and B4)</td><td class="num">20,011</td><td class="num">0.30</td><td class="num">0.0895</td></tr><tr><td>A1 (11-fold within 1 px of 6-fold)</td><td class="num">20,016</td><td class="num">0.30</td><td class="num">0.0895</td></tr><tr><td>D1B8 (A1 and B8)</td><td class="num">19,983</td><td class="num">0.29</td><td class="num">0.0895</td></tr></tbody></table>
+<p class="small">The winner on the tune half was the 6-fold blend alone; on the untouched measure
+half it scored <b>P 0.0493</b>
+against <b>0.0469</b> for the
+unpruned artifact — a tie, i.e. no policy in the grid beat doing nothing. The lineament-corroborated
+policies were actively worse (P 0.0149–0.0226). Emission <em>selection</em> is not where the remaining
+score is; this repository's field is already a one-pixel skeleton (<code>skeletonize</code> returns
+the shipped mask unchanged), so there is no thickness left to remove.</p>
+
+<p><b>The large gain from a near-catalogue band is an artefact of the proxy, and is deliberately not
+shipped.</b> Restricting the emission to within a few pixels of the supplied catalogue roughly
+doubles the local P score, monotonically, because the proxy's "held-out" truth is carved out of the
+supplied catalogue and therefore lies <em>on</em> the pixels the platform masks — so any field that
+hugs the catalogue's edge looks good for a reason that says nothing about the hidden new-fault set.</p>
+<table><thead><tr><th>band</th><th>P on the local population</th><th>emitted px</th></tr></thead><tbody><tr><td>union restricted to within 8 px of the supplied catalogue</td><td class="num">0.1656</td><td class="num">71,932</td></tr><tr><td>union restricted to within 16 px of the supplied catalogue</td><td class="num">0.1323</td><td class="num">105,632</td></tr><tr><td>union restricted to within 32 px of the supplied catalogue</td><td class="num">0.1082</td><td class="num">143,019</td></tr><tr><td>union restricted to within 64 px of the supplied catalogue</td><td class="num">0.0949</td><td class="num">171,695</td></tr><tr><td>union restricted to within inf px of the supplied catalogue</td><td class="num">0.0903</td><td class="num">183,642</td></tr></tbody></table>
+<p class="small">What the organizers do say is that corrections of known traces are one explicit
+target — so a near-trace component is not worthless, it is merely unmeasurable here. The shipped
+field keeps the whole union; the band numbers stay in
+<code>data/evidence/union/union_report.json</code> as a measured, refused option.</p>
 <h2>Honest status</h2>
 <div class="note bad"><b>A green workflow is not evidence.</b> The 6-fold ensemble run
 <code>35042805806</code> trained every fold for 2 h 36 min and then crashed while writing the
@@ -56,7 +124,7 @@ is measured, but it is <b>not yet competitive</b>: the first full-scale run was 
 smoke test that scored <em>below</em> the trivial blanket-coverage baseline, which is recorded here as
 a negative result rather than dressed up. And every DTI on this page is computed against the
 <em>provided labels or local SGMC proxy populations</em>; none is the hidden scored universe (see <a href="metric.html">Metric</a>).</div>
-<div class="note ok"><b>Secondary browser-builder bytes, measured at build time:</b> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — 557.5 KB, sha256 <span class='mono small'>7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</span>. The run tables below are <i>historical records</i> of what each run wrote <i>then</i>: the 2026-09-25 template-conformance sanitation re-wrote the shipped file, so pre-fix blend hashes no longer match it (the pixels it scored on are unchanged — see <a href='how_to_submit.html#rejection'>How to submit &sect;6b</a>).</div>
+<div class="note ok"><b>Secondary browser-builder bytes, measured at build time:</b> <code>data/evidence/union/submission.tif</code> — 554.8 KB, sha256 <span class='mono small'>f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2</span>. The run tables below are <i>historical records</i> of what each run wrote <i>then</i>: the 2026-09-25 template-conformance sanitation re-wrote the shipped file, so pre-fix blend hashes no longer match it (the pixels it scored on are unchanged — see <a href='how_to_submit.html#rejection'>How to submit &sect;6b</a>).</div>
 <h3>Run <code>?</code></h3>
 <table class="kv"><tbody>
 <tr><th>Profile</th><td>—</td></tr>
@@ -370,7 +438,7 @@ number is quoted.</p>
 </ol>
 </main>
 <footer><div class="wrap">
-  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 05:55 UTC</p>
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 17:27 UTC</p>
   <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
      <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
      <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>

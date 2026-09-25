@@ -1,0 +1,294 @@
+{
+ "generated_utc": "2026-09-25T15:19:41Z",
+ "script": "scripts/prune_submission_emission.py",
+ "protocol": "prune the canonical 11-fold emission to pixels corroborated by an independent detector, by component length or by the label-free lineament field; select on the tune half of the held-out segments, report the measure half once",
+ "inputs": {
+  "recall_mask": {
+   "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+   "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15"
+  },
+  "precision_mask": {
+   "path": "data/evidence/runs/35042805806/submission.tif",
+   "sha256": "a5ae61d572b0cd95eac111cab86954eca2219ad310fc0febddcda7ab92fb7969"
+  },
+  "lineament_field": {
+   "path": "data/evidence/suture/field_raw.tif",
+   "sha256": "d057df56845b0ef8fae669e67c596a9eb10e83ac124e5b3945330170d216cd3d"
+  },
+  "supplied_catalogue": {
+   "path": "data/labels.tif",
+   "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+  }
+ },
+ "split": {
+  "dir": "data/evidence/seghold",
+  "tune_truth_px": 5896,
+  "measure_truth_px": 7301,
+  "held_out_segments": 960,
+  "independent_px_gt": 5.0
+ },
+ "scoring": "prediction masked on the supplied catalogue and the 3 px training buffer, truth = held-out segments, alpha 0.2 / beta 0.8, k = max(1 - d/3, 0)",
+ "tune_table": [
+  {
+   "dti_P": 0.09053292726715427,
+   "tp": 772.1326293945312,
+   "fp": 18287.61328125,
+   "fn": 5123.867370605469,
+   "emitted_px": 19637,
+   "policy": "G (6-fold blend alone)",
+   "coverage_tune": 0.29698100407055633
+  },
+  {
+   "dti_P": 0.09053292726715427,
+   "tp": 772.1326293945312,
+   "fp": 18287.61328125,
+   "fn": 5123.867370605469,
+   "emitted_px": 19637,
+   "policy": "E0 (A0 union 6-fold)",
+   "coverage_tune": 0.29698100407055633
+  },
+  {
+   "dti_P": 0.08978701439733706,
+   "tp": 767.8416748046875,
+   "fp": 18407.21875,
+   "fn": 5128.1583251953125,
+   "emitted_px": 19694,
+   "policy": "D1B32 (A1 and B32)",
+   "coverage_tune": 0.2940976933514247
+  },
+  {
+   "dti_P": 0.08952392995419985,
+   "tp": 771.29150390625,
+   "fp": 18722.1015625,
+   "fn": 5124.70849609375,
+   "emitted_px": 20011,
+   "policy": "D1B4 (A1 and B4)",
+   "coverage_tune": 0.2956241519674355
+  },
+  {
+   "dti_P": 0.08951354010308187,
+   "tp": 771.29150390625,
+   "fp": 18727.1015625,
+   "fn": 5124.70849609375,
+   "emitted_px": 20016,
+   "policy": "A1 (11-fold within 1 px of 6-fold)",
+   "coverage_tune": 0.2956241519674355
+  },
+  {
+   "dti_P": 0.08945316486031672,
+   "tp": 770.1749267578125,
+   "fp": 18694.884765625,
+   "fn": 5125.8250732421875,
+   "emitted_px": 19983,
+   "policy": "D1B8 (A1 and B8)",
+   "coverage_tune": 0.29494572591587515
+  },
+  {
+   "dti_P": 0.08929625013421212,
+   "tp": 767.8416748046875,
+   "fp": 18642.21875,
+   "fn": 5128.1583251953125,
+   "emitted_px": 19929,
+   "policy": "D1B16 (A1 and B16)",
+   "coverage_tune": 0.29426729986431477
+  },
+  {
+   "dti_P": 0.08628676269892754,
+   "tp": 811.7505493164062,
+   "fp": 22642.203125,
+   "fn": 5084.249450683594,
+   "emitted_px": 24057,
+   "policy": "D2B32 (A2 and B32)",
+   "coverage_tune": 0.30529172320217096
+  },
+  {
+   "dti_P": 0.08587748792754499,
+   "tp": 816.005126953125,
+   "fp": 23109.833984375,
+   "fn": 5079.994873046875,
+   "emitted_px": 24529,
+   "policy": "D2B4 (A2 and B4)",
+   "coverage_tune": 0.307157394843962
+  },
+  {
+   "dti_P": 0.08586664386086751,
+   "tp": 816.005126953125,
+   "fp": 23115.833984375,
+   "fn": 5079.994873046875,
+   "emitted_px": 24535,
+   "policy": "A2 (11-fold within 2 px of 6-fold)",
+   "coverage_tune": 0.307157394843962
+  },
+  {
+   "dti_P": 0.08575556375387552,
+   "tp": 814.0838623046875,
+   "fp": 23067.283203125,
+   "fn": 5081.9161376953125,
+   "emitted_px": 24485,
+   "policy": "D2B8 (A2 and B8)",
+   "coverage_tune": 0.30630936227951155
+  },
+  {
+   "dti_P": 0.08569679480849818,
+   "tp": 567.4281616210938,
+   "fp": 8955.3037109375,
+   "fn": 5328.571838378906,
+   "emitted_px": 9741,
+   "policy": "D0B32 (A0 and B32)",
+   "coverage_tune": 0.25169606512890097
+  },
+  {
+   "dti_P": 0.08567115660490732,
+   "tp": 811.7505493164062,
+   "fp": 22980.203125,
+   "fn": 5084.249450683594,
+   "emitted_px": 24395,
+   "policy": "D2B16 (A2 and B16)",
+   "coverage_tune": 0.30546132971506107
+  },
+  {
+   "dti_P": 0.08542843376502132,
+   "tp": 567.4281616210938,
+   "fp": 9059.3037109375,
+   "fn": 5328.571838378906,
+   "emitted_px": 9845,
+   "policy": "D0B16 (A0 and B16)",
+   "coverage_tune": 0.25169606512890097
+  },
+  {
+   "dti_P": 0.08539552328668211,
+   "tp": 567.739990234375,
+   "fp": 9090.048828125,
+   "fn": 5328.260009765625,
+   "emitted_px": 9876,
+   "policy": "D0B4 (A0 and B4)",
+   "coverage_tune": 0.25220488466757124
+  },
+  {
+   "dti_P": 0.08539038575414921,
+   "tp": 567.739990234375,
+   "fp": 9092.048828125,
+   "fn": 5328.260009765625,
+   "emitted_px": 9878,
+   "policy": "A0 (11-fold within 0 px of 6-fold)",
+   "coverage_tune": 0.25220488466757124
+  },
+  {
+   "dti_P": 0.08537701844615844,
+   "tp": 567.4281616210938,
+   "fp": 9079.3037109375,
+   "fn": 5328.571838378906,
+   "emitted_px": 9865,
+   "policy": "D0B8 (A0 and B8)",
+   "coverage_tune": 0.25169606512890097
+  },
+  {
+   "dti_P": 0.08468061017117516,
+   "tp": 887.3514404296875,
+   "fp": 27922.6640625,
+   "fn": 5008.6485595703125,
+   "emitted_px": 29775,
+   "policy": "E1 (A1 union 6-fold)",
+   "coverage_tune": 0.3056309362279512
+  },
+  {
+   "dti_P": 0.0806366908757117,
+   "tp": 916.2201538085938,
+   "fp": 32311.396484375,
+   "fn": 4979.779846191406,
+   "emitted_px": 34294,
+   "policy": "E2 (A2 union 6-fold)",
+   "coverage_tune": 0.3136024423337856
+  },
+  {
+   "dti_P": 0.043312596739327566,
+   "tp": 1276.5145263671875,
+   "fp": 122500.140625,
+   "fn": 4619.4854736328125,
+   "emitted_px": 125229,
+   "policy": "B32 (components >= 32 px)",
+   "coverage_tune": 0.4718453188602442
+  },
+  {
+   "dti_P": 0.041395463191449884,
+   "tp": 1341.877685546875,
+   "fp": 137154.40625,
+   "fn": 4554.122314453125,
+   "emitted_px": 140025,
+   "policy": "B16 (components >= 16 px)",
+   "coverage_tune": 0.49779511533242876
+  },
+  {
+   "dti_P": 0.039858895723335674,
+   "tp": 1379.853515625,
+   "fp": 148128.4375,
+   "fn": 4516.146484375,
+   "emitted_px": 151057,
+   "policy": "B8 (components >= 8 px)",
+   "coverage_tune": 0.5110244233378561
+  },
+  {
+   "dti_P": 0.03894883789498262,
+   "tp": 1396.27685546875,
+   "fp": 154264.71875,
+   "fn": 4499.72314453125,
+   "emitted_px": 157229,
+   "policy": "B4 (components >= 4 px)",
+   "coverage_tune": 0.51780868385346
+  },
+  {
+   "dti_P": 0.03792350819477072,
+   "tp": 1442.93017578125,
+   "fp": 165215.25,
+   "fn": 4453.06982421875,
+   "emitted_px": 168283,
+   "policy": "F (unpruned 11-fold, the shipped artifact)",
+   "coverage_tune": 0.5425712347354138
+  },
+  {
+   "dti_P": 0.022574941615748013,
+   "tp": 484.8246154785156,
+   "fp": 83312.3203125,
+   "fn": 5411.175384521484,
+   "emitted_px": 84457,
+   "policy": "C50 (lineament >= p50)",
+   "coverage_tune": 0.1962347354138399
+  },
+  {
+   "dti_P": 0.017815754283749617,
+   "tp": 263.5921936035156,
+   "fp": 50129.68359375,
+   "fn": 5632.407806396484,
+   "emitted_px": 50732,
+   "policy": "C70 (lineament >= p70)",
+   "coverage_tune": 0.1117706919945726
+  },
+  {
+   "dti_P": 0.014865407538845531,
+   "tp": 145.07077026367188,
+   "fp": 25065.6796875,
+   "fn": 5750.929229736328,
+   "emitted_px": 25396,
+   "policy": "C85 (lineament >= p85)",
+   "coverage_tune": 0.06445047489823609
+  }
+ ],
+ "winner": "G (6-fold blend alone)",
+ "measurement_on_untouched_half": {
+  "dti_P": 0.049285055658679425,
+  "tp": 475.7030334472656,
+  "fp": 18580.669921875,
+  "fn": 6825.296966552734,
+  "emitted_px": 19637,
+  "coverage_measure": 0.16408711135460896
+ },
+ "unpruned_artifact_on_same_half": {
+  "dti_P": 0.046862770529290644,
+  "tp": 1836.22265625,
+  "fp": 164874.640625,
+  "fn": 5464.77734375,
+  "emitted_px": 168283,
+  "coverage_measure": 0.6021093000958773
+ },
+ "caveat": "one local population and one split; the tune half is 6,776 truth pixels, so the winner is a hypothesis about the leaderboard, not a measurement of it"
+}

@@ -56,11 +56,14 @@ import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
 
-#: the artifact the site treats as "the file to upload" - the same constant build_site.py uses
-ARTIFACT = "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
-SIDECAR = "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.sha256"
-BLEND_REPORT = "data/evidence/runs/ens12-adopted-floor0.1-w0/blend_report.json"
-VALIDATION_LOG = "data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log"
+#: the artifact the site treats as "the file to upload" - the same constant build_site.py uses.
+#: Session 27: the union of the two detector families (`scripts/union_submission.py`), which is the
+#: artifact data/evidence/submission_portfolio.json recommends under the organizers' mask, and whose
+#: own bytes pass scripts/validate_submission.py (log committed beside it).
+ARTIFACT = "data/evidence/union/submission.tif"
+SIDECAR = "data/evidence/union/submission.tif.sha256"
+BLEND_REPORT = "data/evidence/union/union_report.json"
+VALIDATION_LOG = "data/evidence/union/validation.log"
 SAMPLE = "data/sample_submission.tif"
 
 META_REL = "docs/submission_meta.json"

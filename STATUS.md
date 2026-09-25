@@ -1,5 +1,54 @@
 # Project status — 2026-09-24/25 (sessions 11–25)
 
+## Session 27 (2026-09-25) — the catalogue echo found and removed; a measured portfolio; a new shipped field
+
+The session opened by scoring every downloadable candidate this repository holds **from its own
+bytes**, on one population, with the organizers' pixel-exact catalogue mask applied
+(`scripts/measure_submission_portfolio.py` → `data/evidence/submission_portfolio.json`). The result
+reordered the repository:
+
+| candidate | L | S | I | **P (mask applied)** | random floor, same support | lift |
+|---|---|---|---|---|---|---|
+| **dual-family union (now shipped)** | **0.1222** | **0.1128** | 0.0955 | **0.0903** | 0.0648 | **1.39×** |
+| 11-fold ensemble (`ens12-adopted`, the 0.1563 upload) | 0.1189 | 0.1110 | 0.0939 | 0.0887 | 0.0660 | 1.34× |
+| 6-fold blend (`35042805806`) | 0.1188 | 0.1119 | **0.1173** | 0.0831 | 0.0241 | **3.45×** |
+| SUTURE v1 (structure-tensor lineaments, built this session) | 0.0820 | 0.0783 | 0.0670 | 0.0632 | 0.0628 | 1.01× |
+| recall-union v1 (the site's previous primary) | 0.0820 | 0.0780 | 0.0638 | 0.0626 | 0.0642 | 0.97× |
+| fusion v2 | 0.3480 | 0.3290 | 0.2674 | 0.0499 | 0.0646 | 0.77× |
+| turbo-binary | 0.4666 | 0.4573 | 0.4128 | 0.0081 | 0.0377 | 0.21× |
+
+1. **The two "best" local fields were catalogue echoes.** turbo-binary's 33,623 catalogue pixels
+   (53 % of its emission) come from `scripts/generate_turbo_variants.py`'s proximity boost
+   `exp(-d/decay)` plus a forced 0.95 on known-fault pixels; the site's previous primary candidate
+   scores *at* the random floor (0.97×). Both are now labelled as such wherever the site lists them.
+2. **A new field is shipped**: `data/evidence/union/submission.tif` — the union of the 11-fold
+   ensemble and the 6-fold blend, built by `scripts/union_submission.py` (568,065 B, sha256
+   `f68e590f8534…`, 183,642 px, conformant by construction, `scripts/validate_submission.py`
+   PASSED, read-back verified). It beats the 11-fold arm at every plausible hidden-truth size and
+   the 6-fold arm above ≈1× the local stand-in, and it is the best of the three on the population
+   that applies the organizers' mask.
+3. **Two negative results are recorded rather than buried.** (a) Pruning the emission by
+   corroboration (second model family, component length, label-free lineament field) tied with
+   doing nothing on an untouched half; the lineament policies were worse. (b) Restricting emission
+   to a band near the catalogue *doubles* the local score monotonically — and is refused, because
+   the proxy's truth lies on masked pixels (`data/evidence/union/union_report.json`).
+4. **Site and payload moved with the bytes.** `build_site.py` (`SHIPPED_SUBMISSION`,
+   `SHIPPED_EVIDENCE_DIR`, `BLEND_PROVENANCE_DIR`), `build_submission_payload.py` (payload rebuilt:
+   539,131 B / 263,039 runs, float32 round-trip verified), `check_site_generator.py` (verdict
+   **PASS**, 8/10 steps: the browser rebuilds the shipped field bit-for-bit), and
+   `check_submission_readiness.py` (9 PASS / 0 FAIL / 1 HUMAN) all now pin the union. The three
+   test modules and the DOM harness derive the artifact from `docs/submission_meta.json` instead of
+   hardcoding a run directory, and the tamper test now tampers a *value code* so the pin, not the
+   decoder, is what refuses.
+5. **Packaging**: `scripts/package_portfolio.py` gates each file (single band, float32,
+   EPSG:32611, template transform, finite in [0,1] inside, NaN outside, NODATA=nan, zip member
+   re-hashes to the same digest) and copies content-addressed files into `docs/`; the submission
+   name carries the packaging instant. The precision arm's raw bytes fail that gate and are
+   replaced by the sanitized twin — the exact rejection class this repository was hit by.
+6. **Suite**: `python -m pytest` → **529 passed, 2 skipped** (after installing torch/tqdm in the
+   sandbox; without them 8 tests import-fail). `prepare_data.py` re-run: OK.
+
+
 ## Session 25 (2026-09-24/25) — "Predicted values must be in range [0, 1]": root-caused, fixed at the writers, gated in the validator, and the site now hands over a unique name + Note
 
 The platform rejected a real upload of the shipped artifact with exactly one sentence —
@@ -1872,3 +1921,47 @@ without being scored. The lesson kept from the merge: the fold-weight question s
 per-fold held-out footprints (queued in `SUGGESTIONS.md`), and a number that cannot be measured
 should be `None`, not a plausible-looking float.
 
+---
+
+## 8. Session 27b: a fourth arm built for the population no local table can see
+
+**What was added.** `scripts/extension_arm.py` builds the shipped union plus a corridor of
+`--dist` px (300 m each) along the supplied catalogue and seals the reasoning around it in
+`data/evidence/extension/extension_report.json`: the organizers' own sentence that "a new-fault
+ground truth pixel can lie within 300 m of a known trace (corrections / modifications to existing
+traces are an explicit target)" (forum 11516, quoted verbatim in `data/evidence/rules_quotes.json`),
+two pre-registered hypotheses (H1: the corridor earns credit; H2: it is pure FP mass), and the
+number that proves the local tables cannot arbitrate between them — **1.000 of the 17,339 held-out
+truth pixels lie within 3 px of the catalogue**.
+
+| arm (corridor width) | corridor px | L | S | I | P |
+|---|---|---|---|---|---|
+| 1 px | 122,597 | 0.2549 | 0.1800 | 0.1429 | 0.1700 |
+| 2 px | 243,560 | 0.2379 | 0.1403 | 0.1095 | 0.1325 |
+| 3 px | 383,806 | 0.2005 | 0.1089 | 0.0845 | 0.1028 |
+| (base union, no corridor) | — | 0.1222 | 0.1128 | 0.0955 | 0.0903 |
+
+The corridor is included in the *measured portfolio* (it is measured on all four populations like
+every other candidate) but flagged `local_ranking_eligible: false`, so it cannot decide the local
+recommendation: scoring it locally is scoring "how close to the catalogue am I", not "how well did I
+detect". `docs/gemsdoe2-extension-arm-ad5ba911.tif` is packaged with the same
+format gate as the other arms (292,190 px, 486,705 B,
+conformance clean) and gets its own Note.
+
+**The one-week upload plan is now on the site** (`scripts/build_site.py::_submit_plan`, rendered in
+the landing hero of `index.html` and `executive_summary.html`): four arms in priority order — union
+first (the best local evidence those populations can rank), then precision, then the extension bet,
+then the recall arm in the spare slot — each with the hypothesis it tests and the rule for reading
+its score, all written before the first upload. It is the only block on the site about the future
+rather than about a measurement, and it is labelled as such.
+
+**Two operators were tested against the same objective and rejected**: collinear gap-bridging and
+end-extension of the detector's own traces buy TP credit but cost ~5× more FP mass (bridge L=1 on
+the tune half: TP 1,588 vs FP 246,659, against 1,542 / 174,411 unbridged). The corridor survives
+that screen only because the organizers name its target population explicitly; nothing else about
+this session's experiments supports extending emission.
+
+**Pages re-derived, not retyped.** `_primary_facts()` (build_site) is now the single source for
+"which file is the one to upload" on the index hero, the executive summary TL;DR, `submission.html`
+and `how_to_submit.html`; the Recall-Union paragraphs that still called themselves the primary are
+gone, and the recall arm keeps a row of its own. Suite: **529 passed / 2 skipped**.
