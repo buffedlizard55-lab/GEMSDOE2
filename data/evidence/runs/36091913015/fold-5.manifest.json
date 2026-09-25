@@ -1,0 +1,519 @@
+{
+ "created": "2026-09-25T03:51:34Z",
+ "config": {
+  "data": {
+   "feature_path": "data/training_features.tif",
+   "label_path": "data/labels.tif",
+   "sample_submission_path": "data/sample_submission.tif",
+   "external_dir": "data/external",
+   "output_dir": "outputs",
+   "norm_mode": "clip_zscore",
+   "clip_percentile": [
+    1.0,
+    99.0
+   ],
+   "use_external_dem": false,
+   "use_ingenious_extra": false
+  },
+  "training": {
+   "patch_size": 256,
+   "train_step": 128,
+   "test_proportion": 0.3,
+   "neg_fraction": 0.35,
+   "mc_id": 23,
+   "mc_splits": 1,
+   "batch_size": 8,
+   "epochs": 45,
+   "max_minutes": 150,
+   "init_lr": 0.0003,
+   "weight_decay": 0.0001,
+   "scheduler": "onecycle",
+   "alpha": 0.2,
+   "beta": 0.8,
+   "loss": "combined_dw",
+   "use_global_fp_weight": true,
+   "augment": true,
+   "noise_std": 0.01,
+   "rand_crop_scale": [
+    0.75,
+    1.0
+   ],
+   "early_stopping_patience": 10,
+   "num_workers": 2,
+   "seed": 45,
+   "good_channels": null,
+   "calibrate_shaping": true,
+   "selection_mode": "raw",
+   "shaping_grid": 11,
+   "shaping_windows": 12
+  },
+  "model": {
+   "architectures": [
+    "unetplusplus",
+    "deeplabv3plus",
+    "unet"
+   ],
+   "encoder": "resnet34",
+   "segformer_encoder": "mit_b2",
+   "pretrained": true,
+   "in_channels": null,
+   "classes": 1
+  },
+  "inference": {
+   "overlap": 0.5,
+   "batch_size": 8,
+   "tta": true,
+   "threshold": null,
+   "blend_mode": "gaussian",
+   "ensemble_weights": null,
+   "submission_shaping": {
+    "t0": null,
+    "thin": null,
+    "hard": true,
+    "gamma": 1.0
+   }
+  },
+  "postprocess": {
+   "frangi_filter": false,
+   "frangi_scale_range": [
+    1,
+    6
+   ],
+   "frangi_weight": 0.35,
+   "morphological_closing": true,
+   "closing_kernel": 3,
+   "min_fault_length": 5,
+   "skeletonize": false
+  },
+  "metric": {
+   "R_meters": 300,
+   "resolution_m": 100,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "epsilon": 1e-07
+  }
+ },
+ "band_names": [
+  "Magnetic anomaly - deviation from expected Earth's magnetic field",
+  "Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects",
+  "Total magnetic intensity horizontal gradient - rate of change in horizontal direction",
+  "Geodetic second invariant - measure of strain rate tensor magnitude",
+  "Isostatic gravity anomaly slope - gradient of gravity after isostatic correction",
+  "Tilt angle or total curvature - magnetic field derivative for edge detection",
+  "Geodetic shear rate - rate of angular deformation from GPS/InSAR",
+  "Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)",
+  "Total magnetic intensity vertical gradient - rate of change in vertical direction",
+  "Distance to earthquake (n=100km radius, a=15\u00b0 azimuth parameters)",
+  "Isostatic gravity anomaly vertical gradient - vertical rate of change",
+  "Detrended elevation - topography with regional trends removed",
+  "Isostatic gravity anomaly - gravity after compensating for topographic mass",
+  "Total magnetic intensity - total strength of magnetic field",
+  "Depth to basement surface - thickness of sedimentary cover",
+  "Earthquake intensity or density (n=100km radius, a=15\u00b0 parameters)",
+  "Conductivity surface - electrical conductivity of subsurface",
+  "Isostatic gravity anomaly horizontal gradient - horizontal rate of change",
+  "Detrended elevation slope - gradient of elevation after detrending"
+ ],
+ "n_bands": 19,
+ "feature_grid": [
+  3730,
+  3292
+ ],
+ "label_grid": [
+  3730,
+  3292
+ ],
+ "norm_stats_file": "outputs/norm_stats.json",
+ "R_pixels": 3,
+ "cuda": false,
+ "torch": "2.14.0+cpu",
+ "feature_file": "data/training_features.tif",
+ "models": [
+  {
+   "file": "model_mc23_unet_resnet34.pt",
+   "arch": "unet",
+   "encoder": "resnet34",
+   "in_channels": 19,
+   "classes": 1,
+   "dti": 0.09043691988884177,
+   "epoch": 19,
+   "mc": 23,
+   "select_on": "in_domain",
+   "dti_shaped": 0.09043691988884177,
+   "dti_union": null,
+   "patch_size": 256,
+   "minutes_used": 65.0,
+   "budget_hit": false,
+   "holdout": {
+    "mode": "random",
+    "test_proportion": 0.3
+   },
+   "test_windows": [
+    [
+     0,
+     512
+    ],
+    [
+     0,
+     1024
+    ],
+    [
+     0,
+     1536
+    ],
+    [
+     0,
+     2048
+    ],
+    [
+     0,
+     2816
+    ],
+    [
+     256,
+     512
+    ],
+    [
+     256,
+     768
+    ],
+    [
+     256,
+     1792
+    ],
+    [
+     256,
+     2304
+    ],
+    [
+     512,
+     0
+    ],
+    [
+     512,
+     1024
+    ],
+    [
+     512,
+     1792
+    ],
+    [
+     512,
+     2048
+    ],
+    [
+     512,
+     2560
+    ],
+    [
+     512,
+     2816
+    ],
+    [
+     512,
+     3072
+    ],
+    [
+     768,
+     256
+    ],
+    [
+     768,
+     512
+    ],
+    [
+     768,
+     2560
+    ],
+    [
+     768,
+     2816
+    ],
+    [
+     1024,
+     256
+    ],
+    [
+     1024,
+     768
+    ],
+    [
+     1024,
+     1792
+    ],
+    [
+     1024,
+     2304
+    ],
+    [
+     1280,
+     512
+    ],
+    [
+     1280,
+     768
+    ],
+    [
+     1280,
+     1280
+    ],
+    [
+     1280,
+     3072
+    ],
+    [
+     1536,
+     2048
+    ],
+    [
+     1792,
+     2304
+    ],
+    [
+     2048,
+     0
+    ],
+    [
+     2048,
+     1536
+    ],
+    [
+     2048,
+     2048
+    ],
+    [
+     2048,
+     2304
+    ],
+    [
+     2048,
+     2816
+    ],
+    [
+     2304,
+     256
+    ],
+    [
+     2304,
+     512
+    ],
+    [
+     2304,
+     1280
+    ],
+    [
+     2304,
+     2048
+    ],
+    [
+     2304,
+     2304
+    ],
+    [
+     2304,
+     2816
+    ],
+    [
+     2560,
+     0
+    ],
+    [
+     2560,
+     1280
+    ],
+    [
+     2560,
+     1792
+    ],
+    [
+     2560,
+     2048
+    ],
+    [
+     2560,
+     2304
+    ],
+    [
+     2560,
+     2560
+    ],
+    [
+     2560,
+     2816
+    ],
+    [
+     2560,
+     3072
+    ],
+    [
+     2816,
+     2048
+    ],
+    [
+     2816,
+     2816
+    ],
+    [
+     2816,
+     3072
+    ],
+    [
+     3072,
+     1024
+    ],
+    [
+     3072,
+     1280
+    ],
+    [
+     3328,
+     1280
+    ],
+    [
+     3328,
+     1536
+    ],
+    [
+     3328,
+     2304
+    ],
+    [
+     3584,
+     2560
+    ]
+   ]
+  }
+ ],
+ "shaping": {
+  "t0": 0.362091,
+  "thin": false,
+  "hard": true,
+  "gamma": 1.0,
+  "mean_heldout_dti": 0.14853706245112458,
+  "mean_heldout_dti_raw": 0.09448799670916931,
+  "n_splits_used": 1,
+  "search": [
+   {
+    "t0": 0.0,
+    "thin": false,
+    "mean_dti": 0.010766657550357701
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "mean_dti": 0.008004668942183112
+   },
+   {
+    "t0": 0.0001,
+    "thin": false,
+    "mean_dti": 0.05442938647548273
+   },
+   {
+    "t0": 0.0001,
+    "thin": true,
+    "mean_dti": 0.04010628268880204
+   },
+   {
+    "t0": 0.000248556,
+    "thin": false,
+    "mean_dti": 0.05541890369537974
+   },
+   {
+    "t0": 0.000248556,
+    "thin": true,
+    "mean_dti": 0.07118297153446485
+   },
+   {
+    "t0": 0.000617801,
+    "thin": false,
+    "mean_dti": 0.058504164541786134
+   },
+   {
+    "t0": 0.000617801,
+    "thin": true,
+    "mean_dti": 0.09724848152686627
+   },
+   {
+    "t0": 0.00153558,
+    "thin": false,
+    "mean_dti": 0.062406244283451234
+   },
+   {
+    "t0": 0.00153558,
+    "thin": true,
+    "mean_dti": 0.10831484428237331
+   },
+   {
+    "t0": 0.00381678,
+    "thin": false,
+    "mean_dti": 0.08015291868949655
+   },
+   {
+    "t0": 0.00381678,
+    "thin": true,
+    "mean_dti": 0.11419259764889733
+   },
+   {
+    "t0": 0.00948683,
+    "thin": false,
+    "mean_dti": 0.1151542237062116
+   },
+   {
+    "t0": 0.00948683,
+    "thin": true,
+    "mean_dti": 0.11294625110422872
+   },
+   {
+    "t0": 0.0235801,
+    "thin": false,
+    "mean_dti": 0.1331173906491674
+   },
+   {
+    "t0": 0.0235801,
+    "thin": true,
+    "mean_dti": 0.11178159815371046
+   },
+   {
+    "t0": 0.0586097,
+    "thin": false,
+    "mean_dti": 0.13632879154543978
+   },
+   {
+    "t0": 0.0586097,
+    "thin": true,
+    "mean_dti": 0.09340033052865596
+   },
+   {
+    "t0": 0.145678,
+    "thin": false,
+    "mean_dti": 0.14202082382002848
+   },
+   {
+    "t0": 0.145678,
+    "thin": true,
+    "mean_dti": 0.09559980152869518
+   },
+   {
+    "t0": 0.362091,
+    "thin": false,
+    "mean_dti": 0.14853706245112458
+   },
+   {
+    "t0": 0.362091,
+    "thin": true,
+    "mean_dti": 0.0951467558415995
+   },
+   {
+    "t0": 0.9,
+    "thin": false,
+    "mean_dti": 0.012304710318404397
+   },
+   {
+    "t0": 0.9,
+    "thin": true,
+    "mean_dti": 0.01231629669675827
+   }
+  ],
+  "note": "floor+thin by pooled held-out mean DTI; src/submission_optim.py"
+ }
+}
