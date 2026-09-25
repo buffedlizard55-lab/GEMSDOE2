@@ -1,0 +1,611 @@
+........................................................................ [ 13%]
+.........................................................F.............. [ 27%]
+......................................................................F. [ 40%]
+FssFF...............F................................................... [ 54%]
+.......................F................................................ [ 68%]
+..............................s.......................FF.F.....FFsEEEFFF [ 81%]
+FFFFFFFF.F.F..F.F..................................................s.s.s [ 95%]
+.......................                                                  [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_node_generated_file_is_pixel_identical_to_the_artifact _
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+__ ERROR at setup of test_repository_validator_passes_on_the_generated_bytes ___
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+_________ ERROR at setup of test_generated_zip_holds_exactly_that_tif __________
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+=================================== FAILURES ===================================
+E   AssertionError: assert False
+     +  where False = <built-in method startswith of str object at 0x7f6281a65c30>('a3dcd6d5')
+     +    where <built-in method startswith of str object at 0x7f6281a65c30> = '7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15'.startswith
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_cross_catalogue.py:332: AssertionError: assert False
+E   AssertionError: the mount point the glue looks for is gone
+    assert 'id="tif-generator"' in '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_how_to_submit_generator.py:62: AssertionError: the mount point the glue looks for is gone
+E   AssertionError: the page no longer cites docs/generate_submission.js
+    assert 'docs/generate_submission.js' in '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_how_to_submit_generator.py:87: AssertionError: the page no longer cites docs/generate_submission.js
+E   assert '8 measured steps passed' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n'
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_how_to_submit_generator.py:126: assert '8 measured steps passed' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n'
+E   assert ('FAIL' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n' and 'injected' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n')
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_how_to_submit_generator.py:145: assert ('FAIL' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n' and 'injected' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n')
+E   AssertionError: the page cites paths that do not exist: ['docs/submission_meta.json']
+    assert not ['docs/submission_meta.json']
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_how_to_submit_page.py:188: AssertionError: the page cites paths that do not exist: ['docs/submission_meta.json']
+E   subprocess.CalledProcessError: Command '['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.tif', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.zip']' returned non-zero exit status 3.
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/subprocess.py:571: subprocess.CalledProcessError: Command '['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.tif', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.zip']' returned non-zero exit status 3.
+E   AssertionError: the glue binds ONE mount; a second would print nothing
+    assert 0 == 1
+     +  where 0 = <built-in method count of str object at 0x557b5f188f90>('id="tif-generator"')
+     +    where <built-in method count of str object at 0x557b5f188f90> = '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'.count
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site.py:223: AssertionError: the glue binds ONE mount; a second would print nothing
+E   assert 0 == 1
+     +  where 0 = <built-in method count of str object at 0x557b5f342580>('id="tif-generator"')
+     +    where <built-in method count of str object at 0x557b5f342580> = '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'.count
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site.py:238: assert 0 == 1
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   AssertionError: DRIFT — the committed site payload no longer reproduces the artifact:
+        - docs/submission_meta.json: not committed
+        - docs/submission_field.bin: not committed
+        fix: python scripts/build_submission_payload.py && rebuild the site
+      
+    assert 1 == 0
+     +  where 1 = CompletedProcess(args=['/opt/hostedtoolcache/Python/3.11.16/x64/bin/python', 'scripts/build_submission_payload.py', '-...bmission_field.bin: not committed\n  fix: python scripts/build_submission_payload.py && rebuild the site\n', stderr='').returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:120: AssertionError: DRIFT — the committed site payload no longer reproduces the artifact:
+E   AssertionError: MISSING  docs/submission_meta.json / docs/submission_field.bin - run without --check/--verify to create them
+      
+    assert 2 == 0
+     +  where 2 = CompletedProcess(args=['/opt/hostedtoolcache/Python/3.11.16/x64/bin/python', 'scripts/build_submission_payload.py', '-...ING  docs/submission_meta.json / docs/submission_field.bin - run without --check/--verify to create them\n', stderr='').returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:129: AssertionError: MISSING  docs/submission_meta.json / docs/submission_field.bin - run without --check/--verify to create them
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:236: AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:236: AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:236: AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+          at Object.readFileSync (node:fs:440:20)
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+          at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+          at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+          at Module._compile (node:internal/modules/cjs/loader:1781:14)
+          at Object..js (node:internal/modules/cjs/loader:1913:10)
+          at Module.load (node:internal/modules/cjs/loader:1505:32)
+          at Function._load (node:internal/modules/cjs/loader:1309:12)
+          at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+          at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:236: AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+E   AssertionError: "
+         },
+         {
+          "name": "mount was found and populated",
+          "ok": true,
+          "detail": "7 nodes"
+         },
+         {
+          "name": "glue fetched the manifest by the name the site ships",
+          "ok": true,
+          "detail": "submission_meta.json"
+         },
+         {
+          "name": "glue did not invent a second payload path",
+          "ok": true,
+          "detail": "submission_meta.json"
+         },
+         {
+          "name": "provenance table names the artifact it reproduces",
+          "ok": false,
+          "detail": "artifact path rendered"
+         },
+         {
+          "name": "two build buttons exist",
+          "ok": true,
+          "detail": "2"
+         },
+         {
+          "name": "status reports success",
+          "ok": false,
+          "detail": "Failed: submission_meta.json → HTTP 404  ·  use route A (curl the artifact) or route C (scripts/baseline_submission.py) instead"
+         },
+         {
+          "name": "field blob was fetched when the build was clicked",
+          "ok": false,
+          "detail": "submission_meta.json,submission_meta.json"
+         },
+         {
+          "name": "a blob was registered for download",
+          "ok": false,
+          "detail": "0"
+         },
+         {
+          "name": "download link names a unique per-build file",
+          "ok": false,
+          "detail": ""
+         },
+         {
+          "name": "download type matches the container",
+          "ok": false,
+          "detail": ""
+         },
+         {
+          "name": "an identity block (unique name + suggested note) was rendered",
+          "ok": false,
+          "detail": "missing"
+         },
+         {
+          "name": "the suggested note is policy · build <sha8> · <UTC stamp>",
+          "ok": false,
+          "detail": ""
+         }
+        ],
+        "ok": false
+       }
+      }
+      [generate_submission] Error: submission_meta.json → HTTP 404
+          at generate_submission.js:128:24
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/tests/support/generator_ui_harness....}\n}\n', stderr='[generate_submission] Error: submission_meta.json → HTTP 404\n    at generate_submission.js:128:24\n').returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:299: AssertionError: "
+E   AssertionError: "
+         },
+         {
+          "name": "mount was found and populated",
+          "ok": true,
+          "detail": "7 nodes"
+         },
+         {
+          "name": "glue fetched the manifest by the name the site ships",
+          "ok": true,
+          "detail": "submission_meta.json"
+         },
+         {
+          "name": "glue did not invent a second payload path",
+          "ok": true,
+          "detail": "submission_meta.json"
+         },
+         {
+          "name": "provenance table names the artifact it reproduces",
+          "ok": false,
+          "detail": "artifact path rendered"
+         },
+         {
+          "name": "two build buttons exist",
+          "ok": true,
+          "detail": "2"
+         },
+         {
+          "name": "status reports success",
+          "ok": false,
+          "detail": "Failed: submission_meta.json → HTTP 404  ·  use route A (curl the artifact) or route C (scripts/baseline_submission.py) instead"
+         },
+         {
+          "name": "field blob was fetched when the build was clicked",
+          "ok": false,
+          "detail": "submission_meta.json,submission_meta.json"
+         },
+         {
+          "name": "a blob was registered for download",
+          "ok": false,
+          "detail": "0"
+         },
+         {
+          "name": "download link names a unique per-build file",
+          "ok": false,
+          "detail": ""
+         },
+         {
+          "name": "download type matches the container",
+          "ok": false,
+          "detail": ""
+         },
+         {
+          "name": "an identity block (unique name + suggested note) was rendered",
+          "ok": false,
+          "detail": "missing"
+         },
+         {
+          "name": "the suggested note is policy · build <sha8> · <UTC stamp>",
+          "ok": false,
+          "detail": ""
+         }
+        ],
+        "ok": false
+       }
+      }
+      [generate_submission] Error: submission_meta.json → HTTP 404
+          at generate_submission.js:128:24
+      
+    assert 3 == 0
+     +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/tests/support/generator_ui_harness....}\n}\n', stderr='[generate_submission] Error: submission_meta.json → HTTP 404\n    at generate_submission.js:128:24\n').returncode
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:299: AssertionError: "
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/shutil.py:256: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+E   AssertionError: a FAIL verdict must exit 1 (2 = missing prerequisites, 0 = pass)
+    assert 2 == 1
+----------------------------- Captured stdout call -----------------------------
+MISSING prerequisites: docs/submission_meta.json, docs/submission_field.bin
+  build the payload with: python scripts/build_submission_payload.py
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:335: AssertionError: a FAIL verdict must exit 1 (2 = missing prerequisites, 0 = pass)
+E   AssertionError: assert (False)
+     +  where False = exists()
+     +    where exists = PosixPath('/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json').exists
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_generator.py:376: AssertionError: assert (False)
+E   FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+/opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/pathlib.py:1044: FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+E   AssertionError: executive_summary_turbo.html cannot reach ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', 'sources.html', 'verification.html', 'review.html', 'reproduce.html']
+    assert not ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', ...]
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_pages.py:59: AssertionError: executive_summary_turbo.html cannot reach ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', 'sources.html', 'verification.html', 'review.html', 'reproduce.html']
+E   AssertionError: the committed pages are stale against a rebuild: ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+    assert not ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+/home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_site_pages.py:128: AssertionError: the committed pages are stale against a rebuild: ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+=============================== warnings summary ===============================
+../../../../../opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: 3 warnings
+tests/test_adopted_policy.py: 11 warnings
+tests/test_baseline_submission.py: 5 warnings
+tests/test_ensemble.py: 3 warnings
+tests/test_external_data.py: 2 warnings
+tests/test_fetch_qfaults.py: 12 warnings
+tests/test_metric.py: 1 warning
+tests/test_miss_distance.py: 15 warnings
+tests/test_package_submission.py: 5 warnings
+tests/test_proxy_catalogue.py: 9 warnings
+tests/test_submission_writer.py: 4 warnings
+tests/test_template_conformance.py: 10 warnings
+tests/test_union_selection.py: 1 warning
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    return Affine.translation(west, north) * Affine.scale(xsize, -ysize)
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:366: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = writer(
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_ensemble.py::test_save_ensemble_writes_the_pre_shaping_input
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_ensemble.py:416: RuntimeWarning: Mean of empty slice
+    expect = np.nanmean(np.stack([p for _, p in folds]), axis=0)
+
+tests/test_proxy_catalogue.py: 54 warnings
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_proxy_catalogue.py:63: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    x, y = transform * (col + 0.5, r)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_cross_catalogue.py::test_the_committed_qfaults_refusal_is_the_documented_finding - AssertionError: assert False
+ +  where False = <built-in method startswith of str object at 0x7f6281a65c30>('a3dcd6d5')
+ +    where <built-in method startswith of str object at 0x7f6281a65c30> = '7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15'.startswith
+FAILED tests/test_how_to_submit_generator.py::test_the_generator_has_its_own_numbered_section_and_mount_point - AssertionError: the mount point the glue looks for is gone
+assert 'id="tif-generator"' in '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'
+FAILED tests/test_how_to_submit_generator.py::test_route_commands_reference_files_that_exist - AssertionError: the page no longer cites docs/generate_submission.js
+assert 'docs/generate_submission.js' in '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'
+FAILED tests/test_how_to_submit_generator.py::test_the_generator_verification_table_reflects_its_evidence - assert '8 measured steps passed' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n'
+FAILED tests/test_how_to_submit_generator.py::test_a_fail_verdict_on_the_generator_is_visible_as_a_failure - assert ('FAIL' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n' and 'injected' in ' \n  \n \n \n How to submit, exactly — GEMS Prize \n \n \n  ⛰️  ">\n  \n \n   \n      ⛰️ \n        GEMS Prize — worki...uthoritative sources:  competition  ·\n      problem description  ·  official rules  ·\n      repository  \n  \n\n  \n')
+FAILED tests/test_how_to_submit_page.py::test_no_repository_path_on_the_page_is_missing - AssertionError: the page cites paths that do not exist: ['docs/submission_meta.json']
+assert not ['docs/submission_meta.json']
+FAILED tests/test_package_submission.py::test_the_browser_zip_and_the_cli_zip_agree_on_container_semantics - subprocess.CalledProcessError: Command '['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.tif', '/tmp/pytest-of-runner/pytest-0/test_the_browser_zip_and_the_c0/b.zip']' returned non-zero exit status 3.
+FAILED tests/test_site.py::test_index_opens_with_the_submission_builder - AssertionError: the glue binds ONE mount; a second would print nothing
+assert 0 == 1
+ +  where 0 = <built-in method count of str object at 0x557b5f188f90>('id="tif-generator"')
+ +    where <built-in method count of str object at 0x557b5f188f90> = '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'.count
+FAILED tests/test_site.py::test_executive_summary_carries_the_builder_before_the_sections - assert 0 == 1
+ +  where 0 = <built-in method count of str object at 0x557b5f342580>('id="tif-generator"')
+ +    where <built-in method count of str object at 0x557b5f342580> = '<!DOCTYPE html>\n<html lang="en"><head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, i...n     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>\n</div></footer>\n\n</body></html>\n'.count
+FAILED tests/test_site.py::test_builder_numbers_come_from_the_payload_not_the_template - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+FAILED tests/test_site_generator.py::test_the_committed_payload_still_reproduces_the_artifact - AssertionError: DRIFT — the committed site payload no longer reproduces the artifact:
+    - docs/submission_meta.json: not committed
+    - docs/submission_field.bin: not committed
+    fix: python scripts/build_submission_payload.py && rebuild the site
+  
+assert 1 == 0
+ +  where 1 = CompletedProcess(args=['/opt/hostedtoolcache/Python/3.11.16/x64/bin/python', 'scripts/build_submission_payload.py', '-...bmission_field.bin: not committed\n  fix: python scripts/build_submission_payload.py && rebuild the site\n', stderr='').returncode
+FAILED tests/test_site_generator.py::test_payload_verify_mode_decodes_back_to_the_artifact - AssertionError: MISSING  docs/submission_meta.json / docs/submission_field.bin - run without --check/--verify to create them
+  
+assert 2 == 0
+ +  where 2 = CompletedProcess(args=['/opt/hostedtoolcache/Python/3.11.16/x64/bin/python', 'scripts/build_submission_payload.py', '-...ING  docs/submission_meta.json / docs/submission_field.bin - run without --check/--verify to create them\n', stderr='').returncode
+FAILED tests/test_site_generator.py::test_every_container_variant_is_readable_and_identical[['--no-deflate']-uncompressed strips] - AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+      at Object.readFileSync (node:fs:440:20)
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+      at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+      at Module._compile (node:internal/modules/cjs/loader:1781:14)
+      at Object..js (node:internal/modules/cjs/loader:1913:10)
+      at Module.load (node:internal/modules/cjs/loader:1505:32)
+      at Function._load (node:internal/modules/cjs/loader:1309:12)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+      at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+FAILED tests/test_site_generator.py::test_every_container_variant_is_readable_and_identical[['--rows-per-strip', '1']-one row per strip] - AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+      at Object.readFileSync (node:fs:440:20)
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+      at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+      at Module._compile (node:internal/modules/cjs/loader:1781:14)
+      at Object..js (node:internal/modules/cjs/loader:1913:10)
+      at Module.load (node:internal/modules/cjs/loader:1505:32)
+      at Function._load (node:internal/modules/cjs/loader:1309:12)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+      at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+FAILED tests/test_site_generator.py::test_every_container_variant_is_readable_and_identical[['--rows-per-strip', '3730']-one strip for the whole grid] - AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+      at Object.readFileSync (node:fs:440:20)
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+      at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+      at Module._compile (node:internal/modules/cjs/loader:1781:14)
+      at Object..js (node:internal/modules/cjs/loader:1913:10)
+      at Module.load (node:internal/modules/cjs/loader:1505:32)
+      at Function._load (node:internal/modules/cjs/loader:1309:12)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+      at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+FAILED tests/test_site_generator.py::test_every_container_variant_is_readable_and_identical[['--rows-per-strip', '7']-a strip height that is not a divisor] - AssertionError: ERROR Error: ENOENT: no such file or directory, open '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+      at Object.readFileSync (node:fs:440:20)
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:523:34
+      at /home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:558:9
+      at Object.<anonymous> (/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js:563:3)
+      at Module._compile (node:internal/modules/cjs/loader:1781:14)
+      at Object..js (node:internal/modules/cjs/loader:1913:10)
+      at Module.load (node:internal/modules/cjs/loader:1505:32)
+      at Function._load (node:internal/modules/cjs/loader:1309:12)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+      at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/geotiff_writer.js', '/home/run...dules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n").returncode
+FAILED tests/test_site_generator.py::test_writer_refuses_a_payload_it_cannot_honour - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+FAILED tests/test_site_generator.py::test_writer_refuses_a_field_blob_of_the_wrong_length - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+FAILED tests/test_site_generator.py::test_writer_refuses_a_same_length_tamper_via_the_pinned_hash - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+FAILED tests/test_site_generator.py::test_page_glue_builds_the_file_it_claims[tif] - AssertionError: "
+     },
+     {
+      "name": "mount was found and populated",
+      "ok": true,
+      "detail": "7 nodes"
+     },
+     {
+      "name": "glue fetched the manifest by the name the site ships",
+      "ok": true,
+      "detail": "submission_meta.json"
+     },
+     {
+      "name": "glue did not invent a second payload path",
+      "ok": true,
+      "detail": "submission_meta.json"
+     },
+     {
+      "name": "provenance table names the artifact it reproduces",
+      "ok": false,
+      "detail": "artifact path rendered"
+     },
+     {
+      "name": "two build buttons exist",
+      "ok": true,
+      "detail": "2"
+     },
+     {
+      "name": "status reports success",
+      "ok": false,
+      "detail": "Failed: submission_meta.json → HTTP 404  ·  use route A (curl the artifact) or route C (scripts/baseline_submission.py) instead"
+     },
+     {
+      "name": "field blob was fetched when the build was clicked",
+      "ok": false,
+      "detail": "submission_meta.json,submission_meta.json"
+     },
+     {
+      "name": "a blob was registered for download",
+      "ok": false,
+      "detail": "0"
+     },
+     {
+      "name": "download link names a unique per-build file",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "download type matches the container",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "an identity block (unique name + suggested note) was rendered",
+      "ok": false,
+      "detail": "missing"
+     },
+     {
+      "name": "the suggested note is policy · build <sha8> · <UTC stamp>",
+      "ok": false,
+      "detail": ""
+     }
+    ],
+    "ok": false
+   }
+  }
+  [generate_submission] Error: submission_meta.json → HTTP 404
+      at generate_submission.js:128:24
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/tests/support/generator_ui_harness....}\n}\n', stderr='[generate_submission] Error: submission_meta.json → HTTP 404\n    at generate_submission.js:128:24\n').returncode
+FAILED tests/test_site_generator.py::test_page_glue_builds_the_file_it_claims[zip] - AssertionError: "
+     },
+     {
+      "name": "mount was found and populated",
+      "ok": true,
+      "detail": "7 nodes"
+     },
+     {
+      "name": "glue fetched the manifest by the name the site ships",
+      "ok": true,
+      "detail": "submission_meta.json"
+     },
+     {
+      "name": "glue did not invent a second payload path",
+      "ok": true,
+      "detail": "submission_meta.json"
+     },
+     {
+      "name": "provenance table names the artifact it reproduces",
+      "ok": false,
+      "detail": "artifact path rendered"
+     },
+     {
+      "name": "two build buttons exist",
+      "ok": true,
+      "detail": "2"
+     },
+     {
+      "name": "status reports success",
+      "ok": false,
+      "detail": "Failed: submission_meta.json → HTTP 404  ·  use route A (curl the artifact) or route C (scripts/baseline_submission.py) instead"
+     },
+     {
+      "name": "field blob was fetched when the build was clicked",
+      "ok": false,
+      "detail": "submission_meta.json,submission_meta.json"
+     },
+     {
+      "name": "a blob was registered for download",
+      "ok": false,
+      "detail": "0"
+     },
+     {
+      "name": "download link names a unique per-build file",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "download type matches the container",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "an identity block (unique name + suggested note) was rendered",
+      "ok": false,
+      "detail": "missing"
+     },
+     {
+      "name": "the suggested note is policy · build <sha8> · <UTC stamp>",
+      "ok": false,
+      "detail": ""
+     }
+    ],
+    "ok": false
+   }
+  }
+  [generate_submission] Error: submission_meta.json → HTTP 404
+      at generate_submission.js:128:24
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/tests/support/generator_ui_harness....}\n}\n', stderr='[generate_submission] Error: submission_meta.json → HTTP 404\n    at generate_submission.js:128:24\n').returncode
+FAILED tests/test_site_generator.py::test_page_glue_refuses_a_tampered_manifest - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+FAILED tests/test_site_generator.py::test_without_placed_data_the_judge_names_the_gap_not_a_keyerror - AssertionError: a FAIL verdict must exit 1 (2 = missing prerequisites, 0 = pass)
+assert 2 == 1
+FAILED tests/test_site_generator.py::test_the_files_the_page_loads_are_the_files_the_tests_run - AssertionError: assert (False)
+ +  where False = exists()
+ +    where exists = PosixPath('/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json').exists
+FAILED tests/test_site_generator.py::test_every_repository_path_the_manifest_names_actually_exists - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+FAILED tests/test_site_pages.py::test_every_page_carries_the_whole_nav - AssertionError: executive_summary_turbo.html cannot reach ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', 'sources.html', 'verification.html', 'review.html', 'reproduce.html']
+assert not ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', ...]
+FAILED tests/test_site_pages.py::test_the_build_reproduces_the_committed_pages - AssertionError: the committed pages are stale against a rebuild: ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+assert not ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+27 failed, 490 passed, 7 skipped, 142 warnings, 3 errors in 61.00s (0:01:00)

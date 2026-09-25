@@ -1,0 +1,31 @@
+workflow: Tests
+run: 36095637763
+sha: a83b54bf21a8e427640de8d81176933cebac4652
+branch: main
+
+--- pytest tail ---
+      "name": "the suggested note is policy · build <sha8> · <UTC stamp>",
+      "ok": false,
+      "detail": ""
+     }
+    ],
+    "ok": false
+   }
+  }
+  [generate_submission] Error: submission_meta.json → HTTP 404
+      at generate_submission.js:128:24
+  
+assert 3 == 0
+ +  where 3 = CompletedProcess(args=['/usr/local/bin/node', '/home/runner/work/GEMSDOE2/GEMSDOE2/tests/support/generator_ui_harness....}\n}\n', stderr='[generate_submission] Error: submission_meta.json → HTTP 404\n    at generate_submission.js:128:24\n').returncode
+FAILED tests/test_site_generator.py::test_page_glue_refuses_a_tampered_manifest - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_field.bin'
+FAILED tests/test_site_generator.py::test_without_placed_data_the_judge_names_the_gap_not_a_keyerror - AssertionError: a FAIL verdict must exit 1 (2 = missing prerequisites, 0 = pass)
+assert 2 == 1
+FAILED tests/test_site_generator.py::test_the_files_the_page_loads_are_the_files_the_tests_run - AssertionError: assert (False)
+ +  where False = exists()
+ +    where exists = PosixPath('/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json').exists
+FAILED tests/test_site_generator.py::test_every_repository_path_the_manifest_names_actually_exists - FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/GEMSDOE2/GEMSDOE2/docs/submission_meta.json'
+FAILED tests/test_site_pages.py::test_every_page_carries_the_whole_nav - AssertionError: executive_summary_turbo.html cannot reach ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', 'sources.html', 'verification.html', 'review.html', 'reproduce.html']
+assert not ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', ...]
+FAILED tests/test_site_pages.py::test_the_build_reproduces_the_committed_pages - AssertionError: the committed pages are stale against a rebuild: ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+assert not ['executive_summary.html', 'how_to_submit.html', 'index.html', 'metric.html', 'results.html', 'submission.html']
+27 failed, 490 passed, 7 skipped, 142 warnings, 3 errors in 61.00s (0:01:00)
