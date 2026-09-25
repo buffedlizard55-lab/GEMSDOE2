@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-19T15:29:03+00:00",
+ "generated_utc": "2026-09-25T03:51:13+00:00",
  "generated_by": "scripts/block_holdout_eval.py",
  "purpose": "block-stratified error bars on the emission policy, on the catalogue and on the new-fault-like proxy population, from an exact additive decomposition of the official metric plus a block bootstrap",
  "inputs": {
@@ -19,10 +19,10 @@
     -100.0,
     4508550.0
    ],
-   "nodata": null,
+   "nodata": NaN,
    "dtype": "float32",
-   "sha256": "a3dcd6d51303f312fd3e13667a1890d8eeab0752483432ddd46bc74231168009",
-   "bytes": 569531
+   "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+   "bytes": 570890
   }
  },
  "metric": {
@@ -15175,6 +15175,7 @@
    0.111886
   ],
   "reference_labels_dti": 0.229799,
+  "reference_combined_dti": null,
   "best_swept_candidate": "floor0.1_w0px",
   "best_swept_proxy_dti": 0.099859,
   "best_swept_contrast": 0.0,
@@ -15221,7 +15222,7 @@
    "emission_px": 0
   },
   "runner_sha256": "32eda32d151398458f5ecdb789c1562ccf2cbbf362fc0ca3731a42003959565f",
-  "sandbox_input_sha256": "a3dcd6d51303f312fd3e13667a1890d8eeab0752483432ddd46bc74231168009",
+  "sandbox_input_sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
   "meaning": "the shipped raster scored in the sandbox equals the policy the runner sweep measured, so the committed evidence and the local numbers describe the same bytes"
  },
  "pruning": {

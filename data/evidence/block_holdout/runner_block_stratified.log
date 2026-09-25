@@ -37,4 +37,4 @@ reference candidate floor0.1_w0px:
   mean per-block sign agreement between the two populations: 0.747 (1.00 = they prefer the same candidate in the same block every time)
   largest population conflict: floor0.1_w3px gains on the new-fault-like proxy population in 10 of 32 blocks where both populations are scoreable while the catalogue population loses in the same block
 
-wrote data/evidence/block_holdout/runner_block_stratified.json (346,167 bytes)
+wrote data/evidence/block_holdout/runner_block_stratified.json (346,200 bytes)
