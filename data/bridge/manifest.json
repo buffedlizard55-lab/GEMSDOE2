@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-17T01:02:28+00:00",
+ "generated_utc": "2026-09-25T03:50:54+00:00",
  "generated_by": "scripts/make_data_bridge.py",
  "purpose": "transport the official competition rasters from an unrestricted runner into the egress-restricted dev sandbox via git; GitHub's 100 MB blob limit forces the feature stack to be split",
  "source": {
@@ -9,7 +9,7 @@
    "existing_faults.tif": "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1",
    "example_submission.tif": "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1"
   },
-  "sha256_pins": "data/evidence/inventory.json (scripts/inspect_competition_data.py, GitHub-hosted runner, generated 2026-09-14T18:07:33+00:00)"
+  "sha256_pins": "data/evidence/inventory.json (scripts/inspect_competition_data.py, GitHub-hosted runner, generated 2026-09-17T01:29:10+00:00)"
  },
  "part_bytes": 94371840,
  "reassemble_command": "python scripts/assemble_data_bridge.py",
