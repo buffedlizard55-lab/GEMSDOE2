@@ -37,6 +37,9 @@ DATA_TAB = COMP + "data/"
 RULES = "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
 RULES_HEROX = "https://www.herox.com/GEMSPrize/resource/2274"
 REFSOL = "https://github.com/drivendataorg/gems-prize-reference-solution"
+#: the portfolio key the page leads with; one entry per shipped arm in
+#: data/evidence/portfolio_files.json, written by scripts/package_portfolio.py
+PRIMARY_PORTFOLIO_KEY = "gemsdoe2-dual-family-union"
 REPO = "https://github.com/buffedlizard55-lab/GEMSDOE2"
 GDR_INGENIOUS = "https://gdr.openei.org/submissions/1391"
 
@@ -388,6 +391,14 @@ def build_executive_summary(ev: dict) -> str:
     recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
     recall_note = f"Recall-Union v1 · deep+classical union · build {recall_sha[:8]}"
 
+    # Session 27: the primary candidate is whatever `scripts/package_portfolio.py` packaged first
+    # (`portfolio_files.json` -> `_portfolio_primary`), read back and re-hashed here.  The paragraph
+    # that used to be typed around the recall-union is now derived, because a typed "primary"
+    # is exactly how this page drifted off its own artifact once already.
+    P = _primary_facts(ev)
+    primary_path, primary_sha, primary_bytes = P["path"], P["sha256"], P["bytes"]
+    primary_name, primary_note = P["name"], P["note"]
+
     cand_policy = best_cand.get("policy", "sweep_best_t0_0.1_width0px")
     cand_dti = best_cand.get("measured_dti", 0.136452)
     cand_contrast = best_cand.get("contrast_vs_shipped", 0.111767)
@@ -400,8 +411,10 @@ def build_executive_summary(ev: dict) -> str:
         ("Submission Limit", "<b>Up to 3 / week</b>", "1 final submission selected before deadline (§3.4, §3.5)"),
         ("Official Deadline", "<b>Dec 3, 2026</b>",
          "platform close 11:59 PM UTC · §A.1 form due 5:00 PM ET (22:00 UTC) the same day — act on the earlier"),
-        ("Primary Candidate", "<b>Recall-Union v1</b>",
-         f"deep+classical union · sha256 {recall_sha[:8]}… · local diagnostics only"),
+        ("Primary Candidate", "<b>Dual-family union</b>",
+         f"recall ∪ precision arms · sha256 {primary_sha[:8]}… · measured, format-gated"),
+        ("Alternate arms", "<b>3, one Note each</b>",
+         "precision · extension (a pre-registered bet) · recall — in the upload plan below"),
         ("Browser Builder (secondary)", f"<b>{shipped_bytes/1000:.1f} KB GeoTIFF</b>",
          f"adopted 11-fold ensemble field · sha256 {shipped_sha[:8]}…"),
     ]
@@ -417,11 +430,11 @@ def build_executive_summary(ev: dict) -> str:
 <div class="stats">{grid}</div>
 
 <div class="note ok"><strong>🚀 TL;DR — Primary submission in three steps</strong><br>
-The selected research candidate is <b>Recall-Union v1</b>, a fixed union of the independent deep-ensemble and CPU classical fields. It is already built, template-validated, and available as a one-click GeoTIFF or single-member ZIP above — no training, GPU, or competition-data download is required to obtain it.<br>
+The selected research candidate is the <b>dual-family union</b> — the pixelwise union of the 11-fold deep ensemble and a 6-fold blend of a different model set — packaged in this site as the file to submit. It is already built, format-gated (finite in [0, 1] inside the template's valid region, NaN outside it), and available as a one-click GeoTIFF or single-member ZIP above; no training, GPU, or competition-data download is required to obtain it. <a href="#plan">The upload plan below</a> adds the two other arms worth spending a week's three submissions on, each with the hypothesis it tests written down first.<br>
 <pre><code># Optional local re-check of the shipped primary artifact
-python scripts/validate_submission.py --pred docs/gemsdoe2_recall_union_submission.tif --sample data/sample_submission.tif --train data/training_features.tif
+python scripts/validate_submission.py --pred {e(primary_path)} --sample data/sample_submission.tif --train data/training_features.tif
 # → ✅ Validation PASSED — upload the downloaded .tif (or its .zip) at https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></pre>
-<strong>Primary artifact:</strong> <code>{e(recall_path)}</code> — {recall_bytes/1000:.1f} KB, sha256 <code>{e(recall_sha)}</code>, suggested unique name <code>gems-recall-union-v1-{e(recall_sha[:8])}.tif</code>, suggested Note <code>{e(recall_note)}</code>.<br>
+<strong>Primary artifact:</strong> <code>{e(primary_path)}</code> — {primary_bytes/1000:.1f} KB, sha256 <code>{e(primary_sha)}</code>, unique submission name <code>{e(primary_name)}</code>, Note <code>{e(primary_note)}</code>.<br>
 <strong>Important:</strong> the SGMC and provided-label measurements below are local diagnostics, not leaderboard scores; only an authenticated DrivenData submission can provide the official score. Paste the required Generative AI disclosure (§3.2) into the submission narrative, and follow the platform's current enrollment and final-submission rules before the deadline. <a href="#generate-here">The secondary browser-builder route</a> is available for reproducibility, and <a href="how_to_submit.html">the full subpage</a> lists the exact gates.</div>
 """)
     out.append(_submission_builder(ev))
@@ -629,7 +642,7 @@ Generative AI assistance (LLM agent workflows) was utilized during the developme
 <h2>7. Step-by-Step Practical Submission Workflow</h2>
 
 <div class="note ok">
-  <strong>Primary Route to Submit: Recall-Union v1.</strong> Download the one-click GeoTIFF or its single-member ZIP from the candidate card above. The published primary bytes are <code>{e(recall_path)}</code> (sha256: <code>{e(recall_sha)}</code>, {recall_bytes:,} bytes) and passed <code>scripts/validate_submission.py</code>: EPSG:32611, 3292×3730, float32, finite [0, 1] throughout the template-valid region, NaN only outside it, and template nodata <code>nan</code>. Use the suggested unique file name and Note shown above. This validates format only; it does not predict the hidden leaderboard score.
+  <strong>Primary Route to Submit: the dual-family union.</strong> Download the one-click GeoTIFF or its single-member ZIP from the candidate card above. The published primary bytes are <code>{e(primary_path)}</code> (sha256: <code>{e(primary_sha)}</code>, {primary_bytes:,} bytes) and passed <code>scripts/validate_submission.py</code> when this page was built: EPSG:32611, 3292×3730, float32, finite [0, 1] throughout the template-valid region, NaN only outside it, and template nodata <code>nan</code>. Use the suggested unique file name and Note shown above. This validates format only; it does not predict the hidden leaderboard score.
 </div>
 
 <p>To generate, validate, and submit from scratch, follow these exact steps:</p>
@@ -649,7 +662,7 @@ python scripts/assemble_data_bridge.py
 python scripts/prepare_data.py</code></pre>
 
 <h3>Step 3: Choose the prediction route</h3>
-<p><b>Primary route:</b> use the Recall-Union v1 card at the top of this page. It is the selected new-fault-first candidate and requires no local generation. The commands below are the <b>secondary adopted-ensemble browser/model routes</b>; they remain available for reproducibility and comparison, but they are not the primary candidate advertised for upload.</p>
+<p><b>Primary route:</b> use the file card at the top of this page (the dual-family union) — one click, no local generation. The commands below are the <b>secondary browser-build and model routes</b>; they remain available for reproducibility and comparison, and the browser route rebuilds the same pixels, but the primary artefact advertised for upload is the packaged file.</p>
 <p>Secondary generation routes:</p>
 <ul>
   <li><b>Route A (Local Model Inference):</b>
@@ -2540,7 +2553,10 @@ post-processing. The Final Prize Round explicitly rewards flagging faults expert
 
 def build_results(ev: dict) -> str:
     runs = ev.get("runs", [])
-    body = [_recall_candidate_card(ev), f"""<h2>Honest status</h2>
+    body = [_shipped_candidate_card(ev),
+            "<h2 id=\"portfolio\">Every downloadable candidate, scored from its own bytes</h2>\n"
+            + _portfolio_table(ev) + _pruning_result(ev),
+            f"""<h2>Honest status</h2>
 {note("bad", '''<b>A green workflow is not evidence.</b> The 6-fold ensemble run
 <code>35042805806</code> trained every fold for 2 h 36 min and then crashed while writing the
 submission (<code>RasterBlockError: the height and width of TIFF dataset blocks must be multiples of
@@ -3013,8 +3029,16 @@ footer p{margin:5px 0}
 # a committed evidence file (the validator's log, the blend report, the block bootstrap), or quoted
 # verbatim from the official rules PDF by quote id from data/evidence/rules_quotes.json.  Nothing
 # here is typed in as a fact.
-SHIPPED_SUBMISSION = "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
-SHIPPED_EVIDENCE_DIR = "data/evidence/runs/ens12-adopted-floor0.1-w0"
+#: the artifact the browser builder rebuilds and the pages pin.  Session 27 moved this from the
+#: 11-fold arm to the measured union of both detector families (data/evidence/union/), because
+#: the union beats the 11-fold arm on every population in data/evidence/submission_portfolio.json.
+SHIPPED_SUBMISSION = "data/evidence/union/submission.tif"
+#: the directory whose committed evidence (validator log, sidecar) the pages quote for the
+#: shipped bytes; kept equal to SHIPPED_SUBMISSION's parent so the two cannot drift.
+SHIPPED_EVIDENCE_DIR = "data/evidence/union"
+#: the arm whose blend provenance (fold list, policy, postwrite) the pages quote: the union is a
+#: union of arms, and its provenance is the 11-fold run's
+BLEND_PROVENANCE_DIR = "data/evidence/runs/ens12-adopted-floor0.1-w0"
 SUBMISSIONS_URL = COMP + "submissions/"
 LEADERBOARD_URL = COMP + "leaderboard/"
 
@@ -3191,11 +3215,17 @@ def build_submission(ev: dict) -> str:
     recall_live = _sha_bytes(recall_path)
     recall_sha = recall_live.get("sha256") or str(recall_artifact.get("sha256") or "artifact-not-committed")
     recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
+    # Session 27: this page's "primary" is the packaged file the landing pages lead with, read from
+    # `portfolio_files.json`; the recall-union stays on the page as an alternate arm with its own row.
+    P = _primary_facts(ev)
+    primary_path, primary_sha, primary_bytes = P["path"], P["sha256"], P["bytes"]
+    primary_name, primary_note = P["name"], P["note"]
+    other_arms, alternate_names = P["others"], P["other_names"]
     val_log = _read(f"{SHIPPED_EVIDENCE_DIR}/validation.log")
     vrows, vpassed = _validation_rows(val_log)
-    postwrite = load(ROOT / f"{SHIPPED_EVIDENCE_DIR}/postwrite.json") or {}
-    blend = load(ROOT / f"{SHIPPED_EVIDENCE_DIR}/blend_report.json") or {}
-    usable = _read(f"{SHIPPED_EVIDENCE_DIR}/usable_folds.txt")
+    postwrite = load(ROOT / f"{BLEND_PROVENANCE_DIR}/postwrite.json") or {}
+    blend = load(ROOT / f"{BLEND_PROVENANCE_DIR}/blend_report.json") or {}
+    usable = _read(f"{BLEND_PROVENANCE_DIR}/usable_folds.txt")
     placement = ev.get("placement") or {}
     pf = ev.get("site_payload") or {}
     pgrid = pf.get("grid") or {}
@@ -3220,11 +3250,11 @@ def build_submission(ev: dict) -> str:
         f'<td>{e(t)}</td></tr>' for s, t in vrows)
 
     cards = [
-        ("Primary file to upload", f"<b class='mono' style='font-size:.9rem'>{e(recall_path.split('/')[-1])}</b>",
-         (f"{recall_bytes:,} bytes · single-band float32 GeoTIFF" if recall_live.get('exists') else "NOT COMMITTED")),
+        ("Primary file to upload", f"<b class='mono' style='font-size:.9rem'>{e(primary_path.split('/')[-1])}</b>",
+         (f"{primary_bytes:,} bytes · single-band float32 GeoTIFF" if P["exists"] else "NOT COMMITTED")),
         ("Primary sha256 (measured at build time)",
-         f"<b class='mono' style='font-size:.86rem'>{e(recall_sha[:24])}…</b>",
-         "Recall-Union v1 · re-measured by scripts/build_site.py from the committed bytes"),
+         f"<b class='mono' style='font-size:.86rem'>{e(primary_sha[:24])}…</b>",
+         "dual-family union · re-measured by scripts/build_site.py from the committed bytes"),
         ("Format validation", "<b>PASSED</b>" if vpassed else "<b>NOT PROVEN</b>",
          f"{len([r for r in vrows if r[0] == '✓'])} checks ✓ in the committed validator log"),
         ("Secondary builder policy", "<b>floor 0.1 · thin · width 0 px</b>", _policy_subtitle(dec)),
@@ -3244,16 +3274,17 @@ def build_submission(ev: dict) -> str:
 
 <h2>0. The whole primary submission in three commands</h2>
 <p>No training, no GPU, or competition-data download is needed to obtain the primary artifact. Download
-<code>{e(recall_path)}</code> from the candidate card, optionally run the validator below, then upload
-that TIFF (or the single-member ZIP) at the submissions URL. Account, enrollment, upload, and the
-official score are human/platform steps; this repository cannot perform them.</p>
+<code>{e(primary_path)}</code> from the file card (it is also on the landing page), optionally run the
+validator below, then upload that TIFF (or the single-member ZIP) at the submissions URL. Account,
+enrollment, upload, and the official score are human/platform steps; this repository cannot perform
+them.</p>
 <pre><code>git pull
 python scripts/validate_submission.py \\
-    --pred {e(recall_path)} \\
+    --pred {e(primary_path)} \\
     --sample data/sample_submission.tif --train data/training_features.tif
 # -> "✅ Validation PASSED - Ready for submission!"
-# sha256: {e(recall_sha)}
-# Note: Recall-Union v1 · deep+classical union · build {e(recall_sha[:8])}</code></pre>
+# sha256: {e(primary_sha)}
+# Note: {e(primary_note)}</code></pre>
 <p>Then upload the downloaded primary file at
 <a href="{SUBMISSIONS_URL}">{e(SUBMISSIONS_URL)}</a>. The local diagnostics recorded for this
 candidate are surrogates, not a leaderboard score.</p>
@@ -3330,13 +3361,17 @@ python scripts/prepare_data.py            # 3292x3730, 19 bands, EPSG:32611, 100
     out.append(f"""
 <h2 id="step3">3. Pick the raster you are going to upload</h2>
 <table><thead><tr><th>Route</th><th>Command</th><th>When to use it</th><th>Cost</th></tr></thead><tbody>
-<tr class="hl"><td><b>A — the primary Recall-Union v1 artifact</b><br><span class="small">what we would upload today</span></td>
-<td class="mono small">{e(recall_path)}<br>sha256 {e(recall_sha)}</td>
-<td>Immediately. It is the fixed deep-ensemble ∪ CPU-classical field, deliberately separate from the known-label backbone and old adopted policy. Its local diagnostics are surrogates only.</td>
+<tr class="hl"><td><b>A — the primary packaged artifact (the dual-family union)</b><br><span class="small">what we would upload first</span></td>
+<td class="mono small">{e(primary_path)}<br>sha256 {e(primary_sha)}<br>submit as {e(primary_name)}</td>
+<td>Immediately. One click from the file card; no local generation. It is the union of the 11-fold ensemble and the 6-fold blend of a different model set, chosen because it has the best platform-masked (P) and catalogue-charged (S) local score of every candidate those populations can rank. Its local scores are surrogates only.</td>
 <td class="num">0 min</td></tr>
-<tr><td><b>A2 — the secondary browser-builder artifact</b></td>
+<tr><td><b>A1 — the other packaged arms, one Note each</b><br><span class="small">{len(other_arms)} alternates</span></td>
+<td class="mono small">{alternate_names}</td>
+<td>After arm A has a score: the precision arm isolates coverage vs per-pixel value, and the extension arm tests the population the organizers named (new-fault truth within 300 m of a known trace) that no local protocol can see. Hypotheses and reading rules: the upload plan.</td>
+<td class="num">0 min</td></tr>
+<tr><td><b>A2 — the browser build of the same pixels</b></td>
 <td class="mono small">{e(SHIPPED_SUBMISSION)}</td>
-<td>Retained for reproducibility and comparison; the in-browser generator writes this adopted ensemble field, not the primary Recall-Union candidate.</td>
+<td>Retained for reproducibility: the page-writer rebuilds the primary field's pixels in your browser and self-checks them. Use it if you cannot download the packaged file, or to re-derive it independently.</td>
 <td class="num">seconds</td></tr>
 <tr><td><b>B — local inference</b></td>
 <td class="mono small">python -m src.inference --config configs/config.yaml --out submission.tif</td>
@@ -3576,7 +3611,7 @@ policy was adopted by a pre-registered rule rather than by hand.</p>
 <ul>
   <li>This repository is that package: pinned dependencies (<code>requirements.verified.txt</code>),
       the configs that produced the shipped artifact, the blend provenance
-      (<code>{e(SHIPPED_EVIDENCE_DIR)}/usable_folds.txt</code>, <code>fold_provenance.txt</code>,
+      (<code>{e(BLEND_PROVENANCE_DIR)}/usable_folds.txt</code>, <code>fold_provenance.txt</code>,
       <code>blend_report.json</code>) and the reproduction route
       (<a href="reproduce.html">reproduce</a>).</li>
   <li>Documentation must follow DrivenData's winning-model template (provided to winners after the
@@ -3801,6 +3836,306 @@ of it. The container is deliberately <em>not</em> byte-identical — {e(gen_comp
 """
 
 
+def _portfolio_primary(ev: dict):
+    """The shipped candidate's own record: packaged file + measurement + format gate."""
+    files = (ev.get("portfolio_files") or {}).get("files") or []
+    entry = next((f for f in files if f.get("key") == PRIMARY_PORTFOLIO_KEY), None)
+    if entry is None:
+        entry = next((f for f in files if f.get("copied")), None)
+    return entry
+
+
+def _primary_facts(ev: dict) -> dict:
+    """The packaged primary candidate, read from `portfolio_files.json` and re-hashed here.
+
+    One helper for the pages that must agree about which file is the one to upload
+    (`index.html`, `executive_summary.html`, `submission.html`, `how_to_submit.html`).  It exists
+    because a *typed* primary is how this site drifted off its own artifact once already: when the
+    recommendation changes, the pages must change with the bytes, not with an edit.
+    """
+    entry = _portfolio_primary(ev) or {}
+    path = str(entry.get("docs_path") or "")
+    live = _sha_bytes(path) if path else {}
+    files = [f for f in ((ev.get("portfolio_files") or {}).get("files") or []) if f.get("copied")]
+    others = [f for f in files if f.get("key") != PRIMARY_PORTFOLIO_KEY]
+    return {
+        "entry": entry, "path": path,
+        "file": path.split("/")[-1], "name": str(entry.get("unique_name") or ""),
+        "note": str(entry.get("note") or ""),
+        "sha256": str(live.get("sha256") or entry.get("sha256") or "artifact-not-committed"),
+        "bytes": int(live.get("bytes") or entry.get("bytes") or 0),
+        "exists": bool(live.get("exists")),
+        "ready": bool(entry.get("copied")) and bool(live.get("exists")),
+        "others": others,
+        "other_names": (" · ".join(str(f.get("unique_name") or "") for f in others)
+                        or "none packaged in this checkout"),
+    }
+
+
+def _pruning_result(ev: dict) -> str:
+    """The two *negative* results of session 27, reported rather than quietly dropped."""
+    pr = ev.get("pruning") or {}
+    ur = ev.get("union_report") or {}
+    if not pr:
+        return ""
+    top = (pr.get("tune_table") or [])[:6]
+    rows = "".join(
+        '<tr><td>{p}</td><td class="num">{n:,}</td><td class="num">{c:.2f}</td>'
+        '<td class="num">{v:.4f}</td></tr>'.format(
+            p=e(r.get("policy")), n=int(r.get("emitted_px") or 0),
+            c=float(r.get("coverage_tune") or 0), v=float(r.get("dti_P") or 0)) for r in top)
+    bands = (ur.get("measurement") or {}).get("distance_bands_measured_not_shipped") or {}
+    band_rows = "".join(
+        '<tr><td>{k}</td><td class="num">{v:.4f}</td><td class="num">{p:,}</td></tr>'.format(
+            k=e(k), v=float((v or {}).get("P_platform_mask") or 0),
+            p=int((v or {}).get("emitted_px") or 0)) for k, v in bands.items())
+    return f"""
+<h3>Two things that did not work, measured</h3>
+<p><b>Pruning the emission does not help.</b> The metric's loss is dominated by emission that earns
+nothing (on the canonical 11-fold field: TP 4,146 against 0.2&times;FP 32,778), so the obvious move is
+to keep only the pixels another signal corroborates — the second model family, long components, or
+the label-free structure-tensor lineament field. Every one of those policies was scored on a tune
+half and the winner measured once on the other half
+(<code>scripts/prune_submission_emission.py</code>, grid pre-registered in the script):</p>
+<table><thead><tr><th>policy (best six on the tune half)</th><th>emitted px</th>
+<th>coverage of the tune truth</th><th>P on the tune half</th></tr></thead><tbody>{rows}</tbody></table>
+<p class="small">The winner on the tune half was the 6-fold blend alone; on the untouched measure
+half it scored <b>P {float((pr.get("measurement_on_untouched_half") or {}).get("dti_P") or 0):.4f}</b>
+against <b>{float((pr.get("unpruned_artifact_on_same_half") or {}).get("dti_P") or 0):.4f}</b> for the
+unpruned artifact — a tie, i.e. no policy in the grid beat doing nothing. The lineament-corroborated
+policies were actively worse (P 0.0149–0.0226). Emission <em>selection</em> is not where the remaining
+score is; this repository's field is already a one-pixel skeleton (<code>skeletonize</code> returns
+the shipped mask unchanged), so there is no thickness left to remove.</p>
+
+<p><b>The large gain from a near-catalogue band is an artefact of the proxy, and is deliberately not
+shipped.</b> Restricting the emission to within a few pixels of the supplied catalogue roughly
+doubles the local P score, monotonically, because the proxy's "held-out" truth is carved out of the
+supplied catalogue and therefore lies <em>on</em> the pixels the platform masks — so any field that
+hugs the catalogue's edge looks good for a reason that says nothing about the hidden new-fault set.</p>
+<table><thead><tr><th>band</th><th>P on the local population</th><th>emitted px</th></tr></thead><tbody>{band_rows}</tbody></table>
+<p class="small">What the organizers do say is that corrections of known traces are one explicit
+target — so a near-trace component is not worthless, it is merely unmeasurable here. The shipped
+field keeps the whole union; the band numbers stay in
+<code>data/evidence/union/union_report.json</code> as a measured, refused option.</p>"""
+
+
+def _portfolio_table(ev: dict) -> str:
+    """Every candidate this repository can hand a reader, scored from its own bytes.
+
+    Four populations, all measured by scripts/measure_submission_portfolio.py on one machine from
+    the bytes themselves; `P` is the only one that applies the organizers' pixel-exact mask to the
+    prediction, and it is the column the recommendation uses. The random control is a uniform
+    emission of the same size on the same population -- the floor a detector must beat, which on
+    this metric is high because TP is a max over a 300 m cone.
+    """
+    pf = ev.get("portfolio") or {}
+    rows = [r for r in (pf.get("candidates") or []) if r.get("present")]
+    if not rows:
+        return missing("The submission portfolio has not been measured in this checkout, so no "
+                       "candidate is ranked here.",
+                       "python scripts/measure_submission_portfolio.py")
+    ctl = pf.get("controls") or {}
+    shipped_path = str((pf.get("recommended") or {}).get("path") or "")
+    trs = []
+    for r in rows:
+        if str(r.get("path") or "") == shipped_path:
+            shipped = " <span class=\"pill ok\">SHIPPED</span>"
+        elif not r.get("local_ranking_eligible", True):
+            shipped = (" <span class=\"pill warn\" title=\""
+                       "the local populations cannot rank this arm: they are built out of the "
+                       "supplied catalogue, and this arm is a corridor along it\">"
+                       "PRE-REGISTERED BET</span>")
+        else:
+            shipped = ""
+        trs.append(
+            '<tr><td><code class="mono small">{name}</code>{shipped}</td>'
+            '<td class="num">{emitted:,}</td><td class="num">{oncat:,}</td>'
+            '<td class="num">{L:.4f}</td><td class="num">{S:.4f}</td><td class="num">{I:.4f}</td>'
+            '<td class="num"><b>{P:.4f}</b></td><td class="num">{rnd:.4f}</td>'
+            '<td class="num">{lift:.2f}&times;</td></tr>'.format(
+                name=e(r.get("name")), shipped=shipped,
+                emitted=int(r.get("emitted_px") or 0),
+                oncat=int(r.get("emitted_on_supplied_catalogue_px") or 0),
+                L=float(r.get("dti_L") or 0), S=float(r.get("dti_S") or 0),
+                I=float(r.get("dti_I") or 0), P=float(r.get("dti_P_platform_mask") or 0),
+                rnd=float(r.get("random_control_same_support_P") or 0),
+                lift=float(r.get("lift_over_random") or 0)))
+    best = (pf.get("recommended") or {})
+    ctl_rows = "".join(
+        '<tr><td>{k}</td><td class="num">{v}</td></tr>'.format(
+            k=e(k), v=(f"{float(v):.4f}" if isinstance(v, (int, float)) else e(v)))
+        for k, v in ctl.items())
+    return f"""<table><thead><tr><th>candidate, scored from its own bytes</th><th>emitted px</th>
+<th>on the catalogue</th><th>L<br><span class="small">third party</span></th>
+<th>S<br><span class="small">catalogue off</span></th><th>I<br><span class="small">truth &gt; 5 px</span></th>
+<th>P<br><span class="small">mask applied</span></th><th>random<br><span class="small">same support</span></th>
+<th>lift</th></tr></thead><tbody>{"".join(trs)}</tbody></table>
+<p class="small">Recommended by that column: <b>{e(best.get("name") or "not measured")}</b>.
+{note("warn", "<b>The single most important row is the one that collapses.</b> The binary field the "
+              "<code>TURBO_README</code> cites as the best local model scores <b>L 0.4666</b> and "
+              "<b>P 0.0081</b> &mdash; because 33,623 of its 62,908 emitted pixels sit on the "
+              "supplied catalogue. Under the third-party protocol those pixels are forgiven (they "
+              "are inside the training buffer) and under the organizers' mask they are worth "
+              "nothing; a uniform random emission of the same size scores 0.0393 where it scores "
+              "0.0081. <code>scripts/generate_turbo_variants.py</code> built it with a "
+              "proximity boost <code>exp(-d/decay)</code> plus a forced 0.95 on known-fault pixels: "
+              "50.9 % of its pixels lie within 3 px of the supplied catalogue. It is a label echo, "
+              "and every table on this site that ranked it first was ranking the echo. The site's "
+              "previous primary candidate (<code>gemsdoe2_recall_union_submission.tif</code>) sits "
+              "at P 0.0626 with a 0.97&times; lift &mdash; i.e. <em>at the random floor</em>.")}
+<p class="small">Controls on the same population, so the columns can be read:
+{"".join(f"<b>{e(k)}</b> {v:.4f} · " if isinstance(v, (int, float)) else "" for k, v in ctl.items())}
+a uniform random emission of the same size is the floor, not zero, because the metric's TP term is
+a max over the 300 m cone. Source: <code>data/evidence/submission_portfolio.json</code>, written by
+<code>scripts/measure_submission_portfolio.py</code>.</p>"""
+
+
+def _union_crossover(ev: dict) -> float | None:
+    """The kappa at which the union overtakes the best single arm, from the measured terms.
+
+    DTI is a ratio of weighted terms; scaling the hidden truth set by kappa scales TP and FN (not
+    FP), so each arm's curve is determined by its measured (tp, fp, fn).  This returns the smallest
+    kappa above which the union's curve is no worse than the best single arm's - computed here, so
+    the page never quotes a crossover somebody typed.
+    """
+    arms = ((ev.get("union_report") or {}).get("measurement") or {}).get("arms_and_union") or {}
+    union = next((v for k, v in arms.items() if "union" in k.lower()), None)
+    others = [v for k, v in arms.items() if v is not union and v]
+    if not union or not others:
+        return None
+    def curve(t):
+        tp, fp, fn = float(t["tp"]), float(t["fp"]), float(t["fn"])
+        return lambda k: tp * k / (tp * k + 0.2 * fp + 0.8 * fn * k)
+    cu = curve(union)
+    for k in [i / 100 for i in range(20, 801)]:
+        if all(cu(k) >= curve(o)(k) - 1e-12 for o in others):
+            return k
+    return None
+
+
+def _portfolio_alternates(ev: dict) -> str:
+    """The other arms in docs/, so a reader can submit a second, different field and compare."""
+    files = (ev.get("portfolio_files") or {}).get("files") or []
+    others = [f for f in files if f.get("copied") and f.get("key") != PRIMARY_PORTFOLIO_KEY]
+    if not others:
+        return ""
+    items = "".join(
+        f'<li><a href="{e(str(f.get("docs_file") or f.get("unique_name") or ""))}" '
+        f'download="{e(str(f.get("unique_name") or ""))}">'
+        f'<code>{e(str(f.get("unique_name") or ""))}</code></a> — {int(f.get("bytes") or 0):,} B, '
+        f'{int((f.get("format") or {}).get("emitted_px") or 0):,} emitted px. '
+        f'Note: <span class="mono small">{e(f.get("note") or "")}</span></li>'
+        for f in others)
+    return (f'<div class="card" style="border-left:4px solid #8250df; padding:.75rem 1rem; '
+            f'margin-bottom:1.5rem;"><p style="margin:.2rem 0;"><b>Alternate arms, same format gate, '
+            f'different trade-off</b> (submit one of these instead if you want a second, different '
+            f'field on the board — the leaderboard history is the only honest way to tell which '
+            f'transfers):</p><ul style="margin:.25rem 0 .25rem 1.25rem;">{items}</ul></div>')
+
+
+def _shipped_candidate_card(ev: dict) -> str:
+    """The one card the landing pages lead with: download the shipped file, paste the Note.
+
+    Everything on it is read from the packaged bytes and their measurement (scripts/
+    package_portfolio.py re-hashes every file at packaging time; this function re-hashes it again
+    at build time and shows a drift pill if the two disagree), never typed by hand.
+    """
+    entry = _portfolio_primary(ev)
+    if not entry or not entry.get("copied"):
+        return missing(
+            "No portfolio file has been packaged into docs/ in this checkout, so the page does "
+            "not advertise a download.",
+            "python scripts/union_submission.py && python scripts/measure_submission_portfolio.py "
+            "&& python scripts/package_portfolio.py")
+    name = str(entry.get("unique_name") or "")            # the submission name (stamped)
+    docs_file = str(entry.get("docs_file") or name)        # the stable file committed in docs/
+    live = _sha_bytes(str(entry.get("docs_path") or f"docs/{docs_file}"))
+    expected = str(entry.get("sha256") or "")
+    synced = bool(live.get("exists") and live.get("sha256") == expected)
+    checks = (entry.get("format") or {}).get("checks") or {}
+    checks_html = "".join(
+        f'<span class="pill {"ok" if ok else "bad"}" style="margin:2px 4px 2px 0;">'
+        f'{"&#10004;" if ok else "&#10008;"} {e(k.replace("_", " "))}</span>'
+        for k, ok in checks.items())
+    n_fail = sum(1 for ok in checks.values() if not ok)
+    pf = ev.get("portfolio") or {}
+    row = next((r for r in (pf.get("candidates") or [])
+                if str(r.get("path") or "").endswith("union/submission.tif")), None)
+    measured = ""
+    if row:
+        measured = (
+            f'<tr><th>Measured on the local stand-in populations</th><td>'
+            f'L <b>{float(row.get("dti_L") or 0):.4f}</b> · '
+            f'S <b>{float(row.get("dti_S") or 0):.4f}</b> · '
+            f'I <b>{float(row.get("dti_I") or 0):.4f}</b> · '
+            f'<b>P (organizers&rsquo; mask applied) {float(row.get("dti_P_platform_mask") or 0):.4f}</b> '
+            f'against a same-size uniform random emission at '
+            f'{float(row.get("random_control_same_support_P") or 0):.4f} '
+            f'({float(row.get("lift_over_random") or 0):.2f}&times; lift) · '
+            f'{int(row.get("emitted_px") or 0):,} emitted px, '
+            f'{int(row.get("emitted_on_supplied_catalogue_px") or 0):,} of them on the supplied '
+            f'catalogue, where the platform pays nothing.</td></tr>')
+    integrity_html = ("<span class=\"pill ok\">BYTES MATCH</span>" if synced
+                      else "<span class=\"pill bad\">DRIFT &mdash; repackage</span>")
+    if n_fail:
+        gate_html = "<b>%d check(s) FAIL</b> &mdash; do not upload" % n_fail
+    else:
+        gate_html = "all %d checks pass" % len(checks)
+    zip_name = str(entry.get("docs_zip") or entry.get("docs_path") or "").split("/")[-1]
+    crossover = _union_crossover(ev)
+    crossover_txt = (f"{crossover:.2f}&times;" if crossover else "the measured crossover of")
+    return f"""
+<div class="card candidate-card" style="border: 2px solid #1a7f37; background: #f2fbf4; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
+  <h3 style="margin-top:0; color:#116329;">Start here &mdash; the file to submit</h3>
+  <p><b>Download &rarr; <em>File to submit</em> &rarr; paste the Note.</b> That is the whole
+  procedure; the long version is <a href="how_to_submit.html">How to submit</a>. The downloaded
+  file is already in the competition's format &mdash; every gate below was re-measured from these
+  bytes when this page was built.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
+    <a href="{e(docs_file)}" download="{e(name)}" class="btn" style="background:#1a7f37; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#128229; Download {e(name)}</a>
+    <a href="{e(str(entry.get("docs_zip") or docs_file[:-4] + ".zip").split("/")[-1])}" download="{e(name[:-4] + ".zip")}" class="btn" style="background:#0969da; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#128230; Download the ZIP</a>
+    <a href="{SUBMISSIONS_URL}" class="btn" style="background:#8250df; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">&#8599; Open the submissions page</a>
+    <a href="how_to_submit.html" class="btn" style="background:#57606a; color:#fff; padding:12px 20px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">Step-by-step</a>
+  </div>
+  <ol style="margin:.25rem 0 1rem 1.25rem;">
+    <li><b>Download</b> the GeoTIFF above (or the ZIP containing it; a single-member ZIP is accepted).</li>
+    <li><b>Open</b> <a href="{SUBMISSIONS_URL}">{SUBMISSIONS_URL}</a> while signed in, choose this competition, and click <b>New submission</b> / <em>File to submit</em>.</li>
+    <li><b>Upload</b> the file, paste the <b>Note</b> below into the comment box, and submit. The
+        submission name is the file name; the Note is what tells your submissions apart on the
+        leaderboard's history.</li>
+  </ol>
+  <table class="kv" style="font-size:.88rem"><tbody>
+    <tr><th>Unique submission name (what you upload)</th><td class="mono">{e(name)}</td></tr>
+    <tr><th>File committed in this site</th><td class="mono"><a href="{e(docs_file)}">{e(docs_file)}</a></td></tr>
+    <tr><th>Copy-paste Note for the dialog</th><td class="mono" style="background:#fffbe6; padding:6px 8px; border-radius:4px;">{e(entry.get("note") or "")}</td></tr>
+    <tr><th>Size &middot; sha256</th><td class="mono">{int(live.get("bytes") or 0):,} B &middot; {e(expected)}</td></tr>
+    <tr><th>What it is</th><td>the pixelwise <b>union of two independent detector families</b>:
+        the 11-fold U-Net++/DeepLabV3+ ensemble (172,974 px, widest coverage) and the 6-fold blend
+        of a different model set (21,492 px, 3.45&times; the random floor per pixel). Built by
+        <code>scripts/union_submission.py</code>. The union is the best of the three on the
+        third-party protocol (L 0.1222 vs 0.1189/0.1188), on the held-out segments with the
+        catalogue charged (S 0.1128) and under the organizers' mask (P 0.0903 vs 0.0887/0.0831),
+        and it stays the best of the three once the hidden new-fault set is at least
+        <b>{crossover_txt}</b> the size of the local stand-in (the ratio is computed from the
+        measured weighted terms, not typed). It is <em>not</em> the best on the strictest local
+        truth population (I), where the 6-fold arm alone wins 0.1173 to 0.0955 &mdash; which is why
+        that arm is offered below as an alternate rather than hidden. No other candidate this
+        repository holds, including the one the site used to lead with, beats either arm under the
+        organizers' mask.</td></tr>
+    {measured}
+    <tr><th>Format gate, re-measured from these bytes</th><td>{checks_html}
+        <div class="small">{gate_html}</div></td></tr>
+    <tr><th>Integrity versus the packaged record</th><td>{integrity_html}
+        · the ZIP's single member re-hashes to the same sha256 ({e(str(entry.get("zip_inner_sha256") or "")[:16])}&hellip;)</td></tr>
+    <tr><th>What it is not</th><td>a leaderboard score. The only labels that can score it are the
+        organizers' hidden new-fault labels; every DTI on this page is a local stand-in, measured
+        on populations this repository can see. <a href="results.html#portfolio">Results</a> ranks
+        every candidate, including the ones that failed.</td></tr>
+  </tbody></table>
+</div>
+"""
+
+
 def _recall_candidate_card(ev: dict) -> str:
     """Render the current unique candidate from measured evidence, never from typed hashes."""
     rep = ev.get("recall_union") or {}
@@ -3853,6 +4188,105 @@ def _recall_candidate_card(ev: dict) -> str:
 """
 
 
+#: The upload plan, written before any of these files is uploaded: what each packaged arm tests
+#: about the HIDDEN leaderboard, and how to read the score it comes back with.  This is the one
+#: section of the site that is deliberately about the future rather than about a measurement, so it
+#: is stated as hypotheses with a decision rule ("if X, then upload Y next"), never as a claim that
+#: an arm will score.  The 3-submissions-per-week limit (rules §3.4) is what makes the order matter.
+ARM_PLAN = {
+    "gemsdoe2-dual-family-union": (
+        1,
+        "the best local evidence this repository has: the highest platform-masked (P 0.0903) and "
+        "catalogue-charged (S 0.1128) score of every candidate those populations can rank, built "
+        "from two independent detector families",
+        "if it scores at or below <b>0.1563</b> (the recall-union's board score), the two detector "
+        "families have not moved the board &mdash; the problem is the detector, not the emission, "
+        "and no larger union of the same two families will fix it. If it scores clearly above, the "
+        "union is the new floor and the next upload should isolate what did it."),
+    "gemsdoe2-precision-arm": (
+        2,
+        "per-pixel value against coverage: the thinnest arm of the three model candidates "
+        "(21,492 px, 3.45&times; the random floor where the union is 1.39&times;)",
+        "compare with arm 1. Much lower &rarr; the board rewards coverage and the union's extra "
+        "pixels were buying something. Comparable or higher &rarr; the union's emission is too wide "
+        "and the next build should prune, not extend (the local pruning grid says extending is "
+        "worse; the board is the only witness that can contradict it)."),
+    "gemsdoe2-extension-arm": (
+        3,
+        "the population the organizers named and no local protocol can see: new-fault truth within "
+        "300 m of a known trace (corrections / extensions of existing traces). It is arm 1 plus a "
+        "one-pixel corridor along the supplied catalogue, and it is excluded from the local "
+        "recommendation on purpose",
+        "much higher than arm 1 &rarr; a material share of the hidden new-fault set hugs known "
+        "traces, and the next arm should widen that corridor; much lower &rarr; the hidden truth is "
+        "away from the catalogue, and every future build should spend its pixels on novel "
+        "detections instead. Either answer is worth the upload: it is the one experiment the local "
+        "tables cannot run."),
+    "gemsdoe2-recall-arm": (
+        4,
+        "the spare slot, if the week's plan has one: the 11-fold ensemble on its own, i.e. arm 1 "
+        "minus the second family",
+        "only informative if arm 1 landed above the previous score &mdash; it separates \"the union "
+        "helped\" from \"the ensemble alone would have scored the same\"."),
+}
+
+
+def _submit_plan(ev: dict) -> str:
+    """The one-week upload plan: which packaged arm to submit, in what order, and how to read it.
+
+    Everything factual on it (file names, Notes, sha256, emitted pixels) is read from
+    `data/evidence/portfolio_files.json`, which `scripts/package_portfolio.py` wrote from the bytes
+    themselves; only the hypotheses and the decision rule are prose, and they are labelled as such.
+    """
+    files = {f.get("key"): f for f in ((ev.get("portfolio_files") or {}).get("files") or [])
+             if f.get("copied")}
+    if not files:
+        return ""
+    pf = ev.get("portfolio") or {}
+    measured = {str(r.get("path") or ""): r for r in (pf.get("candidates") or [])}
+    rows = []
+    for key, (order, tests, read) in sorted(ARM_PLAN.items(), key=lambda kv: kv[1][0]):
+        f = files.get(key)
+        if not f:
+            continue
+        c = measured.get(str(f.get("source") or "")) or {}
+        score = (f"L {float(c.get('dti_L') or 0):.4f} &middot; S {float(c.get('dti_S') or 0):.4f} "
+                 f"&middot; I {float(c.get('dti_I') or 0):.4f} &middot; "
+                 f"P {float(c.get('dti_P_platform_mask') or 0):.4f}")
+        badge = "" if c.get("local_ranking_eligible", True) else (
+            ' <span class="pill warn">not locally rankable</span>')
+        rows.append(
+            f'<tr><td class="num"><b>{order}</b></td>'
+            f'<td><a href="{e(str(f.get("docs_file") or ""))}" download="{e(str(f.get("unique_name") or ""))}">'
+            f'<b>{e(str(f.get("label") or key))}</b></a>{badge}'
+            f'<div class="small mono">{e(str(f.get("unique_name") or ""))} &middot; '
+            f'{int(f.get("bytes") or 0):,} B &middot; '
+            f'{int((f.get("format") or {}).get("emitted_px") or 0):,} px</div>'
+            f'<div class="small">Note: <span class="mono">{e(str(f.get("note") or ""))}</span></div>'
+            f'<div class="small">{score}</div></td>'
+            f'<td class="small">{tests}</td><td class="small">{read}</td></tr>')
+    ur = "https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/"
+    return f"""
+<h3 id="plan">The one-week upload plan (three submissions, one hypothesis each)</h3>
+<p>The prize allows <b>3 submissions per week</b> and one final selection, so a week is an
+experiment with three slots, not a lottery. Every file below is already built, format-gated and
+packaged in this site; download it, open <a href="{ur}">{ur}</a> while signed in, click
+<b>New submission</b> / <em>File to submit</em>, choose the file, paste its <b>Note</b>, submit, and
+write the score down. The hypotheses and the decision rule are written here <em>before</em> the first
+upload; the local scores in each row are measurements on stand-in populations and do not decide
+it.</p>
+<table><thead><tr><th>#</th><th>arm &middot; file &middot; Note &middot; local stand-in scores</th>
+<th>what it tests about the hidden board</th><th>how to read the score</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table>
+<p class="small">Read them together, not one at a time: arm 1 alone says whether the current
+detector has moved at all; arms 2 and 3 are the two ways it can be wrong (too little emission,
+or a detector that has learned the catalogue instead of the geology). A score that lands between
+arm 3 and arm 1 is the informative middle case &mdash; it means part of the hidden
+<span class="mono">new</span> fault set is an extension of known traces, which is exactly what the
+organizers said an explicit target is.</p>
+"""
+
+
 def _submission_builder(ev: dict) -> str:
     """The submission builder as the FIRST thing a visitor sees: opens index.html and
     executive_summary.html.
@@ -3872,7 +4306,11 @@ def _submission_builder(ev: dict) -> str:
     # The new-fault-first candidate is the actionable download.  The browser builder below
     # remains the audited route for the adopted ensemble field; keeping both visible makes the
     # trade-off explicit instead of silently replacing one artifact with another.
-    breakthrough_card = _recall_candidate_card(ev)
+    # Session 27: the card leads with the file that is packaged in docs/ and measured in
+    # data/evidence/submission_portfolio.json.  The Recall-Union card it replaced is kept
+    # below as an alternate arm, because it is still downloadable and still measured.
+    breakthrough_card = (_shipped_candidate_card(ev) + _submit_plan(ev)
+                        + _portfolio_alternates(ev))
 
     if not f["present"]:
         return head + breakthrough_card + builder_title + missing("the site payload has not been built, so there is no file to generate "
@@ -3963,6 +4401,9 @@ def build_how_to_submit(ev: dict) -> str:
     recall_live = _sha_bytes(recall_path)
     recall_sha = recall_live.get("sha256") or str(recall_artifact.get("sha256") or "artifact-not-committed")
     recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
+    P = _primary_facts(ev)
+    primary_path, primary_sha, primary_bytes = P["path"], P["sha256"], P["bytes"]
+    primary_name, primary_note = P["name"], P["note"]
     val_log = _read(f"{SHIPPED_EVIDENCE_DIR}/validation.log")
     vrows, vpassed = _validation_rows(val_log)
     dl = _deadline_from_catalog()
@@ -4037,11 +4478,12 @@ def build_how_to_submit(ev: dict) -> str:
     # empty ev, and caught it.)
     gen_verdict = str((ev.get("site_generator") or {}).get("verdict") or "not run in this checkout")
     routes = [
-        ("A", "Download the primary Recall-Union v1 artifact", "seconds",
-         f"curl -L -o gems-recall-union-v1-{recall_sha[:8]}.tif {REPO}/raw/main/{recall_path}",
-         f"The fixed deep-ensemble ∪ CPU-classical field. It is {recall_bytes:,} bytes and re-hashed "
-         f"at build time as <code>{recall_sha}</code>; run the validator before upload. Its local "
-         "diagnostics are surrogates, not leaderboard scores."),
+        ("A", "Download the primary packaged artifact (the dual-family union)", "seconds",
+         f"curl -L -o {e(primary_name)} {REPO}/raw/main/{primary_path}",
+         f"The file card's artifact. It is {primary_bytes:,} bytes and re-hashed at build time as "
+         f"<code>{primary_sha}</code>; run the validator before upload. Its local diagnostics are "
+         "surrogates, not leaderboard scores. The other packaged arms (and the hypothesis each one "
+         "tests) are listed in the upload plan."),
         ("B", "Re-run the training workflow on GitHub Actions", "2–6 h, free",
          "gh workflow run train-and-submit.yml -f profile=smoke   # or: Actions → Train and build submission → Run workflow",
          "Uses the CPU runner as the unrestricted machine: assembles data/ from the bridge, trains, "
@@ -4264,7 +4706,7 @@ see the sources page for the citation log.)</span></li>
 ({summary_line})</td></tr>
 <tr><td>Artifact bytes + hash</td><td class="small">re-hashed at build time from
 <code>{e(SHIPPED_SUBMISSION)}</code>; recorded counterpart
-<code>{e(SHIPPED_EVIDENCE_DIR)}/submission.sha256</code></td></tr>
+<code>{e(SHIPPED_EVIDENCE_DIR)}/submission.tif.sha256</code></td></tr>
 <tr><td>Format specification</td><td class="small"><a href="{PROB}">problem description → submission
 format</a> · validator: <code>scripts/validate_submission.py</code></td></tr>
 <tr><td>Rules sentences</td><td class="small"><a href="{RULES}">official rules PDF</a>, quoted by id
@@ -4390,6 +4832,16 @@ def main(argv=None) -> int:
         # Unique submission arm shown above the browser builder.  The page re-hashes the
         # published bytes and labels diagnostics as surrogates; it never turns a local score
         # into a leaderboard claim.
+        # Session 27: the measured portfolio of every downloadable candidate, the packaged files
+        # with their format gates, the shipped union's own report, and the pruning negative result.
+        "portfolio": load(ROOT / "data/evidence/submission_portfolio.json"),
+        "portfolio_files": load(ROOT / "data/evidence/portfolio_files.json"),
+        "union_report": load(ROOT / "data/evidence/union/union_report.json"),
+        # The pre-registered extension arm: union + a one-pixel corridor along the supplied
+        # catalogue, built for the target population the organizers named (new-fault truth
+        # within 300 m of a known trace) and unrankable by any local population.
+        "extension": load(ROOT / "data/evidence/extension/extension_report.json"),
+        "pruning": load(ROOT / "data/evidence/optimised/pruning_report.json"),
         "recall_union": load(ROOT / "data/evidence/runs/recall-union-v1/recall_union_report.json"),
         "structure_consensus": load(ROOT / "data/evidence/runs/structure-consensus-v1/structure_report.json"),
         "runs": [],

@@ -1,0 +1,234 @@
+{
+ "strategy": "SUTURE v1 - structure-tensor lineament response fused with the shipped deep ensemble, skeletonised, policy selected under the organizers' rule",
+ "generated_utc": "2026-09-25T15:08:07Z",
+ "inputs": {
+  "features": "data/training_features.tif",
+  "features_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+  "labels": "data/labels.tif",
+  "labels_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "ensemble": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+  "ensemble_sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15"
+ },
+ "field": {
+  "bands_used": [
+   "mag_anom",
+   "rtp",
+   "tmi_hg",
+   "tmi_vg",
+   "tc",
+   "tmi",
+   "iso_grav_anom",
+   "iso_grav_anom_hg",
+   "iso_grav_anom_vg",
+   "det_elev_slope",
+   "cond_surf",
+   "depth_to_base_surf"
+  ],
+  "bands_missing": [],
+  "sigmas": [
+   2.0,
+   4.0,
+   8.0
+  ],
+  "components": [
+   "lineament",
+   "ensemble"
+  ],
+  "per_band_mean_scaled_response": [
+   {
+    "band": "mag_anom",
+    "scale_sum": 0.01978084072470665
+   },
+   {
+    "band": "rtp",
+    "scale_sum": 0.022670617327094078
+   },
+   {
+    "band": "tmi_hg",
+    "scale_sum": 0.0559549480676651
+   },
+   {
+    "band": "tmi_vg",
+    "scale_sum": 0.04496730491518974
+   },
+   {
+    "band": "tc",
+    "scale_sum": 0.0455465242266655
+   },
+   {
+    "band": "tmi",
+    "scale_sum": 0.02244890294969082
+   },
+   {
+    "band": "iso_grav_anom",
+    "scale_sum": 0.03568514809012413
+   },
+   {
+    "band": "iso_grav_anom_hg",
+    "scale_sum": 0.03697284683585167
+   },
+   {
+    "band": "iso_grav_anom_vg",
+    "scale_sum": 0.03650603070855141
+   },
+   {
+    "band": "det_elev_slope",
+    "scale_sum": 0.07741587609052658
+   },
+   {
+    "band": "cond_surf",
+    "scale_sum": 0.00791323371231556
+   },
+   {
+    "band": "depth_to_base_surf",
+    "scale_sum": 0.017612643539905548
+   }
+  ],
+  "footprint_px": 5167373,
+  "template": "data/sample_submission.tif",
+  "ensemble_fused": true
+ },
+ "split": {
+  "frac": 0.3,
+  "seed": 0,
+  "buffer_px": 3,
+  "independent_px": 5.0,
+  "truth_dropped_within_independent_px": 4142,
+  "held_out_px": 17339,
+  "tune_truth_px": 6776,
+  "measure_truth_px": 6421
+ },
+ "policy_selection": {
+  "population": "organizer-faithful: footprint minus supplied-catalogue pixels; truth = held-out segments (forum 11516 #2/#4)",
+  "tuned_on": "tune half of the held-out segments",
+  "measured_on": "the other half, scored once",
+  "sweep": [
+   {
+    "support_fraction": 0.004,
+    "emitted_px": 18767,
+    "emitted_fraction_of_footprint": 0.0036318260748740222,
+    "dti_S": 0.024710900706359805,
+    "tp_w": 226.73233032226562,
+    "fp_w": 18546.25390625,
+    "fn_w": 6549.267669677734,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.008,
+    "emitted_px": 33016,
+    "emitted_fraction_of_footprint": 0.0063893200665018765,
+    "dti_S": 0.02922598658467284,
+    "tp_w": 351.3831481933594,
+    "fp_w": 32659.46484375,
+    "fn_w": 6424.616851806641,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.015,
+    "emitted_px": 50618,
+    "emitted_fraction_of_footprint": 0.009795693092021806,
+    "dti_S": 0.02849439556495475,
+    "tp_w": 442.85260009765625,
+    "fp_w": 50161.8671875,
+    "fn_w": 6333.147399902344,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.025,
+    "emitted_px": 66753,
+    "emitted_fraction_of_footprint": 0.01291816944509328,
+    "dti_S": 0.03210035538633641,
+    "tp_w": 602.54931640625,
+    "fp_w": 66147.4453125,
+    "fn_w": 6173.45068359375,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.04,
+    "emitted_px": 83549,
+    "emitted_fraction_of_footprint": 0.01616856379440772,
+    "dti_S": 0.033821753865953236,
+    "tp_w": 748.30908203125,
+    "fp_w": 82773.1015625,
+    "fn_w": 6027.69091796875,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.06,
+    "emitted_px": 98462,
+    "emitted_fraction_of_footprint": 0.019054556348070868,
+    "dti_S": 0.03517398899810764,
+    "tp_w": 883.1712646484375,
+    "fp_w": 97556.0625,
+    "fn_w": 5892.8287353515625,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.09,
+    "emitted_px": 115251,
+    "emitted_fraction_of_footprint": 0.022303596043869875,
+    "dti_S": 0.03747816034251729,
+    "tp_w": 1066.7008056640625,
+    "fp_w": 114138.953125,
+    "fn_w": 5709.2991943359375,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.12,
+    "emitted_px": 125872,
+    "emitted_fraction_of_footprint": 0.02435899247064224,
+    "dti_S": 0.03920121665483504,
+    "tp_w": 1198.90673828125,
+    "fp_w": 124614.125,
+    "fn_w": 5577.09326171875,
+    "n_truth": 6776
+   },
+   {
+    "support_fraction": 0.18,
+    "emitted_px": 143195,
+    "emitted_fraction_of_footprint": 0.027711372877475653,
+    "dti_S": 0.04011919149847922,
+    "tp_w": 1365.4267578125,
+    "fp_w": 141701.84375,
+    "fn_w": 5410.5732421875,
+    "n_truth": 6776
+   }
+  ],
+  "winner": {
+   "support_fraction": 0.18,
+   "emitted_px": 143195,
+   "emitted_fraction_of_footprint": 0.027711372877475653,
+   "dti_S": 0.04011919149847922,
+   "tp_w": 1365.4267578125,
+   "fp_w": 141701.84375,
+   "fn_w": 5410.5732421875,
+   "n_truth": 6776
+  },
+  "measurement_on_untouched_half": {
+   "support_fraction": 0.18,
+   "emitted_px": 143195,
+   "emitted_fraction_of_footprint": 0.027711372877475653,
+   "dti_S": 0.03726567298690966,
+   "tp_w": 1258.239501953125,
+   "fp_w": 141877.9375,
+   "fn_w": 5162.760498046875,
+   "n_truth": 6421
+  }
+ },
+ "submission": {
+  "path": "data/evidence/suture/submission.tif",
+  "sha256": "d2f5ebb1ffe742d829267c44add47113ed64dd84274dae560a66fcf390c37a19",
+  "bytes": 509865,
+  "support_fraction": 0.18,
+  "emitted_px": 143195,
+  "unique_name": "suture-v1-20260925T150807Z-d2f5ebb1.tif",
+  "note": "SUTURE v1 | structure-tensor lineaments + ensemble | s=0.180 | build d2f5ebb1",
+  "format": {
+   "crs": "EPSG:32611",
+   "dtype": "float32",
+   "nodata": "nan (outside the footprint)",
+   "values": "[0, 1]"
+  }
+ },
+ "honesty": "Local numbers are an imitation of the board: the held-out segments are pixels of the supplied catalogue.  Only DrivenData can score against the private new-fault set; no claim of beating 0.3049 is made here."
+}

@@ -1,0 +1,228 @@
+{
+ "generated_utc": "2026-09-25T15:34:05Z",
+ "script": "scripts/union_submission.py",
+ "inputs": {
+  "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif": {
+   "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+   "bytes": 570890
+  },
+  "data/evidence/runs/35042805806/submission.tif": {
+   "sha256": "a5ae61d572b0cd95eac111cab86954eca2219ad310fc0febddcda7ab92fb7969",
+   "bytes": 386018
+  },
+  "data/sample_submission.tif": {
+   "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+   "bytes": 1599597
+  },
+  "data/labels.tif": {
+   "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+   "bytes": 425830
+  }
+ },
+ "population_definitions": {
+  "L": "third-party held-out-segment protocol (gems-eval)",
+  "S": "footprint minus the supplied catalogue; truth = held-out segments",
+  "I": "S with truth restricted to held-out segments more than 5 px from the training catalogue",
+  "P_platform_mask": "S with the prediction masked on the supplied catalogue, i.e. the organizers' pixel-exact mask applied"
+ },
+ "measurement": {
+  "split": {
+   "dir": "data/evidence/seghold",
+   "held_out_px": 17339,
+   "independent_px": 13197,
+   "tune_px": 5896,
+   "measure_px": 7301
+  },
+  "arms_and_union": {
+   "recall arm (11-fold, shipped by earlier sessions)": {
+    "L": 0.11894125319493132,
+    "S": 0.11096418750528762,
+    "I": 0.09388111492712001,
+    "P_platform_mask": 0.08868924900224232,
+    "tp": 5268.30126953125,
+    "fp": 162763.15625,
+    "fn": 12070.69873046875,
+    "emitted_px": 172974,
+    "emitted_on_catalogue_px": 6455
+   },
+   "precision arm (6-fold blend)": {
+    "L": 0.11876668097511633,
+    "S": 0.11194575162185934,
+    "I": 0.1172835880043246,
+    "P_platform_mask": 0.08314169452386748,
+    "tp": 1996.048095703125,
+    "fp": 17800.423828125,
+    "fn": 15342.951904296875,
+    "emitted_px": 21492,
+    "emitted_on_catalogue_px": 2593
+   },
+   "union of the two arms (SHIPPED)": {
+    "L": 0.12222908356145007,
+    "S": 0.11282379324915928,
+    "I": 0.09551741208759976,
+    "P_platform_mask": 0.09025723992605593,
+    "tp": 5565.00732421875,
+    "fp": 171702.828125,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   }
+  },
+  "graded_variants_measured_not_shipped": {
+   "1.0 on union within 8 px of the catalogue, 0 elsewhere": {
+    "L": 0.2458682744603057,
+    "S": 0.20624300626447178,
+    "I": 0.1856168122697265,
+    "P_platform_mask": 0.16562436232071215,
+    "tp": 5565.00732421875,
+    "fp": 59992.8359375,
+    "fn": 11773.99267578125,
+    "emitted_px": 71932,
+    "emitted_on_catalogue_px": 7693
+   },
+   "1.0 on union within 8 px of the catalogue, 0.25 elsewhere": {
+    "L": 0.1962418215628173,
+    "S": 0.1708720651873271,
+    "I": 0.15019736590735586,
+    "P_platform_mask": 0.1370204567843954,
+    "tp": 5565.00732421875,
+    "fp": 87920.3359375,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   },
+   "1.0 on union within 8 px of the catalogue, 0.5 elsewhere": {
+    "L": 0.16328426819266692,
+    "S": 0.1458573430822098,
+    "I": 0.12612934046791452,
+    "P_platform_mask": 0.11684151864296677,
+    "tp": 5565.00732421875,
+    "fp": 115847.8359375,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   },
+   "1.0 on union within 8 px of the catalogue, 0.75 elsewhere": {
+    "L": 0.13980492567912928,
+    "S": 0.12723137118820596,
+    "I": 0.10870944916545529,
+    "P_platform_mask": 0.10184312534091991,
+    "tp": 5565.00732421875,
+    "fp": 143775.34375,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   },
+   "1.0 on union within 8 px of the catalogue, 1 elsewhere": {
+    "L": 0.12222908356145007,
+    "S": 0.11282379324915928,
+    "I": 0.09551741208759976,
+    "P_platform_mask": 0.09025723992605593,
+    "tp": 5565.00732421875,
+    "fp": 171702.828125,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   }
+  },
+  "distance_bands_measured_not_shipped": {
+   "union restricted to within 8 px of the supplied catalogue": {
+    "L": 0.2458682744603057,
+    "S": 0.20624300626447178,
+    "I": 0.1856168122697265,
+    "P_platform_mask": 0.16562436232071215,
+    "tp": 5565.00732421875,
+    "fp": 59992.8359375,
+    "fn": 11773.99267578125,
+    "emitted_px": 71932,
+    "emitted_on_catalogue_px": 7693
+   },
+   "union restricted to within 16 px of the supplied catalogue": {
+    "L": 0.18838253881456332,
+    "S": 0.16502225489173994,
+    "I": 0.1444981071370163,
+    "P_platform_mask": 0.13229780803576283,
+    "tp": 5565.00732421875,
+    "fp": 93692.8359375,
+    "fn": 11773.99267578125,
+    "emitted_px": 105632,
+    "emitted_on_catalogue_px": 7693
+   },
+   "union restricted to within 32 px of the supplied catalogue": {
+    "L": 0.14958271675065984,
+    "S": 0.13507243526387816,
+    "I": 0.1159918493022884,
+    "P_platform_mask": 0.10815428092874863,
+    "tp": 5565.00732421875,
+    "fp": 131079.84375,
+    "fn": 11773.99267578125,
+    "emitted_px": 143019,
+    "emitted_on_catalogue_px": 7693
+   },
+   "union restricted to within 64 px of the supplied catalogue": {
+    "L": 0.12917617294448294,
+    "S": 0.11856745347343416,
+    "I": 0.10074745758131874,
+    "P_platform_mask": 0.09487437876298947,
+    "tp": 5565.00732421875,
+    "fp": 159755.84375,
+    "fn": 11773.99267578125,
+    "emitted_px": 171695,
+    "emitted_on_catalogue_px": 7693
+   },
+   "union restricted to within inf px of the supplied catalogue": {
+    "L": 0.12222908356145007,
+    "S": 0.11282379324915928,
+    "I": 0.09551741208759976,
+    "P_platform_mask": 0.09025723992605593,
+    "tp": 5565.00732421875,
+    "fp": 171702.828125,
+    "fn": 11773.99267578125,
+    "emitted_px": 183642,
+    "emitted_on_catalogue_px": 7693
+   }
+  },
+  "random_control_same_support": {
+   "L": 0.06192646973035308,
+   "S": 0.0648202558919928,
+   "I": 0.05233885973661281,
+   "P_platform_mask": 0.0648202558919928,
+   "tp": 3201.79345703125,
+   "fp": 174416.96875,
+   "fn": 14137.20654296875,
+   "emitted_px": 175949,
+   "emitted_on_catalogue_px": 0
+  },
+  "size_robustness": {
+   "note": "DTI as a function of the hidden new-fault set's size, scaled to the local stand-in |G| = 13197 px: TP and FN both scale, FP does not.  The leaderboard's |G| is unknown, which is why this is reported instead of one number.",
+   "kappa_G_over_local_proxy": {
+    "0.5": 0.06651509225674085,
+    "1": 0.11282379324938803,
+    "2": 0.1730709557092753,
+    "4": 0.23611211202005405,
+    "8": 0.2886897907869578
+   }
+  },
+  "why_the_band_is_not_shipped": "the proxy's held-out truth is carved out of the supplied catalogue, so it lies *on* the pixels the platform masks; a prediction restricted to the catalogue's edges therefore scores locally for a reason that says nothing about the hidden new-fault set, which the organizers describe as faults that are not in the supplied set (with corrections of known traces as only one explicit sub-target).  Shipping the band would trade real recall for a local artefact."
+ },
+ "conformance": {
+  "stats": {
+   "pixels": 12279160,
+   "template_valid_px": 5167373,
+   "filled_inside": 0,
+   "masked_outside": 0,
+   "clipped": 0,
+   "unchanged": 12279160
+  },
+  "checks": "single band, float32, EPSG:32611, template transform and shape, finite in [0,1] inside, NaN outside, GDAL_NODATA = NaN"
+ },
+ "written": {
+  "path": "data/evidence/union/submission.tif",
+  "bytes": 568065,
+  "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+  "emitted_px": 183642,
+  "readback_identical_to_written": true,
+  "readback_nan_mask_identical": true,
+  "readback_values_identical": true
+ }
+}

@@ -107,8 +107,12 @@ function assert(name, cond, detail) {
   assert('glue did not invent a second payload path',
     fetchLog.every((f) => ['submission_meta.json', 'submission_field.bin'].includes(f)),
     fetchLog.join(','));
+  // derived, not hardcoded: the manifest's own artifact path must be the one rendered, so this
+  // assertion follows the shipped artifact wherever it moves (session 27: 11-fold run -> union)
+  const pinnedArtifact = JSON.parse(
+    fs.readFileSync(path.join(DOCS, 'submission_meta.json'), 'utf8')).artifact.path;
   assert('provenance table names the artifact it reproduces',
-    texts.includes('ens12-adopted-floor0.1-w0'), 'artifact path rendered');
+    texts.includes(pinnedArtifact), 'artifact path rendered: ' + pinnedArtifact);
 
   // 3. click "Build submission.tif" (or the zip variant) and wait for the status line
   const btnTif = mount.children.find((c) => c.tag === 'div' && c.className === 'gen-actions');

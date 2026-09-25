@@ -43,7 +43,27 @@ BLOB = ROOT / "docs" / "submission_field.bin"
 WRITER = ROOT / "docs" / "geotiff_writer.js"
 GLUE = ROOT / "docs" / "generate_submission.js"
 HARNESS = ROOT / "tests" / "support" / "generator_ui_harness.js"
-ARTIFACT = ROOT / "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+def _shipped_artifact():
+    """The artifact the site and the payload pin, derived - never a hardcoded run directory.
+
+    Session 27 moved the shipped artifact from an 11-fold run to the measured union of the two
+    detector families; the tests that hardcoded the old path kept passing against bytes the site no
+    longer offered, which is exactly the drift they exist to catch.  The payload manifest
+    (docs/submission_meta.json, written by scripts/build_submission_payload.py from its ARTIFACT
+    constant) is the single source of truth, which is itself the constant build_site.py uses.
+    """
+    meta = ROOT / "docs/submission_meta.json"
+    if meta.exists():
+        try:
+            rel = json.loads(meta.read_text()).get("artifact", {}).get("path")
+            if rel and (ROOT / rel).exists():
+                return ROOT / rel
+        except Exception:
+            pass
+    return ROOT / "data/evidence/union/submission.tif"
+
+
+ARTIFACT = _shipped_artifact()
 SAMPLE = ROOT / "data/sample_submission.tif"
 
 
@@ -273,14 +293,36 @@ def test_writer_refuses_a_field_blob_of_the_wrong_length(tmp_path):
     assert not out.exists(), "a failed build must not leave a plausible-looking .tif on disk"
 
 
+def _flip_a_value_code(blob: bytes) -> bytes:
+    """Return the blob with one value code changed 1 -> 0, keeping the run structure valid.
+
+    A blind flip in the middle of the stream may land on a *run length*, which makes the decoder
+    refuse before the manifest's pins are ever consulted - a refusal, but not the property this
+    test exists for.  Parsing the run structure first (uleb128 length, then a code byte) makes the
+    tamper land on a value, so the stream still decodes - to a field with a different number of
+    pixels at 1.0 - and only the pinned hash / pixel count can catch it.
+    """
+    out = bytearray(blob)
+    i = 0
+    while i < len(out):
+        while i < len(out) and out[i] & 0x80:
+            i += 1
+        i += 1                                  # the terminating byte of the run length
+        if i >= len(out):
+            break
+        if out[i] == 1:                         # a value code: 1 = float32 1.0
+            out[i] = 0                          # the same run now carries zeros
+            return bytes(out)
+        i += 1
+    raise AssertionError("no value code found in the blob")
+
+
 def test_writer_refuses_a_same_length_tamper_via_the_pinned_hash(tmp_path):
-    """Flipping one byte inside the run stream keeps the size correct, so only the sha256 pin can
-    catch it - which is why the manifest carries one for the blob as well as for the field."""
+    """Changing one value code keeps the size and the run structure, so only the sha256 pin and the
+    pixel-count check can catch it - which is why the manifest carries both."""
     node = _node()
-    bad = bytearray(BLOB.read_bytes())
-    bad[len(bad) // 2] ^= 0x01
     blob = tmp_path / "field.bin"
-    blob.write_bytes(bytes(bad))
+    blob.write_bytes(_flip_a_value_code(BLOB.read_bytes()))
     out = tmp_path / "x.tif"
     p = subprocess.run([node, str(WRITER), str(META), str(blob), str(out)],
                        cwd=ROOT, capture_output=True, text=True)

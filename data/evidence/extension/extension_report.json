@@ -1,0 +1,87 @@
+{
+ "generated_utc": "2026-09-25T15:59:02Z",
+ "script": "scripts/extension_arm.py",
+ "what_it_is": "the shipped dual-family union plus a thin corridor along the supplied catalogue, betting on the organizers' stated target population (new-fault truth within 300 m of a known trace)",
+ "hypotheses": {
+  "H1": "new-fault truth hugging known traces -> the corridor earns credit and the arm out-scores the union",
+  "H2": "new-fault truth away from known traces -> the corridor is pure false-positive mass and the arm under-scores the union"
+ },
+ "sources": {
+  "organizer_answer": "https://community.drivendata.org/raw/11516 (quoted in data/evidence/rules_quotes.json)",
+  "metric": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/"
+ },
+ "base": {
+  "path": "data/evidence/union/submission.tif",
+  "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2"
+ },
+ "shipped_corridor_px": 1,
+ "artifact": {
+  "path": "data/evidence/extension/submission.tif",
+  "sha256": "ad5ba91174b637bb77f399ae35506bebfa920a2e159ab593492f9baa64f3389f",
+  "bytes": 486705,
+  "emitted_px": 292190,
+  "conformant": true,
+  "conformance": {
+   "pixels": 12279160,
+   "template_valid_px": 5167373,
+   "nan_inside_px": 0,
+   "finite_outside_px": 0,
+   "out_of_range_px": 0,
+   "conformant": true
+  },
+  "conform_stats": {
+   "pixels": 12279160,
+   "template_valid_px": 5167373,
+   "filled_inside": 0,
+   "masked_outside": 7111787,
+   "clipped": 0,
+   "unchanged": 5167373
+  }
+ },
+ "grid": [
+  {
+   "emitted_px": 292451,
+   "emitted_px_in_play": 286590,
+   "dti_L": 0.2549329538591251,
+   "dti_S": 0.17997547780161097,
+   "dti_I": 0.142851664395811,
+   "dti_P_platform_mask": 0.17002315812846033,
+   "corridor_px": 1,
+   "corridor_emitted_px": 122597,
+   "corridor_on_supplied_catalogue_px": 0
+  },
+  {
+   "emitted_px": 403050,
+   "emitted_px_in_play": 396663,
+   "dti_L": 0.23791911426336224,
+   "dti_S": 0.14027286413736018,
+   "dti_I": 0.10954704391284427,
+   "dti_P_platform_mask": 0.1324556949501088,
+   "corridor_px": 2,
+   "corridor_emitted_px": 243560,
+   "corridor_on_supplied_catalogue_px": 0
+  },
+  {
+   "emitted_px": 534379,
+   "emitted_px_in_play": 526988,
+   "dti_L": 0.2004709352248981,
+   "dti_S": 0.10891803853915545,
+   "dti_I": 0.08446837736829398,
+   "dti_P_platform_mask": 0.1028112541303555,
+   "corridor_px": 3,
+   "corridor_emitted_px": 383806,
+   "corridor_on_supplied_catalogue_px": 0
+  }
+ ],
+ "baseline_on_same_populations": {
+  "emitted_px": 183642,
+  "emitted_px_in_play": 178042,
+  "dti_L": 0.12222908356145007,
+  "dti_S": 0.11282379324915928,
+  "dti_I": 0.09551741208759976,
+  "dti_P_platform_mask": 0.09025723992605593
+ },
+ "local_truth_inside_3px_of_catalogue": 1.0,
+ "why_the_local_tables_cannot_rank_this": "every local truth pixel is a pixel of the supplied catalogue, and the organizers' pixel-exact mask removes catalogue pixels from scoring, so the corridor's intended population is exactly the population no local protocol can see.  The arm is therefore pre-registered as a leaderboard bet with H1/H2 written down before the upload, and its local numbers are reported only so that the reader can see they do not decide it.",
+ "caveat": "one upload decides nothing on its own; read it against the union's score, which is the same file minus the corridor"
+}

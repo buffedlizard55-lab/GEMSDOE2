@@ -40,7 +40,9 @@ ROOT = Path(__file__).resolve().parents[1]
 WRITER = "docs/geotiff_writer.js"
 META = "docs/submission_meta.json"
 BLOB = "docs/submission_field.bin"
-ARTIFACT = "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+#: the artifact the payload reproduces; kept equal to build_site.SHIPPED_SUBMISSION and
+#: build_submission_payload.ARTIFACT (session 27: the measured union of both arms).
+ARTIFACT = "data/evidence/union/submission.tif"
 SAMPLE = "data/sample_submission.tif"
 OUT_DEFAULT = "data/evidence/site_generator.json"
 

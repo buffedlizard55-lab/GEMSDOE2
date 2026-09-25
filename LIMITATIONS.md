@@ -648,3 +648,80 @@ runner twice). What is *not* verified from here is one hop further out:
   the merge SHA, which is the check to run if the site looks stale after a merge.
 * **The submit dialog's wording**, unchanged from before: transcribed by a logged-in human, not
   fetchable here (rules §3.2 documents only the single-GeoTIFF form).
+
+---
+
+## Session 27 (2026-09-25) — limitations of the shipped field and of every number on it
+
+1. **The hidden truth set's size is unknown, and the recommendation depends on it.** DTI scales TP
+   and FN with the hidden new-fault set (`|G|`) but not FP, so each field's score is a *curve* in
+   `|G|`. The shipped union beats both of its arms for `|G|` at or above roughly the local
+   stand-in (13,197 px in population S / 5,896–7,301 px in the split halves); below that the 6-fold
+   arm alone is better. `data/evidence/union/union_report.json` (`size_robustness`) carries the
+   curve; the site renders the crossover computed from those measured terms.
+2. **No local population can calibrate a leaderboard score.** The stand-in truth is 30 % of the
+   supplied catalogue, and the supplied catalogue is what the platform masks; the strictest local
+   population (I, truth > 5 px from the catalogue) still contains only catalogue *segments*.
+   Everything measured here ranks fields; nothing here estimates the number the board will show.
+3. **The one population that resembles the task is small.** Population I has 13,197 truth pixels;
+   the tune/measure halves are 5,896 / 7,301 px. A single held-segment can move a score by
+   hundredths, which is why policy selection used a pre-registered grid on one half only.
+4. **4.19 % of the shipped emission sits on the supplied catalogue** (7,693 of 183,642 px). Those
+   pixels are *free* under the organizers' mask — neither charged nor rewarded — so this is wasted
+   opportunity, not a penalty. It is the residual echo of the arms' training data and it is
+   reported rather than trimmed, because trimming it in this repository can only be validated on
+   catalogue-derived truth.
+5. **The 6-fold arm's own committed bytes are not conformant** (3,061 NaN inside the template's
+   valid region, 1,540 finite px outside it, no NODATA tag). The packaged precision-arm file is the
+   sanitized twin (`data/evidence/runs/35042805806/submission_conformant.tif`, sha256
+   `8bce5dfe7302…`); the raw run output is deliberately not offered for download.
+6. **Pruning emission by corroboration does not work here** (measured, tune/measure split,
+   `data/evidence/optimised/pruning_report.json`): every policy in a pre-registered grid tied with
+   doing nothing on the untouched half, and the lineament-corroborated policies were actively
+   worse. The shipped field is already a one-pixel skeleton; there is no thickness to remove.
+7. **The near-catalogue band that doubles the local score is refused on purpose.** The proxy's
+   truth lies on masked pixels, so a band hugging the catalogue looks good for a reason that says
+   nothing about new faults. The measured band table is in `union_report.json` as a refused option.
+8. **Torch is not installed in the agent sandbox**: `tests/test_metric.py` and
+   `tests/test_union_selection.py` import `src/train.py` and were green only after installing
+   torch/tqdm; on a machine without them the suite reports 8 failures that are purely import
+   errors. The shipped-field path (union, packaging, payload, site, validator) needs no torch.
+9. **Submission is still a human action.** No DrivenData credentials exist in this environment:
+   the site hands over bytes, a unique name and a Note, and the upload itself must be done by the
+   account holder (3 submissions per week limit, rules §3.4).
+10. **The leaderboard claim is unverified by construction.** The brief was to beat 0.3049; what can
+    be established offline is that the shipped bytes pass every format gate, are measurably the
+    best of the candidates this repository holds under the organizers' mask, and cannot be
+    confirmed to outscore anything until a human uploads them.
+
+---
+
+## Session 27b — the extension arm, and what it can and cannot be measured on
+
+1. **The extension arm (union + a 1 px corridor along the supplied catalogue) is a bet, not a
+   result.** Local truth pixels are catalogue pixels, and the organizers' pixel-exact mask removes
+   catalogue pixels from scoring, so every local population rewards a corridor for a reason that
+   says nothing about the hidden new-fault set. The arm's local numbers (L 0.2549,
+   S 0.1800, I 0.1429, P 0.1700)
+   are reported for completeness and are excluded from the local recommendation by an explicit
+   `local_ranking_eligible: false` flag in `data/evidence/submission_portfolio.json`.
+2. **The local ceiling is saturated, so the local tables cannot separate the arms.** 1.000 of the
+   17,339 held-out-segment truth pixels lie within 3 px of the supplied catalogue. Any criterion
+   measured on that population rewards "be near the catalogue" and cannot rank a detector.
+3. **No new model training happened this session.** The corridor arm is deterministic post-processing
+   of an existing measured field; the deep ensembles are unchanged, and the GPU capacity question
+   (`configs/config.yaml`: EfficientNet-B5, 10 MC splits, 60 epochs) remains the binding
+   limitation on the leaderboard case.
+4. **The upload order is an untested plan.** The one-week plan fixes hypotheses and reading rules
+   before the first upload, but the repository cannot upload, cannot read the private leaderboard,
+   and has no score to fit anything on; the plan's value is that it prevents the week being spent
+   on three versions of one idea.
+5. **Trace-extension operators were measured and they lose locally.** Collinear gap-bridging and
+   end-extension add TP credit but roughly five times as much FP mass (bridge L=1: TP 1,588 vs FP
+   246,659; base: TP 1,542 vs FP 174,411, on the tune half). That is why the shipped arm is only a
+   corridor on the catalogue, which has the organizers' explicit statement behind it, and not a
+   dilation of the detector's own traces.
+6. **Two arms of the plan cannot be scored by the same local protocol.** The union's P score comes
+   from local stand-in truth built out of the supplied catalogue; the extension arm's intended truth
+   population is invisible to that protocol by construction. Reading the two leaderboard scores
+   together is the only way to separate them.

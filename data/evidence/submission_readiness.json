@@ -1,10 +1,10 @@
 {
- "generated_utc": "2026-09-25T05:55:04Z",
+ "generated_utc": "2026-09-25T17:27:28Z",
  "script": "scripts/check_submission_readiness.py",
  "purpose": "every gate on docs/how_to_submit.html is a measurement from this checkout",
  "root": "/home/user/GEMSDOE2",
  "data_dir": "data",
- "seconds": 14.09,
+ "seconds": 14.02,
  "checks": [
   {
    "id": "data_placed",
@@ -62,13 +62,13 @@
    "label": "Shippable artifact present and hash-consistent",
    "status": "PASS",
    "measured": {
-    "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
-    "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
-    "bytes": 570890,
-    "recorded_sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
-    "recorded_in": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.sha256"
+    "path": "data/evidence/union/submission.tif",
+    "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+    "bytes": 568065,
+    "recorded_sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+    "recorded_in": "data/evidence/union/submission.tif.sha256"
    },
-   "source": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.sha256",
+   "source": "data/evidence/union/submission.tif.sha256",
    "note": ""
   },
   {
@@ -76,8 +76,8 @@
    "label": "Committed validator log reports PASSED",
    "status": "PASS",
    "measured": {
-    "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log",
-    "log_sha256": "a2030f9a785c80d61679f4a3899c1aae11c99f8c6353a3fb9f8a254ce39eda6d",
+    "path": "data/evidence/union/validation.log",
+    "log_sha256": "128c82c979bb5b31ad0738703f4fcb542970437f655c27dcfe8d4bbfd340018a",
     "checks": [
      "\u2713 CRS EPSG:32611",
      "\u2713 Resolution 100m",
@@ -92,7 +92,7 @@
      "\u2713 Size matches training_features"
     ]
    },
-   "source": "data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log",
+   "source": "data/evidence/union/validation.log",
    "note": ""
   },
   {
@@ -160,8 +160,8 @@
      "variant: whole grid in one strip"
     ],
     "failed": [],
-    "generated_utc": "2026-09-25T05:54:55Z",
-    "seconds": 8.67,
+    "generated_utc": "2026-09-25T17:27:19Z",
+    "seconds": 8.71,
     "container_note": "generated, artifact and template all declare nan since the 2026-09-25 template-conformance fix"
    },
    "source": "scripts/check_site_generator.py -> data/evidence/site_generator.json",
@@ -204,21 +204,25 @@
   },
   {
    "id": "primary_candidate",
-   "label": "Recall-Union v1 public and evidence artifacts match their report",
+   "label": "Shipped candidate: public bytes, audit copy and mask measurement agree",
    "status": "PASS",
    "measured": {
-    "report": "data/evidence/runs/recall-union-v1/recall_union_report.json",
-    "public": "docs/gemsdoe2_recall_union_submission.tif",
-    "evidence": "data/evidence/runs/recall-union-v1/submission.tif",
-    "report_sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
-    "public_sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
-    "evidence_sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
-    "bytes": 1982553,
-    "known_labels_used_to_generate_field": false,
-    "component_filter": "none (recall-first arm; DTI beta=0.8 > alpha=0.2)"
+    "report": "data/evidence/submission_portfolio.json",
+    "public": "docs/gemsdoe2-dual-family-union-f68e590f.tif",
+    "evidence": "data/evidence/union/submission.tif",
+    "recommended": "dual-family union (the shipped artifact)",
+    "report_sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+    "public_sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+    "evidence_sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+    "bytes": 568065,
+    "emitted_px": 183642,
+    "emitted_on_supplied_catalogue_px": 7693,
+    "fraction_on_catalogue": 0.04189128848520491,
+    "lift_over_random": 1.3924233819201157,
+    "dti_P_platform_mask": 0.09025723992605593
    },
-   "source": "data/evidence/runs/recall-union-v1/recall_union_report.json",
-   "note": "the selected candidate is a local, format-validated artifact; official scoring still requires a human upload"
+   "source": "data/evidence/submission_portfolio.json",
+   "note": "the selected candidate is a local, format-validated artifact; official scoring still requires a human upload. Emission on the supplied catalogue is free under the organizers' mask, so this gate fails only when more than 20 % of the emission sits there (a catalogue echo, like the TURBO binary's 53 %), or when the field is no better than a same-size random emission (lift <= 1.05x)."
   },
   {
    "id": "candidates",
@@ -227,22 +231,22 @@
    "measured": {
     "candidates": [
      {
+      "path": "docs/gemsdoe2-dual-family-union-f68e590f.tif",
+      "kind": "dual-family union (primary candidate)",
+      "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+      "bytes": 568065
+     },
+     {
+      "path": "data/evidence/union/submission.tif",
+      "kind": "dual-family union (audit copy)",
+      "sha256": "f68e590f8534d036872f18170819b52366c728e68619f17c648dce9629b0aaf2",
+      "bytes": 568065
+     },
+     {
       "path": "docs/gemsdoe2_recall_union_submission.tif",
-      "kind": "Recall-Union v1 (primary candidate)",
+      "kind": "recall-union v1 (earlier site primary)",
       "sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
       "bytes": 1982553
-     },
-     {
-      "path": "data/evidence/runs/recall-union-v1/submission.tif",
-      "kind": "Recall-Union v1 (audit copy)",
-      "sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
-      "bytes": 1982553
-     },
-     {
-      "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
-      "kind": "deep ensemble (11-fold blend, adopted policy)",
-      "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
-      "bytes": 570890
      },
      {
       "path": "data/evidence/runs/local-sandbox-smoke/submission.tif",
