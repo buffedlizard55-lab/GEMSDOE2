@@ -1,0 +1,31 @@
+workflow: Tests
+run: 36094754820
+sha: 734af66ba7df9f76f9373d62315ff5904edede96
+branch: arena/01a0d6bb-gemsdoe2
+
+--- pytest tail ---
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_ensemble.py::test_save_ensemble_writes_the_pre_shaping_input
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_ensemble.py:416: RuntimeWarning: Mean of empty slice
+    expect = np.nanmean(np.stack([p for _, p in folds]), axis=0)
+
+tests/test_proxy_catalogue.py: 54 warnings
+  /home/runner/work/GEMSDOE2/GEMSDOE2/tests/test_proxy_catalogue.py:63: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    x, y = transform * (col + 0.5, r)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_cross_catalogue.py::test_the_committed_qfaults_refusal_is_the_documented_finding - AssertionError: assert False
+ +  where False = <built-in method startswith of str object at 0x7faf95e31cb0>('a3dcd6d5')
+ +    where <built-in method startswith of str object at 0x7faf95e31cb0> = '7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15'.startswith
+FAILED tests/test_site_pages.py::test_every_page_carries_the_whole_nav - AssertionError: executive_summary_turbo.html cannot reach ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', 'sources.html', 'verification.html', 'review.html', 'reproduce.html']
+assert not ['how_to_submit.html', 'submission.html', 'data.html', 'metric.html', 'method.html', 'results.html', ...]
+FAILED tests/test_site_pages.py::test_the_build_reproduces_the_committed_pages - AssertionError: the committed pages are stale against a rebuild: ['metric.html', 'results.html']
+assert not ['metric.html', 'results.html']
+3 failed, 520 passed, 4 skipped, 142 warnings in 79.79s (0:01:19)
