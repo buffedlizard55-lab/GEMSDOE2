@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-25T03:50:39+00:00",
+ "generated_utc": "2026-09-25T03:52:30+00:00",
  "generated_by": "scripts/fetch_qfaults.py",
  "purpose": "second independent fault catalogue (QFaults) for the cross-catalogue transfer measurement: emit catalogue A (SGMC), score against catalogue B (QFaults)",
  "source": {
@@ -153,7 +153,7 @@
   "bytes": 19006297,
   "features": 14481
  },
- "elapsed_s": 25.9,
+ "elapsed_s": 6.8,
  "next_steps": [
   "python scripts/build_proxy_catalogue.py --proxy data/external/qfaults_footprint.geojson --template data/labels.tif --labels data/labels.tif --out data/evidence/xcat/qfaults_catalogue.tif --stats data/evidence/xcat/qfaults_stats.json --fetch-meta data/evidence/xcat/fetch_meta.json",
   "python scripts/measure_cross_catalogue_transfer.py"
