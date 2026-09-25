@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-17T23:08:17+00:00",
+ "generated_utc": "2026-09-25T03:50:26+00:00",
  "generated_by": "scripts/eval_proxy_catalogue.py",
  "purpose": "score a prediction against faults the training labels do not contain (docs/DISCOVERY_PLAN.md 3b) - the only local measurement aligned with the scored 'new fault' population",
  "inputs": {
