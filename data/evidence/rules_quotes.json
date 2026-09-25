@@ -1,0 +1,512 @@
+{
+ "generated_utc": "2026-09-21T12:53:40Z",
+ "script": "scripts/verify_rules_quotes.py",
+ "source": {
+  "url": "/tmp/rules_canonical.pdf",
+  "canonical_url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+  "bytes": 455140,
+  "sha256": "50d854b1e0239fe6b9648d9fa5c7537bc7b6e5bc10cf6b37a2ff9aa401c36938"
+ },
+ "method": "verbatim substring match after NFKC, quote/dash folding, de-hyphenation across line breaks, whitespace collapse and removal of page numbers at page margins - no paraphrasing, no fuzzy matching",
+ "page_furniture_stripped": true,
+ "page_furniture_removed": [
+  {
+   "page": 2,
+   "removed": "2",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 3,
+   "removed": "3",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 4,
+   "removed": "4",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 5,
+   "removed": "5",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 6,
+   "removed": "6",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 7,
+   "removed": "7",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 8,
+   "removed": "8",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 9,
+   "removed": "9",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 10,
+   "removed": "10",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 11,
+   "removed": "11",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 12,
+   "removed": "12",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 13,
+   "removed": "13",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 14,
+   "removed": "14",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 15,
+   "removed": "15",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 16,
+   "removed": "16",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 17,
+   "removed": "17",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 18,
+   "removed": "18",
+   "why": "bare number at the top of the page"
+  },
+  {
+   "page": 19,
+   "removed": "19",
+   "why": "bare number at the top of the page"
+  }
+ ],
+ "pages": [
+  {
+   "page": 1,
+   "chars": 96,
+   "head": "Geologic Enhanced Mapping",
+   "tail": "SEPTEMBER 2026",
+   "raw_head": "Geologic Enhanced Mapping",
+   "raw_tail": "SEPTEMBER 2026",
+   "raw_head_repr": "'Geologic Enhanced Mapping'",
+   "blank_lines_before_first_text": 3
+  },
+  {
+   "page": 2,
+   "chars": 633,
+   "head": "Preface",
+   "tail": "Date Modifications",
+   "raw_head": "2",
+   "raw_tail": "Date Modifications",
+   "raw_head_repr": "'2'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 3,
+   "chars": 6761,
+   "head": "Contents",
+   "tail": "A.17 Platform ..................................................................",
+   "raw_head": "3",
+   "raw_tail": "A.17 Platform ..........................",
+   "raw_head_repr": "'3'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 4,
+   "chars": 2152,
+   "head": "1 Executive Summary",
+   "tail": "dataset using the same distance-weighted Tversky index.",
+   "raw_head": "4",
+   "raw_tail": "dataset using the same distance-weighted",
+   "raw_head_repr": "'4'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 5,
+   "chars": 1563,
+   "head": "Phase 2",
+   "tail": "recognized accrediting agency or association.",
+   "raw_head": "5",
+   "raw_tail": "recognized accrediting agency or associa",
+   "raw_head_repr": "'5'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 6,
+   "chars": 3651,
+   "head": "Ineligible entities:",
+   "tail": "is subject to change.",
+   "raw_head": "6",
+   "raw_tail": "is subject to change.",
+   "raw_head_repr": "'6'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 7,
+   "chars": 3069,
+   "head": "To be eligible, an individual authorized to represent the competitor must agree ",
+   "tail": "mapping and modeling that will, in turn, assist geothermal and critical mineral ",
+   "raw_head": "7",
+   "raw_tail": "mapping and modeling that will, in turn,",
+   "raw_head_repr": "'7'",
+   "blank_lines_before_first_text": 2
+  },
+  {
+   "page": 8,
+   "chars": 2459,
+   "head": "work is vital to accelerate discoveries of new, commercially viable hidden geoth",
+   "tail": "Survey. Accessed December 22, 2025. https://doi.org/10.5066/P93LGLVQ.",
+   "raw_head": "8",
+   "raw_tail": "Survey. Accessed December 22, 2025. http",
+   "raw_head_repr": "'8'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 9,
+   "chars": 3212,
+   "head": "The GEMS Prize is a competition with $300,000 in cash prizes. This competition f",
+   "tail": "updated test set created by expert review.",
+   "raw_head": "9",
+   "raw_tail": "updated test set created by expert revie",
+   "raw_head_repr": "'9'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 10,
+   "chars": 2914,
+   "head": "\u25cf Solution verification and delivery \u2014 Prize finalists will also submit their so",
+   "tail": "Repository. GBCGE, NBMG, UNR. https://doi.org/10.15121/1881483.",
+   "raw_head": "10",
+   "raw_tail": "Repository. GBCGE, NBMG, UNR. https://do",
+   "raw_head_repr": "'10'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 11,
+   "chars": 3020,
+   "head": "3.4 Feedback",
+   "tail": "overfitting to the public test set.  The set of faults included in the public te",
+   "raw_head": "11",
+   "raw_tail": "overfitting to the public test set.  The",
+   "raw_head_repr": "'11'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 12,
+   "chars": 1558,
+   "head": "relative weight of faults in both test datasets will be determined by the compet",
+   "tail": "One such platform for connection will be provided via the DrivenData community f",
+   "raw_head": "12",
+   "raw_tail": "One such platform for connection will be",
+   "raw_head_repr": "'12'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 13,
+   "chars": 2655,
+   "head": "Appendix A: Additional Terms and Conditions",
+   "tail": "RELATED TO THE PRIZE.",
+   "raw_head": "13",
+   "raw_tail": "RELATED TO THE PRIZE.",
+   "raw_head_repr": "'13'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 14,
+   "chars": 2917,
+   "head": "A.2 Verification for Payments",
+   "tail": "trade secrets or confidential, proprietary, or privileged information:",
+   "raw_head": "14",
+   "raw_tail": "trade secrets or confidential, proprieta",
+   "raw_head_repr": "'14'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 15,
+   "chars": 3504,
+   "head": "Notice of Restriction on Disclosure and Use of Data: Pages [list applicable page",
+   "tail": "exhibition and other exploitation in any manner and in all media, whether now",
+   "raw_head": "15",
+   "raw_tail": "exhibition and other exploitation in any",
+   "raw_head_repr": "'15'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 16,
+   "chars": 2973,
+   "head": "existing or hereafter discovered, throughout the world",
+   "tail": "responsible for this prize, the judge has determined that no liability insurance",
+   "raw_head": "16",
+   "raw_tail": "responsible for this prize, the judge ha",
+   "raw_head_repr": "'16'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 17,
+   "chars": 3056,
+   "head": "insured will be required of competitors to compete in this competition per 15 U.",
+   "tail": "will select no competitors to be winners and will award no prize money.",
+   "raw_head": "17",
+   "raw_tail": "will select no competitors to be winners",
+   "raw_head_repr": "'17'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 18,
+   "chars": 3345,
+   "head": "All applications submitted to DOE are subject to a due diligence review.",
+   "tail": "in the manner most pertinent to their participation in the prize competition. Pa",
+   "raw_head": "18",
+   "raw_tail": "in the manner most pertinent to their pa",
+   "raw_head_repr": "'18'",
+   "blank_lines_before_first_text": 1
+  },
+  {
+   "page": 19,
+   "chars": 1338,
+   "head": "asked to provide DOE with information on their planned activities so that DOE ca",
+   "tail": "This is the end of the rules document; thank you for reading.",
+   "raw_head": "19",
+   "raw_tail": "This is the end of the rules document; t",
+   "raw_head_repr": "'19'",
+   "blank_lines_before_first_text": 1
+  }
+ ],
+ "extracted_text": null,
+ "match_against_mirror": {
+  "expected_sha256": null,
+  "identical": false
+ },
+ "quotes": [
+  {
+   "id": "two_phases",
+   "section": "\u00a71.1",
+   "quote": "Participants will submit a single entry, which will be evaluated in two prize phases using a distance-weighted Tversky index.",
+   "why": "One submission is scored twice; there is no separate Phase-2 upload to optimise for.",
+   "exact_match": true
+  },
+  {
+   "id": "phase1_target",
+   "section": "\u00a71.1",
+   "quote": "In Phase 1, submissions will be evaluated against a privately withheld subset of the original new fault dataset compiled by expert reviewers.",
+   "why": "The scored population is NEW faults, not the catalogue we can download.",
+   "exact_match": true
+  },
+  {
+   "id": "experts_revise",
+   "section": "\u00a71.1",
+   "quote": "After Phase 1, expert reviewers will use submitted predictions to revise the new fault dataset.",
+   "why": "Discoveries can be confirmed by experts - predictions that look like real new faults matter.",
+   "exact_match": true
+  },
+  {
+   "id": "phase2_eligibility",
+   "section": "\u00a71.1",
+   "quote": "All Phase 1 competitors will be eligible to compete in Phase 2 and will be automatically submitted for consideration.",
+   "why": "No top-5 cutoff gates the larger prize pool: Phase-1 risk-taking buys nothing.",
+   "exact_match": true
+  },
+  {
+   "id": "phase2_target",
+   "section": "\u00a71.1",
+   "quote": "Submissions will be reevaluated against the full, revised new fault dataset using the same distance-weighted Tversky index.",
+   "why": "Phase 2 is the same metric on the same population - one objective, two label revisions.",
+   "exact_match": true
+  },
+  {
+   "id": "prize_pools",
+   "section": "\u00a71.1",
+   "quote": "The Phase 2 prize pool of $250,000 will be distributed among the top five competitors, as judged by their performance on all fault labels in this updated label set.",
+   "why": "$250k of the $300k is decided on the revised new-fault labels; $50k in Phase 1.",
+   "exact_match": true
+  },
+  {
+   "id": "labels_source",
+   "section": "\u00a72",
+   "quote": "The labels for this prize come from the USGS Quaternary Fault and Fold Database and from a set of newly identified faults labeled by geology experts at the National Laboratory of the Rockies (NLR) and USGS.",
+   "why": "Two populations in one sentence: the public catalogue (training) and the expert-mapped new faults (scoring).",
+   "exact_match": true
+  },
+  {
+   "id": "ranking_basis",
+   "section": "\u00a73.2",
+   "quote": "Second-round prize rankings will be determined by running the selected final submissions against the complete updated test set created by expert review.",
+   "why": "Phase 2 ground truth is the *complete updated* set - expert new faults, not the old database.",
+   "exact_match": true
+  },
+  {
+   "id": "features_source",
+   "section": "\u00a72",
+   "quote": "The feature data for this prize come from the recently released Geoscience Data Acquisition for Western Nevada (GeoDAWN)",
+   "why": "The features are the GeoDAWN geophysics (lidar/magnetic/radiometric), i.e. what the experts themselves mapped the new faults from.",
+   "exact_match": true
+  },
+  {
+   "id": "dem_is_a_feature",
+   "section": "\u00a72",
+   "quote": "In addition, the feature data also contain U.S. Geological Survey (USGS) Digital Elevation Model (DEM) elevation data at 1-m resolution.",
+   "why": "The 1 m DEM is intended input data, not an external extra - it is admissible.",
+   "exact_match": true
+  },
+  {
+   "id": "single_geotiff",
+   "section": "\u00a73.2",
+   "quote": "You must submit a single GeoTIFF with a single raster layer at 100-meter resolution containing your model's predictions of fault locations for the entirety of the GeoDAWN study area.",
+   "why": "Submission format, exactly.",
+   "exact_match": true
+  },
+  {
+   "id": "weekly_limit",
+   "section": "\u00a73.2",
+   "quote": "You can make multiple submissions, subject to the limits specified on the competition website (three submissions per week).",
+   "why": "Three measured shots per week at the real metric - the only honest feedback available.",
+   "exact_match": true
+  },
+  {
+   "id": "ai_disclosure",
+   "section": "\u00a73.2",
+   "quote": "you must indicate in the narrative (not included in the word count) the extent to which, if any, you used generative AI technology",
+   "why": "Required in the final narrative; this repository documents its own AI use.",
+   "exact_match": true
+  },
+  {
+   "id": "code_assets",
+   "section": "\u00a73.2",
+   "quote": "The solution assets must contain a description of the resources required to build and run the solution, and they should be able to sufficiently reproduce the winning results and generate predictions on new data samples.",
+   "why": "Why every run here commits its logs, hashes, environment pins and reproduce steps.",
+   "exact_match": true
+  },
+  {
+   "id": "prize_split",
+   "section": "\u00a71.1",
+   "quote": "There will be two phases of prize awards.",
+   "why": "Two prize rounds over one submission; the split matters for risk allocation.",
+   "exact_match": true
+  },
+  {
+   "id": "phase1_pool_amount",
+   "section": "\u00a71.1",
+   "quote": "The Phase 1 pool of $50,000 will be distributed equally among the top five competitors, as judged by their performance on the private test set of fault labels.",
+   "why": "Phase 1 is an equal split among the top five, i.e. rank inside the top five is not paid differently - the $250k Phase 2 ranking is where rank itself pays.",
+   "exact_match": true
+  },
+  {
+   "id": "experts_update_labels",
+   "section": "\u00a71.1",
+   "quote": "A panel of experts will then use the submitted predictions to update fault labels in the region.",
+   "why": "Submissions are read by the experts before Phase 2: a false positive that is geologically plausible can become a label, which the metric alone does not reward.",
+   "exact_match": true
+  },
+  {
+   "id": "features_single_geotiff",
+   "section": "\u00a73.3",
+   "quote": "This dataset will be provided as a single multiband GeoTIFF, with one feature per band.",
+   "why": "19 bands in one file on one grid - band order is the only documentation of semantics.",
+   "exact_match": true
+  },
+  {
+   "id": "dem_download_instructions",
+   "section": "\u00a73.3",
+   "quote": "In addition, instructions will be provided for downloading USGS DEM elevation data at 1-m resolution for the GeoDAWN region.",
+   "why": "The 1 m DEM is delivered as a link list (1m_DEM_links.csv / the data tab's PDF), not as raster tiles - which is why this repo stores a verified tile inventory in data/dem_links.json.",
+   "exact_match": true
+  },
+  {
+   "id": "all_faults",
+   "section": "\u00a73.3",
+   "quote": "Competitors will submit their predictions for all faults in the GeoDAWN study area as a GeoTIFF raster at 100-m resolution.",
+   "why": "'All faults' - not only the new ones and not only the catalogued ones.",
+   "exact_match": true
+  },
+  {
+   "id": "one_final_submission",
+   "section": "\u00a73.5",
+   "quote": "Before the end of the competition, you must choose only one submission for evaluation across both prize rounds.",
+   "why": "One artefact must serve both rounds; nothing can be tuned for one and swapped for the other.",
+   "exact_match": true
+  },
+  {
+   "id": "one_final_per_entity",
+   "section": "\u00a73.4",
+   "quote": "Each participating entity (team, organization, or individual prize competitor not on a team) is allowed to have one final submission",
+   "why": "Per-entity, not per-account: duplicate submissions from one entity are not a strategy.",
+   "exact_match": true
+  },
+  {
+   "id": "no_private_knowledge",
+   "section": "\u00a73.6.2",
+   "quote": "You must choose only one submission to use for scoring across both prize rounds, and you must make your decision without knowledge of your scores on the private test set.",
+   "why": "Explicit anti-overfitting rule: the public leaderboard is the only feedback there is.",
+   "exact_match": true
+  },
+  {
+   "id": "test_set_composition",
+   "section": "\u00a73.6.2",
+   "quote": "The set of faults included in the public test dataset and the relative weight of faults in both test datasets will be determined by the competition organizers before the start of the competition.",
+   "why": "Public/private composition and fault weighting are the organizers' choice and are fixed before the start - so public-LB optimising cannot reweight them.",
+   "exact_match": true
+  },
+  {
+   "id": "entry",
+   "section": "\u00a73.1",
+   "quote": "To enter the competition, you must create a profile on the DrivenData platform and agree to abide by the competition rules and restrictions.",
+   "why": "The one genuinely human step: registration, then the account-gated data tab and upload.",
+   "exact_match": true
+  },
+  {
+   "id": "citizen",
+   "section": "\u00a71.3",
+   "quote": "An individual prize competitor (who is not competing as a member of a group) must be a U.S. citizen or permanent resident.",
+   "why": "Eligibility - checked before any prize is contemplated.",
+   "exact_match": true
+  },
+  {
+   "id": "payment",
+   "section": "\u00a7A.2",
+   "quote": "Each competitor must sign and return to the prize administrator within 30 days of the date on the notice a completed NLR Request for ACH Banking Information form and a completed IRS W-9 form.",
+   "why": "What winning actually requires administratively.",
+   "exact_match": true
+  },
+  {
+   "id": "public_elements",
+   "section": "\u00a7A.4",
+   "quote": "The elements of the submission that are designated as public will become publicly available as part of this prize.",
+   "why": "Public-designated elements must contain no trade secrets; everything here is public already.",
+   "exact_match": true
+  },
+  {
+   "id": "single_award",
+   "section": "\u00a7A.3",
+   "quote": "The prize administrator will award a single dollar amount to the designated primary submitter, whether consisting of a single entity or multiple entities.",
+   "why": "Team allocation is the team's problem, not the sponsor's.",
+   "exact_match": true
+  }
+ ],
+ "summary": {
+  "n_quotes": 29,
+  "n_found": 29,
+  "all_found": true
+ },
+ "conclusion": "Both prize phases are scored against the expert-mapped NEW fault dataset (Phase 1 a private subset, Phase 2 the full revised set). The catalogue in the data tab is the training labels and is not the scored population."
+}

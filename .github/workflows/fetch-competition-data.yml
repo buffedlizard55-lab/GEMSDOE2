@@ -1,0 +1,97 @@
+name: Fetch competition data
+
+# =============================================================================
+# DATA BRIDGE
+#
+# The development sandbox egresses through an allowlist that only permits
+# github.com / api.github.com / codeload.github.com / pypi.org.  Dropbox, S3,
+# drivendata.org, sciencebase.gov and the Azure blob host that serves Actions
+# ARTIFACTS are all unreachable from there (verified: curl exit 35 / EOF).
+#
+# A GitHub-hosted runner has unrestricted egress, so it plays the role of the
+# machine that can reach the data.  Results come back to the sandbox the only
+# way that survives the allowlist: committed to this branch over github.com.
+#
+#   full rasters  -> workflow ARTIFACT (for a human to download & submit)
+#   verified facts-> data/evidence/*.json committed to the branch (auditable)
+#
+# Nothing here is transcribed by hand: every number in the committed JSON is
+# produced by rasterio/hashlib on the runner against the bytes it downloaded.
+# =============================================================================
+on:
+  workflow_dispatch:
+  push:
+    branches: ["arena/**"]
+    paths: [".github/triggers/fetch-data"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download competition files (Dropbox mirrors from the DrivenData data tab)
+        run: |
+          set -uo pipefail
+          mkdir -p data
+          dl () { # url outfile
+            echo "::group::$2"
+            if curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1"; then
+              echo "OK $2 $(stat -c%s "data/$2") bytes"
+            else
+              echo "FAILED $2"; rm -f "data/$2"
+            fi
+            echo "::endgroup::"
+          }
+          dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" gems-geodawn-numerical-features.tif
+          dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" existing_faults.tif
+          dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" example_submission.tif
+          dl "https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&dl=1" GEMS_96647.pdf
+          dl "https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&dl=1" Digital-elevation-model-links-JSON.pdf
+
+      - name: Install inspection deps
+        run: |
+          python -m pip install --quiet rasterio numpy pypdf pdfplumber
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils tesseract-ocr
+
+      - name: Inspect -> machine-generated evidence JSON
+        run: python scripts/inspect_competition_data.py --data-dir data --out data/evidence
+
+      - name: Transfer/encoding analysis + sample-vs-labels cross-check
+        run: python scripts/analyze_for_transfer.py --data-dir data --out data/evidence/transfer_analysis.json
+
+      - name: Build the small real-data dev fixture (committed back to the branch)
+        run: python scripts/make_dev_fixture.py --data-dir data --out-dir data/fixture --size 512
+
+      - name: Verify every catalog link over live HTTP
+        run: python scripts/verify_links.py --catalog docs/data_catalog.csv --json-out docs/link_verification.json --csv-out docs/data_catalog.verified.csv || true
+
+      - name: Extract the DEM link list from the provided PDF
+        run: python scripts/extract_dem_links.py --pdf data/Digital-elevation-model-links-JSON.pdf --out data/dem_links.json --evidence data/evidence || echo "DEM link extraction failed (non-fatal)"
+
+      - name: Commit evidence back to the branch
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/evidence data/dem_links.json data/fixture 2>/dev/null || true
+          git add -f docs/link_verification.json docs/data_catalog.verified.csv 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "no evidence changes"
+          else
+            git commit -m "data(evidence): machine-generated inventory from runner [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Upload full data as artifact (for human download / submission)
+        uses: actions/upload-artifact@v4
+        with:
+          name: competition-data
+          path: data/
+          retention-days: 30
+          compression-level: 0

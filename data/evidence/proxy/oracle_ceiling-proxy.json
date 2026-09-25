@@ -1,0 +1,478 @@
+{
+ "generated_utc": "2026-09-17T19:11:53+00:00",
+ "generated_by": "scripts/measure_miss_distance.py",
+ "purpose": "split the error on the new-fault-like population into localization error (recoverable by widening the emitted band) and detection error (not recoverable by widening) using the official metric's own R = 3 px tolerance",
+ "label": "oracle ceiling on the proxy population (perfect localizer, same band width)",
+ "inputs": {
+  "pred": {
+   "path": "data/evidence/runs/35042805806/submission.tif",
+   "sha256": "a5ae61d572b0cd95eac111cab86954eca2219ad310fc0febddcda7ab92fb7969",
+   "threshold": 0.5
+  },
+  "proxy": {
+   "path": "data/evidence/proxy/proxy_catalogue.tif",
+   "sha256": "7563e187171f7210d70295f958b0b2714c1fa504afa35f9a4688fc99b1e1122a"
+  },
+  "truth_mode": "only"
+ },
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ]
+ },
+ "metric": {
+  "R_pixels": 3,
+  "R_meters": 300,
+  "alpha": 0.2,
+  "beta": 0.8
+ },
+ "truth_px": 61664,
+ "truth_km": 6166.4,
+ "emitted_px": 21492,
+ "emitted_km": 2149.2,
+ "miss_geometry": {
+  "credited_within_R": 0.04899130773222626,
+  "within_3px": 0.04899130773222626,
+  "within_6px": 0.11270757654385055,
+  "within_12px": 0.260216658017644,
+  "within_20px": 0.44985729112610273,
+  "within_30px": 0.6498118837571354,
+  "percentiles_px": {
+   "50": 22.360679626464844,
+   "75": 37.2155876159668,
+   "90": 56.64803695678711,
+   "95": 67.47480773925781
+  },
+  "max_px": 179.621826171875,
+  "km_of_trace_within_12px": 1604.6
+ },
+ "unreachable_by_widening": {
+  "beyond_6px": 0.887292,
+  "beyond_12px": 0.739783,
+  "beyond_20px": 0.550143,
+  "beyond_30px": 0.350188
+ },
+ "width_curve": [
+  {
+   "width_px": 0,
+   "dti": 0.024685,
+   "TP_w": 1324.081,
+   "FP_w": 20211.052,
+   "FN_w": 60339.919,
+   "emission_px": 21492,
+   "emission_km": 2149.2
+  },
+  {
+   "width_px": 1,
+   "dti": 0.035137,
+   "TP_w": 2202.998,
+   "FP_w": 64629.638,
+   "FN_w": 59461.002,
+   "emission_px": 68712,
+   "emission_km": 6871.2
+  },
+  {
+   "width_px": 3,
+   "dti": 0.050892,
+   "TP_w": 4429.766,
+   "FP_w": 184128.141,
+   "FN_w": 57234.234,
+   "emission_px": 195559,
+   "emission_km": 19555.9
+  },
+  {
+   "width_px": 6,
+   "dti": 0.063718,
+   "TP_w": 8639.067,
+   "FP_w": 422615.384,
+   "FN_w": 53024.933,
+   "emission_px": 447946,
+   "emission_km": 44794.6
+  },
+  {
+   "width_px": 12,
+   "dti": 0.070982,
+   "TP_w": 17625.238,
+   "FP_w": 977253.241,
+   "FN_w": 44038.762,
+   "emission_px": 1032431,
+   "emission_km": 103243.1
+  },
+  {
+   "width_px": 16,
+   "dti": 0.071321,
+   "TP_w": 23521.626,
+   "FP_w": 1378823.136,
+   "FN_w": 38142.374,
+   "emission_px": 1453849,
+   "emission_km": 145384.9
+  },
+  {
+   "width_px": 20,
+   "dti": 0.071263,
+   "TP_w": 29214.652,
+   "FP_w": 1773900.55,
+   "FN_w": 32449.348,
+   "emission_px": 1867660,
+   "emission_km": 186766.0
+  },
+  {
+   "width_px": 30,
+   "dti": 0.069729,
+   "TP_w": 41177.567,
+   "FP_w": 2664865.509,
+   "FN_w": 20486.433,
+   "emission_px": 2799068,
+   "emission_km": 279906.8
+  },
+  {
+   "width_px": 40,
+   "dti": 0.065685,
+   "TP_w": 48612.033,
+   "FP_w": 3405129.369,
+   "FN_w": 13051.967,
+   "emission_px": 3565210,
+   "emission_km": 356521.0
+  }
+ ],
+ "oracle_band_ceiling": {
+  "rows": [
+   {
+    "width_px": 0,
+    "oracle_dti": 1.0,
+    "emission_px": 61664,
+    "fp_per_truth_px": 0.0
+   },
+   {
+    "width_px": 1,
+    "oracle_dti": 0.885244,
+    "emission_px": 181568,
+    "fp_per_truth_px": 0.6482
+   },
+   {
+    "width_px": 3,
+    "oracle_dti": 0.579451,
+    "emission_px": 429471,
+    "fp_per_truth_px": 3.6289
+   },
+   {
+    "width_px": 6,
+    "oracle_dti": 0.346048,
+    "emission_px": 788357,
+    "fp_per_truth_px": 9.4489
+   },
+   {
+    "width_px": 12,
+    "oracle_dti": 0.203092,
+    "emission_px": 1415512,
+    "fp_per_truth_px": 19.6194
+   },
+   {
+    "width_px": 16,
+    "oracle_dti": 0.16181,
+    "emission_px": 1802824,
+    "fp_per_truth_px": 25.9004
+   },
+   {
+    "width_px": 20,
+    "oracle_dti": 0.136443,
+    "emission_px": 2157083,
+    "fp_per_truth_px": 31.6454
+   },
+   {
+    "width_px": 30,
+    "oracle_dti": 0.102059,
+    "emission_px": 2918382,
+    "fp_per_truth_px": 43.9913
+   },
+   {
+    "width_px": 40,
+    "oracle_dti": 0.083897,
+    "emission_px": 3572351,
+    "fp_per_truth_px": 54.5967
+   }
+  ],
+  "defined_as": "the emitted set is the truth dilated by the same width with p = 1: a perfect localizer that still writes a band. Emission of the truth itself (width 0) scores 1.0 by construction",
+  "truth_size_independent": true,
+  "why": "TP_w and FP_w both scale with |G| for a band around a self-similar truth, so the ceiling depends only on the width, not on how large the hidden truth is",
+  "reading": "a candidate whose PROJECTED value exceeds the oracle ceiling at its own width is wrong - the projection assumes the coverage a perfect localizer would need"
+ },
+ "marginal_gain_per_width": [
+  {
+   "from_px": 0,
+   "to_px": 1,
+   "dti_gain": 0.010452,
+   "px_added": 47220
+  },
+  {
+   "from_px": 1,
+   "to_px": 3,
+   "dti_gain": 0.015755,
+   "px_added": 126847
+  },
+  {
+   "from_px": 3,
+   "to_px": 6,
+   "dti_gain": 0.012826,
+   "px_added": 252387
+  },
+  {
+   "from_px": 6,
+   "to_px": 12,
+   "dti_gain": 0.007264,
+   "px_added": 584485
+  },
+  {
+   "from_px": 12,
+   "to_px": 16,
+   "dti_gain": 0.000339,
+   "px_added": 421418
+  },
+  {
+   "from_px": 16,
+   "to_px": 20,
+   "dti_gain": -5.8e-05,
+   "px_added": 413811
+  },
+  {
+   "from_px": 20,
+   "to_px": 30,
+   "dti_gain": -0.001534,
+   "px_added": 931408
+  },
+  {
+   "from_px": 30,
+   "to_px": 40,
+   "dti_gain": -0.004044,
+   "px_added": 766142
+  }
+ ],
+ "projection_over_scored_truth_size": [
+  {
+   "truth_px": 500,
+   "truth_km": 50.0,
+   "best_width_px": 0,
+   "best_dti": 0.002416,
+   "skeleton_dti": 0.002416,
+   "gain_over_skeleton": 0.0,
+   "widening_wins": false,
+   "per_width": {
+    "0": 0.002416,
+    "1": 0.00134,
+    "3": 0.000965,
+    "6": 0.000825,
+    "12": 0.00073,
+    "16": 0.000691,
+    "20": 0.000667,
+    "30": 0.000626,
+    "40": 0.000578
+   }
+  },
+  {
+   "truth_px": 1000,
+   "truth_km": 100.0,
+   "best_width_px": 0,
+   "best_dti": 0.004431,
+   "skeleton_dti": 0.004431,
+   "gain_over_skeleton": 0.0,
+   "widening_wins": false,
+   "per_width": {
+    "0": 0.004431,
+    "1": 0.002601,
+    "3": 0.001909,
+    "6": 0.001641,
+    "12": 0.001456,
+    "16": 0.001379,
+    "20": 0.001332,
+    "30": 0.001251,
+    "40": 0.001156
+   }
+  },
+  {
+   "truth_px": 2500,
+   "truth_km": 250.0,
+   "best_width_px": 0,
+   "best_dti": 0.008869,
+   "skeleton_dti": 0.008869,
+   "gain_over_skeleton": 0.0,
+   "widening_wins": false,
+   "per_width": {
+    "0": 0.008869,
+    "1": 0.005977,
+    "3": 0.004621,
+    "6": 0.004045,
+    "12": 0.003616,
+    "16": 0.003431,
+    "20": 0.003318,
+    "30": 0.003119,
+    "40": 0.002884
+   }
+  },
+  {
+   "truth_px": 5000,
+   "truth_km": 500.0,
+   "best_width_px": 0,
+   "best_dti": 0.013314,
+   "skeleton_dti": 0.013314,
+   "gain_over_skeleton": 0.0,
+   "widening_wins": false,
+   "per_width": {
+    "0": 0.013314,
+    "1": 0.010531,
+    "3": 0.008783,
+    "6": 0.007901,
+    "12": 0.007155,
+    "16": 0.006808,
+    "20": 0.006594,
+    "30": 0.00621,
+    "40": 0.005747
+   }
+  },
+  {
+   "truth_px": 10000,
+   "truth_km": 1000.0,
+   "best_width_px": 0,
+   "best_dti": 0.017768,
+   "skeleton_dti": 0.017768,
+   "gain_over_skeleton": 0.0,
+   "widening_wins": false,
+   "per_width": {
+    "0": 0.017768,
+    "1": 0.017014,
+    "3": 0.015975,
+    "6": 0.015096,
+    "12": 0.01401,
+    "16": 0.013406,
+    "20": 0.013025,
+    "30": 0.012314,
+    "40": 0.011415
+   }
+  },
+  {
+   "truth_px": 20000,
+   "truth_km": 2000.0,
+   "best_width_px": 6,
+   "best_dti": 0.027719,
+   "skeleton_dti": 0.021336,
+   "gain_over_skeleton": 0.006383,
+   "widening_wins": true,
+   "per_width": {
+    "0": 0.021336,
+    "1": 0.02458,
+    "3": 0.027051,
+    "6": 0.027719,
+    "12": 0.026889,
+    "16": 0.026012,
+    "20": 0.025425,
+    "30": 0.02421,
+    "40": 0.022518
+   }
+  },
+  {
+   "truth_px": 26042,
+   "truth_km": 2604.2,
+   "best_width_px": 6,
+   "best_dti": 0.034391,
+   "skeleton_dti": 0.022379,
+   "gain_over_skeleton": 0.012012,
+   "widening_wins": true,
+   "per_width": {
+    "0": 0.022379,
+    "1": 0.027408,
+    "3": 0.032236,
+    "6": 0.034391,
+    "12": 0.03418,
+    "16": 0.033269,
+    "20": 0.032633,
+    "30": 0.031205,
+    "40": 0.029081
+   }
+  },
+  {
+   "truth_px": 61664,
+   "truth_km": 6166.4,
+   "best_width_px": 16,
+   "best_dti": 0.071321,
+   "skeleton_dti": 0.024685,
+   "gain_over_skeleton": 0.046636,
+   "widening_wins": true,
+   "per_width": {
+    "0": 0.024685,
+    "1": 0.035137,
+    "3": 0.050892,
+    "6": 0.063718,
+    "12": 0.070982,
+    "16": 0.071321,
+    "20": 0.071263,
+    "30": 0.069729,
+    "40": 0.065685
+   }
+  },
+  {
+   "truth_px": 100000,
+   "truth_km": 10000.0,
+   "best_width_px": 20,
+   "best_dti": 0.106644,
+   "skeleton_dti": 0.02542,
+   "gain_over_skeleton": 0.081224,
+   "widening_wins": true,
+   "per_width": {
+    "0": 0.02542,
+    "1": 0.038152,
+    "3": 0.060744,
+    "6": 0.083729,
+    "12": 0.101657,
+    "16": 0.104968,
+    "20": 0.106644,
+    "30": 0.106617,
+    "40": 0.101486
+   }
+  },
+  {
+   "truth_px": 250000,
+   "truth_km": 25000.0,
+   "best_width_px": 30,
+   "best_dti": 0.217839,
+   "skeleton_dti": 0.026171,
+   "gain_over_skeleton": 0.191668,
+   "widening_wins": true,
+   "per_width": {
+    "0": 0.026171,
+    "1": 0.041597,
+    "3": 0.0747,
+    "6": 0.120142,
+    "12": 0.174395,
+    "16": 0.192714,
+    "20": 0.204752,
+    "30": 0.217839,
+    "40": 0.214119
+   }
+  }
+ ],
+ "widening_starts_winning_above_px": 20000,
+ "verdict": {
+  "shipped_width0_dti": 0.024685,
+  "best_width_px": 16,
+  "best_dti": 0.071321,
+  "gain_from_widening": 0.046636,
+  "still_improving_at_the_widest_measured_width": false,
+  "detection_failure_share": 0.739783,
+  "widening_starts_winning_above_px": 20000,
+  "widening_starts_winning_above_km": 2000.0,
+  "reading": "share of the proxy truth that widening the emitted band converts into credit vs the share that is beyond 1.2 km of any emitted pixel and needs detection, not width"
+ },
+ "caveats": [
+  "Population C is USGS state-map surface mapping, not the expert interpretation of GeoDAWN geophysics that the prize scores: policy planning only.",
+  "The truth is the code-2 proxy trace only (faults absent from labels.tif), so a prediction that reproduces the catalogue scores zero here by construction.",
+  "The width curve dilates the SAME emitted set; it does not re-rank the probability field, so it is the marginal value of width alone.",
+  "The projection over scored-truth sizes holds each width's measured coverage and FP mass fixed while |G| varies.  A different-sized truth would not be covered at exactly the same fractional rate, so the projected row is the assumption stated out loud, not an estimate; it is exact at the proxy's own size (61,664 px)."
+ ]
+}

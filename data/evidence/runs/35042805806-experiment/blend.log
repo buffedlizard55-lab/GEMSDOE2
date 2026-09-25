@@ -1,0 +1,17 @@
+loaded 6 fold(s): ['folds/fold-0', 'folds/fold-1', 'folds/fold-2', 'folds/fold-3', 'folds/fold-4', 'folds/fold-5']
+pooled shaping: t0=0.470 thin=True dilate=0px -> mean held-out DTI 0.1903 (unshaped 0.1560; skeleton r=0 0.0441)
+leave-one-fold-out aggregation audit (6 folds, 1695s):
+  mean DTI, floor re-fitted without the scored fold : 0.1643   (unshaped 0.1560, gain +0.0083)
+  mean DTI, oracle floor fitted on the scored fold : 0.2029
+  fold weights are fitted per row but not scored (held-out crops cover different regions; see report note)
+  pooled (selection-optimistic) reference : 0.1903
+          fold-0  t0_loo 0.0095 thin True   dti_loo 0.2034  unshaped 0.2253  self-best 0.2598
+          fold-1  t0_loo 0.1973 thin False  dti_loo 0.1502  unshaped 0.1245  self-best 0.1969
+          fold-2  t0_loo 0.0433 thin True   dti_loo 0.0302  unshaped 0.0294  self-best 0.0382
+          fold-3  t0_loo 0.0433 thin True   dti_loo 0.3226  unshaped 0.3054  self-best 0.3399
+          fold-4  t0_loo 0.1973 thin True   dti_loo 0.0971  unshaped 0.0774  self-best 0.1856
+          fold-5  t0_loo 0.0433 thin True   dti_loo 0.1824  unshaped 0.1743  self-best 0.1969
+wrote submission.tif  386008 B sha256=45d50773d2313de6  nonzero=21492 finite=5165852/12279160 mass 575330 -> 21492  tiled=True blocks=[[256, 256]]
+informational DTI vs known faults = 0.1387 (blanket-ones floor 0.0246)
+discovery vs known catalog: novel_fraction=0.684  candidate_new(>0.5)=6090 px in 617 components
+wrote blend_report.json

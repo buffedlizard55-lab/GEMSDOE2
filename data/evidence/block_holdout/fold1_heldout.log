@@ -1,0 +1,40 @@
+config configs/config_block_holdout.yaml: block_holdout_eval={"R": 3, "alpha": 0.2, "beta": 0.8, "block_px": 512, "bootstraps": 2000, "crosscheck_sweep": "data/evidence/proxy/eval_sweep-mean12.json", "eps": 1e-07, "floors": "0.1,0.15,0.2,0.3,0.5", "folds": 4, "out": "data/evidence/block_holdout/block_stratified.json", "reference_floor": 0.1, "reference_width": 0, "seed": 0, "widths": "0,1,2,3,4,6,8,12,16,20"}
+
+blocks: 512 px = 51.2 km; 9 of 56 scoreable (22 footprint-empty)
+footprint: 1,170,054 px (9.53 % of the grid)
+populations: catalogue 16,598 px (1,659.8 km) | proxy-only 14,117 px (1,411.7 km)
+
+reference candidate floor0.1_w0px:
+  proxy-only DTI 0.0789  block-bootstrap CI95 [0.0644, 0.0963]
+  catalogue  DTI 0.1851  (in-domain - see the note in the JSON)
+  worst single-block contrast +0.0000; 0 of 9 scoreable blocks gain
+  best of the recoverable sweep: floor0.1_w1px 0.0793 (+0.0004); reference is best: False
+  candidates swept 50, DISTINCT emissions 50 (floor axis degenerate: False)
+  best genuinely different alternative: floor0.1_w1px 0.0793 (+0.0004), P(beats reference over block resamples) = 0.5185, worst single block -0.0059
+  prediction field: 1157058 distinct values, 1,169,116 emitted px, hard band False
+
+  candidate                  proxy DTI   CI95 (block bootstrap)     P(>ref)  catalogue DTI
+  floor0.1_w0px              0.0789      [0.0644, 0.0963]       ref    0.1851
+  floor0.1_w1px              0.0793      [0.0612, 0.1007]      0.52   0.1687
+  floor0.1_w2px              0.0786      [0.0574, 0.1046]      0.45   0.1538
+  floor0.1_w3px              0.0772      [0.0540, 0.1073]      0.39   0.1389
+  floor0.1_w4px              0.0756      [0.0511, 0.1083]      0.34   0.1277
+  floor0.1_w6px              0.0730      [0.0472, 0.1094]      0.29   0.1103
+  floor0.1_w8px              0.0712      [0.0453, 0.1087]      0.24   0.1001
+  floor0.1_w12px             0.0684      [0.0421, 0.1046]      0.19   0.0872
+  floor0.1_w16px             0.0651      [0.0387, 0.1002]      0.13   0.0786
+  floor0.1_w20px             0.0609      [0.0356, 0.0937]      0.06   0.0733
+  floor0.15_w0px             0.0769      [0.0632, 0.0917]      0.15   0.1904
+  floor0.15_w1px             0.0782      [0.0623, 0.0965]      0.31   0.1761
+  floor0.15_w2px             0.0780      [0.0588, 0.1008]      0.40   0.1612
+  floor0.15_w3px             0.0775      [0.0556, 0.1047]      0.39   0.1464
+  floor0.15_w4px             0.0764      [0.0531, 0.1070]      0.35   0.1348
+  floor0.15_w6px             0.0744      [0.0488, 0.1099]      0.32   0.1162
+
+  CAVEAT (derived): 1 candidate(s) win a majority of blocks yet lose globally - a per-block argmax is not a valid policy selector because DTI is not decomposable.  Blocks give variance; the global DTI selects.
+    floor0.1_w8px: wins 5/9 blocks, global 0.0712 < reference 0.0789
+
+  mean per-block sign agreement between the two populations: 0.635 (1.00 = they prefer the same candidate in the same block every time)
+  largest population conflict: floor0.1_w1px gains on the new-fault-like proxy population in 4 of 8 blocks where both populations are scoreable while the catalogue population loses in the same block
+
+wrote data/evidence/block_holdout/fold1_heldout.json (1,171,590 bytes)

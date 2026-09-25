@@ -1,0 +1,93 @@
+# CI ENSEMBLE config — the competitive run that fits GitHub-hosted CPU runners.
+#
+# Design (all numbers measured against run 34876843912 timings: patch-128 MobileNetV2
+# 2 epochs = 69 s, full-raster TTA-less inference = 89 s on a 4-vCPU runner):
+#   * 6 Monte-Carlo folds run as 6 PARALLEL jobs (one model per fold: arch rotates across
+#     folds as architectures[mc_id % 3], so the ensemble mixes UNet++/DeepLabV3+/U-Net
+#     over different 70/30 splits — the reference solution's MC ensemble, parallelised).
+#   * each fold job: train (~2 h budget, time-guarded) -> raw full-raster inference with
+#     8-way TTA -> artifact (checkpoint + prob_raw.tif + heldout_mc{F}.npz + manifest).
+#   * blend job: nanmean of the 6 raw maps -> ONE shaping pass with the (t0, thin) chosen
+#     by POOLED held-out DTI across folds -> submission.tif -> validate + score -> commit.
+#   * resnet34 encoders: the heaviest backbone that finishes 45 epochs inside the job
+#     limit on CPU. On a GPU box use configs/config.yaml (EfficientNet-B5, 4 archs, 10
+#     splits) instead — that config remains the GPU reference.
+data:
+  feature_path: "data/training_features.tif"
+  label_path: "data/labels.tif"
+  sample_submission_path: "data/sample_submission.tif"
+  external_dir: "data/external"
+  output_dir: "outputs"
+  norm_mode: "clip_zscore"
+  clip_percentile: [1.0, 99.0]
+  use_external_dem: false       # DEM derivatives are a GPU-box next step (see docs)
+  use_ingenious_extra: false
+
+training:
+  patch_size: 256               # km-scale lineaments need context (docs/METRIC_STRATEGY.md)
+  train_step: 128               # 2x overlap for training windows
+  test_proportion: 0.3
+  neg_fraction: 0.35
+  mc_id: 0                      # fold index — workflows override per job
+  mc_splits: 1                  # one fold per job; blend pools the folds
+  batch_size: 8
+  epochs: 45
+  max_minutes: 150              # wall-clock budget for THIS fold's training step;
+                                # guarantees a checkpoint exists before the job timeout
+  init_lr: 3.0e-4               # OneCycleLR peak = 10x (src/train.py)
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2                    # official metric parameters (problem page)
+  beta: 0.8
+  loss: combined_dw
+  use_global_fp_weight: true
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.75, 1.0]
+  early_stopping_patience: 10
+  num_workers: 2
+  seed: 42
+  good_channels: null
+  calibrate_shaping: true       # per-fold record; the BINDING calibration is the blend
+  selection_mode: raw           # per-epoch: raw DTI + one floor candidate (cheap); full
+                                # t0 x thin table every epoch is a GPU-box luxury
+  shaping_grid: 11              # pool over heldout_mc{F}.npz in scripts/blend_submission.py
+  shaping_windows: 12
+
+model:
+  architectures: ["unetplusplus", "deeplabv3plus", "unet"]
+  encoder: "resnet34"           # CPU-feasible pretrained backbone
+  segformer_encoder: "mit_b2"
+  pretrained: true              # runner reaches the weights host; models.py falls back
+                                # to random init with a warning if the download fails
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.5                  # 700 windows x 8 TTA ~= 40-60 min/fold on CPU
+  batch_size: 8
+  tta: true
+  threshold: null
+  blend_mode: gaussian
+  ensemble_weights: null
+  submission_shaping:           # fold jobs run with --raw; the blend job shapes
+    t0: null
+    thin: null
+    hard: true
+    gamma: 1.0
+
+postprocess:
+  frangi_filter: false          # A/B candidate; kept off to bound blend-job runtime
+  frangi_scale_range: [1, 6]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 5
+  skeletonize: false
+
+metric:
+  R_meters: 300                 # official
+  resolution_m: 100             # official
+  alpha: 0.2                    # official
+  beta: 0.8                     # official
+  epsilon: 1.0e-7               # our choice (not specified on the page) - flagged

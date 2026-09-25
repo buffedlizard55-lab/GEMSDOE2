@@ -1,0 +1,26 @@
+footprint bbox (EPSG:4326) from data/labels.tif [EPSG:32611 3292x3730]: -120.0372,37.3312,-116.1409,40.7279
+layer 21 'National Database' esriGeometryPolyline; maxRecordCount=2000 -> page=1000; 26 fields; 21 classes in the service's own vocabulary
+service reports 14,481 features intersecting the footprint
+  offset       0: +1000 (total 1,000/14,481) exceededTransferLimit
+  offset    1000: +1000 (total 2,000/14,481) exceededTransferLimit
+  offset    2000: +1000 (total 3,000/14,481) exceededTransferLimit
+  offset    3000: +1000 (total 4,000/14,481) exceededTransferLimit
+  offset    4000: +1000 (total 5,000/14,481) exceededTransferLimit
+  offset    5000: +1000 (total 6,000/14,481) exceededTransferLimit
+  offset    6000: +1000 (total 7,000/14,481) exceededTransferLimit
+  offset    7000: +1000 (total 8,000/14,481) exceededTransferLimit
+  offset    8000: +1000 (total 9,000/14,481) exceededTransferLimit
+  offset    9000: +1000 (total 10,000/14,481) exceededTransferLimit
+  offset   10000: +1000 (total 11,000/14,481) exceededTransferLimit
+  offset   11000: +1000 (total 12,000/14,481) exceededTransferLimit
+  offset   12000: +1000 (total 13,000/14,481) exceededTransferLimit
+  offset   13000: +1000 (total 14,000/14,481) exceededTransferLimit
+  offset   14000: +481 (total 14,481/14,481)
+  link OK_200 (doi)                 https://doi.org/10.5066/P9BCVRCK
+  link OK_200 (sciencebase)         https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23
+  link OK_200 (portal)              https://www.usgs.gov/programs/earthquake-hazards/faults
+  link OK_200 (service)             https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer?f=json
+
+wrote data/external/qfaults_footprint.geojson (19,006,297 bytes, 14,481 features, sha256 bdb30d4cb1dbe4d3…)
+wrote data/evidence/xcat/fetch_meta.json
+classes seen: 15; integrity: fetched 14,481 == reported 14,481

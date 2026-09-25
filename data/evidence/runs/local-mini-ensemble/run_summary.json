@@ -1,0 +1,7 @@
+{
+ "run_id": "local-mini-ensemble",
+ "profile": "sandbox calibration (NOT a GitHub run): 2 folds x 20 epochs on data/fixture, resnet34, pretrained=false",
+ "date": "2026-09-15",
+ "runner": "dev sandbox (2 vCPU, CPU-only)",
+ "purpose": "exercise train-ensemble fold->blend->shape path and measure fold-weighting; see README.md in this dir"
+}

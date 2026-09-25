@@ -1,0 +1,196 @@
+{
+  "generated": "2026-09-13 03:37:47",
+  "note": "RECONSTRUCTED dataset - NOT official competition files",
+  "grid": {
+    "crs": "EPSG:32611",
+    "x0": 406700.0,
+    "y0": 4202700.0,
+    "width": 667,
+    "height": 489,
+    "resolution_m": 100,
+    "bounds_32611": [
+      406700.0,
+      4153800.0,
+      473400.0,
+      4202700.0
+    ]
+  },
+  "source_repo": "https://github.com/jklinck/geothermal_research",
+  "source_commit": "56d78de7a989c12e2dce50cd65a4095df57030d2 2026-06-25T06:18:00Z (codeload tarball, fetched 2026-09-13)",
+  "inputs": {
+    "22103_dem_a1.tif": {
+      "sha256": "d26a81902df32de8a0b9f2622d6fa9423b4313ef773bfe770e28af8e485b9fee",
+      "bytes": 5309326
+    },
+    "22103_rtp_a1.tif": {
+      "sha256": "698697c46f0d4107bc31ae068ae2f44015b38acae506f484a25ca316e05a378e",
+      "bytes": 5289116
+    },
+    "22103_tmi_a1.tif": {
+      "sha256": "6fb634623dce993b83aa63342d9df57d15554584755f9c2679e4f75f0fe45944",
+      "bytes": 5289114
+    },
+    "22103_tmi_vg_a1.tif": {
+      "sha256": "b10cbe61ef98d6cf20161b63e276a1a0537aa2daf9717bbbbbe9beb8252748b4",
+      "bytes": 5289110
+    },
+    "22103_tmi_hg_a1.tif": {
+      "sha256": "d342060ffbf4007cc807ac05d1f57a664e9e9c18014bc71b17e25b0a5d7f9742",
+      "bytes": 5289122
+    },
+    "22103_upcont_tmi150_a1.tif": {
+      "sha256": "6974963577f6aed8191806bb05179de87b7a4826b48dd38da6ce543ca7028714",
+      "bytes": 5301390
+    },
+    "22103_tc_a1.tif": {
+      "sha256": "d31bff810b02164e0ca97ce034d855247aab702dbc646c78703025015c0e2938",
+      "bytes": 5289096
+    },
+    "22103_k_a1.tif": {
+      "sha256": "c2c03cf982f8477f61ebd44ddf64166ad274ba4df86e9f5d2ca8b9b79cb3cb90",
+      "bytes": 5289136
+    },
+    "22103_th_a1.tif": {
+      "sha256": "5f64ab57b418c918b67d2ca36b7493fa309e7eff94f7b197b99fcb990d6dd3c8",
+      "bytes": 5289098
+    },
+    "22103_u_a1.tif": {
+      "sha256": "673e3d90fa6f5d152a9a1b7be8892f58cd0434728e22e02775dbb7eb20717fc6",
+      "bytes": 5289098
+    },
+    "22103_thk_a1.tif": {
+      "sha256": "8745c081bee5e8e0e6c3ab2272b3d41eb6486536ca7b747ee83239031a0926f8",
+      "bytes": 5289116
+    },
+    "22103_uk_a1.tif": {
+      "sha256": "886e9820634f7811bc16dd725651436437577beaedf836cc1a035499a618f64b",
+      "bytes": 5289144
+    },
+    "22103_uth_a1.tif": {
+      "sha256": "b00e62439c48808b65415529abf7040dce10c9f241083f5152f172423db1f9aa",
+      "bytes": 5289104
+    },
+    "deq_n100a05.tif": {
+      "sha256": "b94560d0aa00b1c5da75bea6a546fd805b12686292a8fbdeed7e3595ecdd0879",
+      "bytes": 10819029
+    },
+    "faults_quaternary_regional.shp": {
+      "sha256": "915b6b4d0ab7cc694360c033ff95816ac16d878bd59f4b4cb7e1281f21965879",
+      "bytes": 8713740,
+      "features": 22118,
+      "crs_source": "EPSG:4269"
+    }
+  },
+  "bands": [
+    {
+      "index": 1,
+      "name": "dem",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_dem_a1.tif",
+      "maps_to": "(analog) elevation input for detrended elevation + slope bands"
+    },
+    {
+      "index": 2,
+      "name": "rtp",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_rtp_a1.tif",
+      "maps_to": "(analog) reduced-to-pole magnetic anomaly"
+    },
+    {
+      "index": 3,
+      "name": "tmi",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_tmi_a1.tif",
+      "maps_to": "(analog) total magnetic intensity"
+    },
+    {
+      "index": 4,
+      "name": "tmi_vg",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_tmi_vg_a1.tif",
+      "maps_to": "(analog) vertical gradient ~ vertical slope of TMI"
+    },
+    {
+      "index": 5,
+      "name": "tmi_hg",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_tmi_hg_a1.tif",
+      "maps_to": "(analog) horizontal gradient ~ horizontal slope of TMI"
+    },
+    {
+      "index": 6,
+      "name": "upcont_tmi150",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_upcont_tmi150_a1.tif",
+      "maps_to": "(extra) upward-continued TMI, regional depth signal"
+    },
+    {
+      "index": 7,
+      "name": "tc",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_tc_a1.tif",
+      "maps_to": "(analog) total radiometric counts"
+    },
+    {
+      "index": 8,
+      "name": "k",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_k_a1.tif",
+      "maps_to": "(analog) potassium concentration"
+    },
+    {
+      "index": 9,
+      "name": "th",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_th_a1.tif",
+      "maps_to": "(analog) thorium concentration"
+    },
+    {
+      "index": 10,
+      "name": "u",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_u_a1.tif",
+      "maps_to": "(analog) uranium concentration"
+    },
+    {
+      "index": 11,
+      "name": "thk",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_thk_a1.tif",
+      "maps_to": "(extra) Th/K ratio"
+    },
+    {
+      "index": 12,
+      "name": "uk",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_uk_a1.tif",
+      "maps_to": "(extra) U/K ratio"
+    },
+    {
+      "index": 13,
+      "name": "uth",
+      "source": "GeoDAWN_tiffs/22103_area1_tiffs/22103_uth_a1.tif",
+      "maps_to": "(extra) U/Th ratio"
+    },
+    {
+      "index": 14,
+      "name": "dem_detrended",
+      "source": "derived from 22103_dem_a1 (gaussian sigma=30px)",
+      "maps_to": "(analog) detrended elevation"
+    },
+    {
+      "index": 15,
+      "name": "dem_slope",
+      "source": "derived from 22103_dem_a1 (gradient, degrees)",
+      "maps_to": "(analog) slope of detrended elevation"
+    },
+    {
+      "index": 16,
+      "name": "eq_density",
+      "source": "seismicity_INGENIOUS_regional_data/dependent_eq/geotiffs/deq_n100a05.tif",
+      "maps_to": "(analog) density of earthquakes (INGENIOUS dependent_eq rate-density)"
+    }
+  ],
+  "outputs": {
+    "recon_training_features.tif": {
+      "sha256": "5a5b926197ae6d1c18cbb112ebd422880f35e2c9c6680e7aa95361166c6b3b8b",
+      "bytes": 18290076
+    },
+    "recon_labels.tif": {
+      "sha256": "6c0c249e76a64f1b87fc042ba07cdd5e52d877380cf92c8fef5d4ef48a170d15",
+      "bytes": 11945
+    },
+    "recon_sample_submission.tif": {
+      "sha256": "4acf720f6c2c73a312a450296fa1a0e519499fca915e75baf6275c31c9ffd4e7",
+      "bytes": 27288
+    }
+  }
+}

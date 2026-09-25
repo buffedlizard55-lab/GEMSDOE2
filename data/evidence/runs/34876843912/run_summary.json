@@ -1,0 +1,8 @@
+{
+  "run_id": "34876843912",
+  "profile": "smoke",
+  "commit": "831073ff291001462051d2afd171c7d79c5cf444",
+  "runner": "ubuntu-latest (CPU-only)",
+  "submission_sha256": "4e6f83ab5ad6f81ef922a92983584fcc133665c34c92b4ad4e0c2e9bbf377e74",
+  "submission_bytes": 569644
+}

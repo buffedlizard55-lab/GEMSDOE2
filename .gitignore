@@ -1,0 +1,55 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+.env
+.venv
+venv/
+data/*
+!data/README.md
+# audit trail stays in git (small text/json only - never the rasters)
+!data/dem_links.json
+!data/evidence/
+!data/evidence/**
+!data/reconstructed/
+!data/reconstructed/provenance.json
+# small REAL-data dev fixture (few MB, int16-quantised) - see scripts/make_dev_fixture.py
+!data/fixture/
+!data/fixture/**
+# official competition rasters, runner-downloaded and sha256-pinned (git bridge;
+# the 418,912,844 B feature stack is committed as ~90 MiB parts because GitHub
+# rejects blobs >= 100 MB) - see scripts/assemble_data_bridge.py
+!data/bridge/
+!data/bridge/**
+!data/*.md
+outputs/
+outputs_recon/
+outputs_*/
+*.tif
+*.tiff
+!data/fixture/*.tif
+!data/bridge/*.tif
+!data/evidence/**/*.tif
+!docs/*.tif
+*.zip
+!data/evidence/**/*.zip
+!docs/*.zip
+*.gdb
+*.grd
+*.csv
+!docs/data_catalog.csv
+!data/evidence/*.csv
+*.pt
+*.pth
+.ipynb_checkpoints/
+.DS_Store
+.idea/
+.vscode/
+.venv/
+.venv/

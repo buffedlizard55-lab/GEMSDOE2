@@ -1,0 +1,11 @@
+folds/fold-0 mc_id=?
+folds/fold-1 mc_id=?
+folds/fold-2 mc_id=?
+folds/fold-3 mc_id=?
+folds/fold-4 mc_id=?
+folds/fold-5 mc_id=?
+folds2/fold-0 mc_id=6
+folds2/fold-1 mc_id=7
+folds2/fold-2 mc_id=8
+folds2/fold-3 mc_id=9
+folds2/fold-5 mc_id=11

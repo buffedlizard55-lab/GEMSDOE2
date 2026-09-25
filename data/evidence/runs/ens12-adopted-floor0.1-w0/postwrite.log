@@ -1,0 +1,26 @@
+{
+ "path": "submission.tif",
+ "bytes": 569531,
+ "width": 3292,
+ "height": 3730,
+ "count": 1,
+ "dtype": "float32",
+ "crs": "EPSG:32611",
+ "res": [
+  100.0,
+  100.0
+ ],
+ "nodata": null,
+ "tiled": true,
+ "block_shapes": [
+  [
+   256,
+   256
+  ]
+ ],
+ "finite_px": 5165852,
+ "nonzero_px": 172974,
+ "prob_mass": 172974.0,
+ "min": 0.0,
+ "max": 1.0
+}

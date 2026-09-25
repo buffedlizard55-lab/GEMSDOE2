@@ -1,0 +1,73 @@
+cross-catalogue
+
+# 2026-09-18 (session 16): first fire of the cross-catalogue transfer measurement.
+#
+# WHY: EXECUTIVE_SUMMARY.md §11 item 1 asks for a prior on hidden-expert-set recall - "emit
+# catalogue A (SGMC), score vs independent catalogue B (QFaults), report transfer".  Nothing
+# committed can answer it, because the proxy population IS catalogue A: a submission that copies
+# catalogue A scores 0.0 there by construction (that is the acceptance control in
+# scripts/eval_proxy_catalogue.py, and it is what makes the proxy a fair stand-in for "faults the
+# labels lack").  One surrogate cannot say whether a policy TRAVELS between independently compiled
+# catalogues or merely fits that catalogue's mapping style.
+#
+# SOURCE VERIFIED LIVE FROM THIS REPOSITORY'S OWN HTTP REQUESTS (2026-09-18):
+#   service  https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer
+#            currentVersion 11.5, mapName "2020 Release", capabilities Map,Query,Data,
+#            supportedQueryFormats JSON/geoJSON/PBF, maxRecordCount 2000
+#   layer    21 "National Database", esriGeometryPolyline - one query covers the whole nation, so no
+#            state-boundary logic and no feature can be missed at a state line (layers 11/4/16 are
+#            the Nevada/California/Utah views)
+#   footprint EPSG:4326 envelope computed at run time from data/labels.tif:
+#            -120.0372, 37.3312, -116.1409, 40.7279 -> the service reported 14,482 intersecting
+#            features (returnCountOnly=true)
+#   provenance DOI 10.5066/P9BCVRCK, ScienceBase item 589097b1e4b072a7ac0cae23, public domain
+#
+# WHAT THIS FIRE DOES:
+#   job qfaults  - page the query in EPSG:4326 GeoJSON until the fetched count EQUALS the count the
+#                  service reported (a silent truncation fails the run rather than shipping a
+#                  partial catalogue, which would understate transfer and look like a negative
+#                  result), assign each feature a RuleID from the service's OWN renderer vocabulary,
+#                  then rasterise with the SAME script that built catalogue A so the codes mean the
+#                  same thing (0 none / 1 already within R of a training label / 2 not).
+#   job transfer - controls FIRST (labels-copy must score ~0 against B-only, B-copy must score 1.0,
+#                  blanket-ones gives the trivial floor), then emit A's code-2 pixels at widths
+#                  0..6 px, score every emission against B's code-2 pixels with the official metric,
+#                  and test whether union(model, A) - a probability maximum, not a mask OR - beats
+#                  the model alone by more than the pre-registered margin with pre-registered
+#                  bootstrap support.  The verdict is DERIVED: "ADOPT" is unreachable if a control
+#                  fails, and "REFUSED" is printed instead of a number nobody may act on.
+#
+# Egress: earthquake.usgs.gov is not reachable from the development sandbox (verified 2026-09-18,
+# curl exit 35) but is reachable from a GitHub-hosted runner - the same constraint that put the SGMC
+# fetch and the competition-data bridge on runners.
+#
+# Parameters: .github/triggers/cross-catalogue-params
+
+# 2026-09-19 (session 17): SECOND FIRE, after the first run's failure and after the population guard.
+#
+# The first run (35411164502) fetched and rasterised catalogue B successfully and then died on its
+# "Record overlap" step for a boring reason: it read top-level stats keys, but build_proxy_catalogue.py
+# nests them under `proxy.`.  The step now reads `s["proxy"]`, tells SCHEMA DRIFT apart from a
+# GENUINELY EMPTY population, and downgrades a zero/near-zero code-2 population to ::warning:: so the
+# transfer job still runs and commits its report.
+#
+# What the first run measured, and what this fire is expected to reproduce: of 60,939 catalogue-B
+# pixels inside the scored footprint, 60,938 (100.00 %) are already within R = 3 px of a training label
+# and exactly 1 is code 2; reciprocally 60,986 of the 60,988 label fault pixels lie within R of a
+# QFaults trace.  THE TRAINING LABELS IN THIS FOOTPRINT ARE QFAULTS.  So the expected verdict is
+# `REFUSED` with that overlap as the evidence, written to data/evidence/xcat/transfer_report.json, and
+# the job GREEN - a DTI on a 1-pixel truth population would be noise, and the refusal is the finding.
+# A runner-side refusal also independently reproduces the one already committed from the sandbox.
+
+# 2026-09-19 (session 17): THIRD FIRE, after the params-job defect that killed the transfer job in
+# 28 s.  `[ -n "$(v BOOTSTRAPS)" ] && BOOT="$(v BOOT)"` tested one key and read another; `BOOT` is not
+# a key in cross-catalogue-params, so the good `|| '1000'` fallback was clobbered with an empty string
+# and argparse rejected it (`argument --bootstraps: invalid int value: ''`, see the committed
+# data/evidence/xcat/transfer.log).  Fixed, and three static lints in tests/test_workflow_yaml.py now
+# fail on that class of defect without needing a runner (mutation-checked against the original line).
+#
+# Expected: qfaults job re-fetches and reproduces 14,481 features and the same overlap (the second
+# fire already produced a byte-identical raster, sha256 3fb2ca73...), the overlap step warns about the
+# 1-pixel code-2 population, and the transfer job writes data/evidence/xcat/transfer_report.json with
+# verdict REFUSED and exit 0 - GREEN, because "the training labels are QFaults in this footprint" is
+# the result, not an error.

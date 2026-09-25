@@ -1,0 +1,365 @@
+{
+ "generated_utc": "2026-09-16T00:30:55Z",
+ "script": "scripts/blend_submission.py",
+ "minutes": 0.31,
+ "n_folds": 6,
+ "folds": [
+  {
+   "dir": "outputs_e0",
+   "models": [
+    "model_mc0_unetplusplus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.14972612355895248
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e1",
+   "models": [
+    "model_mc1_deeplabv3plus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.048843456346641036
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e2",
+   "models": [
+    "model_mc2_unet_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.1919494296480125
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e3",
+   "models": [
+    "model_mc3_unetplusplus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.26102485220555016
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e4",
+   "models": [
+    "model_mc4_deeplabv3plus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.02660555807073676
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e5",
+   "models": [
+    "model_mc5_unet_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.1625215023189331
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  }
+ ],
+ "metric": {
+  "R_pixels": 3,
+  "alpha": 0.2,
+  "beta": 0.8
+ },
+ "shaping": {
+  "t0": 0.45999999999999996,
+  "thin": true,
+  "mean_heldout_dti": 0.12859086152610624,
+  "unshaped_mean_heldout_dti": 0.08829017831762949,
+  "calibration_table": [
+   {
+    "t0": null,
+    "thin": null,
+    "mean_dti": 0.08829017831762949,
+    "raw": 0.08829017831762949
+   },
+   {
+    "t0": 0.02,
+    "thin": false,
+    "mean_dti": 0.10114216830783675
+   },
+   {
+    "t0": 0.02,
+    "thin": true,
+    "mean_dti": 0.03439079705168748
+   },
+   {
+    "t0": 0.108,
+    "thin": false,
+    "mean_dti": 0.09669372039576773
+   },
+   {
+    "t0": 0.108,
+    "thin": true,
+    "mean_dti": 0.02551891658208778
+   },
+   {
+    "t0": 0.19599999999999998,
+    "thin": false,
+    "mean_dti": 0.09675583721544252
+   },
+   {
+    "t0": 0.19599999999999998,
+    "thin": true,
+    "mean_dti": 0.03307446123400639
+   },
+   {
+    "t0": 0.28400000000000003,
+    "thin": false,
+    "mean_dti": 0.09714000313155709
+   },
+   {
+    "t0": 0.28400000000000003,
+    "thin": true,
+    "mean_dti": 0.05333860491284997
+   },
+   {
+    "t0": 0.372,
+    "thin": false,
+    "mean_dti": 0.09755619381563757
+   },
+   {
+    "t0": 0.372,
+    "thin": true,
+    "mean_dti": 0.07174919694224731
+   },
+   {
+    "t0": 0.45999999999999996,
+    "thin": false,
+    "mean_dti": 0.10314557740036695
+   },
+   {
+    "t0": 0.45999999999999996,
+    "thin": true,
+    "mean_dti": 0.12859086152610624
+   },
+   {
+    "t0": 0.548,
+    "thin": false,
+    "mean_dti": 0.09772292322858682
+   },
+   {
+    "t0": 0.548,
+    "thin": true,
+    "mean_dti": 0.10231818589172766
+   },
+   {
+    "t0": 0.636,
+    "thin": false,
+    "mean_dti": 0.041392553114121565
+   },
+   {
+    "t0": 0.636,
+    "thin": true,
+    "mean_dti": 0.045273634151716625
+   },
+   {
+    "t0": 0.724,
+    "thin": false,
+    "mean_dti": 0.03909984673871924
+   },
+   {
+    "t0": 0.724,
+    "thin": true,
+    "mean_dti": 0.03945821187884863
+   },
+   {
+    "t0": 0.8119999999999999,
+    "thin": false,
+    "mean_dti": 0.033401542075990436
+   },
+   {
+    "t0": 0.8119999999999999,
+    "thin": true,
+    "mean_dti": 0.02381399208900259
+   },
+   {
+    "t0": 0.9,
+    "thin": false,
+    "mean_dti": 0.029258184826387607
+   },
+   {
+    "t0": 0.9,
+    "thin": true,
+    "mean_dti": 0.020604940532394502
+   }
+  ]
+ },
+ "probability_mass": {
+  "pre_shaping": 136865.43859336784,
+  "post_shaping": 6167.0,
+  "collapse_factor": 22.193195815366927
+ },
+ "fold_weights": [
+  0.1478,
+  0.0659,
+  0.2072,
+  0.3601,
+  0.0552,
+  0.1637
+ ],
+ "submission": {
+  "path": "outputs_mini6/sub_dti.tif",
+  "bytes": 20346,
+  "sha256": "351dfd44eba09deca039844b2b657f5143d30abb9c6b458d5918553b58525a04",
+  "grid": {
+   "width": 512,
+   "height": 512,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    371350.0,
+    0.0,
+    -100.0,
+    4303750.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "res": [
+    100.0,
+    100.0
+   ]
+  },
+  "finite_px": 261835,
+  "total_px": 262144,
+  "nonzero_px": 6167,
+  "min": 0.0,
+  "max": 1.0,
+  "mean": 0.023553000763058662
+ },
+ "local_score_vs_known": {
+  "dti_known_faults": 0.06558538369889902,
+  "TP_w": 351.4959935863507,
+  "FP_w": 5829.327761650195,
+  "FN_w": 4802.504006413649,
+  "closed_form": 0.06558538369889902,
+  "closed_form_matches": true,
+  "blanket_ones_dti": 0.09550081915407606,
+  "note": "scored against the PUBLIC known-fault raster \u2014 NOT the competition test set (private expert-labelled NEW faults). Optimistic AND wrong-universe: reported for pipeline monitoring only."
+ }
+}

@@ -1,0 +1,27 @@
+proxy-eval
+
+# 2026-09-16 (session 7): build the independent (proxy) fault catalogue, score the
+# committed submission against faults the labels lack, and sweep the emission width there.
+
+# 2026-09-16 (session 7, second run): re-run with the corrected measurement code and the wider
+# emission grid.  The first sweep (run 35152701740) was scored by scripts/eval_proxy_catalogue.py
+# before three defects were fixed: truth length reported 10x short (0.01 instead of 0.1 km/px), the
+# blanket-ones baseline taken over np.isfinite(pred) so its meaning moved with the raster scored,
+# and the score of --pred published as "as submitted" although the sweep's --pred was the
+# pre-shaping ensemble map.  This run also clips every candidate to the data footprint (a legal
+# submission is NaN outside it), extends the width grid to 12 px because the proxy curve was still
+# rising at 6, and writes data/evidence/emission_decision.json from the sweep.
+
+
+# 2026-09-17 (session 11): fire the EXTENDED sweep on the first ensemble (run 35042805806) -
+# explicit floors + field_mass_profile + ramp candidates + a width grid that reaches the measured
+# optimum (16 px).  Settings live in .github/triggers/proxy-eval-params.
+
+# 2026-09-17 (session 12): fire the SECOND-ENSEMBLE sweep (run 35249562910, folds 6-11, seed 43) so
+# the emission decision's condition 3 can be evaluated against the same grid the first ensemble ran.
+# Settings: .github/triggers/proxy-eval-params (SWEEP_LABEL=ensemble2).
+
+# 2026-09-17 (session 13): fire the sweep on the SHIPPING field - the mean of ensembles 1 and 2 -
+# so the adopted (floor, width) policy is measured where it will be applied, not only per ensemble.
+# Settings: .github/triggers/proxy-eval-params (RUN_ID=35042805806,35249562910, SWEEP_LABEL=mean12).
+# fired 2026-09-17T23:1xZ — ens123 sweep (16 live folds over ensembles 1+2+3)

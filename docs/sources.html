@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sources — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html">Results</a><a href="sources.html" class="active">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Sources</h1>
+<p class="lede">Every source, with its live-checked status.</p>
+<h2>Primary sources</h2>
+<table><thead><tr><th>What</th><th>Link</th></tr></thead><tbody>
+<tr><td>Competition home (rules, dates, prizes)</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">https://www.drivendata.org/competitions/306/competition-doe-gems/</a></td></tr>
+<tr><td>Problem description (task, metric, submission format)</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/</a></td></tr>
+<tr><td>About page</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/">https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/</a></td></tr>
+<tr><td>Data download tab (login required)</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">https://www.drivendata.org/competitions/306/competition-doe-gems/data/</a></td></tr>
+<tr><td>Official rules PDF</td><td><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">https://docs.nlr.gov/docs/fy26osti/96647.pdf</a></td></tr>
+<tr><td>Reference solution</td><td><a href="https://github.com/drivendataorg/gems-prize-reference-solution">https://github.com/drivendataorg/gems-prize-reference-solution</a></td></tr>
+<tr><td>GeoDAWN survey (USGS)</td><td><a href="https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and">USGS GeoDAWN</a></td></tr>
+<tr><td>GeoDAWN data release (ScienceBase)</td><td><a href="https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7">ScienceBase 657e1d85…</a></td></tr>
+<tr><td>INGENIOUS project (GBCGE)</td><td><a href="https://gbcge.org/current-projects/ingenious/">gbcge.org</a></td></tr>
+<tr><td>INGENIOUS data (OpenEI GDR)</td><td><a href="https://gdr.openei.org/submissions/1391">GDR 1391</a></td></tr>
+<tr><td>USGS Quaternary faults</td><td><a href="https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23">ScienceBase 589097b1…</a></td></tr>
+<tr><td>USGS 3DEP 1 m elevation</td><td><a href="https://www.usgs.gov/3d-elevation-program">3DEP</a> · <a href="https://apps.nationalmap.gov/downloader/">downloader</a></td></tr>
+</tbody></table>
+<div class="note ok"><b>Licensing.</b> The external data used here is US Government work (USGS: public
+domain) or openly licensed (INGENIOUS via OpenEI GDR). The rules permit additional data provided the
+licence allows use in the challenge and sharing with the sponsor
+(<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#external-datasets">external datasets</a>).</div>
+<h2>INGENIOUS sub-datasets &mdash; direct DOI verification</h2>
+<p>Three of the catalogued external sources are USGS data releases produced for the same DOE
+project that generated the competition data. Each DOI below was followed to its ScienceBase
+landing page and the title, citation and attached files were read off that page
+(2026-09-16T18:13:40Z).</p>
+<table><thead><tr><th>Release</th><th>Citation</th><th>Attached files</th><th>Role here</th></tr>
+</thead><tbody>
+<tr>
+<td><a href="https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b">Electrical Conductance Maps of the Great Basin, USA</a><br>
+    <code>10.5066/P9TWT2LU</code> <span class="muted">(E16)</span></td>
+<td>Peacock, J.R., and Bedrosian, P.A., 2022, Electrical Conductance Maps of the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9TWT2LU.</td>
+<td>-</td>
+<td>magnetotelluric conductance 2-200 km depth; INGENIOUS structural framework</td></tr><tr>
+<td><a href="https://www.sciencebase.gov/catalog/item/628d4fabd34ef70cdba3c4a4">Regional geophysical maps of the Great Basin, USA</a><br>
+    <code>10.5066/P9Z6SA1Z</code> <span class="muted">(E18)</span></td>
+<td>Glen, J.M.G, Earney, T.E., Zielinski, L.A., Schermerhorn, W.D., Dean, B.J., and Hardwick, C., 2022, Regional geophysical maps of the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9Z6SA1Z.</td>
+<td>GB_geophysics_grids.zip <span class="muted">(6.5 MB)</span><br>Regional_geophysical_maps_of_the_Great_Basin_USA_readme.txt <span class="muted">(3.86 KB)</span><br>Regional_geophysical_maps_of_the_Great_Basin_USA_Metadata.xml <span class="muted">(36.73 KB)</span></td>
+<td>gravity/magnetics/depth-to-basement are classic structural controls on faulting; candidate extra input bands for the external-feature experiment</td></tr><tr>
+<td><a href="https://www.sciencebase.gov/catalog/item/64e597dfd34e736b81e198d2">Maps of elevation trend and detrended elevation for the Great Basin, USA</a><br>
+    <code>10.5066/P9MQRCBY</code> <span class="muted">(E17)</span></td>
+<td>DeAngelo, J., Burns, E.R., Mordensky, S.P., and Lindsey, C.R., 2023, Maps of elevation trend and detrended elevation for the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9MQRCBY.</td>
+<td>maps_of_elevation_trend_and_detrended_elevation_for_the_Great_Basin_USA.zip <span class="muted">(12.34 GB)</span><br>USGS_detrendedElevation_gbStudyArea.zip (shapefile) <span class="muted">(21 KB)</span></td>
+<td>detrended elevation is a fault-emphasising transform of topography - a free, official stand-in for the 1 m DEM pilot at 30 m over the whole study area</td></tr>
+</tbody></table>
+<div class="note info"><b>Irregularity, recorded not hidden.</b> Runner-side HTTP verification (scripts/verify_links.py) intermittently times out on sciencebase.gov DOI redirects - exactly one DOI per run, and it is a different DOI each run (P9Z6SA1Z, then P9MQRCBY; P9TWT2LU resolved). Both were resolved on the same day by the platform fetcher, so this is ScienceBase latency or bot-throttling, not a dead link. Recorded here rather than silently retried.</div>
+<div class="note ok"><b>Why this matters for the leaderboard.</b> The scored faults are the ones <em>missing</em> from the INGENIOUS catalogue, and the detrended-elevation and geophysics grids are that project's own fault-emphasising products: free, public-domain, officially released, and already inside the study area. They are the lowest-risk additional inputs to test against the negative-sampling baseline (see <a href='results.html'>Results</a>).</div>
+<h2>Live link verification</h2>
+<p>Every URL in <a href="https://github.com/buffedlizard55-lab/GEMSDOE2/blob/main/docs/data_catalog.csv"><code>data_catalog.csv</code></a> is
+re-fetched by <code>scripts/verify_links.py</code> on a runner and its real HTTP status recorded.
+Checked 84 unique URLs across 92 catalog rows
+(2026-09-21T12:53:52+00:00).</p>
+<p><span class="pill bad">AUTH_REQUIRED: 1</span> <span class="pill info">BOT_BLOCKED_403: 10</span> <span class="pill info">LOGIN_REQUIRED: 1</span> <span class="pill ok">OK_200: 61</span> <span class="pill ok">OK_202: 1</span> <span class="pill ok">OK_REDIRECTED: 10</span></p>
+<h3>Expected non-200 responses (not defects)</h3><table><thead><tr><th>Status</th><th>URL</th></tr></thead><tbody><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1002/2014JB011145">https://agupubs.onlinelibrary.wiley.com/doi/10.1002/2014JB011145</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JB028044">https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JB028044</a></td></tr><tr><td><span class="pill info">AUTH_REQUIRED</span></td><td class="small"><a href="https://api.github.com/search/code">https://api.github.com/search/code</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://doi.org/10.1029/2020JB021269">https://doi.org/10.1029/2020JB021269</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://doi.org/10.1080/08123985.2023.2299475">https://doi.org/10.1080/08123985.2023.2299475</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://doi.org/10.1093/gji/ggad491">https://doi.org/10.1093/gji/ggad491</a></td></tr><tr><td><span class="pill info">LOGIN_REQUIRED</span></td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">https://www.drivendata.org/competitions/306/competition-doe-gems/data/</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://www.mdpi.com/2072-4292/16/7/1115">https://www.mdpi.com/2072-4292/16/7/1115</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://www.sciencedirect.com/science/article/abs/pii/S0098300421000169">https://www.sciencedirect.com/science/article/abs/pii/S0098300421000169</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://www.sciencedirect.com/science/article/abs/pii/S0098300422001765">https://www.sciencedirect.com/science/article/abs/pii/S0098300422001765</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://www.sciencedirect.com/science/article/abs/pii/S0375650525000902">https://www.sciencedirect.com/science/article/abs/pii/S0375650525000902</a></td></tr><tr><td><span class="pill info">BOT_BLOCKED_403</span></td><td class="small"><a href="https://www.sciencedirect.com/science/article/pii/S2949673X25000026">https://www.sciencedirect.com/science/article/pii/S2949673X25000026</a></td></tr></tbody></table>
+<div class="note ok"><b>Why these are not counted as broken.</b>
+<code>LOGIN_REQUIRED</code> on the DrivenData data tab is the competition working as designed.
+<code>BOT_BLOCKED_403/401</code> is Cloudflare-style bot mitigation at academic publishers and
+<code>doi.org</code>, which reject any non-browser client; the DOI remains the citable identifier.
+Calling either one "broken" would itself be an inaccuracy, so they are reported separately.</div>
+<p>Machine output: <a href="link_verification.json">link_verification.json</a> · <a href="data_catalog.verified.csv">data_catalog.verified.csv</a></p>
+<h2>Full catalog</h2>
+<p><a href="data_catalog.csv">data_catalog.csv</a> — one row per source, with publisher, DOI, licence
+and the role it plays here.</p>
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

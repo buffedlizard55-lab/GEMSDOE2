@@ -1,0 +1,16 @@
+# Exact versions installed and import-verified in the development sandbox on 2026-09-12,
+# via: pip install -r requirements.txt && python -c 'import torch, rasterio, smp' (see header of docs/results.html).
+# torch is the CUDA build from PyPI but ran CPU-only here (2 vCPU, no GPU).
+geopandas==1.1.4
+numpy==2.4.6
+pandas==3.0.5
+PyYAML==6.0.3
+rasterio==1.4.4
+scikit-image==0.26.0
+scikit-learn==1.9.1
+scipy==1.17.1
+timm==1.0.29
+torch==2.14.0
+torchvision==0.29.0
+tqdm==4.70.1
+segmentation_models_pytorch==0.5.0

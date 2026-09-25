@@ -1,0 +1,23 @@
+loaded 11 fold(s): ['folds/fold-0', 'folds/fold-1', 'folds/fold-2', 'folds/fold-3', 'folds/fold-4', 'folds/fold-5', 'folds2/fold-0', 'folds2/fold-1', 'folds2/fold-2', 'folds2/fold-3', 'folds2/fold-5']
+pooled shaping: t0=0.470 thin=False dilate=0px -> mean held-out DTI 0.2065 (unshaped 0.1751; skeleton r=0 0.0448)
+ADOPTED measured policy: t0=0.1 thin=True dilate=0px (in-domain calibration would have shipped t0=0.470 thin=False dilate=0px, DTI 0.2065)  source: data/evidence/emission_decision.json
+leave-one-fold-out aggregation audit (11 folds, 4643s):
+  mean DTI, floor re-fitted without the scored fold : 0.1997   (unshaped 0.1751, gain +0.0246)
+  mean DTI, oracle floor fitted on the scored fold : 0.2165
+  fold weights are fitted per row but not scored (held-out crops cover different regions; see report note)
+  pooled (selection-optimistic) reference : 0.2065
+          fold-0  t0_loo 0.0433 thin True   dti_loo 0.2421  unshaped 0.2253  self-best 0.2598
+          fold-1  t0_loo 0.1973 thin False  dti_loo 0.1502  unshaped 0.1245  self-best 0.1969
+          fold-2  t0_loo 0.0433 thin True   dti_loo 0.0302  unshaped 0.0294  self-best 0.0382
+          fold-3  t0_loo 0.0433 thin True   dti_loo 0.3226  unshaped 0.3054  self-best 0.3399
+          fold-4  t0_loo 0.1973 thin False  dti_loo 0.1202  unshaped 0.0774  self-best 0.1856
+          fold-5  t0_loo 0.0433 thin True   dti_loo 0.1824  unshaped 0.1743  self-best 0.1969
+          fold-0  t0_loo 0.0433 thin True   dti_loo 0.2815  unshaped 0.2644  self-best 0.2856
+          fold-1  t0_loo 0.0433 thin True   dti_loo 0.1914  unshaped 0.1642  self-best 0.1929
+          fold-2  t0_loo 0.0433 thin True   dti_loo 0.1661  unshaped 0.1466  self-best 0.1681
+          fold-3  t0_loo 0.0433 thin True   dti_loo 0.2363  unshaped 0.1983  self-best 0.2368
+          fold-5  t0_loo 0.0433 thin True   dti_loo 0.2737  unshaped 0.2161  self-best 0.2805
+wrote submission.tif  569531 B sha256=a3dcd6d51303f312  nonzero=172974 finite=5165852/12279160 mass 384102 -> 172974  tiled=True blocks=[[256, 256]]
+informational DTI vs known faults = 0.2298 (blanket-ones floor 0.0246)
+discovery vs known catalog: novel_fraction=0.886  candidate_new(>0.5)=58420 px in 3467 components
+wrote blend_report.json

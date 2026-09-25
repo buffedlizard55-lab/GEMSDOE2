@@ -1,0 +1,11 @@
+
+truth: only -> 61664 px (6166.4 km of fault trace)
+the raster at --pred (submission.tif), scored as provided: DTI 0.0395  (TP_w 2672 FP_w 89059 FN_w 58992)
+blanket baseline support: labels (the competition footprint) (12,279,160 px)
+  baseline zeros                        DTI 0.0000
+  baseline blanket_ones                 DTI 0.0249
+  baseline blanket_ones_whole_grid      DTI 0.0249
+  baseline catalogue_copy               DTI 0.0000
+  baseline catalogue_plus_submission    DTI 0.0343
+  acceptance catalogue-copy == 0: PASS
+wrote data/evidence/proxy/eval_reblend_submission-ensemble2.json

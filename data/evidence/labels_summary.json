@@ -1,0 +1,24 @@
+{
+  "generated_utc": "2026-09-17T01:29:10+00:00",
+  "path": "existing_faults.tif",
+  "shape": [
+    3730,
+    3292
+  ],
+  "n_pixels": 12279160,
+  "n_valid": 5167373,
+  "n_positive_gt_0p5": 60988,
+  "positive_fraction_of_valid": 0.011802515514169385,
+  "value_histogram_top20": [
+    {
+      "value": 0.0,
+      "count": 5106385
+    },
+    {
+      "value": 1.0,
+      "count": 60988
+    }
+  ],
+  "min": 0.0,
+  "max": 1.0
+}

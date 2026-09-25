@@ -1,0 +1,119 @@
+name: Verify official sources (rules quotes + every catalog link)
+
+# =============================================================================
+# The whole project rests on a handful of claims about the official documents:
+#
+#   * both prize phases score the NEW fault dataset (not the existing catalogue)
+#   * the training labels are the EXISTING fault catalogue
+#   * the 1 m DEM is intended feature data; three scored submissions per week; the
+#     generative-AI disclosure requirement; the code-assets requirement
+#
+# Claims like these become folklore unless something re-checks the bytes.  This job
+# downloads the canonical rules PDF (docs.nlr.gov, reachable from a runner),
+# verifies its sha256 against the copy already inventoried from the data-tab mirror,
+# and asserts every quotation in scripts/verify_rules_quotes.py appears VERBATIM in
+# the extracted text.  It also re-fetches every URL in docs/data_catalog.csv and
+# records the real HTTP status (LOGIN_REQUIRED is recorded as such, never as OK).
+#
+# Outputs (committed to the branch):
+#   data/evidence/rules_quotes.json
+#   data/evidence/rule_sources_verification.json
+#   docs/link_verification.json , docs/data_catalog.verified.csv
+# =============================================================================
+on:
+  workflow_dispatch:
+  push:
+    branches: ["arena/**", "main"]
+    paths: [".github/triggers/verify-sources"]
+  schedule:
+    - cron: "17 6 * * 1"          # weekly: links rot, and this repo must not claim otherwise
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pypdf requests
+
+      - name: Download canonical rules PDF + compare to the data-tab mirror
+        run: |
+          set -euo pipefail
+          mkdir -p data/evidence
+          curl -fL --retry 3 --retry-delay 5 -o /tmp/rules_canonical.pdf \
+            "https://docs.nlr.gov/docs/fy26osti/96647.pdf"
+          python - <<'PY'
+          import hashlib, json, pathlib
+          p = pathlib.Path("/tmp/rules_canonical.pdf")
+          sha = hashlib.sha256(p.read_bytes()).hexdigest()
+          inv = json.loads(pathlib.Path("data/evidence/inventory.json").read_text())
+          mirror = next((f for f in inv["files"] if f["name"] == "GEMS_96647.pdf"), None)
+          out = {
+            "canonical_url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+            "canonical_sha256": sha,
+            "canonical_bytes": p.stat().st_size,
+            "mirror_name": mirror["name"] if mirror else None,
+            "mirror_sha256": mirror["sha256"] if mirror else None,
+            "mirror_bytes": mirror["bytes"] if mirror else None,
+            "identical": bool(mirror and mirror["sha256"] == sha),
+          }
+          pathlib.Path("data/evidence/rule_sources_verification.json").write_text(json.dumps(out, indent=1))
+          print(json.dumps(out, indent=1))
+          # A mismatch is a finding, not a reason to stop: the quote verification below still has
+          # to run against the canonical document, and the JSON records the discrepancy for review.
+          if not out["identical"]:
+              print("::warning title=Rules PDF mismatch::canonical docs.nlr.gov copy differs from the "
+                    "data-tab mirror in data/evidence/inventory.json - investigate before citing either")
+          PY
+
+      - name: Verify every quoted sentence in the rules (verbatim)
+        run: |
+          set -euo pipefail
+          python scripts/verify_rules_quotes.py --pdf /tmp/rules_canonical.pdf \
+            --out data/evidence/rules_quotes.json
+
+      - name: Re-fetch every catalog link and record the real HTTP status
+        run: |
+          set -uo pipefail
+          python scripts/verify_links.py --catalog docs/data_catalog.csv \
+            --json-out docs/link_verification.json --csv-out docs/data_catalog.verified.csv || true
+
+      - name: Regenerate the site so the published HTML cannot disagree with the new JSON
+        run: |
+          set -euo pipefail
+          # The audit gate compares published tables against their artefacts, but a *regenerated*
+          # artefact used to be able to drift from the already-built HTML: on 2026-09-16 the
+          # main-branch run rewrote docs/link_verification.json while the deployed sources page
+          # still showed the previous run's counts.  Rebuilding here makes that impossible - the
+          # site is always rendered from the evidence that was just measured - and the audit
+          # fails the job if anything is inconsistent.
+          python scripts/build_site.py
+          python scripts/audit_docs.py | tail -3
+
+      - name: Commit the verification evidence
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/evidence/rules_quotes.json data/evidence/rule_sources_verification.json \
+                     docs/link_verification.json docs/data_catalog.verified.csv 2>/dev/null || true
+          # the regenerated pages (step above)
+          git add -f docs/*.html docs/style.css 2>/dev/null || true
+          git diff --cached --quiet && echo "no evidence changes" || {
+            git commit -m "verify(sources): rules quotes + catalog links re-checked [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }

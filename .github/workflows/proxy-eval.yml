@@ -1,0 +1,471 @@
+name: Proxy catalogue (independent faults) -> evaluate submission
+
+# =============================================================================
+# THE MEASUREMENT THIS REPOSITORY WAS MISSING
+#
+# Every quality number published so far was computed against `labels.tif` - the faults the
+# catalogue ALREADY contains - while both prize phases score faults it does NOT contain
+# (rules 1.1/3.3, verified verbatim in data/evidence/rules_quotes.json).  Catalogue DTI can
+# prove plumbing but cannot choose a model.
+#
+# This workflow builds an independent fault set and scores against the part of it the training
+# labels do not cover:
+#
+#   job proxy   - fetch USGS SGMC structure polylines (DS 1052, DOI 10.3133/ds1052) for the
+#                 competition footprint, rasterise on the exact grid, split into
+#                 "already in the labels" / "absent from the labels", and score the committed
+#                 submission against the absent part with the official metric.
+#   job sweep   - re-blend the six saved fold artifacts to recover the pre-shaping ensemble map
+#                 (blend_submission.py --save-ensemble) and sweep floor x thinning x emission
+#                 width ON THE PROXY POPULATION.  This is the third and best-aligned measurement
+#                 of the emission-width question: the held-out-crop sweep said "skeleton", the
+#                 shifted-label stress test said "6 px band"; this one scores real mapped faults
+#                 that the catalogue lacks.
+#
+# Both jobs commit machine-generated evidence back to the branch (small JSON + a compact uint8
+# raster + a 512-px window fixture the sandbox can test against offline).
+#
+# Egress: services.arcgis.com and the Dropbox mirrors are reachable from a runner, not from the
+# development sandbox - same constraint as the competition-data bridge.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "run whose fold-* artifacts to reuse for the sweep job"
+        default: "35042805806"
+      shaping_grid:
+        # MEASURED 2026-09-16 on the full 3292x3730 grid: ~21 s per shaping candidate
+        # (floor + distance-R thinning + dilation), so the sweep is sized to the job budget:
+        # candidates = shaping_grid x len(dilate_grid) = 4 x 6 = 24 -> ~9 min.
+        description: "floor candidates in the proxy sweep"
+        default: "4"
+      dilate_grid:
+        # MEASURED 2026-09-16 (run 35152701740): on the new-fault-like population the proxy DTI was
+        # still rising at 6 px (0.0144 -> 0.0395 monotone), so the grid was extended to 12 px.
+        # MEASURED 2026-09-17 (session 10, data/evidence/proxy/miss_distance-ensemble1.json): on the
+        # SHIPPED submission the width curve is interior - 0.0247 (0 px) -> 0.0713 (16 px) -> 0.0697
+        # (30 px) - and the projection puts the optimum at 8 px if the scored truth is the
+        # GeoDAWN-blocks anchor and 16 px at the proxy's own size.  A grid that stops at 12 px
+        # cannot see that optimum, so it now reaches 20 px.
+        # Cost: ~21 s per candidate on the full grid, 4 floors x 11 widths ~ 15 min (job limit 150).
+        description: "emission widths (px) in the proxy sweep"
+        default: "0,1,2,3,4,6,8,10,12,16,20"
+      extra_classes:
+        description: "extra SGMC classes to include besides faults (e.g. Lineament)"
+        default: ""
+      shaping_values:
+        description: "explicit comma-separated floor candidates (empty = log-spaced shaping_grid)"
+        default: ""
+      soft_band:
+        description: "1 = also score ramp emission candidates on the same supports"
+        default: "0"
+      band_gammas:
+        description: "ramp exponents to score (default 1,2)"
+        default: "1,2"
+      skip_sweep:
+        description: "1 = only build the proxy and score the committed submission"
+        default: "0"
+      sweep_label:
+        description: "suffix for the sweep evidence file (empty -> eval_sweep.json)"
+        default: ""
+  push:
+    branches: ["arena/**"]
+    paths: [".github/triggers/proxy-eval"]
+
+# ---------------------------------------------------------------------------
+# WHY THERE IS A `params` JOB (2026-09-17, session 10)
+#
+# The bot token cannot call workflow_dispatch, so runs are fired by pushing
+# .github/triggers/proxy-eval - and a push event carries no inputs.  That left the sweep job
+# hard-wired to run 35042805806's fold artifacts, i.e. only the FIRST ensemble could ever be
+# swept, which is exactly why `emission_decision.json` condition 3 ("reproduced on a second,
+# independently trained ensemble") stayed unmet.  Job OUTPUTS (unlike $GITHUB_ENV) are usable in
+# `${{ }}` expressions such as `actions/download-artifact`'s `run-id`, so a tiny first job reads
+# the committed parameter file and publishes the parameters to the other jobs.
+#
+# .github/triggers/proxy-eval-params may set:
+#   RUN_ID=<actions run id whose fold-* artifacts to sweep>   (default 35042805806 = ensemble 1)
+#          MAY BE A COMMA-SEPARATED LIST (a,b,c): the sweep then re-blends every run's fold-* artifacts
+#          into ONE ensemble mean and sweeps that field.  This is how the field that will actually be
+#          submitted gets its own floor measurement - the optimum depends on the field, and a
+#          3-ensemble mean is not the same field as any single ensemble's mean.
+#   SWEEP_LABEL=<suffix>       -> data/evidence/proxy/eval_sweep-<label>.json (default: no suffix)
+#   DILATE_GRID=0,1,2,3,...    (default 0,1,2,3,4,6,8,10,12 - the proxy curve was still rising at 6)
+#   SHAPING_GRID=<int>         (default 11 floor candidates - 4 was too coarse: the log grid
+#                               then jumped 4.3e-2 -> 0.9 and never scored the 0.469674 the blend
+#                               actually shipped; the sweep also passes --reference-report so the
+#                               shipped floor is always a row and the acceptance rule compares
+#                               against the shipped policy, not the t0=0 skeleton)
+#   SUBMISSION=<path>          (default data/evidence/runs/<RUN_ID>/submission.tif)
+#   SHAPING_VALUES=0,0.02,...  explicit floor grid (default: log-spaced SHAPING_GRID candidates).
+#                              Both are recorded alongside field_mass_profile, which shows how
+#                              many pixels the field has above each floor BEFORE thinning - a
+#                              finer floor grid changes nothing if that column is constant.
+#   SOFT_BAND=1                also score ramp emission (same support, values decaying to 0 at
+#                              the band edge: src/submission_optim.soft_band) - the second axis,
+#                              values on a fixed support, measured separately from band width.
+#   BAND_GAMMAS=1,2            ramp exponents to score (default 1,2)
+# ---------------------------------------------------------------------------
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: proxy-eval-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  params:
+    name: read the committed sweep parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      run_id: ${{ steps.p.outputs.run_id }}
+      run_id_2: ${{ steps.p.outputs.run_id_2 }}
+      run_id_3: ${{ steps.p.outputs.run_id_3 }}
+      sweep_label: ${{ steps.p.outputs.sweep_label }}
+      dilate_grid: ${{ steps.p.outputs.dilate_grid }}
+      shaping_grid: ${{ steps.p.outputs.shaping_grid }}
+      shaping_values: ${{ steps.p.outputs.shaping_values }}
+      soft_band: ${{ steps.p.outputs.soft_band }}
+      band_gammas: ${{ steps.p.outputs.band_gammas }}
+      submission: ${{ steps.p.outputs.submission }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        name: parameters (run id, label, grids)
+        run: |
+          set -euo pipefail
+          RUN_ID="${{ github.event.inputs.run_id || '35042805806' }}"
+          LABEL="${{ github.event.inputs.sweep_label || '' }}"
+          DIL="${{ github.event.inputs.dilate_grid || '0,1,2,3,4,6,8,10,12,16,20' }}"
+          GRID="${{ github.event.inputs.shaping_grid || '11' }}"
+          SVAL="${{ github.event.inputs.shaping_values || '' }}"
+          SOFT="${{ github.event.inputs.soft_band || '0' }}"
+          GAM="${{ github.event.inputs.band_gammas || '1,2' }}"
+          SUB=""
+          F=".github/triggers/proxy-eval-params"
+          if [ -f "$F" ]; then
+            echo "parameters from $F:"; tr -d '\r' < "$F" | grep -E '^[A-Z_]+=' || true
+            v () { tr -d '\r' < "$F" | sed -n "s/^$1=\(.*\)\$/\1/p" | tail -1 || true; }
+            [ -n "$(v RUN_ID)" ] && RUN_ID="$(v RUN_ID)" || true
+            [ -n "$(v SWEEP_LABEL)" ] && LABEL="$(v SWEEP_LABEL)" || true
+            [ -n "$(v DILATE_GRID)" ] && DIL="$(v DILATE_GRID)" || true
+            [ -n "$(v SHAPING_GRID)" ] && GRID="$(v SHAPING_GRID)" || true
+            [ -n "$(v SHAPING_VALUES)" ] && SVAL="$(v SHAPING_VALUES)" || true
+            [ -n "$(v SOFT_BAND)" ] && SOFT="$(v SOFT_BAND)" || true
+            [ -n "$(v BAND_GAMMAS)" ] && GAM="$(v BAND_GAMMAS)" || true
+            SUB="$(v SUBMISSION)" || true
+          else
+            echo "no $F - sweeping run $RUN_ID with grid $DIL"
+          fi
+          [ -n "$SUB" ] || SUB="data/evidence/runs/$RUN_ID/submission.tif"
+          # MULTI-ENSEMBLE SWEEP (2026-09-17, session 13).  `cut -f2` returns the WHOLE line when
+          # there is no delimiter, so a single run id would silently become run_id_2 as well and the
+          # same fold artifacts would be blended twice - parse only when a comma is present (the
+          # same defect reblend.yml documents).
+          RUN1="$(printf '%s' "$RUN_ID" | cut -d, -f1 | tr -d ' ')"
+          R2=""; R3=""
+          if printf '%s' "$RUN_ID" | grep -q ','; then
+            R2="$(printf '%s' "$RUN_ID" | cut -d, -f2 | tr -d ' ')"
+            R3="$(printf '%s' "$RUN_ID" | cut -d, -f3 | tr -d ' ')"
+          fi
+          {
+            echo "run_id=$RUN1"
+            echo "run_id_2=$R2"
+            echo "run_id_3=$R3"
+            echo "sweep_label=$LABEL"
+            echo "dilate_grid=$DIL"
+            echo "shaping_grid=$GRID"
+            echo "shaping_values=$SVAL"
+            echo "soft_band=$SOFT"
+            echo "band_gammas=$GAM"
+            echo "submission=$SUB"
+          } >> "$GITHUB_OUTPUT"
+          echo "RUN_ID=$RUN_ID LABEL=$LABEL DILATE=$DIL SHAPING=$GRID SVAL=$SVAL SOFT=$SOFT SUB=$SUB"
+
+  proxy:
+    name: build the proxy catalogue + score the submission
+    runs-on: ubuntu-latest
+    needs: params
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/scipy/rasterio - no torch needed)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio pyyaml
+
+      - name: Download the competition rasters the proxy must align to (data-tab mirrors)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1"; echo "OK $2 $(stat -c%s "data/$2") bytes"; }
+          dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+          dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          sha256sum data/*.tif | tee data/checksums.txt
+
+      - name: Fetch the independent catalogue (USGS SGMC structure)
+        run: |
+          set -euo pipefail
+          mkdir -p data/external data/evidence/proxy
+          python scripts/fetch_proxy_faults.py \
+            --bbox-source data/labels.tif \
+            --extra-classes "${{ github.event.inputs.extra_classes || '' }}" \
+            --out data/external/sgmc_proxy_faults.geojson \
+            --meta data/evidence/proxy/fetch_meta.json
+
+      - name: Rasterise on the competition grid + split by label coverage
+        run: |
+          set -euo pipefail
+          python scripts/build_proxy_catalogue.py \
+            --proxy data/external/sgmc_proxy_faults.geojson \
+            --template data/labels.tif --labels data/labels.tif \
+            --out data/evidence/proxy/proxy_catalogue.tif \
+            --stats data/evidence/proxy/proxy_stats.json \
+            --fetch-meta data/evidence/proxy/fetch_meta.json \
+            --window 2048,1280,512
+
+      - name: Score the committed submission against the proxy population
+        run: |
+          set -euo pipefail
+          S="data/evidence/runs/35042805806/submission.tif"
+          if [ -f "$S" ]; then
+            python scripts/eval_proxy_catalogue.py --pred "$S" \
+              --proxy data/evidence/proxy/proxy_catalogue.tif --labels data/labels.tif \
+              --out data/evidence/proxy/eval_submission.json \
+              --truth only 2>&1 | tee data/evidence/proxy/eval_submission.log
+            python scripts/eval_proxy_catalogue.py --pred "$S" \
+              --proxy data/evidence/proxy/proxy_catalogue.tif --labels data/labels.tif \
+              --out data/evidence/proxy/eval_submission_combined.json --truth combined || true
+          else
+            echo "::warning::no committed submission to score - the proxy build still lands"
+          fi
+
+      - name: Commit the proxy evidence (small files only)
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/proxy
+          # the raw GeoJSON is 10s of MB and is re-fetchable from a public service: keep the
+          # provenance meta (with its sha256) instead, so the build stays auditable without bloat
+          rm -f data/external/sgmc_proxy_faults.geojson
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" || true
+          git diff --cached --quiet && echo "no proxy evidence changes" || {
+            git commit -m "evidence(proxy): independent fault catalogue built and scored [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload proxy artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxy-catalogue-${{ github.run_id }}
+          path: data/evidence/proxy/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  sweep:
+    name: emission-width sweep on the proxy population
+    runs-on: ubuntu-latest
+    needs: [params, proxy]
+    if: ${{ github.event.inputs.skip_sweep != '1' }}
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}          # pick up the proxy job's commit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/scipy/rasterio/scikit-image/pyyaml - no torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio scikit-image pyyaml
+
+      - name: Download fold artifacts from run ${{ needs.params.outputs.run_id }}
+        uses: actions/download-artifact@v4
+        with:
+          pattern: fold-*
+          path: folds
+          run-id: ${{ needs.params.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+
+      - name: Download fold artifacts from run ${{ needs.params.outputs.run_id_2 }} (second ensemble)
+        if: ${{ needs.params.outputs.run_id_2 != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          pattern: fold-*
+          path: folds2
+          run-id: ${{ needs.params.outputs.run_id_2 }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+
+      - name: Download fold artifacts from run ${{ needs.params.outputs.run_id_3 }} (third ensemble)
+        if: ${{ needs.params.outputs.run_id_3 != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          pattern: fold-*
+          path: folds3
+          run-id: ${{ needs.params.outputs.run_id_3 }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+
+      - name: Download the competition rasters
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1"; echo "OK $2 $(stat -c%s "data/$2") bytes"; }
+          dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+          dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+
+      - name: Re-blend the fold maps, keeping the pre-shaping ensemble
+        run: |
+          set -euo pipefail
+          # Every downloaded ensemble is blended into ONE mean before the sweep, so the floor
+          # measurement is taken on the field that would actually be submitted.  A directory that
+          # downloaded nothing contributes nothing (nullglob), and the count is printed so an
+          # empty second ensemble cannot pass as a successful multi-ensemble sweep.
+          shopt -s nullglob
+          FOLD_ARGS=()
+          for base in folds folds2 folds3; do
+            [ -d "$base" ] || continue
+            for d in "$base"/fold-*/; do FOLD_ARGS+=("$d"); done
+          done
+          echo "fold dirs passed to the blend: ${#FOLD_ARGS[@]}"
+          if [ "${#FOLD_ARGS[@]}" -lt 1 ]; then echo "FAIL: no fold artifacts downloaded" >&2; exit 1; fi
+          python scripts/blend_submission.py \
+            --folds "${FOLD_ARGS[@]}" \
+            --config configs/config_ci_ensemble.yaml \
+            --sample data/sample_submission.tif --labels data/labels.tif \
+            --out submission.tif --report blend_report.json --weights equal \
+            --save-ensemble ensemble_mean.tif 2>&1 | tee blend.log
+
+      - name: Sweep floor x thinning x emission width on the PROXY population
+        run: |
+          set -euo pipefail
+          LABEL="${{ needs.params.outputs.sweep_label }}"
+          SUF=""; [ -n "$LABEL" ] && SUF="-$LABEL"
+          # Labeled sweeps let ensemble 1 and ensemble 2 coexist as evidence, which is what the
+          # reproduction condition in scripts/decide_emission_width.py consumes.
+          SVAL_FLAG=""
+          [ -n "${{ needs.params.outputs.shaping_values }}" ] && \
+            SVAL_FLAG="--shaping-values ${{ needs.params.outputs.shaping_values }}"
+          SOFT_FLAG=""
+          [ "${{ needs.params.outputs.soft_band }}" = "1" ] && SOFT_FLAG="--soft-band"
+          # Two axes are measured in one run: the SUPPORT (floor x thinning x band width, the
+          # original sweep) and the VALUES written on that support (hard 1.0 vs the distance ramp
+          # of src.submission_optim.soft_band, identical support).  --soft-band adds the ramp
+          # candidates; without it this is exactly the previous sweep.
+          python scripts/eval_proxy_catalogue.py --pred ensemble_mean.tif \
+            --proxy data/evidence/proxy/proxy_catalogue.tif --labels data/labels.tif \
+            --out "data/evidence/proxy/eval_sweep$SUF.json" --sweep \
+            --shaping-grid "${{ needs.params.outputs.shaping_grid }}" \
+            $SVAL_FLAG \
+            --dilate-grid "${{ needs.params.outputs.dilate_grid }}" \
+            $SOFT_FLAG --band-gammas "${{ needs.params.outputs.band_gammas }}" \
+            --reference-report blend_report.json \
+            2>&1 | tee "data/evidence/proxy/eval_sweep$SUF.log"
+
+      - name: Score the submission this run produced, on both truth sets
+        run: |
+          set -euo pipefail
+          LABEL="${{ needs.params.outputs.sweep_label }}"
+          SUF=""; [ -n "$LABEL" ] && SUF="-$LABEL"
+          python scripts/eval_proxy_catalogue.py --pred submission.tif \
+            --proxy data/evidence/proxy/proxy_catalogue.tif --labels data/labels.tif \
+            --out "data/evidence/proxy/eval_reblend_submission$SUF.json" --truth only \
+            2>&1 | tee "data/evidence/proxy/eval_reblend_submission$SUF.log"
+          python - "${{ needs.params.outputs.run_id }}$( [ -n '${{ needs.params.outputs.run_id_2 }}' ] && printf ',%s' '${{ needs.params.outputs.run_id_2 }}' )$( [ -n '${{ needs.params.outputs.run_id_3 }}' ] && printf ',%s' '${{ needs.params.outputs.run_id_3 }}' )" "$SUF" <<'PF'
+          import json, pathlib, sys
+          d = pathlib.Path("data/evidence/proxy")
+          (d / f"sweep_source{sys.argv[2]}.json").write_text(json.dumps({
+              "swept_run_id": sys.argv[1],
+              "note": "fold-* artifacts of these Actions runs were re-blended into ONE mean and swept",
+              "sweep_file": f"eval_sweep{sys.argv[2]}.json"}, indent=1))
+          PF
+
+      - name: Reconcile the measurements into the emission decision record
+        run: |
+          set -euo pipefail
+          LABEL="${{ needs.params.outputs.sweep_label }}"
+          SUF=""; [ -n "$LABEL" ] && SUF="-$LABEL"
+          # The first ensemble's sweep (eval_sweep.json) stays the reference record; every LABELLED
+          # sweep is handed in as an independent ensemble so condition 3 can be evaluated.
+          #
+          # EVERY labelled sweep on the branch is handed in, not only this run's (2026-09-17,
+          # session 13): condition 3 is "reproduced on a second (and every further) independently
+          # trained ensemble", and a record that keeps only the newest sweep forgets the earlier
+          # ensembles - a policy would then look reproduced on one evidence file while an earlier
+          # disagreement quietly left the record.
+          SECOND=""
+          if [ -n "$LABEL" ]; then
+            THIS="data/evidence/proxy/eval_sweep$SUF.json"
+            LIST="$THIS"
+            for f in data/evidence/proxy/eval_sweep-*.json; do
+              [ -e "$f" ] || continue
+              [ "$f" = "$THIS" ] && continue
+              LIST="$LIST,$f"
+            done
+            SECOND="--second-sweep $LIST"
+            echo "reproduction sweeps handed to the decision: $LIST"
+          fi
+          python scripts/decide_emission_width.py \
+            --out data/evidence/emission_decision.json $SECOND \
+            2>&1 | tee "data/evidence/proxy/emission_decision$SUF.log"
+
+      - name: Commit the sweep evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/proxy
+          cp -f blend.log "$D/blend_sweep.log" 2>/dev/null || true
+          python - <<'PY' || true
+          import json, pathlib
+          p = pathlib.Path("data/evidence/proxy/fetch_meta.json")
+          m = json.loads(p.read_text()) if p.exists() else {}
+          print("proxy source:", (m.get("source") or {}).get("doi"), "-",
+                (m.get("result") or {}).get("features"), "features")
+          PY
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" data/evidence/emission_decision.json || true
+          git diff --cached --quiet && echo "no sweep evidence changes" || {
+            git commit -m "evidence(proxy): emission-width sweep on faults absent from the labels [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload sweep artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxy-sweep-${{ github.run_id }}
+          path: |
+            data/evidence/proxy/
+            data/evidence/emission_decision.json
+            blend_report.json
+            ensemble_mean.tif
+          retention-days: 30
+          if-no-files-found: ignore

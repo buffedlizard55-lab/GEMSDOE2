@@ -1,0 +1,10 @@
+
+REFUSED: catalogue B has 60,939 px in the footprint but only 1 px (0.0016 %) are code 2 - 60,938 px (100.00 %) are already within R = 3 px of a training label
+  label fault px 60,988; label px within R of B 60,986
+  thresholds: {'min_b_only_px': 100, 'min_b_only_fraction': 0.005, 'min_b_all_px': 1000}
+
+verdict: REFUSED - catalogue B is NOT independent of the training labels: 60,938 of its 60,939 in-footprint pixels (100.00 %) are already within R = 3 px of a label, leaving 1 px (0.0016 %) as a 'new fault' population - below the pre-registered minimum of 100 px and 0.50 %. Scoring against 1 pixel(s) would produce a number with no meaning, so none is reported. This is a FINDING about the two catalogues, not a bug: it means the training labels and catalogue B are the same lines in this footprint, and it is recorded with the overlap that establishes it.
+
+no DTI is reported: a 1-pixel truth population cannot support a transfer claim.
+
+wrote data/evidence/xcat/transfer_report.json (4,473 bytes)

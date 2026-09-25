@@ -1,0 +1,5 @@
+2026-09-14T17:47:00Z
+
+# 2026-09-17 (session 9): fire the smoke profile against the freshly placed data/ (git bridge,
+# sha256-verified, prepare_data PASS in-sandbox). The workflow now assembles data/ from
+# data/bridge/ instead of re-fetching Dropbox.

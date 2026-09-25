@@ -1,0 +1,161 @@
+{
+ "generated_utc": "2026-09-17T23:08:12+00:00",
+ "generated_by": "scripts/build_proxy_catalogue.py",
+ "purpose": "rasterised independent fault catalogue on the competition grid, split by whether the training labels already contain it (docs/DISCOVERY_PLAN.md 3b)",
+ "inputs": {
+  "proxy_geojson": "data/external/sgmc_proxy_faults.geojson",
+  "proxy_sha256": "9b6e29bcd00dcc3c1c81c5e1c19db11cc62e16782cf17d5f7f15f06f2552a9a0",
+  "features_in": 21765,
+  "features_projected": 21765,
+  "dropped": {},
+  "template": "data/labels.tif",
+  "labels": "data/labels.tif",
+  "R_pixels": 3,
+  "R_meters": 300.0
+ },
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "pixel_m": 100.0,
+  "footprint_px": 5167373
+ },
+ "labels": {
+  "fault_px": 60988,
+  "fault_km": 6098.8
+ },
+ "proxy": {
+  "mask_px": 217404,
+  "near_label_px": 20491,
+  "proxy_only_px": 61664,
+  "near_label_km": 2049.1,
+  "proxy_only_km": 6166.4,
+  "catalogue_already_covers_fraction": 0.2494,
+  "catalogue_already_covers_fraction_including_outside_footprint": 0.0943,
+  "outside_footprint_px": 135249,
+  "proxy_only_components": {
+   "components": 2083,
+   "px": 61664,
+   "km": 6166.4,
+   "largest_px": 1571,
+   "largest_km": 157.1,
+   "largest_extent_px": 175,
+   "largest_extent_km": 17.5,
+   "median_px": 12.0
+  },
+  "per_rule_id": {
+   "22": {
+    "features": 15502,
+    "proxy_only_px": 31493,
+    "class": "Fault, unknown type, certain"
+   },
+   "21": {
+    "features": 3665,
+    "proxy_only_px": 14533,
+    "class": "Fault, unknown type, approximate"
+   },
+   "63": {
+    "features": 1158,
+    "proxy_only_px": 11278,
+    "class": "Thrust fault, certain (teeth on right from origin)"
+   },
+   "23": {
+    "features": 1152,
+    "proxy_only_px": 3831,
+    "class": "Fault, unknown type, concealed"
+   },
+   "62": {
+    "features": 91,
+    "proxy_only_px": 1127,
+    "class": "Thrust fault, approximate (teeth on right from origin)"
+   },
+   "64": {
+    "features": 11,
+    "proxy_only_px": 119,
+    "class": "Thrust fault, concealed (teeth on right from origin)"
+   },
+   "24": {
+    "features": 172,
+    "proxy_only_px": 56,
+    "class": "Fault, unknown type, inferred or queried"
+   },
+   "42": {
+    "features": 1,
+    "proxy_only_px": 0,
+    "class": "Normal fault, approximate (ball on down side)"
+   },
+   "43": {
+    "features": 12,
+    "proxy_only_px": 0,
+    "class": "Normal fault, certain (ball on down side)"
+   },
+   "65": {
+    "features": 1,
+    "proxy_only_px": 0,
+    "class": "Thrust fault, inferred or queried (teeth on right from origin)"
+   }
+  }
+ },
+ "output": {
+  "path": "data/evidence/proxy/proxy_catalogue.tif",
+  "sha256": "7563e187171f7210d70295f958b0b2714c1fa504afa35f9a4688fc99b1e1122a",
+  "bytes": 181017,
+  "codes": {
+   "0": "no proxy fault",
+   "1": "proxy fault within R of a training label",
+   "2": "proxy fault with no training label within R"
+  }
+ },
+ "window": {
+  "path": "data/evidence/proxy/proxy_window.tif",
+  "row": 2048,
+  "col": 1280,
+  "size": 512,
+  "codes": {
+   "0": 259925,
+   "1": 990,
+   "2": 1229
+  }
+ },
+ "source": {
+  "dataset": "USGS State Geologic Map Compilation (SGMC), Data Series 1052 (ver. 1.1)",
+  "citation": "Horton, J.D., San Juan, C.A., and Stoeser, D.B., 2017, The State Geologic Map Compilation (SGMC) geodatabase of the conterminous United States (ver. 1.1, August 2017): U.S. Geological Survey Data Series 1052, 46 p.",
+  "doi": "https://doi.org/10.3133/ds1052",
+  "data_doi": "https://doi.org/10.5066/F7WH2N65",
+  "methods_url": "https://pubs.usgs.gov/publication/ds1052",
+  "report_pdf": "https://pubs.usgs.gov/ds/1052/ds1052.pdf",
+  "attribute_dictionary": "https://pubs.usgs.gov/ds/1052/ds20171052_appendix5.pdf",
+  "all_field_definitions": "https://pubs.usgs.gov/ds/1052/ds20171052_appendix2_v1_1.pdf",
+  "successor_release_2026": "https://doi.org/10.5066/P1A3DQZK",
+  "service": "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/SB_5888bf4fe4b05ccb964bab9d_USGS_SGMC_feature/FeatureServer",
+  "layer": 1,
+  "layer_name": "SGMC_Structure",
+  "license": "US public domain (USGS); no credentials used",
+  "official_identity": {
+   "doi": "https://doi.org/10.5066/F7WH2N65",
+   "item_id_in_service": "5888bf4fe4b05ccb964bab9d",
+   "match": true,
+   "route": "doi.org redirect",
+   "resolved": "https://www.sciencebase.gov/catalog/item/5888bf4fe4b05ccb964bab9d",
+   "meaning": "the FeatureServer queried is the published service of this data release"
+  },
+  "documented_links_checked": {
+   "https://pubs.usgs.gov/ds/1052/ds1052.pdf": "OK_200 (report)",
+   "https://pubs.usgs.gov/ds/1052/ds20171052_appendix5.pdf": "OK_200 (appendix5)",
+   "https://pubs.usgs.gov/ds/1052/ds20171052_appendix2_v1_1.pdf": "OK_200 (appendix2)"
+  }
+ },
+ "caveats": [
+  "The proxy is an independent *published* catalogue, not the hidden expert labels: it is systematically easier in places (faults already drawn on state maps) and harder in others (bedrock faults with no Quaternary surface expression).",
+  "Code 1 pixels are NOT removed from the proxy - they are kept so the overlap can be audited; scripts/eval_proxy_catalogue.py scores code 2 by default.",
+  "Code 2 means 'no *labelled* fault within R', which is a statement about the label raster, not a statement that the fault is unmapped in the literature."
+ ]
+}

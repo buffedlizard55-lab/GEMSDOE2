@@ -1,0 +1,423 @@
+name: Train MC ensemble (parallel folds) + blend
+
+# =============================================================================
+# The competitive run that fits free CPU runners.  6 Monte-Carlo folds train in
+# PARALLEL (one model per fold: UNet++/DeepLabV3+/U-Net x resnet34 rotating across
+# folds; configs/config_ci_ensemble.yaml), each producing a full-raster raw
+# probability map (8-way TTA) plus its held-out calibration crop.  A final blend
+# job averages the six maps, runs ONE shaping pass calibrated on the POOLED
+# held-out DTI (docs/METRIC_STRATEGY.md), validates the format, scores the result
+# against the public known-fault raster for monitoring, commits everything back
+# to this branch (small files + report) and uploads submission.tif + models as an
+# artifact.
+#
+# Data path: the dev sandbox cannot reach Dropbox; runners can.  Same trick as
+# .github/workflows/train-and-submit.yml (fetch from the data-tab mirrors into
+# the runner's workspace).  Checkpoints stay in the artifact (14 d) - never in git.
+#
+# Timings are budgeted against measured CPU-runner rates (see the config comments);
+# training is time-guarded (training.max_minutes) so a job CANNOT expire without a
+# checkpoint.  On a GPU box use configs/config.yaml instead.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      folds:
+        description: "JSON list of fold indices to run"
+        default: "[0,1,2,3,4,5]"
+  push:
+    branches: ["arena/**"]
+    paths: [".github/triggers/ensemble"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ensemble-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  fold:
+    name: fold ${{ matrix.fold }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        fold: ${{ fromJson(github.event.inputs.folds || '[0,1,2,3,4,5]') }}
+    # Second-ensemble support (2026-09-17): the bot token cannot workflow_dispatch, so runs are
+    # parameterised by a COMMITTED file instead. .github/triggers/ensemble-params may set
+    #   FOLD_OFFSET=<int>   added to matrix.fold to give the actual mc_id (fold identity)
+    #   ENSEMBLE_SEED=<int> training.seed override (split RNG + init)
+    # The blend job additionally reads MIN_DILATE=<int> (default 0) from the same file: the
+    # measured emission width to ship (see data/evidence/emission_decision.json and
+    # scripts/blend_submission.py --min-dilate).
+    # defaults below reproduce the original run exactly (offset 0, seed 42).
+    #
+    # DEFECT FIXED 2026-09-17 (session 10).  Run 35170395055 (the queued SECOND ensemble) had all
+    # six folds train for ~3 h and then lose everything: the train step below overrode only
+    # `training.mc_id=${{ matrix.fold }}` (so src/train.py wrote heldout_mc0..5.npz /
+    # model_mc0..5_*.pt), while the staging step copied `heldout_mc$((FOLD_OFFSET + matrix.fold)).npz`
+    # -> with FOLD_OFFSET=6 that file never existed, `cp` failed, "Stage fold outputs" failed on
+    # every fold, "Upload fold artifact" was skipped, and the blend job correctly refused to blend
+    # an incomplete fold set.  Approximately 18 CPU-hours of trained folds were discarded.  The
+    # offset/seed are now computed ONCE in the parameters step and applied to the trainer, the
+    # manifest's mc id is asserted against it, and staging uses globs that match whatever the
+    # trainer actually wrote.  Regression test: tests/test_ensemble_workflow.py.
+    env:
+      FOLD_OFFSET: "0"
+      ENSEMBLE_SEED: "42"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read ensemble parameters (committed trigger file overrides the defaults)
+        run: |
+          # NOTE: $GITHUB_ENV only affects SUBSEQUENT steps, so the values are read into shell
+          # variables here (never re-read from the stale job-level env) and exported once.
+          set -euo pipefail
+          PARAMS=".github/triggers/ensemble-params"
+          OFF="0"
+          SEED="42"
+          if [ -f "$PARAMS" ]; then
+            echo "parameters from $PARAMS:"
+            tr -d '\r' < "$PARAMS" | grep -E '^[A-Z_]+=' || true
+            OFF=$(tr -d '\r' < "$PARAMS" | sed -n 's/^FOLD_OFFSET=\([0-9]\+\)$/\1/p' | tail -1)
+            SEED=$(tr -d '\r' < "$PARAMS" | sed -n 's/^ENSEMBLE_SEED=\([0-9]\+\)$/\1/p' | tail -1)
+            OFF=${OFF:-0}
+            SEED=${SEED:-42}
+          else
+            echo "no $PARAMS - using job defaults (FOLD_OFFSET=0, ENSEMBLE_SEED=42)"
+          fi
+          MC_ID=$(( OFF + ${{ matrix.fold }} ))
+          {
+            echo "FOLD_OFFSET=$OFF"
+            echo "ENSEMBLE_SEED=$SEED"
+            echo "MC_ID=$MC_ID"
+          } >> "$GITHUB_ENV"
+          echo "effective fold identity: mc_id=$MC_ID (FOLD_OFFSET=$OFF, ENSEMBLE_SEED=$SEED, matrix.fold=${{ matrix.fold }})"
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (CPU torch)
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet -r requirements.txt
+
+      - name: Place competition data (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            echo "data/bridge is in the tree - assembling locally (no network fetch, sha256-verified)"
+            python scripts/assemble_data_bridge.py
+          else
+            echo "bridge absent - downloading the data-tab Dropbox mirrors"
+            dl () {
+              curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s data/$2) bytes" || { echo "FAILED $2"; exit 1; }
+            }
+            dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          ls -lh data/
+          sha256sum data/*.tif | tee data/checksums.txt
+
+      - name: Pre-flight data validation
+        run: python scripts/prepare_data.py
+
+      - name: Train fold ${{ matrix.fold }}
+        run: |
+          # Do not mask a failed trainer with a successful filtering subshell.
+          # The previous pattern let a broken fold reach the blend job.
+          # MC_ID (FOLD_OFFSET + matrix.fold) and ENSEMBLE_SEED come from the parameters step:
+          # the fold identity the trainer records MUST be the one the staging step looks for.
+          set -euo pipefail
+          python -m src.train --config configs/config_ci_ensemble.yaml \
+            --override training.mc_id="$MC_ID" training.seed="$ENSEMBLE_SEED" 2>&1 \
+            | tr '\r' '\n' | tee train.log
+
+      - name: Inference (raw, 8-way TTA) -> prob map
+        run: |
+          set -euo pipefail
+          python -m src.inference --config configs/config_ci_ensemble.yaml --raw \
+            --out outputs/prob_raw.tif 2>&1 \
+            | tr '\r' '\n' | tee inference.log
+
+      - name: Stage fold outputs
+        run: |
+          # CONTRACT (2026-09-17): glob whatever src/train.py/src/inference.py actually wrote and
+          # FAIL LOUDLY when a required artefact is absent, naming the files that do exist.  The
+          # previous version copied an explicitly-composed heldout_mc{FOLD_OFFSET+fold}.npz name and
+          # therefore lost six fully-trained folds (run 35170395055) when the trainer's mc id did
+          # not carry the offset.  Anything the trainer writes at max_minutes is expected here.
+          set -euo pipefail
+          shopt -s nullglob
+          mkdir -p fold
+          echo "fold identity: MC_ID=$MC_ID FOLD_OFFSET=$FOLD_OFFSET ENSEMBLE_SEED=$ENSEMBLE_SEED matrix.fold=${{ matrix.fold }}"
+          if [ ! -f outputs/prob_raw.tif ]; then
+            echo "FATAL: outputs/prob_raw.tif missing - the inference step produced no probability map"; ls -la outputs || true; exit 1
+          fi
+          if [ ! -f outputs/manifest.json ]; then
+            echo "FATAL: outputs/manifest.json missing - cannot record this fold's provenance"; ls -la outputs || true; exit 1
+          fi
+          cp -f outputs/prob_raw.tif outputs/manifest.json fold/
+          held=(outputs/heldout_mc*.npz)
+          if [ "${#held[@]}" -eq 0 ]; then
+            echo "FATAL: no outputs/heldout_mc*.npz - the blend job pools shaping calibration from these crops"; ls -la outputs || true; exit 1
+          fi
+          cp -f "${held[@]}" fold/
+          models=(outputs/model_mc*.pt)
+          if [ "${#models[@]}" -eq 0 ]; then
+            echo "WARNING: no outputs/model_mc*.pt checkpoint (inference read it from the manifest already); continuing"
+          else
+            cp -f "${models[@]}" fold/
+          fi
+          cp -f outputs/norm_stats.json outputs/train_history.json fold/ 2>/dev/null || true
+          cp -f train.log inference.log fold/ 2>/dev/null || true
+          # The trainer must have recorded exactly the fold identity this job was told to run.
+          # This is the assertion that would have caught the run-35170395055 defect at minute 1
+          # instead of hour 3.
+          python - "$MC_ID" <<'PY'
+          import json, os, sys
+          import numpy as np
+          expected = int(sys.argv[1])
+          man = json.load(open("outputs/manifest.json"))
+          mcs = [m.get("mc") for m in man.get("models", [])]
+          assert mcs == [expected], (
+              f"manifest mc ids {mcs} != workflow fold identity {expected}: the trainer ran a "
+              "different fold than this job stages (FOLD_OFFSET not applied?)")
+          z = np.load(sorted(__import__("glob").glob("fold/heldout_mc*.npz"))[0])
+          assert "pred" in z and "gt" in z, "heldout crop must carry pred and gt"
+          print(f"manifest mc id OK ({mcs}); heldout crop {z['pred'].shape} with gt {int(z['gt'].sum())} px")
+          PY
+          {
+            printf '{\n "mc_id": %s,\n "fold_offset": %s,\n "ensemble_seed": %s,\n "matrix_fold": %s,\n' "$MC_ID" "$FOLD_OFFSET" "$ENSEMBLE_SEED" "${{ matrix.fold }}"
+            printf ' "run_id": "%s",\n "commit": "%s",\n "config": "configs/config_ci_ensemble.yaml"\n}\n' "${{ github.run_id }}" "$GITHUB_SHA"
+          } > fold/fold_params.json
+          ls -la fold/
+
+      - name: Keep the trainer's logs when the fold fails
+        if: failure()
+        run: |
+          # A failed training step used to leave NOTHING behind: its logs exist only on the runner,
+          # and the Actions log blob is not reachable from the development sandbox (egress allowlist).
+          # Run 35249562910's fold 4 failed with exit code 1 and no diagnostic could be recovered.
+          set -uo pipefail
+          mkdir -p diag
+          cp -f train.log inference.log diag/ 2>/dev/null || true
+          cp -f outputs/manifest.json outputs/train_history.json diag/ 2>/dev/null || true
+          ls -la diag/ || true
+
+      - name: Upload fold artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fold-${{ matrix.fold }}
+          path: fold/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Upload fold diagnostics (logs; never matches the fold-* download pattern)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: foldlogs-${{ matrix.fold }}
+          path: diag/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  blend:
+    name: blend folds -> submission.tif
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs: fold
+    if: always()
+    env:
+      # 4 of 6: the pooled shaping calibration and the ensemble mean both degrade gracefully with a
+      # missing fold, and the report records n_folds, so refusing below two thirds keeps the
+      # guarantee (no silent degradation) without throwing away hours of successful training.
+      MIN_FOLDS: "4"
+    steps:
+      # Checkout comes FIRST and is `if: always()`: when the refusal step below failed, every
+      # non-`always()` step was skipped - including this one - and the `if: always()` evidence
+      # step then ran in a workspace with no .git and failed too (run 35170395055).  A failed
+      # run must still be able to commit its failure record.
+      - name: Checkout
+        if: always()
+        uses: actions/checkout@v4
+
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/rasterio/scipy/scikit-image only - no torch needed to blend)
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio scikit-image pyyaml
+
+      - name: Download fold artifacts
+        if: always()
+        uses: actions/download-artifact@v4
+        with:
+          pattern: fold-*
+          path: folds
+
+      - name: Fold inventory + minimum-fold gate
+        if: always()
+        run: |
+          # WHY NOT "refuse unless needs.fold.result == success" (the previous rule): on 2026-09-17
+          # run 35249562910 had five folds train for ~3 h and ONE fold fail in training, and the
+          # binary rule threw all five away.  A 5-of-6 Monte-Carlo ensemble is a legitimate
+          # ensemble - what must never happen is a degraded run being presented as a complete one.
+          # So: count the fold directories that actually carry a probability raster AND a held-out
+          # calibration crop, refuse below MIN_FOLDS (default 4 of 6), and record the shortfall
+          # loudly in the log and in the committed report.
+          set -euo pipefail
+          shopt -s nullglob
+          n=0
+          : > usable_folds.txt
+          for d in folds/fold-*/; do
+            if [ -f "$d/prob_raw.tif" ] && compgen -G "$d/heldout_mc*.npz" > /dev/null; then
+              n=$((n + 1))
+              echo "$d" | sed 's:/$::' >> usable_folds.txt
+            else
+              echo "dropping unusable fold dir: $d (needs prob_raw.tif + heldout_mc*.npz)"
+            fi
+          done
+          echo "usable folds: $n"
+          cat usable_folds.txt || true
+          echo "FOLD_COUNT=$n" >> "$GITHUB_ENV"
+          if [ "$n" -eq 0 ]; then
+            echo "::error::no usable fold artifacts in this run - nothing can be blended"
+            exit 1
+          fi
+          if [ "$n" -lt "${MIN_FOLDS:-4}" ]; then
+            echo "::error::only $n usable fold(s), below MIN_FOLDS=${MIN_FOLDS:-4}: refusing to blend"
+            exit 1
+          fi
+          if [ "$n" -lt 6 ]; then
+            echo "::warning::blending $n of 6 folds (fold matrix result: ${{ needs.fold.result }}); the shortfall is recorded in the report and the committed evidence"
+          fi
+
+      - name: Place labels + sample grid (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            echo "data/bridge is in the tree - assembling locally (no network fetch, sha256-verified)"
+            python scripts/assemble_data_bridge.py
+          else
+            echo "bridge absent - downloading the data-tab Dropbox mirrors"
+            dl () { curl -fL --retry 3 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s data/$2)"; }
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+            dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+          fi
+
+      - name: Read the shipped emission width (committed parameter file)
+        id: shape
+        run: |
+          # The pooled calibration maximises IN-DOMAIN held-out DTI - the faults the model trained
+          # on - and that quantity always prefers the narrowest band, while BOTH prize phases score
+          # faults that are NOT in the training labels (rules 1.1/3.3).  The width that is shipped
+          # is therefore a policy decision made from the new-fault-like measurement
+          # (data/evidence/emission_decision.json), applied here through --min-dilate.  Until that
+          # decision is reproduced on a second ensemble the default stays 0 = unchanged behaviour.
+          set -euo pipefail
+          MIND=0
+          F=".github/triggers/ensemble-params"
+          if [ -f "$F" ]; then
+            MIND=$(tr -d '\r' < "$F" | sed -n 's/^MIN_DILATE=\([0-9]\+\)$/\1/p' | tail -1)
+            MIND=${MIND:-0}
+          fi
+          echo "min_dilate=$MIND" >> "$GITHUB_OUTPUT"
+          echo "shipped emission width (--min-dilate): $MIND px"
+
+      - name: Blend + shape + write submission
+        run: |
+          set -uo pipefail
+          python scripts/blend_submission.py \
+            --folds $(cat usable_folds.txt) \
+            --config configs/config_ci_ensemble.yaml \
+            --sample data/sample_submission.tif \
+            --labels data/labels.tif \
+            --out submission.tif --report blend_report.json --weights equal \
+            --min-dilate "${{ steps.shape.outputs.min_dilate }}" 2>&1 | tee blend.log
+
+      - name: Validate submission format (exit code gates the commit)
+        run: |
+          set -uo pipefail
+          python scripts/validate_submission.py --pred submission.tif \
+            --sample data/sample_submission.tif --train data/training_features.tif 2>&1 | tee validation.log
+
+      - name: Commit run report + submission to the branch
+        if: always()
+        run: |
+          set -uo pipefail
+          D="data/evidence/runs/${{ github.run_id }}"
+          mkdir -p "$D"
+          cp -f blend_report.json "$D/" 2>/dev/null || true
+          cp -f blend.log validation.log "$D/" 2>/dev/null || true
+          cp -f usable_folds.txt "$D/" 2>/dev/null || true
+          # Only a real submission may be committed.  Run 35042805806 committed a 110-byte
+          # GDAL stub left behind by the crashed writer, and every downstream reader treated
+          # it as a submission.  Size + a read-back check are cheap and decisive.
+          if [ -f submission.tif ] && [ "$(stat -c%s submission.tif)" -gt 10000 ] && \
+             python -c "import rasterio,numpy as np,sys; s=rasterio.open('submission.tif'); a=s.read(1); sys.exit(0 if (s.count==1 and s.dtypes[0]=='float32' and np.count_nonzero(np.nan_to_num(a))>0) else 1)"; then
+            cp -f submission.tif "$D/submission.tif"
+            sha256sum submission.tif | tee "$D/submission.sha256"
+          else
+            echo "NO VALID submission.tif - committing the failure evidence instead"
+            rm -f "$D/submission.tif" "$D/submission.sha256"
+            printf '{"status":"NO_SUBMISSION","reason":"blend or validate step failed - see blend.log/validation.log in this directory","run_id":"%s"}\n' "${{ github.run_id }}" > "$D/FAILED.json"
+          fi
+          shopt -s nullglob
+          for f in folds/fold-*/manifest.json; do
+            [ -f "$f" ] && cp -f "$f" "$D/$(basename "$(dirname "$f")").manifest.json" || true
+          done
+          # Per-fold identity (mc_id / FOLD_OFFSET / ENSEMBLE_SEED / commit) so a run's provenance
+          # survives even if the trigger file is reset after firing.
+          for f in folds/fold-*/fold_params.json; do
+            [ -f "$f" ] && cp -f "$f" "$D/$(basename "$(dirname "$f")").params.json" || true
+          done
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" || true
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "train(ensemble): run report ${{ github.run_id }} [skip ci]"
+            pushed=""
+            for attempt in 1 2 3; do
+              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then pushed="yes"; echo "pushed (attempt $attempt)"; break; fi
+              echo "push attempt $attempt failed; retrying"; sleep 10
+            done
+            if [ -z "$pushed" ]; then
+              echo "FATAL: the run record could not be pushed to ${GITHUB_REF_NAME}; the evidence stays in the artifact only"
+              exit 1
+            fi
+          fi
+
+      - name: Upload final submission
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: submission-final-${{ github.run_id }}
+          path: |
+            submission.tif
+            blend_report.json
+            blend.log
+            validation.log
+          retention-days: 30

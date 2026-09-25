@@ -1,0 +1,126 @@
+name: Tests
+
+# =============================================================================
+# WHY THIS WORKFLOW EXISTS
+#
+# Every page of this site says how many tests pass.  Until now nothing in CI ran
+# them: the number came from whoever last ran pytest by hand, which is exactly the
+# "green claim, unmeasured" pattern that lost run 35042805806 its submission.  This
+# job runs the suite on a runner (the same environment the real runs use) so the
+# claim is enforced rather than asserted.
+#
+# Deps: numpy/scipy/rasterio/scikit-image/pyyaml/pytest for the metric, shaping,
+# writer, discovery and blend tests; torch for the tests that import src.dataset and
+# src.inference (the training/inference plumbing).  torch is installed from the CPU
+# wheel index with a PyPI fallback - the CPU build is all these tests need.
+# =============================================================================
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main", "arena/**"]
+    paths:
+      - "src/**"
+      - "scripts/**"
+      - "tests/**"
+      - "configs/**"
+      - ".github/workflows/tests.yml"
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          # The dependency list is derived from the imports in src/, scripts/ and tests/ (not from
+          # memory): a first run of this workflow failed only because tqdm - imported by src/train.py
+          # - was missing, which is exactly the kind of gap a hand-written list leaves.
+          python -m pip install --quiet numpy scipy rasterio scikit-image scikit-learn pyyaml \
+            pytest tqdm segmentation-models-pytorch pypdf reportlab
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu \
+            || python -m pip install --quiet torch
+          python - <<'PY'
+          import numpy, rasterio, skimage, torch, tqdm, segmentation_models_pytorch, pypdf, reportlab
+          import sklearn
+          print(f"numpy {numpy.__version__} rasterio {rasterio.__version__} "
+                f"skimage {skimage.__version__} torch {torch.__version__} "
+                f"smp {segmentation_models_pytorch.__version__} tqdm {tqdm.__version__} "
+                f"pypdf {pypdf.__version__} reportlab {reportlab.Version}")
+          PY
+
+      - name: Run the test suite
+        run: |
+          set -o pipefail
+          set +e            # GitHub runs run: steps under `bash -e`; a grep with no matches would
+                            # otherwise abort the step and report a failure for a green suite
+                            # (that is exactly how the first two runs of this workflow "failed"
+                            # with 44 tests passing).
+          python -m pytest tests -q --tb=line -rf 2>&1 | tee pytest.log
+          S=${PIPESTATUS[0]}
+          # A failure has to be readable without access to the raw job log, so the failing test
+          # names go into the check-run annotations and the whole log is committed below.
+          grep -E "^FAILED|^ERROR" pytest.log | while read -r line; do
+            echo "::error title=pytest::${line}"
+          done || true
+          {
+            echo "### pytest"
+            echo '```'
+            tail -40 pytest.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $S
+
+      - name: Documentation audit (the same five checks the Pages deploy gates on)
+        run: |
+          set -euo pipefail
+          python scripts/audit_docs.py | tail -3
+
+      - name: Upload the pytest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-log-${{ github.run_id }}
+          path: pytest.log
+          retention-days: 14
+          if-no-files-found: ignore
+
+      # Artifacts are a dead end for anyone auditing this repository from the development sandbox
+      # (the blob host is not reachable), so a failure also commits its log to the branch.  That
+      # keeps the "measured, not claimed" rule intact for CI itself: the failing assertion is in
+      # the repository, next to the code that produced it.
+      - name: On failure, commit the log to the branch
+        if: failure()
+        run: |
+          set -euo pipefail
+          D="data/evidence/ci"
+          mkdir -p "$D"
+          cp -f pytest.log "$D/pytest-${GITHUB_RUN_ID}.log"
+          {
+            echo "workflow: Tests"
+            echo "run: ${GITHUB_RUN_ID}"
+            echo "sha: ${GITHUB_SHA}"
+            echo "branch: ${GITHUB_REF_NAME}"
+            echo
+            echo "--- pytest tail ---"
+            tail -25 pytest.log
+          } > "$D/pytest-${GITHUB_RUN_ID}.txt"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D"
+          git diff --cached --quiet && echo "nothing to commit" || {
+            git commit -m "ci(tests): failing pytest log for run ${GITHUB_RUN_ID} [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }

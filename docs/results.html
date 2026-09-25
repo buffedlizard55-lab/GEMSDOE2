@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html" class="active">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Results</h1>
+<p class="lede">Measured outcomes, including the ones that did not work.</p>
+<h2>Honest status</h2>
+<div class="note bad"><b>A green workflow is not evidence.</b> The 6-fold ensemble run
+<code>35042805806</code> trained every fold for 2 h 36 min and then crashed while writing the
+submission (<code>RasterBlockError: the height and width of TIFF dataset blocks must be multiples of
+16</code>). The job was reported <b>successful</b>, because the step piped Python into <code>tee</code>
+without <code>pipefail</code>, and the evidence it committed was self-incriminating:
+<code>data/evidence/runs/35042805806/submission.tif</code> is <b>110 bytes</b> (a GDAL stub) and
+<code>validation.log</code> is an argparse usage dump. Fixed on 2026-09-16: a read-back-verifying
+writer (<code>src/submission_io.py</code>), <code>pipefail</code> on every piped step, and a commit gate
+that ships <code>FAILED.json</code> instead of a stub. The rebuilt submission is the newest run below.</div>
+<div class="note warn">The pipeline runs end to end on the real competition rasters and every number below
+is measured, but it is <b>not yet competitive</b>: the first full-scale run was a 2-epoch MobileNetV2
+smoke test that scored <em>below</em> the trivial blanket-coverage baseline, which is recorded here as
+a negative result rather than dressed up. And every DTI on this page is computed against the
+<em>known</em> catalogue, which is not the scored universe (see <a href="metric.html">Metric</a>).</div>
+<div class="note ok"><b>Current shipped bytes, measured at build time:</b> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — 557.5 KB, sha256 <span class='mono small'>7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</span>. The run tables below are <i>historical records</i> of what each run wrote <i>then</i>: the 2026-09-25 template-conformance sanitation re-wrote the shipped file, so pre-fix blend hashes no longer match it (the pixels it scored on are unchanged — see <a href='how_to_submit.html#rejection'>How to submit &sect;6b</a>).</div>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<table><thead><tr><th>Epoch</th><th>Loss</th><th>DTI raw</th><th>DTI shaped</th><th>TP_w</th><th>FP_w</th></tr></thead><tbody><tr><td>1</td><td class="num">0.6157</td><td class="num">0.0258</td><td class="num">0.0876</td><td class="num">722</td><td class="num">68,246</td></tr><tr><td>2</td><td class="num">0.5774</td><td class="num">0.0300</td><td class="num">0.0997</td><td class="num">841</td><td class="num">68,828</td></tr></tbody></table>
+<h3>Run <code>local-mini-ensemble</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>sandbox calibration (NOT a GitHub run): 2 folds x 20 epochs on data/fixture, resnet34, pretrained=false</td></tr>
+<tr><th>Runner</th><td>dev sandbox (2 vCPU, CPU-only)</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h4>Ensemble blend (2026-09-16T00:30:36Z)</h4>
+<table class="kv"><tbody>
+<tr><th>Folds blended</th><td>6 — <span class="mono small">outputs_e0, outputs_e1, outputs_e2, outputs_e3, outputs_e4, outputs_e5</span></td></tr>
+<tr><th>Pooled shaping</th><td>t0 = <b>0.46</b>,
+  thin = <b>True</b> — mean held-out DTI
+  <b>0.1286</b> (unshaped 0.0883)</td></tr>
+<tr><th>Probability mass</th><td>133,122 → 7,842
+  (shaping compression ×17.0)</td></tr>
+<tr><th>Fold weights</th><td>equal</td></tr>
+<tr><th>Submission</th><td>21.5 KB, nonzero 7,842 px,
+  sha256 <span class="mono small">f00ab4f7b3a4af64…</span></td></tr>
+<tr><th>Info: DTI vs <em>known</em> faults</th><td>0.1033
+  (blanket-ones floor 0.0955) — wrong-universe number, see caveat</td></tr>
+</tbody></table>
+<table><thead><tr><th>Fold</th><th>Model(s)</th><th>Best held-out shaped DTI</th></tr></thead><tbody><tr><td>outputs_e0</td><td>model_mc0_unetplusplus_resnet34.pt</td><td class="num">0.1497</td></tr><tr><td>outputs_e1</td><td>model_mc1_deeplabv3plus_resnet34.pt</td><td class="num">0.0488</td></tr><tr><td>outputs_e2</td><td>model_mc2_unet_resnet34.pt</td><td class="num">0.1919</td></tr><tr><td>outputs_e3</td><td>model_mc3_unetplusplus_resnet34.pt</td><td class="num">0.2610</td></tr><tr><td>outputs_e4</td><td>model_mc4_deeplabv3plus_resnet34.pt</td><td class="num">0.0266</td></tr><tr><td>outputs_e5</td><td>model_mc5_unet_resnet34.pt</td><td class="num">0.1625</td></tr></tbody></table>
+<details><summary>Full shaping calibration table (highlighted row = chosen)</summary><table><thead><tr><th>t0 floor</th><th>thin</th><th>mean held-out DTI</th></tr></thead><tbody><tr><td class="num">unshaped</td><td>—</td><td class="num">0.0883</td></tr><tr><td class="num">0.02</td><td>no</td><td class="num">0.1011</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.0344</td></tr><tr><td class="num">0.11</td><td>no</td><td class="num">0.0967</td></tr><tr><td class="num">0.11</td><td>yes</td><td class="num">0.0255</td></tr><tr><td class="num">0.20</td><td>no</td><td class="num">0.0968</td></tr><tr><td class="num">0.20</td><td>yes</td><td class="num">0.0331</td></tr><tr><td class="num">0.28</td><td>no</td><td class="num">0.0971</td></tr><tr><td class="num">0.28</td><td>yes</td><td class="num">0.0533</td></tr><tr><td class="num">0.37</td><td>no</td><td class="num">0.0976</td></tr><tr><td class="num">0.37</td><td>yes</td><td class="num">0.0717</td></tr><tr><td class="num">0.46</td><td>no</td><td class="num">0.1031</td></tr><tr class="hl"><td class="num">0.46</td><td>yes</td><td class="num">0.1286</td></tr><tr><td class="num">0.55</td><td>no</td><td class="num">0.0977</td></tr><tr><td class="num">0.55</td><td>yes</td><td class="num">0.1023</td></tr><tr><td class="num">0.64</td><td>no</td><td class="num">0.0414</td></tr><tr><td class="num">0.64</td><td>yes</td><td class="num">0.0453</td></tr><tr><td class="num">0.72</td><td>no</td><td class="num">0.0391</td></tr><tr><td class="num">0.72</td><td>yes</td><td class="num">0.0395</td></tr><tr><td class="num">0.81</td><td>no</td><td class="num">0.0334</td></tr><tr><td class="num">0.81</td><td>yes</td><td class="num">0.0238</td></tr><tr><td class="num">0.90</td><td>no</td><td class="num">0.0293</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.0206</td></tr></tbody></table></details>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h4>Ensemble blend (2026-09-17T22:47:58Z)</h4>
+<table class="kv"><tbody>
+<tr><th>Folds blended</th><td>11 — <span class="mono small">folds/fold-0, folds/fold-1, folds/fold-2, folds/fold-3, folds/fold-4, folds/fold-5, folds2/fold-0, folds2/fold-1, folds2/fold-2, folds2/fold-3, folds2/fold-5</span></td></tr>
+<tr><th>Pooled shaping</th><td>t0 = <b>0.1</b>,
+  thin = <b>True</b> — mean held-out DTI
+  <b>0.2065</b> (unshaped 0.1751)</td></tr>
+<tr><th>Probability mass</th><td>384,102 → 172,974
+  (shaping compression ×2.2)</td></tr>
+<tr><th>Fold weights</th><td>equal</td></tr>
+<tr><th>Submission</th><td>556.2 KB, nonzero 172,974 px,
+  sha256 <span class="mono small">a3dcd6d51303f312…</span></td></tr>
+<tr><th>Info: DTI vs <em>known</em> faults</th><td>0.2298
+  (blanket-ones floor 0.0246) — wrong-universe number, see caveat</td></tr>
+</tbody></table>
+<table><thead><tr><th>Fold</th><th>Model(s)</th><th>Best held-out shaped DTI</th></tr></thead><tbody><tr><td>folds/fold-0</td><td>model_mc0_unetplusplus_resnet34.pt</td><td class="num">0.2665</td></tr><tr><td>folds/fold-1</td><td>model_mc1_deeplabv3plus_resnet34.pt</td><td class="num">0.1780</td></tr><tr><td>folds/fold-2</td><td>model_mc2_unet_resnet34.pt</td><td class="num">0.0916</td></tr><tr><td>folds/fold-3</td><td>model_mc3_unetplusplus_resnet34.pt</td><td class="num">0.3351</td></tr><tr><td>folds/fold-4</td><td>model_mc4_deeplabv3plus_resnet34.pt</td><td class="num">0.0742</td></tr><tr><td>folds/fold-5</td><td>model_mc5_unet_resnet34.pt</td><td class="num">0.1776</td></tr><tr><td>folds2/fold-0</td><td>model_mc6_unetplusplus_resnet34.pt</td><td class="num">0.2893</td></tr><tr><td>folds2/fold-1</td><td>model_mc7_deeplabv3plus_resnet34.pt</td><td class="num">0.1797</td></tr><tr><td>folds2/fold-2</td><td>model_mc8_unet_resnet34.pt</td><td class="num">0.1553</td></tr><tr><td>folds2/fold-3</td><td>model_mc9_unetplusplus_resnet34.pt</td><td class="num">0.2196</td></tr><tr><td>folds2/fold-5</td><td>model_mc11_unet_resnet34.pt</td><td class="num">0.2431</td></tr></tbody></table>
+<h5>Discovery diagnostics (vs the known catalogue)</h5>
+<table class="kv"><tbody>
+<tr><th>novel_fraction</th><td><b>0.886</b> of emitted
+  probability mass sits farther than R=3 px from any catalogued fault</td></tr>
+<tr><th>mass</th><td>172,974 total → 153,180 novel</td></tr>
+<tr><th>candidate new faults</th><td>3,467 components
+  (58,420 px) do not touch the catalogue at p&gt;0.5; largest
+  761 px</td></tr>
+<tr><th>catalogue recall @R</th><td>0.578 of catalogued fault
+  pixels have a prediction within R (higher = more catalogue-driven)</td></tr>
+</tbody></table>
+<p class="small">These are the numbers that speak to the scored universe. Read together: high
+catalogue recall with a low <code>novel_fraction</code> means the submission mostly restates the
+catalogue (poor against new faults); a high <code>novel_fraction</code> with a large component count
+means it is proposing candidates (what Phase 2 rewards if experts confirm them).</p>
+<details><summary>Full shaping calibration table (highlighted row = chosen)</summary><table><thead><tr><th>t0 floor</th><th>thin</th><th>mean held-out DTI</th></tr></thead><tbody><tr><td class="num">unshaped</td><td>—</td><td class="num">0.1751</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0270</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0448</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0444</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0455</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0466</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0472</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0473</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0567</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1225</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0829</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0706</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0635</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0594</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0536</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0658</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1304</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0890</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0765</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0691</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0650</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0590</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0753</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1406</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0968</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0835</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0756</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0710</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0640</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0915</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1493</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1037</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0899</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0817</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0766</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0690</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1170</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1648</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1148</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0990</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0895</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0833</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0740</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1401</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1793</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1262</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1086</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0980</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0906</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0795</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1617</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1926</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1368</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1169</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1047</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0965</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0837</td></tr><tr><td class="num">0.01</td><td>no</td><td class="num">0.1799</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.2016</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1465</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1244</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1108</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1019</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.0880</td></tr><tr><td class="num">0.02</td><td>no</td><td class="num">0.1918</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.2056</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1530</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1296</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1150</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1054</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.0907</td></tr><tr><td class="num">0.03</td><td>no</td><td class="num">0.1983</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.2056</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1566</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1328</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1179</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1081</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.0929</td></tr><tr><td class="num">0.07</td><td>no</td><td class="num">0.2020</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.2061</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1602</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1360</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1207</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1107</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.0951</td></tr><tr><td class="num">0.13</td><td>no</td><td class="num">0.2034</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.2045</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1623</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1384</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1229</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1127</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.0969</td></tr><tr><td class="num">0.25</td><td>no</td><td class="num">0.2051</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.2002</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1628</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1387</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1224</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1117</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.0958</td></tr><tr><td class="num">0.47</td><td>no</td><td class="num">0.2065</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.2031</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.1709</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.1463</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.1290</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.1177</td></tr><tr><td class="num">0.47</td><td>yes</td><td class="num">0.1008</td></tr><tr><td class="num">0.90</td><td>no</td><td class="num">0.1602</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1493</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1574</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1459</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1323</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1212</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1032</td></tr></tbody></table></details>
+<h3>Run <code>35169168957</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>smoke</td></tr>
+<tr><th>Runner</th><td>ubuntu-latest (CPU-only)</td></tr>
+<tr><th>Commit</th><td class="mono small">ca08ea3673c8</td></tr>
+<tr><th>Submission</th><td>459.8 KB,
+  sha256 <span class="mono small">ee183e260ee5478a…</span></td></tr>
+</tbody></table>
+<table><thead><tr><th>Epoch</th><th>Loss</th><th>DTI raw</th><th>DTI shaped</th><th>TP_w</th><th>FP_w</th></tr></thead><tbody><tr><td>1</td><td class="num">0.6214</td><td class="num">0.0272</td><td class="num">0.0760</td><td class="num">777</td><td class="num">71,262</td></tr><tr><td>2</td><td class="num">0.5769</td><td class="num">0.0298</td><td class="num">0.0790</td><td class="num">868</td><td class="num">73,838</td></tr></tbody></table>
+<p><b>Full-raster score vs public labels:</b> <code>DTI=0.05852  TP_w=60228.3  FP_w=4841745.2  FN_w=759.7  |G|=60988  (R=3px)</code></p>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h4>Ensemble blend (2026-09-16T21:00:31Z)</h4>
+<table class="kv"><tbody>
+<tr><th>Folds blended</th><td>6 — <span class="mono small">folds/fold-0, folds/fold-1, folds/fold-2, folds/fold-3, folds/fold-4, folds/fold-5</span></td></tr>
+<tr><th>Pooled shaping</th><td>t0 = <b>0.47</b>,
+  thin = <b>True</b> — mean held-out DTI
+  <b>0.1903</b> (unshaped 0.1560)</td></tr>
+<tr><th>Probability mass</th><td>575,330 → 21,492
+  (shaping compression ×26.8)</td></tr>
+<tr><th>Fold weights</th><td>equal</td></tr>
+<tr><th>Submission</th><td>377.0 KB, nonzero 21,492 px,
+  sha256 <span class="mono small">45d50773d2313de6…</span></td></tr>
+<tr><th>Info: DTI vs <em>known</em> faults</th><td>0.1387
+  (blanket-ones floor 0.0246) — wrong-universe number, see caveat</td></tr>
+</tbody></table>
+<table><thead><tr><th>Fold</th><th>Model(s)</th><th>Best held-out shaped DTI</th></tr></thead><tbody><tr><td>folds/fold-0</td><td>model_mc0_unetplusplus_resnet34.pt</td><td class="num">0.2665</td></tr><tr><td>folds/fold-1</td><td>model_mc1_deeplabv3plus_resnet34.pt</td><td class="num">0.1780</td></tr><tr><td>folds/fold-2</td><td>model_mc2_unet_resnet34.pt</td><td class="num">0.0916</td></tr><tr><td>folds/fold-3</td><td>model_mc3_unetplusplus_resnet34.pt</td><td class="num">0.3351</td></tr><tr><td>folds/fold-4</td><td>model_mc4_deeplabv3plus_resnet34.pt</td><td class="num">0.0742</td></tr><tr><td>folds/fold-5</td><td>model_mc5_unet_resnet34.pt</td><td class="num">0.1776</td></tr></tbody></table>
+<h5>Discovery diagnostics (vs the known catalogue)</h5>
+<table class="kv"><tbody>
+<tr><th>novel_fraction</th><td><b>0.684</b> of emitted
+  probability mass sits farther than R=3 px from any catalogued fault</td></tr>
+<tr><th>mass</th><td>21,492 total → 14,703 novel</td></tr>
+<tr><th>candidate new faults</th><td>617 components
+  (6,090 px) do not touch the catalogue at p&gt;0.5; largest
+  92 px</td></tr>
+<tr><th>catalogue recall @R</th><td>0.214 of catalogued fault
+  pixels have a prediction within R (higher = more catalogue-driven)</td></tr>
+</tbody></table>
+<p class="small">These are the numbers that speak to the scored universe. Read together: high
+catalogue recall with a low <code>novel_fraction</code> means the submission mostly restates the
+catalogue (poor against new faults); a high <code>novel_fraction</code> with a large component count
+means it is proposing candidates (what Phase 2 rewards if experts confirm them).</p>
+<details><summary>Full shaping calibration table (highlighted row = chosen)</summary><table><thead><tr><th>t0 floor</th><th>thin</th><th>mean held-out DTI</th></tr></thead><tbody><tr><td class="num">unshaped</td><td>—</td><td class="num">0.1560</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0231</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0441</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0451</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0466</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0480</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0485</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0479</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0500</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1154</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0792</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0679</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0617</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0580</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0526</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0611</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1225</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0852</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0739</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0676</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0638</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0580</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0688</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1287</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0909</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0796</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0731</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0694</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0634</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0814</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1344</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0955</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0841</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0777</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0737</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0674</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0989</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1467</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1031</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0903</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0831</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0783</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0706</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1168</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1591</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1111</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0972</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0894</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0838</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0747</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1355</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1709</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1191</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1028</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0939</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0877</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0774</td></tr><tr><td class="num">0.01</td><td>no</td><td class="num">0.1545</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1816</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1285</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1098</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.0992</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.0923</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.0811</td></tr><tr><td class="num">0.02</td><td>no</td><td class="num">0.1687</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1865</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1345</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1138</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1020</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.0945</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.0827</td></tr><tr><td class="num">0.03</td><td>no</td><td class="num">0.1760</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1855</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1365</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1153</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1034</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.0960</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.0841</td></tr><tr><td class="num">0.07</td><td>no</td><td class="num">0.1795</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1859</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1395</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1176</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1051</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.0975</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.0854</td></tr><tr><td class="num">0.13</td><td>no</td><td class="num">0.1812</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1850</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1413</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1193</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1063</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.0985</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.0867</td></tr><tr><td class="num">0.25</td><td>no</td><td class="num">0.1836</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1799</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1396</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1169</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1029</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.0945</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.0827</td></tr><tr><td class="num">0.47</td><td>no</td><td class="num">0.1883</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1903</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1525</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1281</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1128</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1037</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.0908</td></tr><tr><td class="num">0.90</td><td>no</td><td class="num">0.1339</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1245</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1305</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1186</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1058</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.0966</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.0823</td></tr></tbody></table></details>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h4>Ensemble blend (2026-09-16T18:04:36Z)</h4>
+<table class="kv"><tbody>
+<tr><th>Folds blended</th><td>6 — <span class="mono small">folds/fold-0, folds/fold-1, folds/fold-2, folds/fold-3, folds/fold-4, folds/fold-5</span></td></tr>
+<tr><th>Pooled shaping</th><td>t0 = <b>0.47</b>,
+  thin = <b>True</b> — mean held-out DTI
+  <b>0.1903</b> (unshaped 0.1560)</td></tr>
+<tr><th>Probability mass</th><td>575,330 → 21,492
+  (shaping compression ×26.8)</td></tr>
+<tr><th>Fold weights</th><td>equal</td></tr>
+<tr><th>Submission</th><td>377.0 KB, nonzero 21,492 px,
+  sha256 <span class="mono small">a5ae61d572b0cd95…</span></td></tr>
+<tr><th>Info: DTI vs <em>known</em> faults</th><td>0.1387
+  (blanket-ones floor 0.0246) — wrong-universe number, see caveat</td></tr>
+</tbody></table>
+<table><thead><tr><th>Fold</th><th>Model(s)</th><th>Best held-out shaped DTI</th></tr></thead><tbody><tr><td>folds/fold-0</td><td>model_mc0_unetplusplus_resnet34.pt</td><td class="num">0.2665</td></tr><tr><td>folds/fold-1</td><td>model_mc1_deeplabv3plus_resnet34.pt</td><td class="num">0.1780</td></tr><tr><td>folds/fold-2</td><td>model_mc2_unet_resnet34.pt</td><td class="num">0.0916</td></tr><tr><td>folds/fold-3</td><td>model_mc3_unetplusplus_resnet34.pt</td><td class="num">0.3351</td></tr><tr><td>folds/fold-4</td><td>model_mc4_deeplabv3plus_resnet34.pt</td><td class="num">0.0742</td></tr><tr><td>folds/fold-5</td><td>model_mc5_unet_resnet34.pt</td><td class="num">0.1776</td></tr></tbody></table>
+<h5>Discovery diagnostics (vs the known catalogue)</h5>
+<table class="kv"><tbody>
+<tr><th>novel_fraction</th><td><b>0.684</b> of emitted
+  probability mass sits farther than R=3 px from any catalogued fault</td></tr>
+<tr><th>mass</th><td>21,492 total → 14,703 novel</td></tr>
+<tr><th>candidate new faults</th><td>617 components
+  (6,090 px) do not touch the catalogue at p&gt;0.5; largest
+  92 px</td></tr>
+<tr><th>catalogue recall @R</th><td>0.214 of catalogued fault
+  pixels have a prediction within R (higher = more catalogue-driven)</td></tr>
+</tbody></table>
+<p class="small">These are the numbers that speak to the scored universe. Read together: high
+catalogue recall with a low <code>novel_fraction</code> means the submission mostly restates the
+catalogue (poor against new faults); a high <code>novel_fraction</code> with a large component count
+means it is proposing candidates (what Phase 2 rewards if experts confirm them).</p>
+<details><summary>Full shaping calibration table (highlighted row = chosen)</summary><table><thead><tr><th>t0 floor</th><th>thin</th><th>mean held-out DTI</th></tr></thead><tbody><tr><td class="num">unshaped</td><td>—</td><td class="num">0.1560</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0231</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.0441</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0500</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1154</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0611</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1225</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0688</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1287</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0814</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1344</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.0989</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1467</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1168</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1591</td></tr><tr><td class="num">0.00</td><td>no</td><td class="num">0.1355</td></tr><tr><td class="num">0.00</td><td>yes</td><td class="num">0.1709</td></tr><tr><td class="num">0.01</td><td>no</td><td class="num">0.1545</td></tr><tr><td class="num">0.01</td><td>yes</td><td class="num">0.1816</td></tr><tr><td class="num">0.02</td><td>no</td><td class="num">0.1687</td></tr><tr><td class="num">0.02</td><td>yes</td><td class="num">0.1865</td></tr><tr><td class="num">0.03</td><td>no</td><td class="num">0.1760</td></tr><tr><td class="num">0.03</td><td>yes</td><td class="num">0.1855</td></tr><tr><td class="num">0.07</td><td>no</td><td class="num">0.1795</td></tr><tr><td class="num">0.07</td><td>yes</td><td class="num">0.1859</td></tr><tr><td class="num">0.13</td><td>no</td><td class="num">0.1812</td></tr><tr><td class="num">0.13</td><td>yes</td><td class="num">0.1850</td></tr><tr><td class="num">0.25</td><td>no</td><td class="num">0.1836</td></tr><tr><td class="num">0.25</td><td>yes</td><td class="num">0.1799</td></tr><tr><td class="num">0.47</td><td>no</td><td class="num">0.1883</td></tr><tr class="hl"><td class="num">0.47</td><td>yes</td><td class="num">0.1903</td></tr><tr><td class="num">0.90</td><td>no</td><td class="num">0.1339</td></tr><tr><td class="num">0.90</td><td>yes</td><td class="num">0.1245</td></tr></tbody></table></details>
+<h3>Run <code>34876843912</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>smoke</td></tr>
+<tr><th>Runner</th><td>ubuntu-latest (CPU-only)</td></tr>
+<tr><th>Commit</th><td class="mono small">831073ff2910</td></tr>
+<tr><th>Submission</th><td>556.3 KB,
+  sha256 <span class="mono small">4e6f83ab5ad6f81e…</span></td></tr>
+</tbody></table>
+<table><thead><tr><th>Epoch</th><th>Loss</th><th>DTI raw</th><th>DTI shaped</th><th>TP_w</th><th>FP_w</th></tr></thead><tbody><tr><td>1</td><td class="num">0.6209</td><td class="num">0.0102</td><td class="num">0.0496</td><td class="num">367</td><td class="num">108,169</td></tr><tr><td>2</td><td class="num">0.5771</td><td class="num">0.0249</td><td class="num">0.0588</td><td class="num">701</td><td class="num">69,375</td></tr></tbody></table>
+<p><b>Full-raster score vs public labels:</b> <code>DTI=0.08160  TP_w=6872.8  FP_w=170299.2  FN_w=54115.2  |G|=60988  (R=3px)</code></p>
+<h2 id="xcat">Cross-catalogue transfer &mdash; measured, and REFUSED</h2>
+<p>Catalogue A (SGMC structure, DOI 10.3133/ds1052) was to be emitted and scored against catalogue B
+(QFaults layer 21, DOI 10.5066/P9BCVRCK) on B&rsquo;s code-2 pixels &mdash; the traces the training
+labels do not contain. The runner fetched B and rasterised it on the competition grid, and that
+population turned out to be one pixel wide.</p>
+<div class="note bad"><b>Verdict: REFUSED - catalogue B is NOT independent of the training labels: 60,938 of its 60,939 in-footprint pixels (100.00 %) are already within R = 3 px of a label, leaving 1 px (0.0016 %) as a &#x27;new fault&#x27; population - below the pre-registered minimum of 100 px and 0.50 %. Scoring against 1 pixel(s) would produce a number with no meaning, so none is reported. This is a FINDING about the two catalogues, not a bug: it means the training labels and catalogue B are the same lines in this footprint, and it is recorded with the overlap that establishes it.</b></div>
+<table class="kv"><tbody>
+<tr><th>Features fetched</th><td><b>14,481</b> of 14,481 reported by the service &mdash; integrity gate <code>fetched == service_reported (else the run fails)</code> passed, so the catalogue is not silently truncated</td></tr><tr><th>Source links</th><td>4 of 4 reachable from the runner (https://doi.org/10.5066/P9BCVRCK, https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23, https://www.usgs.gov/programs/earthquake-hazards/faults, https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer?f=json)</td></tr><tr><th>B on the whole grid</th><td>169,115 px rasterised, of which <b>108,176</b> fall outside the scored footprint (NaN in the submission, therefore unscored)</td></tr>
+<tr><th>B inside the footprint</th><td><b>60,939 px</b> =
+  6,094 km of Quaternary fault trace</td></tr>
+<tr><th>&hellip;already in the labels</th><td><b>60,938 px
+  (100.00%)</b> lie within R = 3 px
+  (300 m) of a training label &mdash; code 1, unscored by construction</td></tr>
+<tr><th>&hellip;left as &ldquo;new&rdquo;</th><td><b>1 px
+  (0.0016%)</b> &mdash; below the pre-registered minimum of
+  100 px / 0.50%</td></tr>
+<tr><th>The reciprocal</th><td><b>60,986 of 60,988</b>
+  label fault pixels (99.997%) lie within R of a QFaults trace.
+  <b>In this footprint the training labels <i>are</i> QFaults.</b></td></tr>
+<tr><th>Reported numbers</th><td><b>none.</b> <code>measurements: []</code>,
+  <code>controls_pass: false</code>, <code>exit_code: 0</code> &mdash; a DTI computed against
+  1 truth pixel(s) would be noise, and publishing it would be exactly the kind of
+  unsupported number this repository refuses to produce</td></tr>
+</tbody></table>
+<div class="note warn"><b>Why this exits 0 and not 1.</b> &ldquo;These two catalogues are the same lines&rdquo; is a finding about the data, so it is committed as a report with the overlap that establishes it (<code>data/evidence/xcat/transfer_report.json</code>, input sha256s included). A genuinely broken B raster &mdash; under <code>--min-b-all-px</code> 1,000 in-footprint pixels, i.e. empty, misaligned or miscoded &mdash; still fails the run and writes nothing, so a defect can never masquerade as a result.</div>
+<p><b>What this closes.</b> Rules &sect;3.3 says the scored faults are a <i>new</i> expert set, and
+&sect;11 item 1 of the executive summary asked for a prior on recall against it. That prior cannot
+come from a second Quaternary catalogue: none is independent of these labels, and that is now
+measured rather than argued. The SGMC proxy population
+(<code>data/evidence/proxy/proxy_catalogue.tif</code>, 61,664 code-2 px, 24.94% already covered by
+the labels) remains the only available surrogate for &ldquo;faults the labels lack&rdquo;, with its
+structural weakness intact &mdash; pre-Quaternary bedrock structure digitised from state geologic
+maps, not an expert interpretation of the GeoDAWN geophysics. Any future candidate catalogue must be
+checked for disjointness with <code>scripts/build_proxy_catalogue.py</code> <b>before</b> a transfer
+number is quoted.</p>
+<h2>What the numbers mean</h2>
+<ul>
+<li><b>DTI shaped &gt; DTI raw</b> on every run so far — the floor-plus-thinning step consistently
+    helps, exactly as the metric algebra predicts.</li>
+<li><b>FP_w dominates.</b> The smoke model emits far too much diffuse mass. This is the single
+    biggest lever available, and it is an <em>output shaping</em> problem as much as a modelling one.</li>
+<li><b>Local scores are optimistic.</b> They are computed against the labels used in training and are
+    not the private test set.</li>
+</ul>
+
+<h2>Next steps, in priority order</h2>
+<ol>
+<li><b>Optimise for the scored universe, not the catalogue.</b> The scored faults are missing from
+    <code>labels.tif</code>, so model selection, shaping calibration and fold weighting must be anchored
+    on <code>src/discovery.py</code> diagnostics plus a spatial-block hold-out instead of catalogue DTI.
+    This is a measurement-protocol change before it is a modelling change.</li>
+<li><b>Parallel 6-fold ensemble on CPU runners</b> — implemented as the
+    <em>Train MC ensemble</em> workflow (<code>configs/config_ci_ensemble.yaml</code>:
+    UNet++ / DeepLabV3+ / U-Net × resnet34 at patch 256, 8-way TTA, pooled shaping calibration).
+    The first full run is the current frontier until a GPU exists.</li>
+<li><b>GPU training at full capacity</b> — <code>configs/config.yaml</code> (EfficientNet-B5, 10 MC
+    splits, 60 epochs, 4 architectures) remains the config to move to; a 24 GB card turns the
+    ~4 h CPU profile into under an hour and roughly doubles fold count.</li>
+<li><b>1 m DEM derivatives</b> from the 716 confirmed tiles — lineament and scarp signal at 100 m is
+    the most direct physical evidence of surface faulting (code ready:
+    <code>src/external_data.py</code>, <code>scripts/download_dem_tiles.py</code>).</li>
+<li><b>Frangi line-enhancement A/B</b> on the blended map — proposed in <code>SUGGESTIONS.md</code>,
+    not yet measured.</li>
+<li><b>Self-training with SGMC pseudo-labels</b> — built and in flight 2026-09-19: fold 0 trained
+    with the 61,664 px of SGMC trace the labels do not contain as training-window label mass,
+    measured under the same spatial block holdout and paired against the no-pseudo baseline
+    (<code>.github/workflows/pseudo-label.yml</code>, <code>configs/config_pseudo_labels.yaml</code>).
+    The held-out arm is the leakage-safe reading.</li>
+</ol>
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

@@ -1,0 +1,41 @@
+# Cross-catalogue parameters (read by .github/workflows/cross-catalogue.yml, job `params`).
+#
+# 2026-09-18 (session 16) - FIRST FIRE.
+#
+# LAYER        21 = "National Database" (polyline, whole nation in one query).  Layer 22 is
+#              "Fault Areas" (polygon): rasterising polygons would not be a fault trace, and
+#              scripts/fetch_qfaults.py refuses any layer whose geometryType is not
+#              esriGeometryPolyline.
+# PAGE_SIZE    1000, capped at run time by the service's maxRecordCount (2000).  Asking for more
+#              than maxRecordCount silently truncates every page, which is exactly the failure the
+#              integrity gate exists to catch - so the script caps it and records the value used.
+# PAD_DEG      0.0: the envelope is the footprint's own, computed from data/labels.tif.  Padding
+#              would pull in traces outside the survey area, where no legal submission may emit
+#              (NaN outside the footprint), inflating B-only with pixels that can never be scored.
+# WIDTHS       0,1,2,3,4,6 px.  Deliberately narrower than the proxy sweep's 0..20: widening was
+#              monotonically harmful on the proxy population (0.0999 -> 0.0670), and the question
+#              here is whether A's traces ADD to the model, not how wide to make them.
+# A_CODES      2 = the catalogue-A traces the training labels do NOT already contain.  Emitting
+#              code 1 would re-emit the catalogue the model was trained on and measure nothing.
+# MIN_UNION_GAIN / MIN_BOOTSTRAP_PROB
+#              PRE-REGISTERED before the first run: the union must beat the model alone by > 0.01
+#              DTI against B-only AND the paired block bootstrap must put P(union > model) >= 0.95.
+#              These are the same margins the emission decision uses, so a "yes" here means the
+#              same thing a "yes" there means.  They are not to be tuned after seeing the result -
+#              if the measurement lands near the margin, the honest output is "DO NOT ADOPT".
+# SUBMISSION   the committed adopted artifact, so the union test is against what would actually ship.
+#              Set to empty to measure catalogue A alone (the union is then reported NOT MEASURABLE).
+# SKIP_FETCH   0: fetch fresh.  Set to 1 only to re-run the transfer job against the committed
+#              catalogue-B raster without re-querying the service.
+LAYER=21
+PAGE_SIZE=1000
+PAD_DEG=0.0
+WIDTHS=0,1,2,3,4,6
+A_CODES=2
+BOOTSTRAPS=1000
+SEED=0
+MIN_UNION_GAIN=0.01
+MIN_BOOTSTRAP_PROB=0.95
+SUBMISSION=data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif
+SKIP_FETCH=0
+SKIP_TRANSFER=0

@@ -1,0 +1,86 @@
+pseudo-label
+
+# 2026-09-19 (session 18): first fire - fold 0 with SGMC pseudo labels, seed 46.
+#
+# WHY: the scored faults are NEW (rules 1.1/3.3), so the labels are a lower bound on the
+# truth and external fault catalogues are the only allowed extra signal (problem page
+# #external-datasets).  The QFaults transfer attempt was refused on a total overlap with the
+# labels; the SGMC proxy's code-2 population (61,664 px of mapped trace the labels do NOT
+# contain) is independent of the labels by construction, so this is the only remaining
+# external-catalogue route.
+#
+# WHAT THIS FIRE DOES: trains fold 0 (configs/config_pseudo_labels.yaml = the block-holdout
+# config plus the pseudo pixels as training-window label mass, weight 1.0, seed 46 = the
+# baseline's seed) and scores the raw probability field on fold 0's HELD-OUT blocks with the
+# same policy (floor 0.1, w0), then paired-bootstraps it against the committed no-pseudo
+# baseline (data/evidence/block_holdout/fold0_heldout.json: held-out proxy DTI 0.0806
+# [0.0586, 0.1021]).  The pseudo model never saw those blocks' pseudo pixels (training
+# windows only - src/dataset.py::make_patches), so a gain on the held-out blocks is
+# generalisation of the SGMC-mapped fault style, not label leakage.
+#
+# NO SHIPPING DECISION IS MADE HERE: a pseudo-labelled ensemble reaches the leaderboard only
+# through the field-selection gate (docs/FIELD_SELECTION_RULE.md) as a new reblend.yml
+# RUN_ID with measured R3.  This fire produces the measurement such an adoption would need.
+#
+# Parameters: .github/triggers/pseudo-label-params
+
+# 2026-09-19 (session 19): SECOND fire, same parameters - the workflow that measures them changed.
+#
+# WHY AGAIN: the first fire (above) landed fold 0 on the two COMPONENT populations only:
+# proxy-only +0.1036 [P=0.999] and catalogue -0.0874 [P=0.001] on the held-out blocks
+# (data/evidence/pseudo_labels/fold0_paired_vs_baseline.json).  Those two numbers point in
+# opposite directions, so neither can settle anything, and the private leaderboard scores a
+# population that contains BOTH kinds of fault.  The union is the only population on which the
+# question "does the SGMC signal add detection or move it between fault kinds?" has one answer.
+# FP_w is a sum over PREDICTION pixels, so the union's DTI cannot be inferred from the two
+# components - it has to be scored from the rasters.  The first fire's artifact did not carry
+# outputs/prob_raw.tif, so its pseudo arm cannot be re-scored; this fire fixes the artifact list
+# and measures the union on both arms.
+#
+# WHAT IS NEW IN THE WORKFLOW SINCE THE FIRST FIRE
+#   * --combined-population on the pseudo arm's scoring (both scopes);
+#   * the baseline arm's raw field is downloaded from run 35413207736's artifact
+#     block-holdout-fold-0 and re-scored on the union AFTER its sha256 is checked against the
+#     one its committed report recorded (BASELINE_RUN_ID) - no second training run;
+#   * scripts/read_landed_reports.py --fold K --strict recomposes the whole contrast from the
+#     committed per-block rows and FAILS the run if it disagrees with the inline bootstrap;
+#   * the artifact now carries outputs/prob_raw.tif + outputs/manifest.json, so any later
+#     population question about this arm is a download, not a retrain;
+#   * scripts/push_evidence.sh replaces the bare pull --rebase + push, because a block-holdout
+#     fire triggered by the same push rewrites the same derived fold_gap_summary.json.
+#
+# WHAT WOULD CHANGE THE ANSWER: a positive union contrast on the held-out blocks with
+# P(pseudo > baseline) >= 0.95 would mean the signal adds detection on the population the
+# leaderboard actually scores.  The pre-registered shipping thresholds are unchanged
+# (docs/FIELD_SELECTION_RULE.md): the union contrast must clear 0.95 / +0.010 before a
+# pseudo-labelled field may even be proposed to the field-selection gate.  Nothing here ships.
+
+# 2026-09-24 (session 24): THIRD fire - fold 1 with SGMC pseudo labels, seed 46.
+#
+# WHY NOW: the pooled reader (scripts/read_landed_reports.py --pool, built session 22) is the
+# verdict mechanism for item 7, and it marks a pool with <12 resampling units COARSE /
+# POOL_POSITIVE_BUT_UNDER_POWERED.  Fold 0 alone gives 7 units (8 held-out blocks, one not
+# scoreable in the combined scope); fold 1's held-out scope has 9 scoreable blocks
+# (data/evidence/block_holdout/fold_gap_summary.json), so fold 0 + fold 1 (>= 15 units) should
+# already cross the 12-unit bar.  Time box: the baseline arms' raw fields live on run
+# 35451858112's artifacts with 14-day retention from 2026-09-19 - until ~2026-10-03 (nine days
+# from this fire), after which every pseudo-vs-baseline contrast on the combined population for
+# those folds would cost a second 300-minute training run instead of a download.
+#
+# WHAT THIS FIRE DOES: trains fold 1 (configs/config_pseudo_labels.yaml, mc_id/block_fold=1,
+# seed 46 = the baseline's seed, pseudo weight 1.0) and scores the raw field on fold 1's
+# HELD-OUT blocks and its complement, on all three truth populations (--combined-population);
+# downloads the no-pseudo baseline field from run 35451858112's artifact block-holdout-fold-1,
+# verifies its sha256 against the committed report before re-scoring it (the paired contrast
+# needs both arms on the combined population, and FP_w is not decomposable - it must be scored
+# from the rasters); cross-checks with scripts/read_landed_reports.py --fold 1 --strict and
+# refreshes the pooled file (--pool); commits the evidence.  NO SHIPPING DECISION: adoption
+# still goes through docs/FIELD_SELECTION_RULE.md as a new reblend.yml RUN_ID.
+#
+# WHY SINGLE-FOLD AGAIN (not 1,2,3 at once): pseudo-label.yml trains ONE fold per run and its
+# concurrency group (cancel-in-progress: true) cancels a second fire while the first runs.
+# Folding 1,2,3 into one matrix run is a workflow rewrite with its own risk; the established
+# path is a params edit + trigger bump per fold, and fold 1 is the one that crosses the pool's
+# unit bar.  Folds 2-3 fire the same way once this run lands.
+#
+# Parameters: .github/triggers/pseudo-label-params (FOLD=1, BASELINE_RUN_ID=35451858112)

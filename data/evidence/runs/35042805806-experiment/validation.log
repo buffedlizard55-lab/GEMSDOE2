@@ -1,0 +1,15 @@
+Validating submission.tif
+  Width: 3292, Height: 3730, Count: 1, Dtype: ('float32',), CRS: EPSG:32611, Res: (100.0, 100.0), Nodata: None
+  Data min: 0.0000, max: 1.0000, mean: 0.0042, nan%: 57.93%
+  ✓ CRS EPSG:32611
+  ✓ Resolution 100m
+  ✓ Single band
+  ✓ Dtype float32
+  ✓ Values in [0,1] (min 0.0000 max 1.0000)
+  ✓ Size matches sample 3292x3730
+  ✓ Transform matches sample
+  ✓ Size matches training_features
+  i NaN fraction 57.93% (NaN is expected outside the GeoDAWN footprint)
+
+✅ Validation PASSED - Ready for submission!
+Next: Upload to https://www.drivendata.org/competitions/306/competition-doe-gems/ via 'Submit' button

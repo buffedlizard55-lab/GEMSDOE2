@@ -1,0 +1,6 @@
+loaded 6 fold(s): ['folds/fold-0', 'folds/fold-1', 'folds/fold-2', 'folds/fold-3', 'folds/fold-4', 'folds/fold-5']
+pooled shaping: t0=0.470 thin=True -> mean held-out DTI 0.1903 (unshaped 0.1560)
+wrote submission.tif  386018 B sha256=a5ae61d572b0cd95  nonzero=21492 finite=5165852/12279160 mass 575330 -> 21492  tiled=True blocks=[[256, 256]]
+informational DTI vs known faults = 0.1387 (blanket-ones floor 0.0246)
+discovery vs known catalog: novel_fraction=0.684  candidate_new(>0.5)=6090 px in 617 components
+wrote blend_report.json

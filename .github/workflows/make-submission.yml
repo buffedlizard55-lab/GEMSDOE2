@@ -1,0 +1,344 @@
+name: Generate submission .tif (no GPU)
+
+# =============================================================================
+# WHY THIS WORKFLOW EXISTS
+#
+# The competition needs one artefact: a single-band float32 GeoTIFF on the training grid. The
+# repository already knows how to make one four ways (docs/how_to_submit.html routes A-E), but each
+# of them sits behind a different prerequisite - a GPU, a trained ensemble's runner artefacts, a
+# Python environment, or a `curl` of a committed file. What was missing is the boring one: a button
+# that a person with nothing installed can press, on any machine, and receive a validated
+# `submission.tif` they can upload this minute.
+#
+# So this workflow does the shortest honest path and nothing else:
+#
+#   * `route: adopted`  - take the committed artifact (the 11-fold blend with the adopted emission
+#                         policy) and re-prove it on a clean machine: hash, format gate, payload
+#                         consistency for the site's in-browser generator. Minutes, no training.
+#   * `route: baseline` - run scripts/baseline_submission.py on the official rasters (CPU, torch-free,
+#                         ≈ 5 min measured on 2 vCPU) and validate what it writes. A floor, not a
+#                         contender - its own report refuses to claim competitiveness, and this
+#                         workflow does not either.
+#   * `route: both`     - both, and upload each as its own artefact.
+#
+# The data comes from `data/bridge/` (sha256-pinned parts committed in this repo), so this job needs
+# no DrivenData login and no Dropbox reachability. The .tif is delivered as a workflow ARTIFACT; the
+# measurements are committed as `data/evidence/make_submission/<run>.json` (bytes never are, beyond
+# the ones already pinned in `data/evidence/` - a 569 KB raster in git per run is how a repository
+# drowns).
+#
+# WHAT THIS WORKFLOW DOES NOT DO
+#   * It does not upload anything to DrivenData. Enrolment, the upload click and the leaderboard are
+#     human-only (rules §3.1/§3.2); see the HUMAN gate on docs/how_to_submit.html.
+#   * It does not claim a score. The only unbiased number in this project is the one the platform
+#     returns after a human uploads.
+#   * It does not select a model. It emits the policy that is already adopted, or the baseline that
+#     is already scripted.
+#
+# GATE: every step runs under `set -euo pipefail` and `scripts/validate_submission.py` exits
+# non-zero on a format break, so a green job means a file that passed the repository's own gate -
+# the failure mode that cost run 35042805806 its submission (a masked crash plus a 110-byte stub)
+# cannot repeat here quietly.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      route:
+        description: "which file to produce"
+        type: choice
+        options: [adopted, baseline, both]
+        default: adopted
+      package:
+        description: "container to hand back (.zip holds exactly one GeoTIFF, as the platform allows)"
+        type: choice
+        options: [tif, zip, both]
+        default: both
+      rebuild_payload:
+        description: "rebuild docs/submission_payload before checking it (only if the payload is intentionally stale)"
+        type: boolean
+        default: false
+  push:
+    branches: ["main", "arena/**"]
+    paths: [".github/triggers/make-submission"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: make-submission
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      ROUTE: ${{ github.event.inputs.route || 'adopted' }}
+      PACKAGE: ${{ github.event.inputs.package || 'both' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+          df -h /
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install the CPU dependency set
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          # No torch on purpose: the baseline route is torch-free by design, and a 900 MB wheel that
+          # nothing here imports is a way to make a "no GPU needed" claim dishonest.
+          python -m pip install --quiet numpy scipy rasterio scikit-image scikit-learn pyyaml
+          python - <<'PY'
+          import numpy, rasterio, skimage, sklearn
+          print(f"numpy {numpy.__version__} rasterio {rasterio.__version__} "
+                f"skimage {skimage.__version__} sklearn {sklearn.__version__}")
+          PY
+
+      - name: Node version (the site's generator is judged with the same JS the page loads)
+        run: node --version
+
+      - name: Place the official rasters from the pinned git bridge
+        run: |
+          set -euo pipefail
+          python scripts/assemble_data_bridge.py
+          python scripts/prepare_data.py
+
+      - name: Route A - re-hash and re-validate the adopted artifact
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          if [ "$ROUTE" = baseline ]; then
+            echo "route=$ROUTE: the adopted artifact is not being shipped by this run"; exit 0
+          fi
+          ART=data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif
+          test -f "$ART" || { echo "MISSING $ART (it is committed; a shallow checkout would not have it)"; exit 1; }
+          cp -f "$ART" out/submission.tif
+          sha256sum out/submission.tif | tee out/submission.sha256
+          # the committed sidecar must agree, or the artifact changed underneath the site
+          recorded=$(awk '{print $1}' "$ART".sha256 2>/dev/null || echo "")
+          actual=$(sha256sum "$ART" | cut -d" " -f1)
+          if [ -n "$recorded" ] && [ "$recorded" != "$actual" ]; then
+            echo "::error title=hash mismatch::the committed artifact no longer matches its own sidecar"; exit 1
+          fi
+          # The status is recorded BEFORE it is re-raised, so the evidence file exists even when the
+          # gate fails (a green job that never wrote its measurement is the failure mode here).
+          st=0
+          python scripts/validate_submission.py --pred out/submission.tif \
+            --sample data/sample_submission.tif --train data/training_features.tif | tee out/validation.log || st=$?
+          echo "$st" > out/validation.rc
+          test "$st" -eq 0
+          # and the runner-side gate on this module's own contract (same invariant, JSON verdict)
+          python -m src.submission_io validate-conformant out/submission.tif
+
+      - name: Route C - CPU-only classifier (trains on the official bands, no GPU, no torch)
+        if: ${{ env.ROUTE == 'baseline' || env.ROUTE == 'both' }}
+        run: |
+          set -euo pipefail
+          mkdir -p outputs/baseline
+          python scripts/baseline_submission.py --out-dir outputs/baseline --out outputs/baseline/submission.tif 2>&1 \
+            | tr '\r' '\n' | tee out/baseline.log
+          test -s outputs/baseline/submission.tif || { echo "the baseline wrote no raster"; exit 1; }
+
+      - name: Validate whatever the baseline produced
+        if: ${{ env.ROUTE == 'baseline' || env.ROUTE == 'both' }}
+        run: |
+          set -euo pipefail
+          cp -f outputs/baseline/submission.tif out/baseline.tif
+          sha256sum out/baseline.tif | tee out/baseline.sha256
+          st=0
+          python scripts/validate_submission.py --pred out/baseline.tif \
+            --sample data/sample_submission.tif --train data/training_features.tif | tee out/baseline_validation.log || st=$?
+          echo "$st" > out/baseline_validation.rc
+          test "$st" -eq 0
+          python -m src.submission_io validate-conformant out/baseline.tif
+
+      - name: Site payload consistency (the in-browser generator on docs/how_to_submit.html)
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event.inputs.rebuild_payload }}" = "true" ]; then
+            python scripts/build_submission_payload.py
+          fi
+          # --check is the drift gate: the payload the page ships must still reproduce the artifact.
+          # Exit statuses are the evidence, never a grep of the scripts' prose: an earlier version
+          # looked for the word "matches" in the output, and the script says "reproduce", so a
+          # perfectly good payload was reported as payload_check=false by run 35805002447.
+          st=0
+          python scripts/build_submission_payload.py --check 2>&1 | tee out/payload_check.log || st=$?
+          echo "$st" > out/payload_check.rc
+          # and the generator itself, executed headlessly, judged by rasterio and by this repo's gate
+          gs=0
+          python scripts/check_site_generator.py --out data/evidence/site_generator.json 2>&1 \
+            | tee out/generator_check.log | tail -12 || gs=$?
+          echo "$gs" > out/generator_check.rc
+          cp -f data/evidence/site_generator.json out/site_generator.json
+          test "$st" -eq 0 -a "$gs" -eq 0
+
+      - name: Rebuild the site pages (fresh sha + evidence so Pages never ships stale links)
+        run: |
+          set -euo pipefail
+          # Runs AFTER check_site_generator (previous step) so the pages embed this run's
+          # evidence, and BEFORE the measurement commit so docs/ ships in the same push.
+          python scripts/build_site.py | tail -4
+
+      - name: Package the container the submit dialog accepts
+        run: |
+          set -euo pipefail
+          # Paths are given relative to the repo root because scripts/package_submission.py resolves
+          # them against ROOT, not against the shell's cwd - a `cd out` here would send it looking for
+          # /submission.tif and the step would die on a MISSING error that says nothing about why.
+          if [ "$PACKAGE" = tif ]; then
+            echo "package=tif: no archive written (the dialog accepts the .tif alone)"
+          else
+            python scripts/package_submission.py --tif out/submission.tif --out out/submission.zip \
+              --json > out/package.json
+            # the script's own exit code already proves: one member, named submission.tif, stored
+            # (no recompression), member bytes equal to the .tif, GDAL-readable once extracted, and
+            # byte-identical when re-packaged. No `|| true` here: that is how run 35042805806 shipped
+            # a stub.
+            python scripts/package_submission.py --tif out/submission.tif --out out/submission.zip --check
+          fi
+          ls -la out/
+
+      - name: Refuse to publish a run that produced nothing
+        run: |
+          set -euo pipefail
+          test -s out/submission.tif || { echo "::error title=no artefact::out/submission.tif is missing or empty"; exit 1; }
+          SIZE=$(stat -c%s out/submission.tif)
+          # 110-byte GDAL stubs are the documented failure mode of run 35042805806; anything under
+          # 100 KB on a 3292x3730 grid is a stub, not a prediction.
+          if [ "$SIZE" -lt 100000 ]; then
+            echo "::error title=suspicious size::submission.tif is $SIZE bytes - too small to be the grid"; exit 1
+          fi
+          echo "submission.tif: $SIZE bytes"
+
+      - name: Job summary (the sha256 to check after download, and the note to paste)
+        if: always()
+        run: |
+          set -uo pipefail
+          SHA=$(sha256sum out/submission.tif 2>/dev/null | cut -d" " -f1 || echo "")
+          BYTES=$(stat -c%s out/submission.tif 2>/dev/null || echo 0)
+          ZSHA=$(sha256sum out/submission.zip 2>/dev/null | cut -d" " -f1 || echo "")
+          ZBYTES=$(stat -c%s out/submission.zip 2>/dev/null || echo 0)
+          BSHA=$(sha256sum out/baseline.tif 2>/dev/null | cut -d" " -f1 || echo "")
+          VERDICT=$(python -c 'import json;print(json.load(open("out/site_generator.json")).get("verdict","none"))' 2>/dev/null || echo none)
+          POLICY=$(python -c 'import json;print(json.load(open("data/evidence/emission_decision.json")).get("adopted",{}).get("policy","adopted-policy"))' 2>/dev/null || echo adopted-policy)
+          {
+            echo "### Submission generated by this run"
+            echo
+            echo "| file | bytes | sha256 |"
+            echo "|---|---|---|"
+            [ "$BYTES" != "0" ] && echo "| \`out/submission.tif\` | $BYTES | \`$SHA\` |"
+            [ "$ZBYTES" != "0" ] && echo "| \`out/submission.zip\` | $ZBYTES | \`$ZSHA\` |"
+            [ -n "$BSHA" ] && echo "| \`out/baseline.tif\` | $(stat -c%s out/baseline.tif) | \`$BSHA\` |"
+            echo
+            echo "Site generator (the in-browser route, judged headlessly here): **$VERDICT**"
+            echo
+            echo "Download the artefact \`submission-run-${GITHUB_RUN_ID}\`, then re-hash it before uploading:"
+            echo
+            echo '```'
+            echo "sha256sum submission.tif    # must equal $SHA"
+            echo '```'
+            echo
+            echo "Suggested text for the dialog's optional *Note* field (its stated purpose is telling"
+            echo "entries apart; it is **not** the rules §3.2 generative-AI disclosure, which goes in the"
+            echo "submission narrative):"
+            echo
+            echo '```'
+            echo "GEMS run ${GITHUB_RUN_ID} · route ${ROUTE} · ${POLICY} · sha ${SHA:0:12}"
+            echo '```'
+            echo
+            echo "Uploading to DrivenData stays a human step (rules §3.1/§3.2: account, enrolment, click)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the measurement (not the bytes)
+        if: always()
+        run: |
+          set -uo pipefail
+          python - <<'PY'
+          import hashlib, json, os, time
+          from pathlib import Path
+
+          def h(p):
+              q = Path(p)
+              return hashlib.sha256(q.read_bytes()).hexdigest() if q.exists() and q.stat().st_size else None
+
+          def rc(p):
+              """A recorded exit status, or None when that gate never ran (route skips, early fail)."""
+              q = Path(p)
+              try:
+                  return int(q.read_text().strip())
+              except Exception:
+                  return None
+
+          def flag(p):
+              v = rc(p)
+              return None if v is None else v == 0
+
+          gen = Path("out/site_generator.json")
+          verdict = None
+          if gen.exists():
+              try:
+                  verdict = json.loads(gen.read_text()).get("verdict")
+              except Exception:
+                  verdict = "unparseable"
+          ev = Path("data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif")
+          out = dict(
+              run_id=os.environ.get("GITHUB_RUN_ID"),
+              commit=os.environ.get("GITHUB_SHA"),
+              branch=os.environ.get("GITHUB_REF_NAME"),
+              generated_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+              route=os.environ.get("ROUTE") or "adopted",
+              package=os.environ.get("PACKAGE") or "both",
+              submission_sha256=h("out/submission.tif"),
+              submission_bytes=Path("out/submission.tif").stat().st_size if Path("out/submission.tif").exists() else None,
+              zip_sha256=h("out/submission.zip"),
+              zip_bytes=Path("out/submission.zip").stat().st_size if Path("out/submission.zip").exists() else None,
+              baseline_sha256=h("out/baseline.tif"),
+              validator_passed=flag("out/validation.rc"),
+              baseline_validator_passed=flag("out/baseline_validation.rc"),
+              payload_check=flag("out/payload_check.rc"),
+              generator_check_exit=flag("out/generator_check.rc"),
+              generator_verdict=verdict,
+              committed_artifact_unchanged=(h(ev) == h("out/submission.tif")) if (ev.exists() and Path("out/submission.tif").exists()) else None,
+              note=("evidence only: the .tif itself is delivered as the run artefact, retention 90 days; "
+                    "committing one raster per run is how this repository grew to 411 MB of pinned parts"),
+          )
+          d = Path("data/evidence/make_submission")
+          d.mkdir(parents=True, exist_ok=True)
+          (d / f"{out['run_id']}.json").write_text(json.dumps(out, indent=1) + "\n")
+          print("wrote", d / f"{out['run_id']}.json")
+          PY
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/evidence/make_submission data/evidence/site_generator.json docs || true
+          git diff --cached --quiet && echo "nothing to commit" || {
+            git commit -m "make-submission: run ${GITHUB_RUN_ID} evidence + site rebuild [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload the artefacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: submission-run-${{ github.run_id }}
+          path: |
+            out/submission.tif
+            out/submission.zip
+            out/submission.sha256
+            out/baseline.tif
+            out/baseline.sha256
+            out/validation.log
+            out/baseline_validation.log
+            out/payload_check.log
+            out/site_generator.json
+            out/package.json
+            out/baseline.log
+          if-no-files-found: warn
+          retention-days: 90

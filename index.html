@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEMS Prize — working notes</title>
+<!--
+  GitHub Pages for this repository is configured with build_type "legacy" (Jekyll from the
+  repo root), which renders README.md at the site root and ignores the docs/ artifact that
+  .github/workflows/pages.yml uploads. Changing that setting needs repository-admin rights
+  that the automation token does not have.
+
+  This file is the fix that does not need those rights: under legacy Jekyll a root
+  index.html takes precedence over README.md, so the canonical URL now lands on the
+  generated, evidence-backed site in docs/.
+
+  If someone later flips Settings -> Pages -> Source to "GitHub Actions", the workflow
+  publishes docs/ directly at the root and this redirect becomes harmless.
+-->
+<link rel="canonical" href="https://buffedlizard55-lab.github.io/GEMSDOE2/docs/index.html">
+<meta http-equiv="refresh" content="0; url=./docs/index.html">
+<script>location.replace("./docs/index.html");</script>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fbfaf9;color:#1c1917;
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+  .box{text-align:center;padding:32px}
+  a{color:#b45309}
+</style>
+</head>
+<body>
+  <div class="box">
+    <p>Redirecting to the GEMS Prize working notes…</p>
+    <p><a href="./docs/index.html">Continue to the site</a></p>
+  </div>
+</body>
+</html>

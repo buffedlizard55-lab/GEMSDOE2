@@ -1,0 +1,182 @@
+{
+  "labels_source": "data/labels.tif",
+  "R_pixels": 3,
+  "alpha": 0.2,
+  "beta": 0.8,
+  "n_ground_truth": 60988,
+  "n_valid_pixels": 5167373,
+  "closed_form": "DTI = TP_w / (0.2*(TP_w + FP_w) + 0.8*|G|)   [verified against the direct computation for every row]",
+  "identity": "TP_w + FN_w = |G| exactly, for any prediction",
+  "rows": [
+    {
+      "strategy": "all zeros",
+      "dti": 0.0,
+      "TP_w": 0.0,
+      "FP_w": 0.0,
+      "FN_w": 60988.0,
+      "mass": 0.0,
+      "note": ""
+    },
+    {
+      "strategy": "all ones (blanket coverage)",
+      "dti": 0.05795496774954667,
+      "TP_w": 60988.0,
+      "FP_w": 4956731.46391616,
+      "FN_w": 0.0,
+      "mass": 5167373.0,
+      "note": "upper bound of 'predict everything'; shows the 0.8|G| floor"
+    },
+    {
+      "strategy": "uniform p=0.05",
+      "dti": 0.030812106058721,
+      "TP_w": 3049.400045439601,
+      "FP_w": 247836.57688886073,
+      "FN_w": 57938.5999545604,
+      "mass": 258368.6875,
+      "note": "uniform mass: TP and FP scale together -> DTI nearly flat in c"
+    },
+    {
+      "strategy": "uniform p=0.1",
+      "dti": 0.040891807613502945,
+      "TP_w": 6098.800090879202,
+      "FP_w": 495673.15377772145,
+      "FN_w": 54889.1999091208,
+      "mass": 516737.375,
+      "note": "uniform mass: TP and FP scale together -> DTI nearly flat in c"
+    },
+    {
+      "strategy": "uniform p=0.25",
+      "dti": 0.0508782185175224,
+      "TP_w": 15247.0,
+      "FP_w": 1239182.86597904,
+      "FN_w": 45741.0,
+      "mass": 1291843.25,
+      "note": "uniform mass: TP and FP scale together -> DTI nearly flat in c"
+    },
+    {
+      "strategy": "uniform p=0.5",
+      "dti": 0.05538700603092829,
+      "TP_w": 30494.0,
+      "FP_w": 2478365.73195808,
+      "FN_w": 30494.0,
+      "mass": 2583686.5,
+      "note": "uniform mass: TP and FP scale together -> DTI nearly flat in c"
+    },
+    {
+      "strategy": "exact known faults, p=1",
+      "dti": 0.9999999999983603,
+      "TP_w": 60988.0,
+      "FP_w": 0.0,
+      "FN_w": 0.0,
+      "mass": 60988.0,
+      "note": "what a perfect copy of the PUBLIC labels scores"
+    },
+    {
+      "strategy": "known faults dilated r=1, p=1",
+      "dti": 0.8818247628472228,
+      "TP_w": 60988.0,
+      "FP_w": 40865.66666666666,
+      "FN_w": 0.0,
+      "mass": 183585.0,
+      "note": "shows the cost of smearing: TP saturates at |G|, FP grows with area"
+    },
+    {
+      "strategy": "known faults dilated r=2, p=1",
+      "dti": 0.7329944931960123,
+      "TP_w": 60988.0,
+      "FP_w": 111079.49650403249,
+      "FN_w": 0.0,
+      "mass": 304548.0,
+      "note": "shows the cost of smearing: TP saturates at |G|, FP grows with area"
+    },
+    {
+      "strategy": "known faults dilated r=3, p=1",
+      "dti": 0.5892192545674029,
+      "TP_w": 60988.0,
+      "FP_w": 212592.30675326177,
+      "FN_w": 0.0,
+      "mass": 421926.0,
+      "note": "shows the cost of smearing: TP saturates at |G|, FP grows with area"
+    },
+    {
+      "strategy": "known faults dilated r=4, p=1",
+      "dti": 0.48379640295156384,
+      "TP_w": 60988.0,
+      "FP_w": 325366.4639161604,
+      "FN_w": 0.0,
+      "mass": 536008.0,
+      "note": "shows the cost of smearing: TP saturates at |G|, FP grows with area"
+    },
+    {
+      "strategy": "known faults dilated r=6, p=1",
+      "dti": 0.3588350663157246,
+      "TP_w": 60988.0,
+      "FP_w": 544865.4639161604,
+      "FN_w": 0.0,
+      "mass": 755507.0,
+      "note": "shows the cost of smearing: TP saturates at |G|, FP grows with area"
+    },
+    {
+      "strategy": "triangular ramp radius 3px",
+      "dti": 0.815774337954504,
+      "TP_w": 60988.0,
+      "FP_w": 68864.35472413531,
+      "FN_w": 0.0,
+      "mass": 210641.5625,
+      "note": "soft halo; compare against the hard dilation of the same radius"
+    },
+    {
+      "strategy": "triangular ramp radius 5px",
+      "dti": 0.6278737940626852,
+      "TP_w": 60988.0,
+      "FP_w": 180730.85118580644,
+      "FN_w": 0.0,
+      "mass": 350053.75,
+      "note": "soft halo; compare against the hard dilation of the same radius"
+    },
+    {
+      "strategy": "triangular ramp radius 8px",
+      "dti": 0.45566063316988187,
+      "TP_w": 60988.0,
+      "FP_w": 364286.1253257812,
+      "FN_w": 0.0,
+      "mass": 549103.5,
+      "note": "soft halo; compare against the hard dilation of the same radius"
+    },
+    {
+      "strategy": "25% of known faults, p=1",
+      "dti": 0.5549339602651738,
+      "TP_w": 30455.621640879646,
+      "FP_w": 0.0,
+      "FN_w": 30532.378359120354,
+      "mass": 15247.0,
+      "note": "DTI is roughly linear in recall -> recall is the dominant lever"
+    },
+    {
+      "strategy": "50% of known faults, p=1",
+      "dti": 0.7943103644065427,
+      "TP_w": 46074.15639474761,
+      "FP_w": 0.0,
+      "FN_w": 14913.84360525239,
+      "mass": 30494.0,
+      "note": "DTI is roughly linear in recall -> recall is the dominant lever"
+    },
+    {
+      "strategy": "75% of known faults, p=1",
+      "dti": 0.918669757472475,
+      "TP_w": 54911.34295875915,
+      "FP_w": 0.0,
+      "FN_w": 6076.657041240847,
+      "mass": 45741.0,
+      "note": "DTI is roughly linear in recall -> recall is the dominant lever"
+    }
+  ],
+  "best_strategy": "exact known faults, p=1",
+  "best_dti": 0.9999999999983603,
+  "interpretation": [
+    "TP_w and FP_w share the coefficient 0.2, so probability mass is charged the same wherever it lands; only mass that is the strongest within R of a ground-truth pixel earns credit.",
+    "TP_w per ground-truth pixel saturates at 1, so redundant mass along an already-covered fault is pure cost -> thinning/skeletonising a confident prediction raises DTI.",
+    "beta/alpha = 4, so a missed fault costs 4x a spurious one -> optimise recall first.",
+    "Blanket coverage is a non-trivial baseline any model must beat; see the 'all ones' row."
+  ]
+}

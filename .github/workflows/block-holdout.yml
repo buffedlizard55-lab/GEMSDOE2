@@ -1,0 +1,492 @@
+name: Block-holdout evaluation (per-block DTI, bootstrap CI, fold-restricted training)
+
+# =============================================================================
+# WHY THIS WORKFLOW EXISTS
+#
+# Until now every quality number in this repository was ONE global DTI with no error bar:
+# `data/evidence/proxy/eval_*.json` reports a point estimate computed on the whole 3292x3730 grid,
+# so "candidate A scores 0.0878 and candidate B scores 0.0999" carried no way to ask whether that
+# 0.012 difference is larger than the noise between 51 km regions of the survey.  A decision rule
+# built on an unbarred point estimate is how a policy gets adopted on noise.
+#
+# `scripts/block_holdout_eval.py` fixes that by scoring the SAME submission per 51.2 km block (the
+# partition src/blocks.py already uses for training) and bootstrapping over blocks:
+#
+#   job measure  - re-run the block-stratified measurement on a GitHub-hosted runner and compare it
+#                  digit-for-digit with the report the development sandbox committed.  The runner is
+#                  an independent environment (different numpy/rasterio build, different host), so
+#                  agreement is evidence the numbers are a property of the bytes and the metric, not
+#                  of one machine.  The job also re-checks the reproduction gate against the
+#                  committed proxy sweep (scripts/eval_proxy_catalogue.py output) and FAILS if the
+#                  reference policy's DTI no longer equals it.
+#   job train    - OPTIONAL (off unless TRAIN_FOLDS is set in the trigger params file).  Trains
+#                  folds with configs/config_block_holdout.yaml, i.e. training.holdout:
+#                  spatial_blocks, so whole 51 km blocks are held out with a collar of at least the
+#                  metric's R, then scores each fold's raw probability map TWICE: on the blocks that
+#                  fold never saw (--score-fold K) and on the blocks it trained on (--score-fold K
+#                  --complement).  The difference is the generalisation gap, per fold, with a
+#                  bootstrap CI - the measurement the scattered-window holdout cannot make.  Each
+#                  scope is scored on THREE truth populations (--combined-population): the
+#                  catalogue labels, the new-fault-like proxy pixels the labels do not contain, and
+#                  their disjoint union - the union is the closest available stand-in for the
+#                  private leaderboard's population, and it is what a fold's raw field is later
+#                  contrasted against (see pseudo-label.yml).  After a fold lands, the job refreshes
+#                  the DERIVED data/evidence/block_holdout/fold_gap_summary.json with
+#                  scripts/read_landed_reports.py --gaps-only.
+#
+# Egress: the competition rasters come from the sha256-pinned git bridge when it is in the tree
+# (scripts/assemble_data_bridge.py) and from the data-tab Dropbox mirrors otherwise, exactly like
+# train-ensemble.yml.  No credentials are used anywhere in this file.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      submission:
+        description: "raster to score (default: the committed adopted submission)"
+        default: "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+      score_fold:
+        description: "restrict the measurement to one fold's blocks ('' = all blocks)"
+        default: ""
+      train_folds:
+        description: "comma-separated folds to TRAIN with spatial block holdout ('' = measure only)"
+        default: ""
+      block_px:
+        description: "block edge in pixels (512 px = 51.2 km at the official 100 m resolution)"
+        default: "512"
+      folds:
+        description: "folds in the partition"
+        default: "4"
+      floors:
+        description: "floor candidates"
+        default: "0.1,0.15,0.2,0.3,0.5"
+      widths:
+        description: "emission widths (px)"
+        default: "0,1,2,3,4,6,8,12,16,20"
+      bootstraps:
+        description: "paired block-bootstrap resamples"
+        default: "2000"
+  push:
+    branches: ["arena/**", "main"]
+    paths: [".github/triggers/block-holdout"]
+
+# ---------------------------------------------------------------------------
+# WHY THERE IS A `params` JOB
+#
+# The bot token cannot call workflow_dispatch, so runs are fired by pushing
+# .github/triggers/block-holdout - and a push event carries no inputs.  A tiny first job reads the
+# committed parameter file and publishes the parameters to the other jobs (job OUTPUTS, unlike
+# $GITHUB_ENV, are usable in `${{ }}` expressions such as `matrix` and `if`).  Same pattern as
+# proxy-eval.yml, which documents the original failure.
+#
+# .github/triggers/block-holdout-params may set:
+#   SUBMISSION=<path>        raster to score (default: the committed adopted submission)
+#   SCORE_FOLD=<int>         also measure that fold's held-out blocks and its complement
+#   TRAIN_FOLDS=0,1,2,3      train those folds with spatial block holdout (default: none)
+#   BLOCK_PX / FOLDS / FLOORS / WIDTHS / BOOTSTRAPS / SEED
+#   TRAIN_SEED               seed for the training jobs (default 46 - never reuses an ensemble seed)
+# ---------------------------------------------------------------------------
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: block-holdout-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  params:
+    name: read the committed block-holdout parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      submission: ${{ steps.p.outputs.submission }}
+      score_fold: ${{ steps.p.outputs.score_fold }}
+      train_enabled: ${{ steps.p.outputs.train_enabled }}
+      folds_json: ${{ steps.p.outputs.folds_json }}
+      block_px: ${{ steps.p.outputs.block_px }}
+      folds: ${{ steps.p.outputs.folds }}
+      floors: ${{ steps.p.outputs.floors }}
+      widths: ${{ steps.p.outputs.widths }}
+      bootstraps: ${{ steps.p.outputs.bootstraps }}
+      seed: ${{ steps.p.outputs.seed }}
+      train_seed: ${{ steps.p.outputs.train_seed }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        name: parameters (submission, folds, sweep grid)
+        run: |
+          set -euo pipefail
+          SUB="${{ github.event.inputs.submission || 'data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif' }}"
+          FOLD="${{ github.event.inputs.score_fold || '' }}"
+          TRAIN="${{ github.event.inputs.train_folds || '' }}"
+          BPX="${{ github.event.inputs.block_px || '512' }}"
+          FOLDS="${{ github.event.inputs.folds || '4' }}"
+          FLOORS="${{ github.event.inputs.floors || '0.1,0.15,0.2,0.3,0.5' }}"
+          WIDTHS="${{ github.event.inputs.widths || '0,1,2,3,4,6,8,12,16,20' }}"
+          BOOT="${{ github.event.inputs.bootstraps || '2000' }}"
+          SEED="0"
+          TSEED="46"
+          F=".github/triggers/block-holdout-params"
+          if [ -f "$F" ]; then
+            echo "parameters from $F:"; tr -d '\r' < "$F" | grep -E '^[A-Z_]+=' || true
+            v () { tr -d '\r' < "$F" | sed -n "s/^$1=\(.*\)\$/\1/p" | tail -1 || true; }
+            [ -n "$(v SUBMISSION)" ]  && SUB="$(v SUBMISSION)"   || true
+            [ -n "$(v SCORE_FOLD)" ]  && FOLD="$(v SCORE_FOLD)"  || true
+            [ -n "$(v TRAIN_FOLDS)" ] && TRAIN="$(v TRAIN_FOLDS)" || true
+            [ -n "$(v BLOCK_PX)" ]    && BPX="$(v BLOCK_PX)"     || true
+            [ -n "$(v FOLDS)" ]       && FOLDS="$(v FOLDS)"      || true
+            [ -n "$(v FLOORS)" ]      && FLOORS="$(v FLOORS)"    || true
+            [ -n "$(v WIDTHS)" ]      && WIDTHS="$(v WIDTHS)"    || true
+            [ -n "$(v BOOTSTRAPS)" ]  && BOOT="$(v BOOTSTRAPS)"  || true
+            [ -n "$(v SEED)" ]        && SEED="$(v SEED)"        || true
+            [ -n "$(v TRAIN_SEED)" ]  && TSEED="$(v TRAIN_SEED)" || true
+          else
+            echo "no $F - measuring $SUB on all blocks"
+          fi
+          # matrix input: "[0,1,2,3]" from "0,1,2,3" (empty -> "[]" and the job is skipped)
+          FJ="[]"
+          ENABLED="0"
+          if [ -n "$TRAIN" ]; then
+            FJ="[$(printf '%s' "$TRAIN" | tr -d ' ')]"
+            ENABLED="1"
+          fi
+          {
+            echo "submission=$SUB"
+            echo "score_fold=$FOLD"
+            echo "train_enabled=$ENABLED"
+            echo "folds_json=$FJ"
+            echo "block_px=$BPX"
+            echo "folds=$FOLDS"
+            echo "floors=$FLOORS"
+            echo "widths=$WIDTHS"
+            echo "bootstraps=$BOOT"
+            echo "seed=$SEED"
+            echo "train_seed=$TSEED"
+          } >> "$GITHUB_OUTPUT"
+          echo "SUBMISSION=$SUB SCORE_FOLD=$FOLD TRAIN_FOLDS=$TRAIN ($FJ) BLOCK_PX=$BPX FOLDS=$FOLDS BOOTSTRAPS=$BOOT"
+
+  measure:
+    name: block-stratified measurement on a runner
+    runs-on: ubuntu-latest
+    needs: params
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/scipy/rasterio/scikit-image/pyyaml - no torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio scikit-image pyyaml
+
+      - name: Place the competition rasters (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            echo "data/bridge is in the tree - assembling locally (no network fetch, sha256-verified)"
+            python scripts/assemble_data_bridge.py
+          else
+            echo "bridge absent - downloading the data-tab Dropbox mirrors"
+            dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s "data/$2") bytes" || { echo "FAILED $2"; exit 1; }; }
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          ls -lh data/
+          sha256sum data/labels.tif data/sample_submission.tif | tee data/checksums_block_holdout.txt
+
+      - name: Score the submission per 51 km block + paired block bootstrap
+        run: |
+          set -euo pipefail
+          mkdir -p data/evidence/block_holdout
+          # --config supplies the defaults AND cross-checks that the scoring partition equals the
+          # partition configs/config_block_holdout.yaml trains against; the flags below override
+          # from the trigger params so a run can be re-parameterised without editing the config.
+          python scripts/block_holdout_eval.py \
+            --config configs/config_block_holdout.yaml \
+            --pred "${{ needs.params.outputs.submission }}" \
+            --labels data/labels.tif \
+            --proxy data/evidence/proxy/proxy_catalogue.tif \
+            --template data/sample_submission.tif \
+            --block-px "${{ needs.params.outputs.block_px }}" \
+            --folds "${{ needs.params.outputs.folds }}" \
+            --floors "${{ needs.params.outputs.floors }}" \
+            --widths "${{ needs.params.outputs.widths }}" \
+            --bootstraps "${{ needs.params.outputs.bootstraps }}" \
+            --seed "${{ needs.params.outputs.seed }}" \
+            --crosscheck-sweep data/evidence/proxy/eval_sweep-mean12.json \
+            --out data/evidence/block_holdout/runner_block_stratified.json \
+            2>&1 | tee data/evidence/block_holdout/runner_block_stratified.log
+
+      - name: Also measure one fold's held-out blocks and its complement
+        if: ${{ needs.params.outputs.score_fold != '' }}
+        run: |
+          set -euo pipefail
+          K="${{ needs.params.outputs.score_fold }}"
+          for MODE in "" "--complement"; do
+            TAG=$([ -n "$MODE" ] && echo complement || echo heldout)
+            python scripts/block_holdout_eval.py \
+              --config configs/config_block_holdout.yaml \
+              --pred "${{ needs.params.outputs.submission }}" \
+              --labels data/labels.tif \
+              --proxy data/evidence/proxy/proxy_catalogue.tif \
+              --template data/sample_submission.tif \
+              --block-px "${{ needs.params.outputs.block_px }}" \
+              --folds "${{ needs.params.outputs.folds }}" \
+              --floors "${{ needs.params.outputs.floors }}" \
+              --widths "${{ needs.params.outputs.widths }}" \
+              --bootstraps "${{ needs.params.outputs.bootstraps }}" \
+              --seed "${{ needs.params.outputs.seed }}" \
+              --score-fold "$K" $MODE \
+              --crosscheck-sweep "" \
+              --out "data/evidence/block_holdout/runner_fold${K}_${TAG}.json" \
+              2>&1 | tee "data/evidence/block_holdout/runner_fold${K}_${TAG}.log"
+          done
+
+      - name: Compare the runner report with the report the sandbox committed
+        run: |
+          set -euo pipefail
+          # The whole point of running this on a runner: an INDEPENDENT environment must reproduce
+          # the committed numbers.  Any difference beyond 1e-6 on the reference policy's DTI, or a
+          # different support size, fails the job - a metric that moves between machines is not a
+          # metric anyone can build a decision on.
+          python - <<'PY' | tee data/evidence/block_holdout/sandbox_vs_runner.log
+          import json, pathlib, sys
+          run = pathlib.Path("data/evidence/block_holdout/runner_block_stratified.json")
+          box = pathlib.Path("data/evidence/block_holdout/block_stratified.json")
+          r = json.loads(run.read_text())
+          if not box.exists():
+              print(f"NOTE: {box} is not committed - nothing to compare against on this run")
+              print("runner reference:", json.dumps(r["verdict"], indent=1)[:1200])
+              sys.exit(0)
+          b = json.loads(box.read_text())
+          rows = []
+          def ref(d):
+              lab = d["verdict"]["reference_candidate"]
+              return next(c for c in d["populations"]["proxy_only"]["candidates"] if c["label"] == lab)
+          rr, br = ref(r), ref(b)
+          checks = [
+              ("reference_candidate", r["verdict"]["reference_candidate"], b["verdict"]["reference_candidate"], None),
+              ("proxy DTI", rr["global_dti"], br["global_dti"], 1e-6),
+              ("TP_w", rr["TP_w"], br["TP_w"], 1e-3),
+              ("FP_w", rr["FP_w"], br["FP_w"], 1e-3),
+              ("FN_w", rr["FN_w"], br["FN_w"], 1e-3),
+              ("emitted px", rr["pred_px"], br["pred_px"], 0),
+              ("scoreable blocks", r["blocks"]["n_blocks_scoreable"], b["blocks"]["n_blocks_scoreable"], 0),
+              ("footprint px", r["footprint"]["px"], b["footprint"]["px"], 0),
+              ("bootstrap CI95 low", r["bootstrap"]["proxy_only"][rr["label"]]["dti_ci95"][0],
+                                     b["bootstrap"]["proxy_only"][br["label"]]["dti_ci95"][0], 5e-3),
+              ("bootstrap CI95 high", r["bootstrap"]["proxy_only"][rr["label"]]["dti_ci95"][1],
+                                      b["bootstrap"]["proxy_only"][br["label"]]["dti_ci95"][1], 5e-3),
+          ]
+          bad = []
+          print(f"{'quantity':<20} {'runner':>16} {'sandbox':>16}  ok")
+          for name, rv, bv, tol in checks:
+              if tol is None:
+                  ok = rv == bv
+              else:
+                  ok = abs(float(rv) - float(bv)) <= tol
+              print(f"{name:<20} {str(rv):>16} {str(bv):>16}  {'yes' if ok else 'NO'}")
+              rows.append(dict(quantity=name, runner=rv, sandbox=bv, tolerance=tol, agree=bool(ok)))
+              if not ok:
+                  bad.append(name)
+          out = pathlib.Path("data/evidence/block_holdout/sandbox_vs_runner.json")
+          out.write_text(json.dumps(dict(
+              purpose=("the runner is an independent environment; agreement on the reference "
+                       "policy's DTI, its three metric components, the support size and the "
+                       "bootstrap interval is what makes the committed numbers reproducible "
+                       "rather than machine-specific"),
+              runner_report=str(run), sandbox_report=str(box),
+              runner_generated_utc=r.get("generated_utc"), sandbox_generated_utc=b.get("generated_utc"),
+              checks=rows, agree=(not bad), disagreements=bad), indent=1))
+          print("\nagreement:", "YES - every quantity matches" if not bad else f"NO - {bad}")
+          if bad:
+              sys.exit(1)
+          PY
+
+      - name: Commit the block-holdout evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/block_holdout
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" || true
+          # this job and the fold jobs of the same run push at the same time
+          bash scripts/push_evidence.sh \
+            "evidence(block-holdout): per-block DTI + bootstrap CI measured on a runner [skip ci]"
+
+      - name: Upload block-holdout artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: block-holdout-${{ github.run_id }}
+          path: data/evidence/block_holdout/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  train:
+    name: fold ${{ matrix.fold }} trained with whole blocks held out
+    runs-on: ubuntu-latest
+    needs: params
+    if: ${{ needs.params.outputs.train_enabled == '1' }}
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        fold: ${{ fromJSON(needs.params.outputs.folds_json) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (CPU torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet -r requirements.txt
+
+      - name: Place competition data (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            python scripts/assemble_data_bridge.py
+          else
+            dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s "data/$2") bytes" || { echo "FAILED $2"; exit 1; }; }
+            dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          sha256sum data/*.tif | tee data/checksums.txt
+
+      - name: Pre-flight data validation
+        run: python scripts/prepare_data.py
+
+      - name: Train fold ${{ matrix.fold }} with spatial block holdout
+        run: |
+          # training.mc_id doubles as the block fold (src/train.py: block_fold = mc_id %
+          # block_folds unless training.block_fold is set), so mc_id=${{ matrix.fold }} with
+          # block_folds=${{ needs.params.outputs.folds }} holds out exactly fold
+          # ${{ matrix.fold }} - which is the fold the scoring step below restricts to.
+          set -euo pipefail
+          python -m src.train --config configs/config_block_holdout.yaml \
+            --override training.mc_id=${{ matrix.fold }} \
+                       training.block_fold=${{ matrix.fold }} \
+                       training.block_px=${{ needs.params.outputs.block_px }} \
+                       training.block_folds=${{ needs.params.outputs.folds }} \
+                       training.seed=${{ needs.params.outputs.train_seed }} 2>&1 \
+            | tr '\r' '\n' | tee train_block_holdout.log
+
+      - name: Inference (raw, no shaping) -> probability map
+        run: |
+          set -euo pipefail
+          python -m src.inference --config configs/config_block_holdout.yaml --raw \
+            --out outputs/prob_raw.tif 2>&1 | tr '\r' '\n' | tee inference_block_holdout.log
+
+      - name: Score the fold on the blocks it never saw, and on the blocks it trained on
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet scikit-image
+          mkdir -p data/evidence/block_holdout
+          for MODE in "" "--complement"; do
+            TAG=$([ -n "$MODE" ] && echo complement || echo heldout)
+            python scripts/block_holdout_eval.py \
+              --config configs/config_block_holdout.yaml \
+              --pred outputs/prob_raw.tif \
+              --labels data/labels.tif \
+              --proxy data/evidence/proxy/proxy_catalogue.tif \
+              --template data/sample_submission.tif \
+              --score-fold ${{ matrix.fold }} $MODE \
+              --combined-population \
+              --crosscheck-sweep "" \
+              --out "data/evidence/block_holdout/fold${{ matrix.fold }}_${TAG}.json" \
+              2>&1 | tee "data/evidence/block_holdout/fold${{ matrix.fold }}_${TAG}.log"
+          done
+          python - <<'PY'
+          import json, pathlib
+          K = "${{ matrix.fold }}"
+          d = pathlib.Path("data/evidence/block_holdout")
+          held = json.loads((d / f"fold{K}_heldout.json").read_text())
+          comp = json.loads((d / f"fold{K}_complement.json").read_text())
+          def ref(r):
+              lab = r["verdict"]["reference_candidate"]
+              c = next(x for x in r["populations"]["proxy_only"]["candidates"] if x["label"] == lab)
+              return lab, c["global_dti"], r["bootstrap"]["proxy_only"][lab]["dti_ci95"]
+          hl, hd, hci = ref(held)
+          cl, cd, cci = ref(comp)
+          gap = cd - hd
+          (d / f"fold{K}_generalisation_gap.json").write_text(json.dumps(dict(
+              fold=int(K), candidate=hl,
+              held_out_dti=hd, held_out_ci95=hci, held_out_blocks=held["restriction"]["blocks_scoreable"],
+              trained_on_dti=cd, trained_on_ci95=cci, trained_on_blocks=comp["restriction"]["blocks_scoreable"],
+              generalisation_gap=round(gap, 6),
+              reading=("trained_on minus held_out on the same candidate and the same metric: a "
+                       "positive gap is memorisation of continuous structure, ~0 means the model "
+                       "transfers to 51 km blocks it never saw"),
+              caveat=("both numbers are measured against the new-fault-like proxy population; the "
+                      "catalogue population is reported in the same files under populations.labels"),
+          ), indent=1))
+          print(f"fold {K}: held-out DTI {hd:.4f} {hci} | trained-on DTI {cd:.4f} {cci} | gap {gap:+.4f}")
+          PY
+
+      - name: Keep the trainer's logs when the fold fails
+        if: failure()
+        run: |
+          set +e
+          ls -la outputs || true
+          tail -n 120 train_block_holdout.log || true
+          tail -n 120 inference_block_holdout.log || true
+
+      - name: Commit the per-fold block-holdout evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/block_holdout
+          K=${{ matrix.fold }}
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # fold_gap_summary.json is DERIVED from every committed fold*_generalisation_gap.json, so
+          # the job that lands a fold is the job that refreshes it: scripts/read_landed_reports.py
+          # recomposes the per-fold gaps from the committed rows (it never re-scores a raster),
+          # counts the folds that have landed and names the ones still missing.  --gaps-only skips
+          # the paired pseudo-label contrast, which needs an arm this workflow does not produce.
+          python scripts/read_landed_reports.py --gaps-only --quiet \
+            || echo "::warning::the fold-gap summary could not be refreshed from the committed folds"
+          git add -f "$D"/fold${K}_*.json "$D"/fold${K}_*.log "$D"/fold_gap_summary.json || true
+          # three folds push in parallel and all of them touch the summary, so the push retries and
+          # REGENERATES the derived file from the merged tree instead of resolving a conflict
+          bash scripts/push_evidence.sh \
+            "evidence(block-holdout): fold $K generalisation gap [skip ci]"
+
+      - name: Upload fold artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: block-holdout-fold-${{ matrix.fold }}
+          path: |
+            outputs/prob_raw.tif
+            outputs/manifest.json
+            outputs/heldout_mc*.npz
+            data/evidence/block_holdout/fold${{ matrix.fold }}_*
+            data/evidence/block_holdout/fold_gap_summary.json
+            train_block_holdout.log
+            inference_block_holdout.log
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,1179 @@
+{
+ "created": "2026-09-14T17:48:43Z",
+ "config": {
+  "data": {
+   "feature_path": "data/training_features.tif",
+   "label_path": "data/labels.tif",
+   "sample_submission_path": "data/sample_submission.tif",
+   "external_dir": "data/external",
+   "output_dir": "outputs",
+   "norm_mode": "clip_zscore",
+   "clip_percentile": [
+    1.0,
+    99.0
+   ],
+   "use_external_dem": false,
+   "use_ingenious_extra": false
+  },
+  "training": {
+   "patch_size": 128,
+   "train_step": 128,
+   "test_proportion": 0.3,
+   "neg_fraction": 0.25,
+   "mc_splits": 1,
+   "batch_size": 8,
+   "epochs": 2,
+   "init_lr": 0.0005,
+   "weight_decay": 0.0001,
+   "scheduler": "onecycle",
+   "alpha": 0.2,
+   "beta": 0.8,
+   "loss": "combined_dw",
+   "use_global_fp_weight": true,
+   "augment": true,
+   "noise_std": 0.01,
+   "rand_crop_scale": [
+    0.9,
+    1.0
+   ],
+   "early_stopping_patience": 3,
+   "num_workers": 2,
+   "seed": 42,
+   "good_channels": null,
+   "calibrate_shaping": true,
+   "shaping_grid": 9,
+   "shaping_windows": 12
+  },
+  "model": {
+   "architectures": [
+    "unet"
+   ],
+   "encoder": "mobilenet_v2",
+   "segformer_encoder": "mit_b0",
+   "pretrained": false,
+   "in_channels": null,
+   "classes": 1
+  },
+  "inference": {
+   "overlap": 0.5,
+   "batch_size": 8,
+   "tta": false,
+   "threshold": null,
+   "blend_mode": "gaussian",
+   "ensemble_weights": null,
+   "submission_shaping": {
+    "t0": null,
+    "thin": null,
+    "hard": true,
+    "gamma": 1.0
+   }
+  },
+  "postprocess": {
+   "frangi_filter": false,
+   "frangi_scale_range": [
+    1,
+    4
+   ],
+   "frangi_weight": 0.35,
+   "morphological_closing": true,
+   "closing_kernel": 3,
+   "min_fault_length": 4,
+   "skeletonize": false
+  },
+  "metric": {
+   "R_meters": 300,
+   "resolution_m": 100,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "epsilon": 1e-07
+  }
+ },
+ "band_names": [
+  "Magnetic anomaly - deviation from expected Earth's magnetic field",
+  "Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects",
+  "Total magnetic intensity horizontal gradient - rate of change in horizontal direction",
+  "Geodetic second invariant - measure of strain rate tensor magnitude",
+  "Isostatic gravity anomaly slope - gradient of gravity after isostatic correction",
+  "Tilt angle or total curvature - magnetic field derivative for edge detection",
+  "Geodetic shear rate - rate of angular deformation from GPS/InSAR",
+  "Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)",
+  "Total magnetic intensity vertical gradient - rate of change in vertical direction",
+  "Distance to earthquake (n=100km radius, a=15\u00b0 azimuth parameters)",
+  "Isostatic gravity anomaly vertical gradient - vertical rate of change",
+  "Detrended elevation - topography with regional trends removed",
+  "Isostatic gravity anomaly - gravity after compensating for topographic mass",
+  "Total magnetic intensity - total strength of magnetic field",
+  "Depth to basement surface - thickness of sedimentary cover",
+  "Earthquake intensity or density (n=100km radius, a=15\u00b0 parameters)",
+  "Conductivity surface - electrical conductivity of subsurface",
+  "Isostatic gravity anomaly horizontal gradient - horizontal rate of change",
+  "Detrended elevation slope - gradient of elevation after detrending"
+ ],
+ "n_bands": 19,
+ "feature_grid": [
+  3730,
+  3292
+ ],
+ "label_grid": [
+  3730,
+  3292
+ ],
+ "norm_stats_file": "outputs/norm_stats.json",
+ "R_pixels": 3,
+ "cuda": false,
+ "torch": "2.14.0+cpu",
+ "feature_file": "data/training_features.tif",
+ "models": [
+  {
+   "file": "model_mc0_unet_mobilenet_v2.pt",
+   "arch": "unet",
+   "encoder": "mobilenet_v2",
+   "in_channels": 19,
+   "classes": 1,
+   "dti": 0.05879861780353817,
+   "epoch": 2,
+   "mc": 0,
+   "patch_size": 128,
+   "test_windows": [
+    [
+     0,
+     512
+    ],
+    [
+     0,
+     1920
+    ],
+    [
+     0,
+     2048
+    ],
+    [
+     0,
+     2688
+    ],
+    [
+     0,
+     3072
+    ],
+    [
+     128,
+     0
+    ],
+    [
+     128,
+     1408
+    ],
+    [
+     128,
+     1792
+    ],
+    [
+     128,
+     2560
+    ],
+    [
+     128,
+     2688
+    ],
+    [
+     128,
+     2816
+    ],
+    [
+     256,
+     0
+    ],
+    [
+     256,
+     128
+    ],
+    [
+     256,
+     1024
+    ],
+    [
+     256,
+     1152
+    ],
+    [
+     256,
+     1536
+    ],
+    [
+     256,
+     1664
+    ],
+    [
+     256,
+     2560
+    ],
+    [
+     256,
+     2688
+    ],
+    [
+     256,
+     3072
+    ],
+    [
+     384,
+     256
+    ],
+    [
+     384,
+     1152
+    ],
+    [
+     384,
+     1280
+    ],
+    [
+     384,
+     1536
+    ],
+    [
+     384,
+     1792
+    ],
+    [
+     384,
+     1920
+    ],
+    [
+     384,
+     2304
+    ],
+    [
+     384,
+     2432
+    ],
+    [
+     384,
+     2944
+    ],
+    [
+     384,
+     3200
+    ],
+    [
+     512,
+     768
+    ],
+    [
+     512,
+     896
+    ],
+    [
+     512,
+     1536
+    ],
+    [
+     512,
+     1664
+    ],
+    [
+     512,
+     1920
+    ],
+    [
+     512,
+     2176
+    ],
+    [
+     512,
+     3200
+    ],
+    [
+     640,
+     128
+    ],
+    [
+     640,
+     896
+    ],
+    [
+     640,
+     1408
+    ],
+    [
+     640,
+     2176
+    ],
+    [
+     640,
+     3072
+    ],
+    [
+     640,
+     3200
+    ],
+    [
+     768,
+     640
+    ],
+    [
+     768,
+     768
+    ],
+    [
+     768,
+     896
+    ],
+    [
+     768,
+     2432
+    ],
+    [
+     896,
+     0
+    ],
+    [
+     896,
+     384
+    ],
+    [
+     896,
+     1024
+    ],
+    [
+     896,
+     1792
+    ],
+    [
+     896,
+     1920
+    ],
+    [
+     896,
+     2048
+    ],
+    [
+     896,
+     2176
+    ],
+    [
+     896,
+     2944
+    ],
+    [
+     896,
+     3200
+    ],
+    [
+     1024,
+     128
+    ],
+    [
+     1024,
+     256
+    ],
+    [
+     1024,
+     1152
+    ],
+    [
+     1024,
+     1664
+    ],
+    [
+     1024,
+     1920
+    ],
+    [
+     1024,
+     2432
+    ],
+    [
+     1024,
+     2688
+    ],
+    [
+     1024,
+     2816
+    ],
+    [
+     1152,
+     256
+    ],
+    [
+     1152,
+     512
+    ],
+    [
+     1152,
+     640
+    ],
+    [
+     1152,
+     896
+    ],
+    [
+     1152,
+     1664
+    ],
+    [
+     1152,
+     2176
+    ],
+    [
+     1152,
+     2304
+    ],
+    [
+     1152,
+     2560
+    ],
+    [
+     1152,
+     2688
+    ],
+    [
+     1152,
+     3200
+    ],
+    [
+     1280,
+     512
+    ],
+    [
+     1280,
+     896
+    ],
+    [
+     1280,
+     1664
+    ],
+    [
+     1280,
+     1792
+    ],
+    [
+     1280,
+     2176
+    ],
+    [
+     1280,
+     2432
+    ],
+    [
+     1280,
+     2560
+    ],
+    [
+     1280,
+     2688
+    ],
+    [
+     1280,
+     2944
+    ],
+    [
+     1408,
+     0
+    ],
+    [
+     1408,
+     256
+    ],
+    [
+     1408,
+     384
+    ],
+    [
+     1408,
+     512
+    ],
+    [
+     1408,
+     896
+    ],
+    [
+     1408,
+     1152
+    ],
+    [
+     1408,
+     1408
+    ],
+    [
+     1408,
+     1664
+    ],
+    [
+     1408,
+     2048
+    ],
+    [
+     1408,
+     2304
+    ],
+    [
+     1408,
+     2816
+    ],
+    [
+     1536,
+     128
+    ],
+    [
+     1536,
+     384
+    ],
+    [
+     1536,
+     1152
+    ],
+    [
+     1536,
+     1792
+    ],
+    [
+     1536,
+     2176
+    ],
+    [
+     1536,
+     2688
+    ],
+    [
+     1536,
+     2816
+    ],
+    [
+     1664,
+     384
+    ],
+    [
+     1664,
+     640
+    ],
+    [
+     1664,
+     1536
+    ],
+    [
+     1664,
+     1792
+    ],
+    [
+     1664,
+     2304
+    ],
+    [
+     1664,
+     2688
+    ],
+    [
+     1664,
+     3072
+    ],
+    [
+     1664,
+     3200
+    ],
+    [
+     1792,
+     256
+    ],
+    [
+     1792,
+     512
+    ],
+    [
+     1792,
+     768
+    ],
+    [
+     1792,
+     1408
+    ],
+    [
+     1792,
+     1536
+    ],
+    [
+     1792,
+     1920
+    ],
+    [
+     1792,
+     2048
+    ],
+    [
+     1792,
+     2304
+    ],
+    [
+     1792,
+     2816
+    ],
+    [
+     1792,
+     2944
+    ],
+    [
+     1920,
+     256
+    ],
+    [
+     1920,
+     896
+    ],
+    [
+     1920,
+     1536
+    ],
+    [
+     1920,
+     1664
+    ],
+    [
+     1920,
+     2560
+    ],
+    [
+     1920,
+     2688
+    ],
+    [
+     1920,
+     2816
+    ],
+    [
+     1920,
+     2944
+    ],
+    [
+     2048,
+     384
+    ],
+    [
+     2048,
+     896
+    ],
+    [
+     2048,
+     1024
+    ],
+    [
+     2048,
+     1280
+    ],
+    [
+     2048,
+     1664
+    ],
+    [
+     2048,
+     2304
+    ],
+    [
+     2048,
+     2688
+    ],
+    [
+     2048,
+     2944
+    ],
+    [
+     2048,
+     3200
+    ],
+    [
+     2176,
+     0
+    ],
+    [
+     2176,
+     384
+    ],
+    [
+     2176,
+     512
+    ],
+    [
+     2176,
+     768
+    ],
+    [
+     2176,
+     896
+    ],
+    [
+     2176,
+     1280
+    ],
+    [
+     2176,
+     1408
+    ],
+    [
+     2176,
+     2560
+    ],
+    [
+     2176,
+     2688
+    ],
+    [
+     2176,
+     2816
+    ],
+    [
+     2176,
+     2944
+    ],
+    [
+     2304,
+     256
+    ],
+    [
+     2304,
+     512
+    ],
+    [
+     2304,
+     640
+    ],
+    [
+     2304,
+     768
+    ],
+    [
+     2304,
+     1920
+    ],
+    [
+     2304,
+     2432
+    ],
+    [
+     2304,
+     2816
+    ],
+    [
+     2432,
+     768
+    ],
+    [
+     2432,
+     1024
+    ],
+    [
+     2432,
+     1152
+    ],
+    [
+     2432,
+     1792
+    ],
+    [
+     2432,
+     1920
+    ],
+    [
+     2432,
+     2432
+    ],
+    [
+     2432,
+     2688
+    ],
+    [
+     2432,
+     3072
+    ],
+    [
+     2560,
+     0
+    ],
+    [
+     2560,
+     256
+    ],
+    [
+     2560,
+     512
+    ],
+    [
+     2560,
+     1024
+    ],
+    [
+     2560,
+     1152
+    ],
+    [
+     2560,
+     1280
+    ],
+    [
+     2560,
+     2176
+    ],
+    [
+     2560,
+     2304
+    ],
+    [
+     2560,
+     2688
+    ],
+    [
+     2560,
+     2944
+    ],
+    [
+     2560,
+     3072
+    ],
+    [
+     2688,
+     896
+    ],
+    [
+     2688,
+     1024
+    ],
+    [
+     2688,
+     1152
+    ],
+    [
+     2688,
+     1280
+    ],
+    [
+     2688,
+     1664
+    ],
+    [
+     2688,
+     1792
+    ],
+    [
+     2688,
+     3200
+    ],
+    [
+     2816,
+     128
+    ],
+    [
+     2816,
+     256
+    ],
+    [
+     2816,
+     384
+    ],
+    [
+     2816,
+     896
+    ],
+    [
+     2816,
+     2048
+    ],
+    [
+     2816,
+     2176
+    ],
+    [
+     2816,
+     2304
+    ],
+    [
+     2816,
+     2432
+    ],
+    [
+     2816,
+     3072
+    ],
+    [
+     2944,
+     0
+    ],
+    [
+     2944,
+     2816
+    ],
+    [
+     3072,
+     128
+    ],
+    [
+     3072,
+     2176
+    ],
+    [
+     3200,
+     128
+    ],
+    [
+     3200,
+     256
+    ],
+    [
+     3200,
+     896
+    ],
+    [
+     3200,
+     2048
+    ],
+    [
+     3200,
+     2176
+    ],
+    [
+     3200,
+     2816
+    ],
+    [
+     3200,
+     2944
+    ],
+    [
+     3200,
+     3200
+    ],
+    [
+     3328,
+     256
+    ],
+    [
+     3328,
+     384
+    ],
+    [
+     3328,
+     640
+    ],
+    [
+     3328,
+     768
+    ],
+    [
+     3328,
+     1024
+    ],
+    [
+     3328,
+     1152
+    ],
+    [
+     3328,
+     1792
+    ],
+    [
+     3328,
+     1920
+    ],
+    [
+     3328,
+     2048
+    ],
+    [
+     3328,
+     2432
+    ],
+    [
+     3328,
+     2944
+    ],
+    [
+     3456,
+     256
+    ],
+    [
+     3456,
+     896
+    ],
+    [
+     3456,
+     1152
+    ],
+    [
+     3456,
+     1792
+    ],
+    [
+     3456,
+     1920
+    ],
+    [
+     3456,
+     2560
+    ],
+    [
+     3456,
+     2688
+    ],
+    [
+     3584,
+     256
+    ],
+    [
+     3584,
+     1792
+    ],
+    [
+     3584,
+     2560
+    ],
+    [
+     3584,
+     2688
+    ],
+    [
+     3584,
+     2944
+    ],
+    [
+     3584,
+     3072
+    ],
+    [
+     3584,
+     3200
+    ],
+    [
+     3712,
+     0
+    ],
+    [
+     3712,
+     896
+    ],
+    [
+     3712,
+     1280
+    ],
+    [
+     3712,
+     1408
+    ],
+    [
+     3712,
+     1792
+    ],
+    [
+     3712,
+     2432
+    ],
+    [
+     3712,
+     2816
+    ],
+    [
+     3712,
+     2944
+    ]
+   ]
+  }
+ ],
+ "shaping": {
+  "t0": 0.02,
+  "thin": true,
+  "hard": true,
+  "gamma": 1.0,
+  "mean_heldout_dti": 0.05879861780353817,
+  "mean_heldout_dti_raw": 0.02436488645426685,
+  "n_splits_used": 1,
+  "search": [
+   {
+    "t0": 0.02,
+    "thin": false,
+    "mean_dti": 0.048575870325899564
+   },
+   {
+    "t0": 0.02,
+    "thin": true,
+    "mean_dti": 0.05879861780353817
+   },
+   {
+    "t0": 0.13,
+    "thin": false,
+    "mean_dti": 0.027326837974551092
+   },
+   {
+    "t0": 0.13,
+    "thin": true,
+    "mean_dti": 0.02661286256005466
+   },
+   {
+    "t0": 0.24,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.24,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.35000000000000003,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.35000000000000003,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.46,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.46,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.5700000000000001,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.5700000000000001,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.68,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.68,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.79,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.79,
+    "thin": true,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.9,
+    "thin": false,
+    "mean_dti": 0.0
+   },
+   {
+    "t0": 0.9,
+    "thin": true,
+    "mean_dti": 0.0
+   }
+  ],
+  "note": "floor+thin by pooled held-out mean DTI; src/submission_optim.py"
+ }
+}

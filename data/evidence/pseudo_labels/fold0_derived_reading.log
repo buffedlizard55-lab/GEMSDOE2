@@ -1,0 +1,22 @@
+
+block-holdout generalisation gap over 4 committed fold(s) (of 4 in the partition):
+  fold 0: held-out 0.0806 [0.0586, 0.1021] on 8 blocks | trained-on 0.0920 on 26 blocks | gap +0.0114 | CI readable: False (8 resampling units)
+  fold 1: held-out 0.0789 [0.0644, 0.0963] on 9 blocks | trained-on 0.0719 on 25 blocks | gap -0.0070 | CI readable: False (9 resampling units)
+  fold 2: held-out 0.0480 [0.0238, 0.0803] on 9 blocks | trained-on 0.0619 on 25 blocks | gap +0.0139 | CI readable: False (9 resampling units)
+  fold 3: held-out 0.0892 [0.0581, 0.1197] on 8 blocks | trained-on 0.0985 on 26 blocks | gap +0.0093 | CI readable: False (8 resampling units)
+  mean gap +0.006904 (min -0.007019, max +0.013916, spread 0.020935); positive in 3 fold(s), negative in 1
+
+pseudo-label contrast, fold 0, candidate floor0.1_w0px (adopted policy sweep_best_t0_0.1_width0px):
+  heldout (8 blocks):
+    proxy_only  baseline 0.0806 -> pseudo 0.1483  contrast +0.0677  P(pseudo>baseline)=0.988  support 90,433 -> 471,988 px
+    labels      baseline 0.2113 -> pseudo 0.1034  contrast -0.1079  P(pseudo>baseline)=0.0  support 90,433 -> 471,988 px
+    combined    baseline 0.1972 -> pseudo 0.2285  contrast +0.0313  P(pseudo>baseline)=0.916  support 90,433 -> 471,988 px
+  complement (26 blocks):
+    proxy_only  baseline 0.0920 -> pseudo 0.0977  contrast +0.0057  P(pseudo>baseline)=0.7  support 301,789 -> 1,614,439 px
+    labels      baseline 0.2152 -> pseudo 0.1070  contrast -0.1082  P(pseudo>baseline)=0.0  support 301,789 -> 1,614,439 px
+    combined    baseline 0.2273 -> pseudo 0.1898  contrast -0.0375  P(pseudo>baseline)=0.0025  support 301,789 -> 1,614,439 px
+  pseudo-label source: data/evidence/proxy/proxy_catalogue.tif code 2 (source-circular with the proxy truth: True)
+  VERDICT (derived): GAIN_ON_THE_COMBINED_SURROGATE - the combined (Phase-2-like) population is the only committed population that contains BOTH fault kinds, and it moves +0.031280; proxy +0.067719, catalogue -0.107890
+  shippable on this evidence: False
+wrote /home/runner/work/GEMSDOE/GEMSDOE/data/evidence/block_holdout/fold_gap_summary.json (6,216 bytes)
+wrote /home/runner/work/GEMSDOE/GEMSDOE/data/evidence/pseudo_labels/fold0_two_population_contrast.json (10,968 bytes)

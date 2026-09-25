@@ -1,0 +1,23 @@
+name: gemsdoe
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch
+  - torchvision
+  - rasterio
+  - scikit-image
+  - scikit-learn
+  - matplotlib
+  - scipy
+  - geopandas
+  - pandas
+  - tqdm
+  - pyyaml
+  - pip
+  - pip:
+    - segmentation-models-pytorch
+    - einops

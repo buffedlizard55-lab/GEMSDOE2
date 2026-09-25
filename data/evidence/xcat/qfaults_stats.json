@@ -1,0 +1,199 @@
+{
+ "generated_utc": "2026-09-19T01:38:23+00:00",
+ "generated_by": "scripts/build_proxy_catalogue.py",
+ "purpose": "rasterised independent fault catalogue on the competition grid, split by whether the training labels already contain it (docs/DISCOVERY_PLAN.md 3b)",
+ "inputs": {
+  "proxy_geojson": "data/external/qfaults_footprint.geojson",
+  "proxy_sha256": "bdb30d4cb1dbe4d3bd03a2d485815c744814cf0f23483ffd98a4251e8694ed47",
+  "features_in": 14481,
+  "features_projected": 14481,
+  "dropped": {},
+  "template": "data/labels.tif",
+  "labels": "data/labels.tif",
+  "class_vocabulary_key": "classes.rule_id_to_class",
+  "R_pixels": 3,
+  "R_meters": 300.0
+ },
+ "grid": {
+  "width": 3292,
+  "height": 3730,
+  "crs": "EPSG:32611",
+  "transform": [
+   100.0,
+   0.0,
+   243350.0,
+   0.0,
+   -100.0,
+   4508550.0
+  ],
+  "pixel_m": 100.0,
+  "footprint_px": 5167373
+ },
+ "labels": {
+  "fault_px": 60988,
+  "fault_km": 6098.8
+ },
+ "proxy": {
+  "mask_px": 169115,
+  "near_label_px": 60938,
+  "proxy_only_px": 1,
+  "near_label_km": 6093.8,
+  "proxy_only_km": 0.1,
+  "catalogue_already_covers_fraction": 1.0,
+  "catalogue_already_covers_fraction_including_outside_footprint": 0.3603,
+  "outside_footprint_px": 108176,
+  "proxy_only_components": {
+   "components": 1,
+   "px": 1,
+   "km": 0.1,
+   "largest_px": 1,
+   "largest_km": 0.1,
+   "largest_extent_px": 1,
+   "largest_extent_km": 0.1,
+   "median_px": 1.0
+  },
+  "per_rule_id": {
+   "8": {
+    "features": 349,
+    "proxy_only_px": 1,
+    "class": "late Quaternary Moderately Constrained"
+   },
+   "11": {
+    "features": 428,
+    "proxy_only_px": 0,
+    "class": "latest Quaternary Moderately Constrained"
+   },
+   "12": {
+    "features": 3937,
+    "proxy_only_px": 0,
+    "class": "latest Quaternary Well Constrained"
+   },
+   "9": {
+    "features": 1446,
+    "proxy_only_px": 0,
+    "class": "late Quaternary Well Constrained"
+   },
+   "17": {
+    "features": 953,
+    "proxy_only_px": 0,
+    "class": "undifferentiated Quaternary Moderately Constrained"
+   },
+   "18": {
+    "features": 5433,
+    "proxy_only_px": 0,
+    "class": "undifferentiated Quaternary Well Constrained"
+   },
+   "14": {
+    "features": 27,
+    "proxy_only_px": 0,
+    "class": "middle and late Quaternary Moderately Constrained"
+   },
+   "15": {
+    "features": 86,
+    "proxy_only_px": 0,
+    "class": "middle and late Quaternary Well Constrained"
+   },
+   "6": {
+    "features": 1142,
+    "proxy_only_px": 0,
+    "class": "historic Well Constrained"
+   },
+   "7": {
+    "features": 69,
+    "proxy_only_px": 0,
+    "class": "late Quaternary Inferred"
+   },
+   "13": {
+    "features": 1,
+    "proxy_only_px": 0,
+    "class": "middle and late Quaternary Inferred"
+   },
+   "10": {
+    "features": 230,
+    "proxy_only_px": 0,
+    "class": "latest Quaternary Inferred"
+   },
+   "16": {
+    "features": 342,
+    "proxy_only_px": 0,
+    "class": "undifferentiated Quaternary Inferred"
+   },
+   "5": {
+    "features": 30,
+    "proxy_only_px": 0,
+    "class": "historic Moderately Constrained"
+   },
+   "4": {
+    "features": 8,
+    "proxy_only_px": 0,
+    "class": "historic Inferred"
+   }
+  }
+ },
+ "output": {
+  "path": "data/evidence/xcat/qfaults_catalogue.tif",
+  "sha256": "3fb2ca7327b47aa5a3f73c8b2ad3272d8d26ab25df35bc940944758d4c0885f2",
+  "bytes": 158573,
+  "codes": {
+   "0": "no proxy fault",
+   "1": "proxy fault within R of a training label",
+   "2": "proxy fault with no training label within R"
+  }
+ },
+ "window": {
+  "path": "data/evidence/xcat/proxy_window.tif",
+  "row": 2048,
+  "col": 1280,
+  "size": 512,
+  "codes": {
+   "0": 256990,
+   "1": 5154
+  }
+ },
+ "source": {
+  "citation": "U.S. Geological Survey, 2020, Quaternary fault and fold database for the nation: U.S. Geological Survey data release, https://doi.org/10.5066/P9BCVRCK",
+  "doi": "https://doi.org/10.5066/P9BCVRCK",
+  "sciencebase": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
+  "portal": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+  "license": "Public Domain (U.S. Government work, USGS)",
+  "service": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
+  "layer": 21,
+  "layer_name": "National Database",
+  "geometry_type": "esriGeometryPolyline",
+  "max_record_count": 2000,
+  "page_size_used": 1000,
+  "fields": [
+   "OBJECTID",
+   "Shape",
+   "fault_name",
+   "section_name",
+   "fault_id",
+   "section_id",
+   "Location",
+   "linetype",
+   "age",
+   "dip_direction",
+   "slip_rate",
+   "slip_sense",
+   "mapped_scale",
+   "class",
+   "mapped_certainty",
+   "strike",
+   "total_fault_length",
+   "cooperators",
+   "earthquake",
+   "last_review",
+   "fault_url",
+   "symbology",
+   "ref_id",
+   "Fault_ID_num",
+   "Shape_Length",
+   "archive_pdf"
+  ]
+ },
+ "caveats": [
+  "The proxy is an independent *published* catalogue, not the hidden expert labels: it is systematically easier in places (faults already drawn on state maps) and harder in others (bedrock faults with no Quaternary surface expression).",
+  "Code 1 pixels are NOT removed from the proxy - they are kept so the overlap can be audited; scripts/eval_proxy_catalogue.py scores code 2 by default.",
+  "Code 2 means 'no *labelled* fault within R', which is a statement about the label raster, not a statement that the fault is unmapped in the literature."
+ ]
+}

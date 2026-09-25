@@ -1,0 +1,74 @@
+# LOCAL DEV config - runs on data/fixture/, a 512x512 window of the REAL competition
+# rasters committed to the repo (see scripts/make_dev_fixture.py and src/fixture.py).
+# Lets the sandbox exercise train -> inference -> validate -> score on true band
+# semantics without the 419 MB download. NOT a leaderboard run.
+data:
+  feature_path: "data/fixture/fixture_features_int16.tif"
+  label_path: "data/fixture/fixture_labels.tif"
+  sample_submission_path: "data/fixture/fixture_labels.tif"
+  external_dir: "data/external"
+  output_dir: "outputs_fixture"
+  norm_mode: "clip_zscore"
+  clip_percentile: [1.0, 99.0]
+  use_external_dem: false
+  use_ingenious_extra: false
+  use_fixture: true            # src/train.py dequantises via src/fixture.py
+
+training:
+  patch_size: 128
+  train_step: 64
+  test_proportion: 0.3
+  neg_fraction: 0.3
+  mc_splits: 1
+  batch_size: 8
+  epochs: 3
+  init_lr: 5.0e-4
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2
+  beta: 0.8
+  loss: combined_dw
+  use_global_fp_weight: true
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.9, 1.0]
+  early_stopping_patience: 3
+  num_workers: 0
+  seed: 42
+  good_channels: null
+  calibrate_shaping: true
+  shaping_grid: 9
+  shaping_windows: 8
+
+model:
+  architectures: ["unet"]
+  encoder: "mobilenet_v2"
+  segformer_encoder: "mit_b0"
+  pretrained: false
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.5
+  batch_size: 8
+  tta: false
+  threshold: null
+  blend_mode: gaussian
+  ensemble_weights: null
+  submission_shaping: {t0: null, thin: null, hard: true, gamma: 1.0}
+
+postprocess:
+  frangi_filter: false
+  frangi_scale_range: [1, 4]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 4
+  skeletonize: false
+
+metric:
+  R_meters: 300
+  resolution_m: 100
+  alpha: 0.2
+  beta: 0.8
+  epsilon: 1.0e-7

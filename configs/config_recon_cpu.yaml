@@ -1,0 +1,69 @@
+# CPU SMOKE config: proves train -> inference -> validate -> score on the RECONSTRUCTED
+# public-source dataset (data/reconstructed/, built by scripts/build_reconstruction_dataset.py
+# from USGS GeoDAWN 22103 area1 + INGENIOUS QFaults + INGENIOUS seismicity).
+# NOT for leaderboard submission - configs/config.yaml is that.
+data:
+  feature_path: "data/reconstructed/recon_training_features.tif"
+  label_path: "data/reconstructed/recon_labels.tif"
+  sample_submission_path: "data/reconstructed/recon_sample_submission.tif"
+  external_dir: "data/external"
+  output_dir: "outputs_recon"
+  norm_mode: "clip_zscore"
+  clip_percentile: [1.0, 99.0]
+  use_external_dem: false
+  use_ingenious_extra: false
+
+training:
+  patch_size: 128
+  train_step: 64
+  test_proportion: 0.3
+  neg_fraction: 0.4
+  mc_splits: 1
+  batch_size: 8
+  epochs: 4
+  init_lr: 5.0e-4
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2
+  beta: 0.8
+  loss: combined_dw
+  use_global_fp_weight: true
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.9, 1.0]
+  early_stopping_patience: 3
+  num_workers: 0
+  seed: 42
+  good_channels: null
+
+model:
+  architectures: ["unet"]
+  encoder: "mobilenet_v2"
+  segformer_encoder: "mit_b0"
+  pretrained: false           # encoder weights host is egress-blocked here (flagged)
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.5
+  batch_size: 8
+  tta: false
+  threshold: null
+  blend_mode: gaussian
+  ensemble_weights: null
+
+postprocess:
+  frangi_filter: true
+  frangi_scale_range: [1, 4]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 4
+  skeletonize: false
+
+metric:
+  R_meters: 300
+  resolution_m: 100
+  alpha: 0.2
+  beta: 0.8
+  epsilon: 1.0e-7

@@ -1,0 +1,21 @@
+Touching this file fires the "Verify official sources" workflow: it fetches the canonical rules PDF
+from docs.nlr.gov, checks its sha256 against the data-tab mirror inventoried in
+data/evidence/inventory.json, verifies every quoted sentence of the official rules verbatim
+(scripts/verify_rules_quotes.py) and re-fetches every URL in docs/data_catalog.csv.
+Evidence lands in data/evidence/rules_quotes.json, data/evidence/rule_sources_verification.json,
+docs/link_verification.json and docs/data_catalog.verified.csv.
+# re-trigger (previous commit message carried [skip ci], which suppresses ALL workflows)
+# fired again (clean commit message, no skip marker) to produce data/evidence/rules_quotes.json
+# regenerate link_verification.json with the 401 -> AUTH_REQUIRED classification
+
+# 2026-09-16 (post-merge): regenerate the link evidence with the fixed ScienceBase classification,
+# and rebuild the site from it in the same run.
+
+# 2026-09-16 (session 7): fire the rules-quote re-check for the 10 sentences added from an
+# independent extraction path, and re-verify every catalog URL including the six new SGMC rows.
+
+# 2026-09-19 (session 17): re-verify every catalog URL including the new row E39 (the QFaults
+# rasterisation and its measured overlap with labels.tif), and refresh docs/data_catalog.verified.csv
+# and docs/link_verification.json.  The runner-side fetch of 2026-09-19 recorded transient HTTP 503s
+# from doi.org and sciencebase.gov in data/evidence/xcat/fetch_meta.json; this run says whether they
+# were transient.

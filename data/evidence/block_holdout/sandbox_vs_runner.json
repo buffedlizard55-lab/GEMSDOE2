@@ -1,0 +1,81 @@
+{
+ "purpose": "the runner is an independent environment; agreement on the reference policy's DTI, its three metric components, the support size and the bootstrap interval is what makes the committed numbers reproducible rather than machine-specific",
+ "runner_report": "data/evidence/block_holdout/runner_block_stratified.json",
+ "sandbox_report": "data/evidence/block_holdout/block_stratified.json",
+ "runner_generated_utc": "2026-09-19T15:29:03+00:00",
+ "sandbox_generated_utc": "2026-09-19T00:57:48+00:00",
+ "checks": [
+  {
+   "quantity": "reference_candidate",
+   "runner": "floor0.1_w0px",
+   "sandbox": "floor0.1_w0px",
+   "tolerance": null,
+   "agree": true
+  },
+  {
+   "quantity": "proxy DTI",
+   "runner": 0.099859,
+   "sandbox": 0.099859,
+   "tolerance": 1e-06,
+   "agree": true
+  },
+  {
+   "quantity": "TP_w",
+   "runner": 8378.119828821162,
+   "sandbox": 8378.119828821162,
+   "tolerance": 0.001,
+   "agree": true
+  },
+  {
+   "quantity": "FP_w",
+   "runner": 164461.74055865733,
+   "sandbox": 164461.74055865733,
+   "tolerance": 0.001,
+   "agree": true
+  },
+  {
+   "quantity": "FN_w",
+   "runner": 53285.88017117884,
+   "sandbox": 53285.88017117884,
+   "tolerance": 0.001,
+   "agree": true
+  },
+  {
+   "quantity": "emitted px",
+   "runner": 172974,
+   "sandbox": 172974,
+   "tolerance": 0,
+   "agree": true
+  },
+  {
+   "quantity": "scoreable blocks",
+   "runner": 34,
+   "sandbox": 34,
+   "tolerance": 0,
+   "agree": true
+  },
+  {
+   "quantity": "footprint px",
+   "runner": 5167373,
+   "sandbox": 5167373,
+   "tolerance": 0,
+   "agree": true
+  },
+  {
+   "quantity": "bootstrap CI95 low",
+   "runner": 0.088338,
+   "sandbox": 0.088338,
+   "tolerance": 0.005,
+   "agree": true
+  },
+  {
+   "quantity": "bootstrap CI95 high",
+   "runner": 0.111886,
+   "sandbox": 0.111886,
+   "tolerance": 0.005,
+   "agree": true
+  }
+ ],
+ "agree": true,
+ "disagreements": []
+}

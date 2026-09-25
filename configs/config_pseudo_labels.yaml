@@ -1,0 +1,174 @@
+# PSEUDO-LABEL config - "does the SGMC proxy trace, used as extra training signal, improve
+# transfer to 51 km blocks the model never saw?" (the only remaining external-catalogue route:
+# the cross-catalogue experiment was REFUSED on a total QFaults/labels overlap,
+# data/evidence/xcat/transfer_report.json, 2026-09-19).
+#
+# WHY THIS FILE EXISTS
+#   The scored faults are NEW (rules 1.1/3.3, verbatim in data/evidence/rules_quotes.json), so
+#   the only labels in this repository are a lower bound on the truth.  The SGMC proxy
+#   population (data/evidence/proxy/proxy_catalogue.tif, code 2 = 61,664 px of trace the
+#   labels do NOT contain) is external catalogue information the problem page explicitly
+#   allows (#external-datasets -> rules 3.2).  Training on it can only help if the model
+#   transfers the STYLE of SGMC-mapped faults to geography it never saw - which is exactly
+#   what a spatial block hold-out measures, and what a scattered-window hold-out cannot.
+#
+# LEAKAGE DESIGN (this is the point of the experiment)
+#   Pseudo pixels are applied to TRAINING WINDOWS ONLY (src/dataset.py::make_patches):
+#     * the block partition (assign_folds) and the pos/neg window selection use the ORIGINAL
+#       labels alone - the pseudo run and the baseline run train on exactly the same
+#       windows, so the measured difference is the pseudo signal, nothing else;
+#     * the held-out region is zeroed out of the pseudo mask before it touches the training
+#       signal (same leakage rule as the labels), so a pseudo pixel in a held-out block
+#       never enters the loss through the FP-weight map either;
+#     * the model therefore NEVER sees the pseudo pixels of the blocks it is scored on:
+#       any gain of this config over the baseline (configs/config_block_holdout.yaml, same
+#       partition, same seed) measured on those held-out blocks is generalisation, not
+#       label leakage.  A gain that exists only on the trained-on blocks is memorisation.
+#
+# BASELINE PAIR
+#   fold 0, seed 46, no pseudo: data/evidence/block_holdout/fold0_heldout.json
+#   (held-out proxy DTI 0.0806 [0.0586, 0.1021] vs trained-on 0.0920 [0.0747, 0.1100]).
+#   This config trains fold 0, seed 46 WITH pseudo: .github/workflows/pseudo-label.yml
+#   scores it on the same blocks and paired-bootstraps the difference against that record.
+#
+# PSEUDO_WEIGHT
+#   1.0 = hard pseudo-labels (the pre-registered first measurement).  It must be >= 0.5:
+#   FaultDataset binarises labels at 0.5, so a softer weight would be silently dropped.
+#   A soft-weight arm (e.g. 0.5 with a binarisation fix) is a follow-up, not a re-tuning.
+#
+# Everything else is IDENTICAL to configs/config_block_holdout.yaml on purpose: block
+# partition, buffer, patch geometry, architectures, schedule.  The two configs differ in
+# exactly one place (data.pseudo_label_path / data.pseudo_code / training.pseudo_weight),
+# and that difference is what the experiment measures.
+data:
+  feature_path: "data/training_features.tif"
+  label_path: "data/labels.tif"
+  sample_submission_path: "data/sample_submission.tif"
+  external_dir: "data/external"
+  output_dir: "outputs"
+  norm_mode: "clip_zscore"
+  clip_percentile: [1.0, 99.0]
+  use_external_dem: false
+  use_ingenious_extra: false
+  # THE EXPERIMENT (single structural difference from config_block_holdout.yaml):
+  # coded raster, code 2 = the 61,664 px of SGMC trace the labels do not contain
+  pseudo_label_path: "data/evidence/proxy/proxy_catalogue.tif"
+  pseudo_code: 2
+  # The same coded raster also defines the union hold-out population (code 2 only) when
+  # training.union_selection is on. Off by default so this pseudo-label EXPERIMENT keeps its
+  # committed selection behaviour (selection_mode: raw, select_on: in_domain).
+  proxy_catalogue_path: "data/evidence/proxy/proxy_catalogue.tif"
+
+training:
+  holdout: "spatial_blocks"     # <- the only structural difference from config_ci_ensemble.yaml
+  # See configs/config_block_holdout.yaml for the select_on/union_selection contract; left at the
+  # defaults here so the pseudo-label arm's selection is not changed by this experiment.
+  select_on: in_domain
+  union_selection: false
+  block_px: 512                 # 51.2 km squares; MUST equal block_holdout_eval.block_px
+  block_folds: 4                # whole blocks held out, one fold per job
+  block_fold: null              # null -> mc_id % block_folds (workflows set mc_id per job)
+  block_mode: "balanced"        # greedy normalised-load fold assignment (src/blocks.assign_folds)
+  block_seed: 0                 # partition seed - NOT the fold seed, so all folds share the map
+  block_buffer_px: null         # null -> DEFAULT_BUFFER_PX (3 px == the metric's R at 100 m)
+
+  patch_size: 256               # a 256 px window fits inside a 512 px block, so a window can
+                                # never straddle the train/holdout boundary once the collar is
+                                # applied (measured geometry, tests/test_spatial_holdout.py)
+  train_step: 128
+  test_proportion: 0.3          # ignored under spatial_blocks, kept for diffability
+  neg_fraction: 0.35
+  mc_id: 0
+  mc_splits: 1
+  batch_size: 8
+  epochs: 45
+  max_minutes: 150
+  init_lr: 3.0e-4
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2                    # official metric (problem page, Performance metric)
+  beta: 0.8
+  loss: combined_dw
+  use_global_fp_weight: true
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.75, 1.0]
+  early_stopping_patience: 10
+  num_workers: 2
+  seed: 42
+  good_channels: null
+  calibrate_shaping: true
+  selection_mode: raw
+  shaping_grid: 11
+  shaping_windows: 12
+  pseudo_weight: 1.0          # hard pseudo-labels (>= 0.5, see the header)
+
+model:
+  architectures: ["unetplusplus", "deeplabv3plus", "unet"]
+  encoder: "resnet34"
+  segformer_encoder: "mit_b2"
+  pretrained: true
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.5
+  batch_size: 8
+  tta: true
+  threshold: null
+  blend_mode: gaussian
+  ensemble_weights: null
+  submission_shaping:
+    t0: null
+    thin: null
+    hard: true
+    gamma: 1.0
+
+postprocess:
+  frangi_filter: false
+  frangi_scale_range: [1, 6]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 5
+  skeletonize: false
+
+metric:
+  R_meters: 300
+  resolution_m: 100
+  alpha: 0.2
+  beta: 0.8
+  epsilon: 1.0e-7
+
+# ---------------------------------------------------------------------------
+# Measurement side (scripts/block_holdout_eval.py --config this-file)
+#
+# Every value here is a MEASURED default, not a guess:
+#   block_px / folds          must equal training.block_px / training.block_folds (checked)
+#   floors 0.1..0.5           the shipped raster is a HARD band (2 distinct values), so the floor
+#                             axis is degenerate: measured 2026-09-18, 5 floors x 10 widths swept
+#                             -> only 10 DISTINCT emissions.  The sweep keeps the floors anyway
+#                             because the report says so explicitly (verdict.floor_axis_degenerate)
+#                             rather than implying 50 independent measurements.
+#   widths 0..20 px           widening is monotonically harmful on both populations
+#                             (proxy 0.0999 -> 0.0670, catalogue 0.2298 -> 0.0652 at 20 px)
+#   reference floor/width     the ADOPTED policy (floor 0.1, width 0) - the contrast every
+#                             bootstrap P(>ref) is computed against
+#   bootstraps 2000           paired block bootstrap over 33-34 scoreable blocks; 2000 resamples
+#                             is ~40 s and the CI95 half-width is stable to +-0.0002
+# ---------------------------------------------------------------------------
+block_holdout_eval:
+  block_px: 512
+  folds: 4
+  floors: "0.1,0.15,0.2,0.3,0.5"
+  widths: "0,1,2,3,4,6,8,12,16,20"
+  reference_floor: 0.1
+  reference_width: 0
+  bootstraps: 2000
+  seed: 0
+  R: 3
+  alpha: 0.2
+  beta: 0.8
+  eps: 1.0e-7
+  crosscheck_sweep: "data/evidence/proxy/eval_sweep-mean12.json"
+  out: "data/evidence/block_holdout/block_stratified.json"

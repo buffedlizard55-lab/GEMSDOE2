@@ -1,0 +1,145 @@
+{
+ "generated_utc": "2026-09-24T22:11:57+00:00",
+ "generated_by": "scripts/read_landed_reports.py",
+ "purpose": "the distribution of the memorisation-vs-transfer gap over the committed block-holdout folds: trained_on DTI minus held-out DTI on the same candidate, the same partition and the same metric",
+ "n_folds_committed": 4,
+ "expected": {
+  "block_folds": 4,
+  "dispatched": [
+   1,
+   2,
+   3
+  ],
+  "all_folds": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "sources": {
+   "config": "configs/config_block_holdout.yaml",
+   "params": ".github/triggers/block-holdout-params"
+  }
+ },
+ "folds_missing": [],
+ "complete": true,
+ "per_fold": [
+  {
+   "fold": 0,
+   "candidate": "floor0.1_w0px",
+   "held_out_dti": 0.080584,
+   "held_out_ci95": [
+    0.058567,
+    0.102072
+   ],
+   "held_out_blocks": 8,
+   "trained_on_dti": 0.09202,
+   "trained_on_ci95": [
+    0.07473,
+    0.109977
+   ],
+   "trained_on_blocks": 26,
+   "generalisation_gap": 0.011436,
+   "reliability": {
+    "report": "data/evidence/block_holdout/fold0_heldout.json",
+    "resampling_units": 8,
+    "min_units_for_a_readable_ci": 12,
+    "interval_readable": false,
+    "note": "ONLY 8 independent resampling units (below 12), so the interval is COARSE: a bootstrap that redraws 8 blocks cannot separate a regional preference from sampling noise. A candidate whose contrast flips sign against the full-grid measurement is expected sampling variation at this sample size, NOT evidence that the policy should change; the global full-grid number remains the selection statistic. This happens whenever the measurement is restricted (--score-fold) or the footprint is small."
+   },
+   "source": "data/evidence/block_holdout/fold0_generalisation_gap.json"
+  },
+  {
+   "fold": 1,
+   "candidate": "floor0.1_w0px",
+   "held_out_dti": 0.078892,
+   "held_out_ci95": [
+    0.06442,
+    0.096274
+   ],
+   "held_out_blocks": 9,
+   "trained_on_dti": 0.071873,
+   "trained_on_ci95": [
+    0.055884,
+    0.088434
+   ],
+   "trained_on_blocks": 25,
+   "generalisation_gap": -0.007019,
+   "reliability": {
+    "report": "data/evidence/block_holdout/fold1_heldout.json",
+    "resampling_units": 9,
+    "min_units_for_a_readable_ci": 12,
+    "interval_readable": false,
+    "note": "ONLY 9 independent resampling units (below 12), so the interval is COARSE: a bootstrap that redraws 9 blocks cannot separate a regional preference from sampling noise. A candidate whose contrast flips sign against the full-grid measurement is expected sampling variation at this sample size, NOT evidence that the policy should change; the global full-grid number remains the selection statistic. This happens whenever the measurement is restricted (--score-fold) or the footprint is small."
+   },
+   "source": "data/evidence/block_holdout/fold1_generalisation_gap.json"
+  },
+  {
+   "fold": 2,
+   "candidate": "floor0.1_w0px",
+   "held_out_dti": 0.048021,
+   "held_out_ci95": [
+    0.023815,
+    0.080324
+   ],
+   "held_out_blocks": 9,
+   "trained_on_dti": 0.061937,
+   "trained_on_ci95": [
+    0.043913,
+    0.080662
+   ],
+   "trained_on_blocks": 25,
+   "generalisation_gap": 0.013916,
+   "reliability": {
+    "report": "data/evidence/block_holdout/fold2_heldout.json",
+    "resampling_units": 9,
+    "min_units_for_a_readable_ci": 12,
+    "interval_readable": false,
+    "note": "ONLY 9 independent resampling units (below 12), so the interval is COARSE: a bootstrap that redraws 9 blocks cannot separate a regional preference from sampling noise. A candidate whose contrast flips sign against the full-grid measurement is expected sampling variation at this sample size, NOT evidence that the policy should change; the global full-grid number remains the selection statistic. This happens whenever the measurement is restricted (--score-fold) or the footprint is small."
+   },
+   "source": "data/evidence/block_holdout/fold2_generalisation_gap.json"
+  },
+  {
+   "fold": 3,
+   "candidate": "floor0.1_w0px",
+   "held_out_dti": 0.089244,
+   "held_out_ci95": [
+    0.058062,
+    0.119747
+   ],
+   "held_out_blocks": 8,
+   "trained_on_dti": 0.098526,
+   "trained_on_ci95": [
+    0.080244,
+    0.119291
+   ],
+   "trained_on_blocks": 26,
+   "generalisation_gap": 0.009282,
+   "reliability": {
+    "report": "data/evidence/block_holdout/fold3_heldout.json",
+    "resampling_units": 8,
+    "min_units_for_a_readable_ci": 12,
+    "interval_readable": false,
+    "note": "ONLY 8 independent resampling units (below 12), so the interval is COARSE: a bootstrap that redraws 8 blocks cannot separate a regional preference from sampling noise. A candidate whose contrast flips sign against the full-grid measurement is expected sampling variation at this sample size, NOT evidence that the policy should change; the global full-grid number remains the selection statistic. This happens whenever the measurement is restricted (--score-fold) or the footprint is small."
+   },
+   "source": "data/evidence/block_holdout/fold3_generalisation_gap.json"
+  }
+ ],
+ "gap": {
+  "mean": 0.006904,
+  "min": -0.007019,
+  "max": 0.013916,
+  "spread": 0.020935,
+  "folds_with_positive_gap": 3,
+  "folds_with_negative_gap": 1,
+  "mean_held_out_dti": 0.074185,
+  "mean_trained_on_dti": 0.081089
+ },
+ "interval_readability": {
+  "folds_with_a_readable_ci": 0,
+  "rule": "a fold-restricted bootstrap resamples only that fold's scoreable blocks; below MIN_BLOCKS_FOR_A_READABLE_CI (12) the scorer itself marks the interval COARSE, so the per-fold CIs below are spread indicators, not confidence statements",
+  "source": "scripts/block_holdout_eval.py::bootstrap_reliability"
+ },
+ "reading": "The gap is small in absolute terms (every fold's held-out DTI is within ~0.014 of its trained-on DTI) and its SIGN is not stable across folds, so the honest statement is that this model neither clearly memorises nor clearly improves on unseen 51 km blocks: the proxy-policy reading survives the hold-out, but the per-fold intervals are too coarse to rank folds.  Derived, not asserted - see per_fold.",
+ "caveat": "every number here is measured against the new-fault-like PROXY population and the catalogue population of the committed reports; neither is the scored truth (rules 3.6: public/private test sets, then an expert-updated set)"
+}
