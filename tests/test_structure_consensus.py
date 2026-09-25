@@ -4,6 +4,8 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/generate_structure_consensus_submission.py"
@@ -30,6 +32,8 @@ def test_family_classifier_does_not_read_magnitude_as_magnetic():
 
 
 def test_official_feature_tags_have_six_magnetic_and_three_strain_bands():
+    if not (ROOT / "data/training_features.tif").exists():
+        pytest.skip("competition feature raster is not present in a fresh CI checkout")
     mod = _module()
     import rasterio
 

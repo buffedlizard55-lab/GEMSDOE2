@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 import rasterio
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,6 +33,8 @@ def test_recall_union_public_and_evidence_bytes_match_report():
 
 
 def test_recall_union_pixels_are_exact_source_union_inside_template():
+    if not all(path.exists() for path in (SAMPLE, DEEP, CLASSICAL)):
+        pytest.skip("competition source rasters are not present in a fresh CI checkout")
     with rasterio.open(SAMPLE) as src:
         template = src.read(1)
     with rasterio.open(DEEP) as src:
