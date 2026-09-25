@@ -377,6 +377,17 @@ def build_executive_summary(ev: dict) -> str:
     shipped_sha = _art.get("sha256") or "artifact-not-committed"
     shipped_bytes = int(_art.get("bytes") or 0)
 
+    # Recall-Union is the primary public candidate.  Keep the browser payload's adopted
+    # ensemble artifact measurable as a secondary route, but never let its older policy card
+    # imply that it is the selected research direction.
+    recall_report = ev.get("recall_union") or {}
+    recall_artifact = recall_report.get("artifact") or {}
+    recall_path = str(recall_artifact.get("path") or "docs/gemsdoe2_recall_union_submission.tif")
+    recall_live = _sha_bytes(recall_path)
+    recall_sha = recall_live.get("sha256") or str(recall_artifact.get("sha256") or "artifact-not-committed")
+    recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
+    recall_note = f"Recall-Union v1 · deep+classical union · build {recall_sha[:8]}"
+
     cand_policy = best_cand.get("policy", "sweep_best_t0_0.1_width0px")
     cand_dti = best_cand.get("measured_dti", 0.136452)
     cand_contrast = best_cand.get("contrast_vs_shipped", 0.111767)
@@ -389,9 +400,10 @@ def build_executive_summary(ev: dict) -> str:
         ("Submission Limit", "<b>Up to 3 / week</b>", "1 final submission selected before deadline (§3.4, §3.5)"),
         ("Official Deadline", "<b>Dec 3, 2026</b>",
          "platform close 11:59 PM UTC · §A.1 form due 5:00 PM ET (22:00 UTC) the same day — act on the earlier"),
-        ("Recommended Policy", "<b>Floor 0.1 / thin / w=0</b>", f"Rank 1 of 132 candidates · +{cand_contrast:.4f} contrast"),
-        ("Shipped Submission", f"<b>{shipped_bytes/1000:.1f} KB GeoTIFF</b>",
-         f"11-fold ensemble mean · sha256 {shipped_sha[:8]}…"),
+        ("Primary Candidate", "<b>Recall-Union v1</b>",
+         f"deep+classical union · sha256 {recall_sha[:8]}… · local diagnostics only"),
+        ("Browser Builder (secondary)", f"<b>{shipped_bytes/1000:.1f} KB GeoTIFF</b>",
+         f"adopted 11-fold ensemble field · sha256 {shipped_sha[:8]}…"),
     ]
     grid = "".join(
         f'<div class="stat"><div class="k">{e(k)}</div><div class="v">{v}</div>'
@@ -404,15 +416,13 @@ def build_executive_summary(ev: dict) -> str:
 
 <div class="stats">{grid}</div>
 
-<div class="note ok"><strong>🚀 TL;DR — Submit in 5 commands (tested 2026-09-18, data placement verified)</strong><br>
-If you need a valid submission <em>today</em>, this is the fastest measured path — no training, no GPU, format-validated and ready to upload:<br>
-<pre><code>git pull
-python scripts/assemble_data_bridge.py   # re-verify &amp; place 418 MB feature stack (sha256 pinned)
-python scripts/prepare_data.py           # PASS: 3292×3730, 19 bands, EPSG:32611, 100 m
-python scripts/validate_submission.py --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif --sample data/sample_submission.tif --train data/training_features.tif
-# → ✅ Validation PASSED — upload data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif at https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></pre>
-<strong>Artifact:</strong> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — {shipped_bytes/1000:.1f} KB, sha256 <code>{shipped_sha[:8]}…</code>, 11-fold ensemble mean with adopted policy <code>floor 0.1, thin, width 0 px</code> (rank 1 of 132).<br>
-<strong>Then:</strong> paste the Generative AI disclosure (§3.2) into the submission narrative, and before <strong>Dec 3, 2026 11:59 PM UTC</strong> select this as your single final submission (3/week limit). <a href="#generate-here">Or skip the commands entirely:</a> the generator <b>directly below</b> writes this exact file in your browser, with nothing installed — no Python, no GPU, no download of the 418 MB feature stack — and refuses to hand it over unless its own re-read of the bytes matches every pinned check. <a href="how_to_submit.html">The full subpage</a> lists six routes to the file, their costs, and the gates this checkout passes.</div>
+<div class="note ok"><strong>🚀 TL;DR — Primary submission in three steps</strong><br>
+The selected research candidate is <b>Recall-Union v1</b>, a fixed union of the independent deep-ensemble and CPU classical fields. It is already built, template-validated, and available as a one-click GeoTIFF or single-member ZIP above — no training, GPU, or competition-data download is required to obtain it.<br>
+<pre><code># Optional local re-check of the shipped primary artifact
+python scripts/validate_submission.py --pred docs/gemsdoe2_recall_union_submission.tif --sample data/sample_submission.tif --train data/training_features.tif
+# → ✅ Validation PASSED — upload the downloaded .tif (or its .zip) at https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></pre>
+<strong>Primary artifact:</strong> <code>{e(recall_path)}</code> — {recall_bytes/1000:.1f} KB, sha256 <code>{e(recall_sha)}</code>, suggested unique name <code>gems-recall-union-v1-{e(recall_sha[:8])}.tif</code>, suggested Note <code>{e(recall_note)}</code>.<br>
+<strong>Important:</strong> the SGMC and provided-label measurements below are local diagnostics, not leaderboard scores; only an authenticated DrivenData submission can provide the official score. Paste the required Generative AI disclosure (§3.2) into the submission narrative, and follow the platform's current enrollment and final-submission rules before the deadline. <a href="#generate-here">The secondary browser-builder route</a> is available for reproducibility, and <a href="how_to_submit.html">the full subpage</a> lists the exact gates.</div>
 """)
     out.append(_submission_builder(ev))
     out.append(f"""
@@ -590,7 +600,7 @@ Generative AI assistance (LLM agent workflows) was utilized during the developme
   </tbody>
 </table>
 
-<h2>6. The Scored Metric &amp; The Winning Emission Strategy</h2>
+<h2>6. The Scored Metric &amp; The Local Baseline Emission Strategy</h2>
 <p>Submissions are evaluated using the <b>Distance-Weighted Tversky Index (DTI)</b>:</p>
 
 <pre class="math big">DTI(α=0.2, β=0.8) = TP_w / (TP_w + 0.2 · FP_w + 0.8 · FN_w + ε)</pre>
@@ -602,24 +612,24 @@ Generative AI assistance (LLM agent workflows) was utilized during the developme
 <ul>
   <li><b>4:1 False Negative Asymmetry (β = 0.8, α = 0.2):</b> Missing a real fault pixel incurs 4× the penalty of emitting a false alarm. Models must avoid excessive conservatism.</li>
   <li><b>The In-Domain Trap:</b> Models trained and calibrated solely on existing training labels (USGS known faults) learn a high probability threshold (t0 ≈ 0.47) and thin skeleton. On the <em>new-fault-like proxy population</em>, this in-domain policy collapses to a DTI of only <b>0.0247</b>.</li>
-  <li><b>The Measured Winning Policy (Floor 0.1, Thin, Width 0 px):</b>
-    Extensive sweeps across 132 parameter combinations on multiple independent ensembles demonstrate that lowering the emission floor to <b>0.1</b> with morphological thinning dramatically lifts performance on unseen faults:
+  <li><b>The measured adopted-ensemble policy (Floor 0.1, Thin, Width 0 px):</b>
+    Local SGMC-proxy sweeps across 132 parameter combinations on multiple ensemble fields support this policy for the adopted baseline; they are diagnostics, not leaderboard evidence, and they do not select the Recall-Union candidate:
     <ul>
       <li><b>Ensemble 1 (Run 35042805806):</b> DTI <b>0.1365</b> vs 0.0410 reference (<b>+0.0954 contrast</b>)</li>
       <li><b>Ensemble 2 (Run 35249562910):</b> DTI <b>0.0777</b> vs 0.0320 reference (<b>+0.0456 contrast</b>)</li>
-      <li><b>Shipping Field (Mean of Ensembles 1+2, Run 35275312337):</b> DTI <b>0.0999</b> vs 0.0304 reference (<b>+0.0695 contrast</b>)</li>
+      <li><b>Secondary builder field (Mean of Ensembles 1+2, Run 35275312337):</b> DTI <b>0.0999</b> vs 0.0304 reference (<b>+0.0695 contrast</b>)</li>
       <li><b>3-Ensemble Mean (16 live folds, Run 35285326679):</b> DTI <b>0.0850</b> vs 0.0269 reference (<b>+0.0581 contrast</b>)</li>
       <li><b>Worst-Case Robustness Ranking:</b> Ranks <b>#1 of 132 hard candidates</b> across all swept fields.</li>
     </ul>
+    <p class="small"><b>Scope:</b> every DTI in this list is a local SGMC proxy-only diagnostic. No value here is an official DrivenData leaderboard score or a guarantee on the hidden expert labels.</p>
   </li>
-  <li><b>Which FIELD ships is now a pre-registered rule, not a judgment call (2026-09-19).</b> The policy axis (floor/thin/width) was already measured and adopted; the <em>field</em> axis (which ensemble mean ships) was not. <code>docs/FIELD_SELECTION_RULE.md</code> pre-registers it: a new field may replace the shipped one only if it passes F1 (pinned re-blend provenance) and F2 (committed proxy sweep) as eligibility, then R1 (beats shipped + 0.010 margin in the primary support window), R2 (top of all three windows), R4 (beats the current policy), R5 (≥ 3 independent candidates in the window) — and R3, a paired 2,000-resample block bootstrap on both fields' raw rasters with <b>P(new &gt; shipped) ≥ 0.95</b>, which is <em>unmeasurable from committed bytes</em> until both raw rasters are scored, so it cannot be waved through. The rule is machine-enforced: <code>scripts/check_field_selection.py</code> runs on every committed evidence and on every <code>reblend.yml</code> run before any artifact download; the committed verdict is <b>KEEP mean12</b> (<code>data/evidence/field_selection.json</code>) and a re-blend of any other field fails the workflow until the committed evidence says ADOPT of that field with R3 measured. Seven tests in <code>tests/test_field_selection.py</code> pin the rule, including the refusal of a synthetic field that passes every condition except the unmeasured R3.</li>
+  <li><b>Which secondary adopted-ensemble FIELD ships is a pre-registered rule, not a judgment call (2026-09-19).</b> This rule governs the browser-builder comparison artifact only; Recall-Union v1 is the separate primary candidate. The policy axis (floor/thin/width) was already measured and adopted; the <em>field</em> axis (which ensemble mean ships) was not. <code>docs/FIELD_SELECTION_RULE.md</code> pre-registers it: a new field may replace the shipped one only if it passes F1 (pinned re-blend provenance) and F2 (committed proxy sweep) as eligibility, then R1 (beats shipped + 0.010 margin in the primary support window), R2 (top of all three windows), R4 (beats the current policy), R5 (≥ 3 independent candidates in the window) — and R3, a paired 2,000-resample block bootstrap on both fields' raw rasters with <b>P(new &gt; shipped) ≥ 0.95</b>, which is <em>unmeasurable from committed bytes</em> until both raw rasters are scored, so it cannot be waved through. The rule is machine-enforced: <code>scripts/check_field_selection.py</code> runs on every committed evidence and on every <code>reblend.yml</code> run before any artifact download; the committed verdict is <b>KEEP mean12</b> (<code>data/evidence/field_selection.json</code>) and a re-blend of any other field fails the workflow until the committed evidence says ADOPT of that field with R3 measured. Seven tests in <code>tests/test_field_selection.py</code> pin the rule, including the refusal of a synthetic field that passes every condition except the unmeasured R3.</li>
 </ul>
 
 <h2>7. Step-by-Step Practical Submission Workflow</h2>
 
 <div class="note ok">
-  <strong>Fastest Route to Submit:</strong> The repository includes a pre-computed, fully validated submission raster that applies the adopted winning policy to the 11-fold ensemble mean:
-  <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> (sha256: <code>{shipped_sha}</code>, {shipped_bytes:,} bytes). It is verified and ready for immediate upload to DrivenData — its template conformance (finite inside the sample's valid region, NaN outside, GDAL_NODATA=nan) is enforced by <code>scripts/validate_submission.py</code> and was added 2026-09-25 after the platform rejected a pre-fix file with "Predicted values must be in range [0, 1]".
+  <strong>Primary Route to Submit: Recall-Union v1.</strong> Download the one-click GeoTIFF or its single-member ZIP from the candidate card above. The published primary bytes are <code>{e(recall_path)}</code> (sha256: <code>{e(recall_sha)}</code>, {recall_bytes:,} bytes) and passed <code>scripts/validate_submission.py</code>: EPSG:32611, 3292×3730, float32, finite [0, 1] throughout the template-valid region, NaN only outside it, and template nodata <code>nan</code>. Use the suggested unique file name and Note shown above. This validates format only; it does not predict the hidden leaderboard score.
 </div>
 
 <p>To generate, validate, and submit from scratch, follow these exact steps:</p>
@@ -638,8 +648,9 @@ python scripts/assemble_data_bridge.py
 # Run pre-flight check to verify projection, bounds, resolution, and band tags
 python scripts/prepare_data.py</code></pre>
 
-<h3>Step 3: Generate Predictions with Adopted Policy</h3>
-<p>Choose your generation route:</p>
+<h3>Step 3: Choose the prediction route</h3>
+<p><b>Primary route:</b> use the Recall-Union v1 card at the top of this page. It is the selected new-fault-first candidate and requires no local generation. The commands below are the <b>secondary adopted-ensemble browser/model routes</b>; they remain available for reproducibility and comparison, but they are not the primary candidate advertised for upload.</p>
+<p>Secondary generation routes:</p>
 <ul>
   <li><b>Route A (Local Model Inference):</b>
 <pre><code># src/inference.py automatically reads data/evidence/emission_decision.json
@@ -2428,6 +2439,46 @@ the first honest signal; the private split and the Phase-2 revision are hidden.<
                 "The scoring function, rearranged — and what it actually pays for.")
 
 
+def _strategy_comparison(ev: dict) -> str:
+    """Build the candidate comparison from the committed reports, not hand-entered scores."""
+    recall = ev.get("recall_union") or {}
+    structure = ev.get("structure_consensus") or {}
+    field = ev.get("field_selection") or {}
+
+    def dti(report: dict, population: str) -> str:
+        row = ((report.get("diagnostic_scores") or {}).get(population) or {})
+        value = row.get("dti")
+        return f"{float(value):.4f}" if value is not None else "not measured"
+
+    adopted = ((field.get("fields") or {}).get("mean12") or {}).get("matched_dti")
+    adopted_txt = f"{float(adopted):.4f}" if adopted is not None else "not measured"
+    recall_txt = dti(recall, "sgmc_proxy_only")
+    structure_scores = (structure.get("diagnostic_scores") or {}).get("selected", {})
+    structure_txt = dti({"diagnostic_scores": structure_scores}, "sgmc_proxy_only")
+    if not recall or not structure:
+        return missing(
+            "The candidate comparison reports are not available; no local comparison is advertised.",
+            "python scripts/generate_recall_union_submission.py",
+        )
+    return f"""
+<h2 id="recall-union">New strategy: Recall-Union v1</h2>
+<p>The new candidate shown at the top of the site is intentionally not another copy of the
+catalogue-backbone submission. <code>scripts/generate_recall_union_submission.py</code> forms the
+pixelwise union of the deep ensemble field and the CPU classical baseline, then conforms that field
+to <code>sample_submission.tif</code>. It never reads <code>labels.tif</code> while generating the
+prediction and applies no small-component filter. This is a transparent, high-recall arm for the
+Phase 1 new-fault target; the larger support is its explicit risk.</p>
+<table class="cmp"><thead><tr><th>Arm</th><th>Field construction</th><th>Measured SGMC proxy-only DTI</th><th>Interpretation</th></tr></thead><tbody>
+<tr><td>Adopted baseline</td><td>deep ensemble + floor/thinning policy</td><td>{adopted_txt}</td><td>historical comparison; not a leaderboard score</td></tr>
+<tr><td>Structure-Consensus diagnostic</td><td>19-band multi-scale structure tensor and six-family consensus</td><td>{structure_txt}</td><td>implemented and tested, but not promoted as the download because this local proxy did not support it</td></tr>
+<tr><td><b>Recall-Union v1</b></td><td><b>deep ensemble ∪ CPU classical baseline; no known-label backbone</b></td><td><b>{recall_txt}</b></td><td><b>selected as the new candidate; hidden expert labels remain the only decisive test</b></td></tr>
+</tbody></table>
+<p class="small">The three values above are from committed bytes and the independent SGMC code-2
+population. They are <em>not</em> claims about the DrivenData leaderboard. The site labels this arm
+as a candidate, re-hashes the download, and still requires the same validator before upload.</p>
+"""
+
+
 def build_method(ev: dict) -> str:
     return page("Method", "method.html", f"""
 <h2>Baseline we build on</h2>
@@ -2482,12 +2533,14 @@ expression — magnetic/gravity gradient discontinuities, strain-rate concentrat
 lineaments — which is why all 19 bands are kept and line-enhancement filtering is available in
 post-processing. The Final Prize Round explicitly rewards flagging faults experts then confirm.</li>
 </ol>
+
+{_strategy_comparison(ev)}
 """, "How this differs from the reference solution, and the reasoning behind each change.")
 
 
 def build_results(ev: dict) -> str:
     runs = ev.get("runs", [])
-    body = [f"""<h2>Honest status</h2>
+    body = [_recall_candidate_card(ev), f"""<h2>Honest status</h2>
 {note("bad", '''<b>A green workflow is not evidence.</b> The 6-fold ensemble run
 <code>35042805806</code> trained every fold for 2 h 36 min and then crashed while writing the
 submission (<code>RasterBlockError: the height and width of TIFF dataset blocks must be multiples of
@@ -2501,13 +2554,13 @@ that ships <code>FAILED.json</code> instead of a stub. The rebuilt submission is
 is measured, but it is <b>not yet competitive</b>: the first full-scale run was a 2-epoch MobileNetV2
 smoke test that scored <em>below</em> the trivial blanket-coverage baseline, which is recorded here as
 a negative result rather than dressed up. And every DTI on this page is computed against the
-<em>known</em> catalogue, which is not the scored universe (see <a href="metric.html">Metric</a>).''')}"""]
+<em>provided labels or local SGMC proxy populations</em>; none is the hidden scored universe (see <a href="metric.html">Metric</a>).''')}"""]
 
     _cur = _sha_bytes(SHIPPED_SUBMISSION)
     if _cur.get("exists"):
         body.append(
             note("ok",
-                 f"<b>Current shipped bytes, measured at build time:</b> "
+                 f"<b>Secondary browser-builder bytes, measured at build time:</b> "
                  f"<code>{e(_cur['path'])}</code> — {fmt_bytes(_cur['bytes'])}, "
                  f"sha256 <span class='mono small'>{e(_cur['sha256'])}</span>. "
                  "The run tables below are <i>historical records</i> of what each run wrote "
@@ -3132,6 +3185,12 @@ def _state_pill(ok, yes="READY", no="MISSING") -> str:
 def build_submission(ev: dict) -> str:
     """The operational 'how do I actually submit' page."""
     art = _sha_bytes(SHIPPED_SUBMISSION)
+    recall_report = ev.get("recall_union") or {}
+    recall_artifact = recall_report.get("artifact") or {}
+    recall_path = str(recall_artifact.get("path") or "docs/gemsdoe2_recall_union_submission.tif")
+    recall_live = _sha_bytes(recall_path)
+    recall_sha = recall_live.get("sha256") or str(recall_artifact.get("sha256") or "artifact-not-committed")
+    recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
     val_log = _read(f"{SHIPPED_EVIDENCE_DIR}/validation.log")
     vrows, vpassed = _validation_rows(val_log)
     postwrite = load(ROOT / f"{SHIPPED_EVIDENCE_DIR}/postwrite.json") or {}
@@ -3161,15 +3220,15 @@ def build_submission(ev: dict) -> str:
         f'<td>{e(t)}</td></tr>' for s, t in vrows)
 
     cards = [
-        ("File to upload", f"<b class='mono' style='font-size:.9rem'>{e(SHIPPED_SUBMISSION.split('/')[-1])}</b>",
-         (f"{art['bytes']:,} bytes · single-band float32 GeoTIFF" if art['exists'] else "NOT COMMITTED")),
-        ("sha256 (measured at build time)",
-         f"<b class='mono' style='font-size:.86rem'>{e((art.get('sha256') or '—')[:24])}…</b>",
-         "re-measured by scripts/build_site.py from the committed bytes"),
+        ("Primary file to upload", f"<b class='mono' style='font-size:.9rem'>{e(recall_path.split('/')[-1])}</b>",
+         (f"{recall_bytes:,} bytes · single-band float32 GeoTIFF" if recall_live.get('exists') else "NOT COMMITTED")),
+        ("Primary sha256 (measured at build time)",
+         f"<b class='mono' style='font-size:.86rem'>{e(recall_sha[:24])}…</b>",
+         "Recall-Union v1 · re-measured by scripts/build_site.py from the committed bytes"),
         ("Format validation", "<b>PASSED</b>" if vpassed else "<b>NOT PROVEN</b>",
          f"{len([r for r in vrows if r[0] == '✓'])} checks ✓ in the committed validator log"),
-        ("Emission policy", "<b>floor 0.1 · thin · width 0 px</b>", _policy_subtitle(dec)),
-        ("Ensemble", f"<b>{n_folds} live folds</b>", "runs 35042805806 + 35249562910 (mean12)"),
+        ("Secondary builder policy", "<b>floor 0.1 · thin · width 0 px</b>", _policy_subtitle(dec)),
+        ("Secondary ensemble", f"<b>{n_folds} live folds</b>", "adopted browser-builder field · runs 35042805806 + 35249562910 (mean12)"),
         ("Submission quota", "<b>3 per week</b>", "one final selection before the deadline (rules §3.2/§3.5)"),
         ("Deadline", "<b>Dec 3, 2026 · 11:59 PM UTC</b>", "the same file is scored in both prize rounds"),
         ("Public leaderboard top", f"<b>{lb.get('top_dti', '—')}</b>",
@@ -3183,20 +3242,21 @@ def build_submission(ev: dict) -> str:
 {note("ok", "<strong>This is the operational page.</strong> It answers one question: <em>what exactly do I do to put a valid entry into the GEMS Prize?</em> Background, eligibility analysis and the full source catalogue live on the <a href='executive_summary.html'>executive summary</a>; the numbers behind the model live on <a href='results.html'>results</a>. Every fact below is either (a) measured from the committed bytes while this page was built, (b) copied from a committed evidence JSON, or (c) quoted verbatim from the official rules PDF by quote id.")}
 <div class="stats">{grid}</div>
 
-<h2>0. The whole submission in five commands</h2>
-<p>No training, no GPU, no DrivenData credentials needed for the repository side. This is the path
-that was re-executed in the development sandbox; the validator output it produces is committed at
-<code>{e(SHIPPED_EVIDENCE_DIR)}/validation.log</code>.</p>
-<pre><code>git pull                                     # get the sha256-pinned raster bridge
-python scripts/assemble_data_bridge.py       # verify + place data/training_features.tif, labels.tif, sample_submission.tif
-python scripts/prepare_data.py               # pre-flight: grid, CRS, resolution, band tags
+<h2>0. The whole primary submission in three commands</h2>
+<p>No training, no GPU, or competition-data download is needed to obtain the primary artifact. Download
+<code>{e(recall_path)}</code> from the candidate card, optionally run the validator below, then upload
+that TIFF (or the single-member ZIP) at the submissions URL. Account, enrollment, upload, and the
+official score are human/platform steps; this repository cannot perform them.</p>
+<pre><code>git pull
 python scripts/validate_submission.py \\
-    --pred {e(SHIPPED_SUBMISSION)} \\
+    --pred {e(recall_path)} \\
     --sample data/sample_submission.tif --train data/training_features.tif
-# -> "✅ Validation PASSED - Ready for submission!"</code></pre>
-<p>Then upload <code>{e(SHIPPED_SUBMISSION)}</code> at
-<a href="{SUBMISSIONS_URL}">{e(SUBMISSIONS_URL)}</a> (account + enrollment required — the one step
-this repository cannot do for you, see <a href="#human">§8</a>).</p>
+# -> "✅ Validation PASSED - Ready for submission!"
+# sha256: {e(recall_sha)}
+# Note: Recall-Union v1 · deep+classical union · build {e(recall_sha[:8])}</code></pre>
+<p>Then upload the downloaded primary file at
+<a href="{SUBMISSIONS_URL}">{e(SUBMISSIONS_URL)}</a>. The local diagnostics recorded for this
+candidate are surrogates, not a leaderboard score.</p>
 """)
 
     # ------------------------------------------------------------------ step 1: enter
@@ -3270,10 +3330,14 @@ python scripts/prepare_data.py            # 3292x3730, 19 bands, EPSG:32611, 100
     out.append(f"""
 <h2 id="step3">3. Pick the raster you are going to upload</h2>
 <table><thead><tr><th>Route</th><th>Command</th><th>When to use it</th><th>Cost</th></tr></thead><tbody>
-<tr class="hl"><td><b>A — the committed, validated artifact</b><br><span class="small">what we would upload today</span></td>
-<td class="mono small">{e(SHIPPED_SUBMISSION)}</td>
-<td>Immediately. It is the 11-fold ensemble mean shaped with the adopted policy and its format validation is committed.</td>
+<tr class="hl"><td><b>A — the primary Recall-Union v1 artifact</b><br><span class="small">what we would upload today</span></td>
+<td class="mono small">{e(recall_path)}<br>sha256 {e(recall_sha)}</td>
+<td>Immediately. It is the fixed deep-ensemble ∪ CPU-classical field, deliberately separate from the known-label backbone and old adopted policy. Its local diagnostics are surrogates only.</td>
 <td class="num">0 min</td></tr>
+<tr><td><b>A2 — the secondary browser-builder artifact</b></td>
+<td class="mono small">{e(SHIPPED_SUBMISSION)}</td>
+<td>Retained for reproducibility and comparison; the in-browser generator writes this adopted ensemble field, not the primary Recall-Union candidate.</td>
+<td class="num">seconds</td></tr>
 <tr><td><b>B — local inference</b></td>
 <td class="mono small">python -m src.inference --config configs/config.yaml --out submission.tif</td>
 <td>You trained locally (<code>python -m src.train --config configs/config.yaml</code>) and want predictions from your own weights. The adopted shaping is applied automatically from <code>data/evidence/emission_decision.json</code>.</td>
@@ -3737,6 +3801,58 @@ of it. The container is deliberately <em>not</em> byte-identical — {e(gen_comp
 """
 
 
+def _recall_candidate_card(ev: dict) -> str:
+    """Render the current unique candidate from measured evidence, never from typed hashes."""
+    rep = ev.get("recall_union") or {}
+    if not rep:
+        return missing(
+            "The Recall-Union v1 evidence report is not available, so this candidate is not advertised.",
+            "python scripts/generate_recall_union_submission.py",
+        )
+    artifact = rep.get("artifact") or {}
+    path = str(artifact.get("path") or "docs/gemsdoe2_recall_union_submission.tif")
+    live = _sha_bytes(path)
+    if not live.get("exists"):
+        return missing(
+            "The Recall-Union v1 candidate is not present in this checkout.",
+            "python scripts/generate_recall_union_submission.py",
+        )
+    expected = str(artifact.get("sha256") or "")
+    synced = bool(expected and expected == live.get("sha256"))
+    scores = rep.get("diagnostic_scores") or {}
+    proxy = ((scores.get("sgmc_proxy_only") or {}).get("dti"))
+    union = ((scores.get("union_labels_proxy") or {}).get("dti"))
+    sha = str(live.get("sha256") or "")
+    download_name = Path(path).name
+    zip_name = f"{Path(download_name).stem}.zip"
+    note_text = f"Recall-Union v1 · deep+classical union · build {sha[:8]}"
+    status = '<span class="pill ok">BYTES MATCH REPORT</span>' if synced else '<span class="pill bad">REPORT DRIFT</span>'
+    proxy_txt = f"{float(proxy):.4f}" if proxy is not None else "not measured"
+    union_txt = f"{float(union):.4f}" if union is not None else "not measured"
+    return f"""
+<div class="card candidate-card" style="border: 2px solid #8250df; background: #fbf8ff; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
+  <h3 style="margin-top:0; color:#6639ba;">New candidate: Recall-Union v1</h3>
+  <p><b>New-fault-first strategy:</b> this is the pixelwise union of the independent 11-fold
+  deep-ensemble field and the CPU classical baseline. It intentionally does <em>not</em> copy
+  <code>labels.tif</code> and does not remove small components. That is a deliberate recall-first
+  response to the official DTI weights (α=0.2, β=0.8), not a claim that a local proxy is the
+  leaderboard.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
+    <a href="{e(download_name)}" download="gems-recall-union-v1-{e(sha[:8])}.tif" class="btn" style="background:#8250df; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download Recall-Union GeoTIFF (.tif)</a>
+    <a href="{e(zip_name)}" download="gems-recall-union-v1-{e(sha[:8])}.zip" class="btn" style="background:#0969da; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download single-file ZIP</a>
+  </div>
+  <table class="kv" style="font-size:.88rem"><tbody>
+    <tr><th>File</th><td class="mono">{e(path)} · {int(live.get('bytes') or 0):,} B</td></tr>
+    <tr><th>SHA256</th><td class="mono">{e(sha)}</td></tr>
+    <tr><th>Suggested unique name</th><td class="mono">gems-recall-union-v1-{e(sha[:8])}.tif</td></tr>
+    <tr><th>Suggested Note</th><td class="mono">{e(note_text)}</td></tr>
+    <tr><th>Local diagnostics</th><td>SGMC proxy-only DTI <b>{proxy_txt}</b> · labels∪proxy DTI <b>{union_txt}</b> · these are surrogates, not leaderboard scores</td></tr>
+    <tr><th>Integrity</th><td>{status} · validate again with <code>scripts/validate_submission.py</code> before upload</td></tr>
+  </tbody></table>
+</div>
+"""
+
+
 def _submission_builder(ev: dict) -> str:
     """The submission builder as the FIRST thing a visitor sees: opens index.html and
     executive_summary.html.
@@ -3751,32 +3867,15 @@ def _submission_builder(ev: dict) -> str:
     the panel leads and the audit trail is linked, not reproduced.
     """
     f = _payload_facts(ev)
-    head = ('<section id="build-submission" class="build-hero">\n'
-            '<h2 id="generate-here">The file to submit &mdash; build and download it here, in your '
-            'browser</h2>\n')
-    breakthrough_card = (
-        '<div class="card" style="border: 2px solid #1a7f37; background: #f6f8fa; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 6px;">\n'
-        '<h3 style="margin-top:0; color:#1a7f37;">🚀 GEMSDOE2 Breakthrough: Fault Backbone + Multiscale Geophysical Fusion</h3>\n'
-        '<p><b>Targeting &gt;0.3049 DTI (Highest Public Score):</b> Previous baseline scored <code>0.1563</code> on the DrivenData leaderboard. GEMSDOE2 fuses the verified USGS tectonic fault backbone (1.0), multiscale gradient-boosted geophysics (magnetic horizontal gradient, gravity slope, tilt curvature, detrended elevation), and the 11-fold deep neural ensemble with connected-component noise filtering (&ge;3 px). <b>Measured union surrogate DTI: 0.6367</b> (vs baseline 0.2074).</p>\n'
-        '<div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">\n'
-        '<a href="gemsdoe2_fusion_submission.tif" download="gems-submission-20260925T010000Z-a8dc50f3.tif" class="btn" style="background:#1a7f37; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download GEMSDOE2 Fusion GeoTIFF (.tif)</a>\n'
-        '<a href="gemsdoe2_fusion_submission.zip" download="gems-submission-20260925T010000Z-a8dc50f3.zip" class="btn" style="background:#0969da; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download GEMSDOE2 Fusion Archive (.zip)</a>\n'
-        '</div>\n'
-        '<table class="kv" style="margin: 0.5rem 0; font-size: 0.88rem;"><tbody>\n'
-        '<tr><th>Unique File Name:</th><td class="mono">gems-submission-20260925T010000Z-a8dc50f3.tif</td></tr>\n'
-        '<tr><th>Copyable Note:</th><td class="mono">GEMSDOE2: Fault Backbone + 11-Fold Ensemble + Edge Fusion · build a8dc50f3 · 20260925T010000Z</td></tr>\n'
-        '<tr><th>Format Verification:</th><td>EPSG:32611 · 3292&times;3730 · 100 m float32 · 5,167,373 valid px in [0, 1] · 0 NaNs in valid mask · nodata=nan</td></tr>\n'
-        '<tr><th>SHA256 Checksum:</th><td class="mono">a8dc50f3b0b2c77c9829da8875ae23007d5efbdfe1b3c2b8c1535790c9982f95</td></tr>\n'
-        '</tbody></table>\n'
-        '<div class="note ok" style="margin-top: 10px; font-size: 0.85rem;">\n'
-        '<b>Fix for &quot;Predicted values must be in range [0, 1]&quot;:</b> '
-        'DrivenData validates that all pixels within the template\'s active footprint evaluate to float values between 0.0 and 1.0. Unmasked NaN pixels inside the valid footprint trigger this rejection. GEMSDOE2 conforms exactly to <code>sample_submission.tif</code>: finite in [0, 1] within the 5,167,373 active pixels, NaN outside, with <code>GDAL_NODATA=nan</code>. Fully verified by <code>scripts/validate_submission.py</code>.\n'
-        '</div>\n'
-        '</div>\n'
-        '<h3 style="margin-top:1.5rem;">Interactive In-Browser GeoTIFF Compiler &amp; Validator</h3>\n'
-    )
+    head = '<section id="build-submission" class="build-hero">\n'
+    builder_title = '<h2 id="generate-here">Secondary route: build the adopted ensemble field in your browser</h2>\n'
+    # The new-fault-first candidate is the actionable download.  The browser builder below
+    # remains the audited route for the adopted ensemble field; keeping both visible makes the
+    # trade-off explicit instead of silently replacing one artifact with another.
+    breakthrough_card = _recall_candidate_card(ev)
+
     if not f["present"]:
-        return head + breakthrough_card + missing("the site payload has not been built, so there is no file to generate "
+        return head + breakthrough_card + builder_title + missing("the site payload has not been built, so there is no file to generate "
                               "from this page.",
                               "python scripts/build_submission_payload.py && python scripts/build_site.py") \
                + "\n</section>\n"
@@ -3797,7 +3896,9 @@ def _submission_builder(ev: dict) -> str:
     else:
         verdict_txt = f'verdict <b>{e(verdict)}</b> — the headless run has not landed in this checkout'
     p = (
-        f'<p>The DrivenData <em>File to submit</em> dialog asks for a single-band GeoTIFF '
+        f'<p>This browser builder is a <b>secondary reproducibility route</b> for the adopted ensemble field; '
+        f'the Recall-Union v1 card immediately above is the primary candidate. The DrivenData '
+        f'<em>File to submit</em> dialog asks for a single-band GeoTIFF '
         f'(<code>.tif</code>) &mdash; or a <code>.zip</code> containing one &mdash; that matches the '
         f"submission format's CRS, shape and geotransform: "
         f'<b>{int(grid.get("width") or 0):,} &times; {int(grid.get("height") or 0):,} px &middot; '
@@ -3839,7 +3940,7 @@ def _submission_builder(ev: dict) -> str:
         f'files, re-checked at build time on '
         f'<a href="how_to_submit.html#generate">the subpage</a>.</p>'
     )
-    return head + breakthrough_card + p + "\n" + mount + foot + "\n</section>\n"
+    return head + breakthrough_card + builder_title + p + "\n" + mount + foot + "\n</section>\n"
 
 
 def build_how_to_submit(ev: dict) -> str:
@@ -3856,6 +3957,12 @@ def build_how_to_submit(ev: dict) -> str:
     checks = rd.get("checks") or []
     summary = rd.get("summary") or {}
     art = _sha_bytes(SHIPPED_SUBMISSION)
+    recall_report = ev.get("recall_union") or {}
+    recall_artifact = recall_report.get("artifact") or {}
+    recall_path = str(recall_artifact.get("path") or "docs/gemsdoe2_recall_union_submission.tif")
+    recall_live = _sha_bytes(recall_path)
+    recall_sha = recall_live.get("sha256") or str(recall_artifact.get("sha256") or "artifact-not-committed")
+    recall_bytes = int(recall_live.get("bytes") or recall_artifact.get("bytes") or 0)
     val_log = _read(f"{SHIPPED_EVIDENCE_DIR}/validation.log")
     vrows, vpassed = _validation_rows(val_log)
     dl = _deadline_from_catalog()
@@ -3909,6 +4016,10 @@ def build_how_to_submit(ev: dict) -> str:
                       + (f" · verdict {m.get('verdict')}" if m.get("verdict") else ""))
         elif c["id"] == "human_steps":
             detail = " · ".join(s["action"] for s in (meas.get("steps") or [])[:3]) + " …"
+        elif c["id"] == "primary_candidate":
+            detail = (f"public {str(meas.get('public_sha256') or '')[:16]}… · "
+                      f"audit {str(meas.get('evidence_sha256') or '')[:16]}… · "
+                      f"{meas.get('bytes', 0):,} bytes")
         gate_rows.append(f'<tr><td class="mono small">{e(c["id"])}</td><td>{e(c["label"])}</td>'
                          f'<td>{_readiness_pill(c["status"])}</td>'
                          f'<td class="small">{e(detail)}</td>'
@@ -3926,10 +4037,11 @@ def build_how_to_submit(ev: dict) -> str:
     # empty ev, and caught it.)
     gen_verdict = str((ev.get("site_generator") or {}).get("verdict") or "not run in this checkout")
     routes = [
-        ("A", "Use the committed ensemble artifact", "seconds",
-         f"curl -L -o submission.tif {REPO}/raw/main/{SHIPPED_SUBMISSION}",
-         "The 11-fold blend with the adopted emission policy. Format-validated by the committed "
-         "validator log; its quality numbers are on <a href=\"results.html\">results</a>."),
+        ("A", "Download the primary Recall-Union v1 artifact", "seconds",
+         f"curl -L -o gems-recall-union-v1-{recall_sha[:8]}.tif {REPO}/raw/main/{recall_path}",
+         f"The fixed deep-ensemble ∪ CPU-classical field. It is {recall_bytes:,} bytes and re-hashed "
+         f"at build time as <code>{recall_sha}</code>; run the validator before upload. Its local "
+         "diagnostics are surrogates, not leaderboard scores."),
         ("B", "Re-run the training workflow on GitHub Actions", "2–6 h, free",
          "gh workflow run train-and-submit.yml -f profile=smoke   # or: Actions → Train and build submission → Run workflow",
          "Uses the CPU runner as the unrestricted machine: assembles data/ from the bridge, trains, "
@@ -4036,6 +4148,8 @@ measurement from this checkout; nothing here is typed from memory. The long-form
 <a href="submission.html">submission details</a>, carries the same procedure with the measurements
 and the irregularities in full.</p>
 
+{_recall_candidate_card(ev)}
+
 <h2 id="gates">1. What is already true in this repository (measured now)</h2>
 <p>Every row below is a measurement from <code>data/evidence/submission_readiness.json</code>
 ({e(str(rd.get("generated_utc", "not committed")))}), produced by
@@ -4048,7 +4162,15 @@ means no program here can do it.</p>
       "Everything a machine can do up to that click is done and re-verified here, which is why "
       "the first upload is the highest-value next action on this project.")}
 
-<h2 id="file">2. The file that goes to the platform</h2>
+<h2 id="file">2. The primary file that goes to the platform</h2>
+<p>The candidate card above is the primary route. For a copyable identity, use
+<code>{e(recall_path)}</code>, SHA-256 <code>{e(recall_sha)}</code>, and the suggested Note
+<code>Recall-Union v1 · deep+classical union · build {e(recall_sha[:8])}</code>. The single-member ZIP
+button is an alternate container for those same TIFF bytes.</p>
+<h3>Secondary browser-builder artifact</h3>
+<p>The in-browser compiler in section 3 remains an independently audited way to reproduce the
+adopted 11-fold ensemble field. It is retained for comparison, not presented as the primary
+Recall-Union candidate.</p>
 <table><thead><tr><th>Field</th><th>Value</th><th>How it was established</th></tr></thead><tbody>
 <tr><td><b>Path in this repository</b></td><td class="mono small">{e(SHIPPED_SUBMISSION)}</td>
 <td class="small">the only artifact whose format validation and emission policy are both committed</td></tr>
@@ -4265,6 +4387,11 @@ def main(argv=None) -> int:
             None),
         "site_generator": load(ROOT / "data/evidence/site_generator.json"),
         "site_payload": load(ROOT / "docs/submission_meta.json"),
+        # Unique submission arm shown above the browser builder.  The page re-hashes the
+        # published bytes and labels diagnostics as surrogates; it never turns a local score
+        # into a leaderboard claim.
+        "recall_union": load(ROOT / "data/evidence/runs/recall-union-v1/recall_union_report.json"),
+        "structure_consensus": load(ROOT / "data/evidence/runs/structure-consensus-v1/structure_report.json"),
         "runs": [],
     }
     rd = ROOT / "data/evidence/runs"

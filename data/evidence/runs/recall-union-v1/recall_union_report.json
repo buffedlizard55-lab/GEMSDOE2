@@ -1,0 +1,106 @@
+{
+  "strategy": "GEMSDOE2 Recall-Union v1",
+  "generated_utc": "2026-09-25T05:29:18Z",
+  "script": "scripts/generate_recall_union_submission.py",
+  "official_metric": {
+    "R_pixels": 3,
+    "R_meters": 300,
+    "alpha": 0.2,
+    "beta": 0.8
+  },
+  "provenance": {
+    "deep_source": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+    "classical_source": "data/evidence/baseline/submission.tif",
+    "template": "data/sample_submission.tif",
+    "deep_px": 172974,
+    "classical_px": 155889,
+    "overlap_px": 3698,
+    "union_px": 325165,
+    "known_labels_used_to_generate_field": false,
+    "component_filter": "none (recall-first arm; DTI beta=0.8 > alpha=0.2)",
+    "conformance": {
+      "pixels": 12279160,
+      "template_valid_px": 5167373,
+      "filled_inside": 0,
+      "masked_outside": 7111787,
+      "clipped": 0,
+      "unchanged": 5167373
+    }
+  },
+  "selection_rule": "fixed pixelwise union of the deep ensemble and the CPU classical baseline; no label raster and no hidden score used",
+  "limitations": [
+    "SGMC proxy-only and provided-label scores are local diagnostics, not leaderboard scores.",
+    "The private expert-labeled new-fault set is unavailable in this checkout.",
+    "A larger support can increase recall and false-positive cost; the single final submission must be selected with that trade-off in mind."
+  ],
+  "artifact": {
+    "path": "docs/gemsdoe2_recall_union_submission.tif",
+    "bytes": 1982553,
+    "sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
+    "dtype": "float32",
+    "finite_px": 5167373,
+    "nan_px": 7111787
+  },
+  "evidence_artifact": {
+    "path": "data/evidence/runs/recall-union-v1/submission.tif",
+    "bytes": 1982553,
+    "sha256": "8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a",
+    "width": 3292,
+    "height": 3730,
+    "count": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "res": [
+      100.0,
+      100.0
+    ],
+    "transform": [
+      100.0,
+      0.0,
+      243350.0,
+      0.0,
+      -100.0,
+      4508550.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "nodata": NaN,
+    "tiled": false,
+    "block_shapes": [
+      [
+        1,
+        3292
+      ]
+    ],
+    "finite_px": 5167373,
+    "total_px": 12279160,
+    "nan_px": 7111787,
+    "nonzero_px": 325165,
+    "prob_mass": 325165.0
+  },
+  "diagnostic_scores": {
+    "provided_labels": {
+      "dti": 0.19396717750318127,
+      "TP_w": 22000.313515407288,
+      "FP_w": 301162.025069714,
+      "FN_w": 38987.68648459271,
+      "truth_px": 60988
+    },
+    "sgmc_proxy_only": {
+      "dti": 0.14785022334531403,
+      "TP_w": 16872.528361501485,
+      "FP_w": 307066.7666513368,
+      "FN_w": 44791.471638498515,
+      "truth_px": 61664
+    },
+    "union_labels_proxy": {
+      "dti": 0.23909019312798177,
+      "TP_w": 38872.84187690877,
+      "FP_w": 283451.74578629056,
+      "FN_w": 83779.15812309123,
+      "truth_px": 122652
+    }
+  },
+  "elapsed_note": "Scores are recomputed from the final bytes by this script."
+}

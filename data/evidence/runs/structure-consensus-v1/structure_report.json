@@ -1,0 +1,510 @@
+{
+  "strategy": "GEMSDOE2 Structure-Consensus v1",
+  "generated_utc": "2026-09-25T05:49:18Z",
+  "script": "scripts/generate_structure_consensus_submission.py",
+  "official_problem_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+  "parameters": {
+    "support_fraction": 0.02,
+    "dilation": 1,
+    "min_component": 5
+  },
+  "provenance": {
+    "algorithm": "multiscale structure-tensor gradient energy with independent-family consensus",
+    "source_features": "data/training_features.tif",
+    "source_template": "data/sample_submission.tif",
+    "scales_px": [
+      1.0,
+      3.0,
+      6.0
+    ],
+    "families": {
+      "gravity": 4,
+      "magnetic": 6,
+      "seismic": 2,
+      "strain": 3,
+      "subsurface": 2,
+      "topographic": 2
+    },
+    "bands": [
+      {
+        "index": 1,
+        "name": "mag_anom",
+        "family": "magnetic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.5448748469352722
+      },
+      {
+        "index": 2,
+        "name": "rtp",
+        "family": "magnetic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.7931612133979797
+      },
+      {
+        "index": 3,
+        "name": "tmi_hg",
+        "family": "magnetic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.9113753437995911
+      },
+      {
+        "index": 4,
+        "name": "geod_2ndinv",
+        "family": "strain",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.16407737135887146
+      },
+      {
+        "index": 5,
+        "name": "iso_grav_anom_slope",
+        "family": "gravity",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.7897133231163025
+      },
+      {
+        "index": 6,
+        "name": "tc",
+        "family": "magnetic",
+        "valid_px": 5164300,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.697803795337677
+      },
+      {
+        "index": 7,
+        "name": "geod_shearrate",
+        "family": "strain",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.3063393235206604
+      },
+      {
+        "index": 8,
+        "name": "geod_dilaterate",
+        "family": "strain",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.24683211743831635
+      },
+      {
+        "index": 9,
+        "name": "tmi_vg",
+        "family": "magnetic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.8338730931282043
+      },
+      {
+        "index": 10,
+        "name": "deq_n100a15",
+        "family": "seismic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.6994225978851318
+      },
+      {
+        "index": 11,
+        "name": "iso_grav_anom_vg",
+        "family": "gravity",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.5528284907341003
+      },
+      {
+        "index": 12,
+        "name": "det_elev",
+        "family": "topographic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.6902107000350952
+      },
+      {
+        "index": 13,
+        "name": "iso_grav_anom",
+        "family": "gravity",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.2671387195587158
+      },
+      {
+        "index": 14,
+        "name": "tmi",
+        "family": "magnetic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.7876458168029785
+      },
+      {
+        "index": 15,
+        "name": "depth_to_base_surf",
+        "family": "subsurface",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.8197970986366272
+      },
+      {
+        "index": 16,
+        "name": "ieq_n100a15",
+        "family": "seismic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.35441604256629944
+      },
+      {
+        "index": 17,
+        "name": "cond_surf",
+        "family": "subsurface",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.5822684168815613
+      },
+      {
+        "index": 18,
+        "name": "iso_grav_anom_hg",
+        "family": "gravity",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.5794007778167725
+      },
+      {
+        "index": 19,
+        "name": "det_elev_slope",
+        "family": "topographic",
+        "valid_px": 5164312,
+        "scales": [
+          1.0,
+          3.0,
+          6.0
+        ],
+        "response_p99": 0.8644213080406189
+      }
+    ],
+    "valid_px": 5167373,
+    "score_quantiles": {
+      "50": 0.02547922171652317,
+      "90": 0.11206761747598648,
+      "95": 0.15010327100753784,
+      "99": 0.2916555106639862,
+      "99.5": 0.9585604071617126,
+      "99.9": 1.0
+    }
+  },
+  "emission": {
+    "support_fraction_requested": 0.02,
+    "threshold": 0.20900897681713104,
+    "raw_candidate_px": 103348,
+    "components_before": 1591,
+    "min_component_px": 5,
+    "filtered_px": 102071,
+    "skeleton_px": 24331,
+    "dilation_px": 1,
+    "emitted_px": 73679,
+    "emitted_fraction_of_valid": 0.014258502337648162
+  },
+  "honesty": "labels are diagnostic-only; the emitted field is computed from the 19 feature bands and the sample mask without reading labels.tif",
+  "limitations": [
+    "The hidden expert-labeled test set is unavailable locally; local DTI is a surrogate.",
+    "No claim of beating the leaderboard is made until DrivenData returns a score.",
+    "The one-pixel dilation is a pre-registered localization-margin choice, not tuned on the hidden set."
+  ],
+  "diagnostic_sweep": {
+    "fraction=0.005,dilation=0": {
+      "emission": {
+        "support_fraction_requested": 0.005,
+        "threshold": 0.9585604071617126,
+        "raw_candidate_px": 25837,
+        "components_before": 118,
+        "min_component_px": 5,
+        "filtered_px": 25770,
+        "skeleton_px": 10741,
+        "dilation_px": 0,
+        "emitted_px": 10741,
+        "emitted_fraction_of_valid": 0.002078619058465491
+      },
+      "provided_labels_dti": 0.009456511924244399
+    },
+    "fraction=0.005,dilation=1": {
+      "emission": {
+        "support_fraction_requested": 0.005,
+        "threshold": 0.9585604071617126,
+        "raw_candidate_px": 25837,
+        "components_before": 118,
+        "min_component_px": 5,
+        "filtered_px": 25770,
+        "skeleton_px": 10741,
+        "dilation_px": 1,
+        "emitted_px": 29945,
+        "emitted_fraction_of_valid": 0.005795014217088644
+      },
+      "provided_labels_dti": 0.013356060277614906
+    },
+    "fraction=0.005,dilation=2": {
+      "emission": {
+        "support_fraction_requested": 0.005,
+        "threshold": 0.9585604071617126,
+        "raw_candidate_px": 25837,
+        "components_before": 118,
+        "min_component_px": 5,
+        "filtered_px": 25770,
+        "skeleton_px": 10741,
+        "dilation_px": 2,
+        "emitted_px": 42374,
+        "emitted_fraction_of_valid": 0.008200298294704098
+      },
+      "provided_labels_dti": 0.01673943322706897
+    },
+    "fraction=0.01,dilation=0": {
+      "emission": {
+        "support_fraction_requested": 0.01,
+        "threshold": 0.2916555106639862,
+        "raw_candidate_px": 51674,
+        "components_before": 416,
+        "min_component_px": 5,
+        "filtered_px": 51309,
+        "skeleton_px": 13758,
+        "dilation_px": 0,
+        "emitted_px": 13758,
+        "emitted_fraction_of_valid": 0.0026624747236168164
+      },
+      "provided_labels_dti": 0.015076834061631707
+    },
+    "fraction=0.01,dilation=1": {
+      "emission": {
+        "support_fraction_requested": 0.01,
+        "threshold": 0.2916555106639862,
+        "raw_candidate_px": 51674,
+        "components_before": 416,
+        "min_component_px": 5,
+        "filtered_px": 51309,
+        "skeleton_px": 13758,
+        "dilation_px": 1,
+        "emitted_px": 41660,
+        "emitted_fraction_of_valid": 0.008062123636130002
+      },
+      "provided_labels_dti": 0.020985864412837424
+    },
+    "fraction=0.01,dilation=2": {
+      "emission": {
+        "support_fraction_requested": 0.01,
+        "threshold": 0.2916555106639862,
+        "raw_candidate_px": 51674,
+        "components_before": 416,
+        "min_component_px": 5,
+        "filtered_px": 51309,
+        "skeleton_px": 13758,
+        "dilation_px": 2,
+        "emitted_px": 64520,
+        "emitted_fraction_of_valid": 0.012486034973670374
+      },
+      "provided_labels_dti": 0.02577450396092852
+    },
+    "fraction=0.02,dilation=0": {
+      "emission": {
+        "support_fraction_requested": 0.02,
+        "threshold": 0.20900897681713104,
+        "raw_candidate_px": 103348,
+        "components_before": 1591,
+        "min_component_px": 5,
+        "filtered_px": 102071,
+        "skeleton_px": 24331,
+        "dilation_px": 0,
+        "emitted_px": 24331,
+        "emitted_fraction_of_valid": 0.0047085820977119325
+      },
+      "provided_labels_dti": 0.02815978088413913
+    },
+    "fraction=0.02,dilation=1": {
+      "emission": {
+        "support_fraction_requested": 0.02,
+        "threshold": 0.20900897681713104,
+        "raw_candidate_px": 103348,
+        "components_before": 1591,
+        "min_component_px": 5,
+        "filtered_px": 102071,
+        "skeleton_px": 24331,
+        "dilation_px": 1,
+        "emitted_px": 73679,
+        "emitted_fraction_of_valid": 0.014258502337648162
+      },
+      "provided_labels_dti": 0.03789070648423895
+    },
+    "fraction=0.02,dilation=2": {
+      "emission": {
+        "support_fraction_requested": 0.02,
+        "threshold": 0.20900897681713104,
+        "raw_candidate_px": 103348,
+        "components_before": 1591,
+        "min_component_px": 5,
+        "filtered_px": 102071,
+        "skeleton_px": 24331,
+        "dilation_px": 2,
+        "emitted_px": 120350,
+        "emitted_fraction_of_valid": 0.023290364368896924
+      },
+      "provided_labels_dti": 0.0446875390625659
+    },
+    "fraction=0.04,dilation=0": {
+      "emission": {
+        "support_fraction_requested": 0.04,
+        "threshold": 0.16307565569877625,
+        "raw_candidate_px": 206696,
+        "components_before": 2892,
+        "min_component_px": 5,
+        "filtered_px": 204322,
+        "skeleton_px": 44044,
+        "dilation_px": 0,
+        "emitted_px": 44044,
+        "emitted_fraction_of_valid": 0.008523479919100092
+      },
+      "provided_labels_dti": 0.04564725949759314
+    },
+    "fraction=0.04,dilation=1": {
+      "emission": {
+        "support_fraction_requested": 0.04,
+        "threshold": 0.16307565569877625,
+        "raw_candidate_px": 206696,
+        "components_before": 2892,
+        "min_component_px": 5,
+        "filtered_px": 204322,
+        "skeleton_px": 44044,
+        "dilation_px": 1,
+        "emitted_px": 131607,
+        "emitted_fraction_of_valid": 0.02546884074364285
+      },
+      "provided_labels_dti": 0.0559284697040189
+    },
+    "fraction=0.04,dilation=2": {
+      "emission": {
+        "support_fraction_requested": 0.04,
+        "threshold": 0.16307565569877625,
+        "raw_candidate_px": 206696,
+        "components_before": 2892,
+        "min_component_px": 5,
+        "filtered_px": 204322,
+        "skeleton_px": 44044,
+        "dilation_px": 2,
+        "emitted_px": 216978,
+        "emitted_fraction_of_valid": 0.04199000149592452
+      },
+      "provided_labels_dti": 0.061861578377426826
+    }
+  },
+  "diagnostic_scores": {
+    "selected": {
+      "provided_labels": {
+        "dti": 0.03789070648423895,
+        "TP_w": 2391.5170665532446,
+        "FP_w": 69237.43779690817,
+        "FN_w": 58596.48293344676,
+        "truth_px": 60988,
+        "prediction_px": 73679
+      },
+      "sgmc_proxy_only": {
+        "dti": 0.030102038557415972,
+        "TP_w": 1918.1842200889755,
+        "FP_w": 70039.4898052204,
+        "FN_w": 59745.81577991103,
+        "truth_px": 61664,
+        "prediction_px": 73679
+      },
+      "union_labels_proxy": {
+        "dti": 0.038438021544339826,
+        "TP_w": 4309.70128664222,
+        "FP_w": 65686.24156548394,
+        "FN_w": 118342.29871335778,
+        "truth_px": 122652,
+        "prediction_px": 73679
+      }
+    }
+  },
+  "seconds": 222.82,
+  "artifact": {
+    "path": "docs/gemsdoe2_structure_consensus_submission.tif",
+    "bytes": 1607372,
+    "sha256": "0c265d667e7d98b03cff6e56ad5eca59fd5ebbefcdd57e7e2c2df29f6b5305d7",
+    "dtype": "float32",
+    "finite_px": 5167373,
+    "nan_px": 7111787
+  },
+  "evidence_artifact": {
+    "path": "data/evidence/runs/structure-consensus-v1/submission.tif",
+    "bytes": 1607372,
+    "sha256": "0c265d667e7d98b03cff6e56ad5eca59fd5ebbefcdd57e7e2c2df29f6b5305d7"
+  }
+}

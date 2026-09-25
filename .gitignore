@@ -37,6 +37,9 @@ outputs_*/
 !data/bridge/*.tif
 !data/evidence/**/*.tif
 !docs/*.tif
+# Browser submission builder payload: small, lossless, required by the published site.
+!docs/submission_meta.json
+!docs/submission_field.bin
 *.zip
 !data/evidence/**/*.zip
 !docs/*.zip

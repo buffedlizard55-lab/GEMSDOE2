@@ -1,307 +1,44 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Executive Summary — GEMSDOE2-TURBO</title>
-<meta name="description" content="Advanced multi-model fusion system for DOE GEMS Prize - targeting scores above 0.3049">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Archived TURBO summary — DOE GEMS</title>
+<meta name="description" content="Archived, non-primary TURBO experiment notice for the DOE GEMS working site.">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
 </head><body>
-<header>
-  <div class="wrap">
-    <div class="brand"><span class="logo">🚀</span>
-      <div><div class="name">GEMSDOE2-TURBO</div>
-      <div class="tag">Advanced Multi-Model Fusion · Targeting &gt;0.3049 DTI</div></div>
-    </div>
-  </div>
-</header>
-<nav><div class="wrap">
-<a href="index.html">Overview</a>
-<a href="executive_summary.html">Original Executive Summary</a>
-<a href="executive_summary_turbo.html" class="active">↳ TURBO Executive Summary</a>
-<a href="how_to_submit_turbo.html">How to Submit (TURBO)</a>
-<a href="turbo_method.html">TURBO Method</a>
-<a href="turbo_results.html">TURBO Results</a>
-</div></nav>
+<header><div class="wrap"><div class="brand"><span class="logo">⚠️</span><div><div class="name">GEMS Prize — archived TURBO experiment</div><div class="tag">Not the current submission system · use Recall-Union v1</div></div></div></div></header>
+<nav><div class="wrap"><a href="index.html">Overview</a>
+<a href="executive_summary.html">Executive summary</a>
+<a href="how_to_submit.html">↳ How to submit</a>
+<a href="submission.html">Submission details</a>
+<a href="data.html">Data</a>
+<a href="metric.html">Metric</a>
+<a href="method.html">Method</a>
+<a href="results.html">Results</a>
+<a href="sources.html">Sources</a>
+<a href="verification.html">Verification</a>
+<a href="review.html">Current review</a>
+<a href="reproduce.html">Reproduce</a>
+<a href="executive_summary_turbo.html" class="active">TURBO archive</a>
+<a href="how_to_submit_turbo.html">TURBO guide</a>
+<a href="turbo_method.html">TURBO method</a>
+<a href="turbo_results.html">TURBO results</a></div></nav>
 <main class="wrap">
-
-<h1>GEMSDOE2-TURBO: Executive Summary</h1>
-<p class="lede">Advanced Multi-Model Fusion System for DOE GEMS Prize - Designed to Score Above 0.3049</p>
-
-<div class="note ok" style="margin-bottom: 2rem;">
-<strong>🎯 MISSION:</strong> Create a submission system that can achieve scores higher than the current leaderboard maximum of <b>0.3049 DTI</b> by using advanced multi-scale, multi-model fusion techniques that specifically target <em>new, unmapped faults</em> - the actual scoring target of the competition.
+<h1>Archived TURBO summary</h1>
+<div class="note warn"><b>Archived / not primary.</b> The former TURBO pages and artifacts are retained for audit history only. Do not treat their old target, score, hash, or download as a current official result.</div>
+<h2>Current primary: Recall-Union v1</h2>
+<p>The auditable current candidate is a fixed pixelwise union of the independent deep-ensemble and CPU classical fields. It does not copy <code>labels.tif</code> and its local SGMC measurements are surrogates, not leaderboard scores.</p>
+<div class="card" style="border:2px solid #8250df;background:#fbf8ff;padding:1.25rem;border-radius:8px">
+<p><b>Artifact:</b> <code>docs/gemsdoe2_recall_union_submission.tif</code><br>
+<b>SHA-256:</b> <code>8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</code><br>
+<b>Suggested name:</b> <code>gems-recall-union-v1-8fc82777.tif</code><br>
+<b>Suggested Note:</b> <code>Recall-Union v1 · deep+classical union · build 8fc82777</code></p>
+<p><a class="btn" href="gemsdoe2_recall_union_submission.tif" download="gems-recall-union-v1-8fc82777.tif">Download current GeoTIFF</a>
+<a class="btn" href="gemsdoe2_recall_union_submission.zip" download="gems-recall-union-v1-8fc82777.zip">Download single-member ZIP</a></p>
 </div>
-
-<!-- HERO SECTION WITH DOWNLOAD BUTTONS -->
-<section id="build-submission" class="build-hero">
-<h2 id="generate-here">📥 Download Ready-to-Submit TURBO File</h2>
-<div class="card" style="border: 3px solid #e31937; background: linear-gradient(135deg, #fff5f5, #fef2f2); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-<h3 style="margin-top:0; color:#e31937; font-size: 1.3rem;">⚡ GEMSDOE2-TURBO: Advanced Multi-Model Fusion Submission</h3>
-<p style="font-size: 1.05rem; line-height: 1.6; margin: 0.5rem 0;">
-<b>Target Score: &gt;0.3049 DTI</b> (Current leaderboard maximum: 0.3049)<br>
-<b>Strategy:</b> Multi-scale edge detection + lineament analysis + gradient fusion + proximity boosting<br>
-<b>Key Innovation:</b> Specifically optimized to detect <em>new, unmapped faults</em> (the actual competition scoring target)
-</p>
-
-<div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1.25rem 0;">
-<a href="gemsdoe2_turbo_submission.tif" download="turbo-submission-20260925T010000Z-b3d8f7a2.tif" class="btn" style="background: linear-gradient(135deg, #e31937, #c41526); color:#fff; padding: 14px 24px; border-radius: 8px; text-decoration:none; font-weight:bold; display:inline-block; font-size: 1.05rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">📥 Download TURBO GeoTIFF (.tif)</a>
-<a href="gemsdoe2_turbo_submission.zip" download="turbo-submission-20260925T010000Z-b3d8f7a2.zip" class="btn" style="background: linear-gradient(135deg, #0969da, #0657c2); color:#fff; padding: 14px 24px; border-radius: 8px; text-decoration:none; font-weight:bold; display:inline-block; font-size: 1.05rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">📦 Download TURBO Archive (.zip)</a>
-<a href="javascript:generateTurbo()" class="btn" style="background: linear-gradient(135deg, #1a7f37, #116328); color:#fff; padding: 14px 24px; border-radius: 8px; text-decoration:none; font-weight:bold; display:inline-block; font-size: 1.05rem; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">⚡ Generate Custom TURBO</a>
-</div>
-
-<table class="kv" style="margin: 0.75rem 0; font-size: 0.9rem;">
-<tbody>
-<tr><th style="font-weight: bold; padding: 8px 12px 8px 0; text-align: left;">Unique File Name:</th><td class="mono" style="padding: 8px;">turbo-submission-20260925T010000Z-b3d8f7a2.tif</td></tr>
-<tr><th style="font-weight: bold; padding: 8px 12px 8px 0; text-align: left;">Copyable Note:</th><td class="mono" style="padding: 8px;">GEMSDOE2-TURBO: Multi-Scale Fusion · build b3d8f7a2 · 20260925T010000Z</td></tr>
-<tr><th style="font-weight: bold; padding: 8px 12px 8px 0; text-align: left;">Format Verification:</th><td style="padding: 8px;">EPSG:32611 · 3292×3730 · 100 m float32 · 5,167,373 valid px in [0, 1] · 0 NaNs in valid mask · nodata=nan</td></tr>
-<tr><th style="font-weight: bold; padding: 8px 12px 8px 0; text-align: left;">SHA256 Checksum:</th><td class="mono" style="padding: 8px;">b3d8f7a2c9e5b1a8d4e7f3c2b8a1e6d5c9f7b3a2e8d4c1b5a9f3e7d2c8b4a6</td></tr>
-</tbody>
-</table>
-
-<div class="note ok" style="margin-top: 12px; font-size: 0.88rem; padding: 10px; background: #e8f5e8; border-left: 4px solid #1a7f37;">
-<b>✅ Fix for "Predicted values must be in range [0, 1]"</b><br>
-DrivenData validates that ALL pixels within the template's active footprint are finite values in [0.0, 1.0]. Unmasked NaN pixels inside the valid footprint trigger rejection. GEMSDOE2-TURBO conforms exactly to <code>sample_submission.tif</code>: finite in [0, 1] within the 5,167,373 active pixels, NaN outside, with <code>GDAL_NODATA=nan</code>. Fully verified by <code>scripts/validate_submission.py</code>.
-</div>
-
-<div class="note warn" style="margin-top: 12px; font-size: 0.88rem; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107;">
-<b>⚠️ IMPORTANT:</b> This is a <em>different</em> submission system from the original GEMSDOE2. It uses advanced multi-model fusion specifically designed to detect NEW faults (the actual competition target). Upload this file to test if it scores higher than 0.3049!
-</div>
-</div>
-
-<h3 style="margin-top:1.5rem;">🔄 In-Browser TURBO Generator</h3>
-<p>The DrivenData <em>File to submit</em> dialog requires a single-band GeoTIFF (<code>.tif</code>) or <code>.zip</code> file matching: <b>3,292 × 3,730 px · EPSG:32611 · float32 in [0, 1], NaN outside footprint</b>. Click the button below to generate a TURBO submission directly in your browser with unique parameters optimized for new fault detection.</p>
-
-<div id="turbo-generator" data-meta="turbo_submission_meta.json" data-blob="turbo_submission_field.bin"
-     data-artifact="data/evidence/runs/turbo-latest/submission.tif" data-sha256="b3d8f7a2c9e5b1a8d4e7f3c2b8a1e6d5c9f7b3a2e8d4c1b5a9f3e7d2c8b4a6"></div>
-
-<p class="small">This generator uses the same JavaScript validation as the original GEMSDOE2, ensuring format compliance. The TURBO system adds multi-scale edge detection, lineament analysis, and advanced gradient fusion to improve detection of new faults.</p>
-</section>
-
-<!-- KEY INSIGHTS -->
-<h2>🔍 Why TURBO Can Score Higher Than 0.3049</h2>
-
-<div class="note ok" style="margin: 1rem 0; padding: 1rem; background: #e8f5e8; border-left: 4px solid #1a7f37;">
-<h3 style="margin-top: 0;">The Critical Insight: Scoring Target is NEW Faults</h3>
-<p style="margin: 0.5rem 0 0 0;"><b>The competition does NOT score on the public USGS fault database!</b></p>
-<ul style="margin: 0.5rem 0 0 1rem; padding-left: 1.5rem;">
-<li><b>Training labels</b> = Known USGS faults (public database)</li>
-<li><b>Test/Scoring target</b> = NEW, expert-mapped faults NOT in the public database</li>
-<li><b>Phase 2</b> = Same submissions re-scored against EXPANDED label set (initial new faults + expert-verified discoveries from all submissions)</li>
-</ul>
-<p style="margin: 0.5rem 0 0 0;"><b>Implication:</b> Models that only reproduce known faults will score poorly. We need to detect <em>previously unmapped</em> fault patterns.</p>
-</div>
-
-<h3>TURBO Strategy: Multi-Scale New Fault Detection</h3>
-
-<table>
-<thead>
-<tr><th>Component</th><th>Purpose</th><th>Weight</th><th>Target</th></tr>
-</thead>
-<tbody>
-<tr>
-<td><b>Multi-Scale Edge Detection</b></td>
-<td>Detects linear features at multiple resolutions (1px, 2px, 4px sigma)</td>
-<td>40%</td>
-<td>Sharp fault boundaries at different scales</td>
-</tr>
-<tr>
-<td><b>Lineament Analysis</b></td>
-<td>Identifies straight-line geological structures using directional filtering</td>
-<td>30%</td>
-<td>Regional fault trends and alignments</td>
-</tr>
-<tr>
-<td><b>Gradient Fusion</b></td>
-<td>Combines magnitude and directional derivatives from all 19 geophysical bands</td>
-<td>30%</td>
-<td>Subtle geophysical anomalies indicating faults</td>
-</tr>
-<tr>
-<td><b>Proximity Boosting</b></td>
-<td>Increases confidence near known faults (exponential decay over 500m)</td>
-<td>N/A</td>
-<td>Fault networks and connected structures</td>
-</tr>
-<tr>
-<td><b>Connected Component Filtering</b></td>
-<td>Removes isolated pixels (min 3px components)</td>
-<td>N/A</td>
-<td>Noise reduction while preserving real faults</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Why This Works Better</h3>
-<ol>
-<li><b>Multi-Scale Detection:</b> Faults appear at different scales in geophysical data. Single-scale methods miss many new faults.</li>
-<li><b>Geophysical Fusion:</b> Combines magnetic, gravity, and elevation data - each sensitive to different fault characteristics.</li>
-<li><b>Lineament Focus:</b> Geological faults often appear as straight lineaments in remote sensing data.</li>
-<li><b>Proximity Logic:</b> New faults often occur near known faults (fault networks are connected).</li>
-<li><b>New Fault Specific:</b> Unlike baseline methods that focus on known faults, TURBO is designed to find <em>new</em> patterns.</li>
-</ol>
-
-<h2>📊 Performance Targets</h2>
-
-<div class="stats">
-<div class="stat">
-<div class="k">Current Leaderboard Max</div>
-<div class="v"><b>0.3049</b> DTI</div>
-<div class="s">Target to beat</div>
-</div>
-<div class="stat">
-<div class="k">TURBO Expected Score</div>
-<div class="v"><b>>0.3049</b> DTI</div>
-<div class="s">Multi-model fusion advantage</div>
-</div>
-<div class="stat">
-<div class="k">Validation Status</div>
-<div class="v"><span class="pill ok">PASSED</span></div>
-<div class="s">Format verified by validate_submission.py</div>
-</div>
-<div class="stat">
-<div class="k">File Size</div>
-<div class="v"><b>~570 KB</b></div>
-<div class="s">Compressed GeoTIFF</div>
-</div>
-</div>
-
-<h2>🎯 How to Use This System</h2>
-
-<ol>
-<li><b>Download the TURBO submission file</b> using one of the buttons at the top of this page.</li>
-<li><b>Validate it locally</b> (optional but recommended):
-   <pre><code>python scripts/validate_submission.py --pred turbo-submission-*.tif --sample data/sample_submission.tif</code></pre>
-   Expected output: <code>✅ Validation PASSED - Ready for submission!</code></li>
-<li><b>Upload to DrivenData</b>:
-   <ol>
-   <li>Go to: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a></li>
-   <li>Click "New submission"</li>
-   <li>Choose the downloaded .tif or .zip file</li>
-   <li>In the "Note" field, paste: <code class="mono">GEMSDOE2-TURBO: Multi-Scale Fusion · build b3d8f7a2 · 20260925T010000Z</code></li>
-   <li>Click "Submit"</li>
-   </ol>
-</li>
-<li><b>Check your score</b> on the leaderboard. If it's above 0.3049, you've beaten the current maximum!</li>
-<li><b>Generate variants</b> (optional): Run <code>python scripts/generate_turbo_variants.py</code> to create multiple parameter combinations for testing.</li>
-</ol>
-
-<div class="note warn">
-<b>⚠️ Submission Limit:</b> You can make up to 3 submissions per week. Use them wisely!<br>
-<b>⚠️ Final Selection:</b> Before the deadline (Dec 3, 2026), you must choose ONE submission for both prize rounds.
-</div>
-
-<h2>🔬 Scientific Basis</h2>
-
-<h3>Geophysical Fault Indicators</h3>
-<p>Faults in the GeoDAWN region exhibit characteristic signatures across multiple geophysical datasets:</p>
-
-<table>
-<thead>
-<tr><th>Data Type</th><th>Fault Signature</th><th>Detection Method</th></tr>
-</thead>
-<tbody>
-<tr><td><b>Magnetic</b></td><td>Linear anomalies, gradient changes</td><td>Edge detection, gradient analysis</td></tr>
-<tr><td><b>Gravity</b></td><td>Density contrasts, slope changes</td><td>Lineament detection, 2nd derivative</td></tr>
-<tr><td><b>Elevation</b></td><td>Topographic lineaments, slope breaks</td><td>Detrended elevation analysis</td></tr>
-<tr><td><b>Radiometric</b></td><td>Radioactive element concentration changes</td><td>Gradient and edge detection</td></tr>
-</tbody>
-</table>
-
-<h3>Multi-Scale Approach</h3>
-<p>Faults manifest at different scales:</p>
-<ul>
-<li><b>Local scale (1-3 pixels):</b> Individual fault strands, small offsets</li>
-<li><b>Regional scale (5-10 pixels):</b> Fault zones, damage zones</li>
-<li><b>Broad scale (10+ pixels):</b> Regional fault systems, tectonic boundaries</li>
-</ul>
-<p>TURBO's multi-scale edge detection captures faults at all these scales, increasing the chance of detecting new faults that might be missed at a single scale.</p>
-
-<h3>Connected Component Logic</h3>
-<p>Geological faults are continuous features. The minimum 3-pixel component filter:</p>
-<ul>
-<li>Removes single-pixel noise (false positives)</li>
-<li>Preserves real faults (minimum meaningful fault is ~300m at 100m resolution)</li>
-<li>Reduces false positive penalty in DTI metric</li>
-</ul>
-
-<h2>📚 References & Verification</h2>
-
-<h3>Official Competition Documentation</h3>
-<ul>
-<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">Competition Home</a></li>
-<li><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">Problem Description</a></li>
-<li><a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">Official Rules PDF</a> (SHA256: 50d854b1e0239fe6...)</li>
-<li><a href="https://github.com/drivendataorg/gems-prize-reference-solution">Reference Solution</a></li>
-</ul>
-
-<h3>TURBO System Files</h3>
-<ul>
-<li><code>scripts/generate_turbo_submission.py</code> - Main TURBO generator</li>
-<li><code>scripts/generate_turbo_variants.py</code> - Parameter optimization</li>
-<li><code>scripts/validate_submission.py</code> - Format validation</li>
-<li><code>src/submission_io.py</code> - Template conformance</li>
-<li><code>src/metrics.py</code> - DTI computation</li>
-</ul>
-
-<h3>Verification Status</h3>
-<table>
-<thead>
-<tr><th>Check</th><th>Status</th><th>Method</th></tr>
-</thead>
-<tbody>
-<tr><td>Format compliance (CRS, resolution, bounds)</td><td><span class="pill ok">VERIFIED</span></td><td>validate_submission.py</td></tr>
-<tr><td>Value range [0, 1] in valid region</td><td><span class="pill ok">VERIFIED</span></td><td>validate_submission.py</td></tr>
-<tr><td>NaN only outside valid region</td><td><span class="pill ok">VERIFIED</span></td><td>validate_submission.py</td></tr>
-<tr><td>GDAL_NODATA tag</td><td><span class="pill ok">VERIFIED</span></td><td>validate_submission.py</td></tr>
-<tr><td>Multi-scale detection working</td><td><span class="pill ok">VERIFIED</span></td><td>Unit tests</td></tr>
-<tr><td>Browser generator working</td><td><span class="pill ok">VERIFIED</span></td><td>check_site_generator.py</td></tr>
-</tbody>
-</table>
-
-<h2>🚀 Next Steps</h2>
-
-<h3>Immediate Actions</h3>
-<ol>
-<li><b>Download and submit the TURBO file</b> using the buttons at the top of this page.</li>
-<li><b>Check your score</b> on the DrivenData leaderboard.</li>
-<li><b>If score > 0.3049:</b> Celebrate! You've beaten the current maximum!</li>
-<li><b>If score < 0.3049:</b> Try different parameter combinations using the variant generator.</li>
-</ol>
-
-<h3>Advanced Optimization</h3>
-<ol>
-<li><b>Parameter tuning:</b> Run <code>python scripts/generate_turbo_variants.py</code> to test different weight combinations.</li>
-<li><b>Feature selection:</b> Identify which of the 19 bands are most predictive of new faults.</li>
-<li><b>Ensemble methods:</b> Combine TURBO with other models (U-Net, Random Forest, etc.).</li>
-<li><b>Post-processing:</b> Apply morphological operations to clean predictions.</li>
-</ol>
-
-<h3>Long-Term Strategy</h3>
-<ul>
-<li><b>GPU Training:</b> Train deep learning models with full capacity (24GB GPU recommended)</li>
-<li><b>External Data:</b> Incorporate additional public datasets (USGS maps, satellite imagery)</li>
-<li><b>Geological Rules:</b> Add expert knowledge about fault patterns in the region</li>
-<li><b>Iterative Improvement:</b> Use Phase 1 feedback to refine for Phase 2</li>
-</ul>
-
+<h2>Why this page is retained</h2>
+<p>This page name belonged to an earlier fusion experiment. Keeping a visible deprecation notice is
+safer than allowing an old copy, stale checksum, or unsupported score target to look current.</p>
+<p><a href="executive_summary.html">Return to the current executive summary</a> · <a href="how_to_submit.html">Current upload workflow</a> · <a href="verification.html">Verification and limitations</a></p>
 </main>
-<footer>
-<div class="wrap">
-  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 04:00 UTC</p>
-  <p>GEMSDOE2-TURBO: Advanced Multi-Model Fusion System<br>
-     Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
-     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> ·
-     <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
-     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
-</div>
-</footer>
-<script src="geotiff_writer.js"></script>
-<script src="generate_submission.js" defer></script>
-<script>
-// Custom TURBO generator function
-function generateTurbo() {
-    alert('TURBO generator will create a custom submission with unique parameters.\n\nFor now, please use the pre-generated TURBO file above.\n\nTo generate custom variants, run:\npython scripts/generate_turbo_submission.py\n\nThis will create a new submission with a unique timestamp and hash.');
-}
-</script>
-
+<footer><div class="wrap"><p>Generated working notes by <code>scripts/build_site.py</code> · 2026-09-25 05:55 UTC · verify the current artifact with <code>scripts/validate_submission.py</code> before upload.</p></div></footer>
 </body></html>
