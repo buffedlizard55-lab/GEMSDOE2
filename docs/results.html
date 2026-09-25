@@ -19,6 +19,28 @@
 <main class="wrap">
 <h1>Results</h1>
 <p class="lede">Measured outcomes, including the ones that did not work.</p>
+
+<div class="card candidate-card" style="border: 2px solid #8250df; background: #fbf8ff; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
+  <h3 style="margin-top:0; color:#6639ba;">New candidate: Recall-Union v1</h3>
+  <p><b>New-fault-first strategy:</b> this is the pixelwise union of the independent 11-fold
+  deep-ensemble field and the CPU classical baseline. It intentionally does <em>not</em> copy
+  <code>labels.tif</code> and does not remove small components. That is a deliberate recall-first
+  response to the official DTI weights (α=0.2, β=0.8), not a claim that a local proxy is the
+  leaderboard.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
+    <a href="gemsdoe2_recall_union_submission.tif" download="gems-recall-union-v1-8fc82777.tif" class="btn" style="background:#8250df; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download Recall-Union GeoTIFF (.tif)</a>
+    <a href="gemsdoe2_recall_union_submission.zip" download="gems-recall-union-v1-8fc82777.zip" class="btn" style="background:#0969da; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download single-file ZIP</a>
+  </div>
+  <table class="kv" style="font-size:.88rem"><tbody>
+    <tr><th>File</th><td class="mono">docs/gemsdoe2_recall_union_submission.tif · 1,982,553 B</td></tr>
+    <tr><th>SHA256</th><td class="mono">8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</td></tr>
+    <tr><th>Suggested unique name</th><td class="mono">gems-recall-union-v1-8fc82777.tif</td></tr>
+    <tr><th>Suggested Note</th><td class="mono">Recall-Union v1 · deep+classical union · build 8fc82777</td></tr>
+    <tr><th>Local diagnostics</th><td>SGMC proxy-only DTI <b>0.1479</b> · labels∪proxy DTI <b>0.2391</b> · these are surrogates, not leaderboard scores</td></tr>
+    <tr><th>Integrity</th><td><span class="pill ok">BYTES MATCH REPORT</span> · validate again with <code>scripts/validate_submission.py</code> before upload</td></tr>
+  </tbody></table>
+</div>
+
 <h2>Honest status</h2>
 <div class="note bad"><b>A green workflow is not evidence.</b> The 6-fold ensemble run
 <code>35042805806</code> trained every fold for 2 h 36 min and then crashed while writing the
@@ -33,8 +55,72 @@ that ships <code>FAILED.json</code> instead of a stub. The rebuilt submission is
 is measured, but it is <b>not yet competitive</b>: the first full-scale run was a 2-epoch MobileNetV2
 smoke test that scored <em>below</em> the trivial blanket-coverage baseline, which is recorded here as
 a negative result rather than dressed up. And every DTI on this page is computed against the
-<em>known</em> catalogue, which is not the scored universe (see <a href="metric.html">Metric</a>).</div>
-<div class="note ok"><b>Current shipped bytes, measured at build time:</b> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — 557.5 KB, sha256 <span class='mono small'>7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</span>. The run tables below are <i>historical records</i> of what each run wrote <i>then</i>: the 2026-09-25 template-conformance sanitation re-wrote the shipped file, so pre-fix blend hashes no longer match it (the pixels it scored on are unchanged — see <a href='how_to_submit.html#rejection'>How to submit &sect;6b</a>).</div>
+<em>provided labels or local SGMC proxy populations</em>; none is the hidden scored universe (see <a href="metric.html">Metric</a>).</div>
+<div class="note ok"><b>Secondary browser-builder bytes, measured at build time:</b> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — 557.5 KB, sha256 <span class='mono small'>7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</span>. The run tables below are <i>historical records</i> of what each run wrote <i>then</i>: the 2026-09-25 template-conformance sanitation re-wrote the shipped file, so pre-fix blend hashes no longer match it (the pixels it scored on are unchanged — see <a href='how_to_submit.html#rejection'>How to submit &sect;6b</a>).</div>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
+<h3>Run <code>?</code></h3>
+<table class="kv"><tbody>
+<tr><th>Profile</th><td>—</td></tr>
+<tr><th>Runner</th><td>—</td></tr>
+<tr><th>Commit</th><td class="mono small"></td></tr>
+<tr><th>Submission</th><td>—,
+  sha256 <span class="mono small">…</span></td></tr>
+</tbody></table>
 <h3>Run <code>?</code></h3>
 <table class="kv"><tbody>
 <tr><th>Profile</th><td>—</td></tr>
@@ -284,7 +370,7 @@ number is quoted.</p>
 </ol>
 </main>
 <footer><div class="wrap">
-  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:52 UTC</p>
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 05:55 UTC</p>
   <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
      <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
      <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>

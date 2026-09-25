@@ -328,8 +328,13 @@ def test_the_committed_qfaults_refusal_is_the_documented_finding():
     assert pop["B_in_footprint_px"] == stats["mask_px"] - stats["outside_footprint_px"]
     assert stats["catalogue_already_covers_fraction"] == pytest.approx(1.0)
     assert pop["B_code1_fraction"] > 0.999
-    # the shipped submission is the prediction the refusal was measured against
-    assert rep["sources"]["prediction"]["grid"]["sha256"].startswith("a3dcd6d5")
+    # the refusal is about catalogue overlap, not a permanently named submission. The shipped
+    # raster was template-conformed after the original transfer report was produced, so compare
+    # against the live bytes rather than the stale pre-fix prefix.
+    shipped = ROOT / "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+    import hashlib
+    live_sha = hashlib.sha256(shipped.read_bytes()).hexdigest()
+    assert rep["sources"]["prediction"]["grid"]["sha256"] == live_sha
 
 
 # --------------------------------------------------------------------------------------

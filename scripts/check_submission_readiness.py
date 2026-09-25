@@ -27,7 +27,8 @@ CHECKS
   7. in-browser generator         - runs docs/geotiff_writer.js under node and judges its output,
                                     via scripts/check_site_generator.py (the site can hand over a file)
   8. human steps remaining        - enroll / upload / read the leaderboard / pick the final entry
-  9. artifact candidates          - every committed raster that could be uploaded, with its hash
+  9. primary Recall-Union candidate - public/evidence bytes match its report and identity
+ 10. artifact candidates      - every committed raster that could be uploaded, with its hash
 
 USAGE
     python scripts/check_submission_readiness.py                    # writes the evidence JSON
@@ -54,6 +55,9 @@ CANONICAL = {
     "sample_submission.tif": "example_submission.tif",
 }
 SHIPPED_DIR = "data/evidence/runs/ens12-adopted-floor0.1-w0"
+PRIMARY_REPORT = "data/evidence/runs/recall-union-v1/recall_union_report.json"
+PRIMARY_PUBLIC = "docs/gemsdoe2_recall_union_submission.tif"
+PRIMARY_EVIDENCE = "data/evidence/runs/recall-union-v1/submission.tif"
 HUMAN_STEPS = [
     ("Create the DrivenData profile and accept the competition rules", "rules §3.1 verbatim quote"),
     ("Confirm prize eligibility (citizenship / residence; rules §1.3, App. A)", "rules §1.3 verbatim quote"),
@@ -263,11 +267,55 @@ def check_human() -> dict:
                   "private leaderboard; these stay open until a human does them")
 
 
-# ------------------------------------------------------------------ 8. candidates
+# ------------------------------------------------------------------ 8. primary candidate
+def check_primary_candidate() -> dict:
+    """Verify the selected public candidate's report, public bytes, and audit copy agree."""
+    report_path = ROOT / PRIMARY_REPORT
+    public = ROOT / PRIMARY_PUBLIC
+    evidence = ROOT / PRIMARY_EVIDENCE
+    if not report_path.exists() or not public.exists() or not evidence.exists():
+        return _check(
+            "primary_candidate",
+            "Recall-Union v1 public and evidence artifacts match their report",
+            "MISSING",
+            dict(report=PRIMARY_REPORT, public=PRIMARY_PUBLIC, evidence=PRIMARY_EVIDENCE),
+            PRIMARY_REPORT,
+            "run scripts/generate_recall_union_submission.py",
+        )
+    report = json.loads(report_path.read_text())
+    expected = str((report.get("artifact") or {}).get("sha256") or "")
+    public_sha = sha256_file(public)
+    evidence_sha = sha256_file(evidence)
+    provenance = report.get("provenance") or {}
+    no_label_backbone = provenance.get("known_labels_used_to_generate_field") is False
+    ok = bool(expected) and public_sha == expected and evidence_sha == expected and no_label_backbone
+    return _check(
+        "primary_candidate",
+        "Recall-Union v1 public and evidence artifacts match their report",
+        "PASS" if ok else "FAIL",
+        dict(
+            report=PRIMARY_REPORT,
+            public=PRIMARY_PUBLIC,
+            evidence=PRIMARY_EVIDENCE,
+            report_sha256=expected,
+            public_sha256=public_sha,
+            evidence_sha256=evidence_sha,
+            bytes=public.stat().st_size,
+            known_labels_used_to_generate_field=provenance.get("known_labels_used_to_generate_field"),
+            component_filter=provenance.get("component_filter"),
+        ),
+        PRIMARY_REPORT,
+        "the selected candidate is a local, format-validated artifact; official scoring still requires a human upload",
+    )
+
+
+# ------------------------------------------------------------------ 9. candidates
 def check_candidates() -> dict:
     """Every committed raster that could be uploaded, with the hash of the bytes on disk."""
     cands = []
-    for rel, kind in ((f"{SHIPPED_DIR}/submission.tif", "deep ensemble (11-fold blend, adopted policy)"),
+    for rel, kind in ((PRIMARY_PUBLIC, "Recall-Union v1 (primary candidate)"),
+                      (PRIMARY_EVIDENCE, "Recall-Union v1 (audit copy)"),
+                      (f"{SHIPPED_DIR}/submission.tif", "deep ensemble (11-fold blend, adopted policy)"),
                       ("data/evidence/runs/local-sandbox-smoke/submission.tif", "CPU smoke run (pipeline proof)"),
                       ("data/evidence/baseline/submission.tif", "CPU-only classical baseline")):
         p = ROOT / rel
@@ -295,7 +343,7 @@ def main(argv=None) -> int:
               check_preflight(ROOT / a.data_dir, a.skip_preflight),
               check_artifact(), check_validation(), check_rules(), check_baseline(),
               check_generator(a.skip_generator),
-              check_human(), check_candidates()]
+              check_human(), check_primary_candidate(), check_candidates()]
     failing = [c["id"] for c in checks if c["status"] in ("FAIL",)]
     report = dict(
         generated_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

@@ -21,22 +21,23 @@
 <p class="lede">Exactly how to enter the DOE GEMS Prize and upload a valid GeoTIFF — every step verified against the official rules and re-executed in this repository.</p>
 
 <div class="note ok"><strong>This is the operational page.</strong> It answers one question: <em>what exactly do I do to put a valid entry into the GEMS Prize?</em> Background, eligibility analysis and the full source catalogue live on the <a href='executive_summary.html'>executive summary</a>; the numbers behind the model live on <a href='results.html'>results</a>. Every fact below is either (a) measured from the committed bytes while this page was built, (b) copied from a committed evidence JSON, or (c) quoted verbatim from the official rules PDF by quote id.</div>
-<div class="stats"><div class="stat"><div class="k">File to upload</div><div class="v"><b class='mono' style='font-size:.9rem'>submission.tif</b></div><div class="s">570,890 bytes · single-band float32 GeoTIFF</div></div><div class="stat"><div class="k">sha256 (measured at build time)</div><div class="v"><b class='mono' style='font-size:.86rem'>7f00890a62878d612fb5eef6…</b></div><div class="s">re-measured by scripts/build_site.py from the committed bytes</div></div><div class="stat"><div class="k">Format validation</div><div class="v"><b>PASSED</b></div><div class="s">11 checks ✓ in the committed validator log</div></div><div class="stat"><div class="k">Emission policy</div><div class="v"><b>floor 0.1 · thin · width 0 px</b></div><div class="s">rank 1 of 132 candidates · adopted by measurement</div></div><div class="stat"><div class="k">Ensemble</div><div class="v"><b>11 live folds</b></div><div class="s">runs 35042805806 + 35249562910 (mean12)</div></div><div class="stat"><div class="k">Submission quota</div><div class="v"><b>3 per week</b></div><div class="s">one final selection before the deadline (rules §3.2/§3.5)</div></div><div class="stat"><div class="k">Deadline</div><div class="v"><b>Dec 3, 2026 · 11:59 PM UTC</b></div><div class="s">the same file is scored in both prize rounds</div></div><div class="stat"><div class="k">Public leaderboard top</div><div class="v"><b>0.2854</b></div><div class="s">this repository is NOT on that leaderboard (no DrivenData account)</div></div></div>
+<div class="stats"><div class="stat"><div class="k">Primary file to upload</div><div class="v"><b class='mono' style='font-size:.9rem'>gemsdoe2_recall_union_submission.tif</b></div><div class="s">1,982,553 bytes · single-band float32 GeoTIFF</div></div><div class="stat"><div class="k">Primary sha256 (measured at build time)</div><div class="v"><b class='mono' style='font-size:.86rem'>8fc827773ea28ceeac3ece35…</b></div><div class="s">Recall-Union v1 · re-measured by scripts/build_site.py from the committed bytes</div></div><div class="stat"><div class="k">Format validation</div><div class="v"><b>PASSED</b></div><div class="s">11 checks ✓ in the committed validator log</div></div><div class="stat"><div class="k">Secondary builder policy</div><div class="v"><b>floor 0.1 · thin · width 0 px</b></div><div class="s">rank 1 of 132 candidates · adopted by measurement</div></div><div class="stat"><div class="k">Secondary ensemble</div><div class="v"><b>11 live folds</b></div><div class="s">adopted browser-builder field · runs 35042805806 + 35249562910 (mean12)</div></div><div class="stat"><div class="k">Submission quota</div><div class="v"><b>3 per week</b></div><div class="s">one final selection before the deadline (rules §3.2/§3.5)</div></div><div class="stat"><div class="k">Deadline</div><div class="v"><b>Dec 3, 2026 · 11:59 PM UTC</b></div><div class="s">the same file is scored in both prize rounds</div></div><div class="stat"><div class="k">Public leaderboard top</div><div class="v"><b>0.2854</b></div><div class="s">this repository is NOT on that leaderboard (no DrivenData account)</div></div></div>
 
-<h2>0. The whole submission in five commands</h2>
-<p>No training, no GPU, no DrivenData credentials needed for the repository side. This is the path
-that was re-executed in the development sandbox; the validator output it produces is committed at
-<code>data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log</code>.</p>
-<pre><code>git pull                                     # get the sha256-pinned raster bridge
-python scripts/assemble_data_bridge.py       # verify + place data/training_features.tif, labels.tif, sample_submission.tif
-python scripts/prepare_data.py               # pre-flight: grid, CRS, resolution, band tags
+<h2>0. The whole primary submission in three commands</h2>
+<p>No training, no GPU, or competition-data download is needed to obtain the primary artifact. Download
+<code>docs/gemsdoe2_recall_union_submission.tif</code> from the candidate card, optionally run the validator below, then upload
+that TIFF (or the single-member ZIP) at the submissions URL. Account, enrollment, upload, and the
+official score are human/platform steps; this repository cannot perform them.</p>
+<pre><code>git pull
 python scripts/validate_submission.py \
-    --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif \
+    --pred docs/gemsdoe2_recall_union_submission.tif \
     --sample data/sample_submission.tif --train data/training_features.tif
-# -> "✅ Validation PASSED - Ready for submission!"</code></pre>
-<p>Then upload <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> at
-<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> (account + enrollment required — the one step
-this repository cannot do for you, see <a href="#human">§8</a>).</p>
+# -> "✅ Validation PASSED - Ready for submission!"
+# sha256: 8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a
+# Note: Recall-Union v1 · deep+classical union · build 8fc82777</code></pre>
+<p>Then upload the downloaded primary file at
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>. The local diagnostics recorded for this
+candidate are surrogates, not a leaderboard score.</p>
 
 <h2 id="step1">1. Enter the competition (once, before anything else)</h2>
 <blockquote><p><em>&ldquo;To enter the competition, you must create a profile on the DrivenData platform and agree to abide by the competition rules and restrictions.&rdquo;</em><br><span class="small">— official rules §3.1 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-25 · why it matters: The one genuinely human step: registration, then the account-gated data tab and upload.</span></p></blockquote>
@@ -62,21 +63,25 @@ mismatch, so a corrupted or substituted raster cannot enter the pipeline quietly
 python scripts/prepare_data.py            # 3292x3730, 19 bands, EPSG:32611, 100 m, aligned bounds, band tags present</code></pre>
 <table><thead><tr><th>Canonical file</th><th>Pinned sha256 (data/bridge/manifest.json)</th>
 <th>In this checkout, measured while building this page</th><th>State</th></tr></thead>
-<tbody><tr><td class="mono">data/training_features.tif</td><td class="small mono">4371c82e3b8339b807bdffcf…</td><td class="small mono">run the two commands above</td><td><span class="pill bad">ABSENT</span></td></tr><tr><td class="mono">data/labels.tif</td><td class="small mono">7ba308ccdc4418b31a178f4f…</td><td class="small mono">run the two commands above</td><td><span class="pill bad">ABSENT</span></td></tr><tr><td class="mono">data/sample_submission.tif</td><td class="small mono">2176d08e485aa2cd2860ce8d…</td><td class="small mono">run the two commands above</td><td><span class="pill bad">ABSENT</span></td></tr></tbody></table>
+<tbody><tr><td class="mono">data/training_features.tif</td><td class="small mono">4371c82e3b8339b807bdffcf…</td><td class="small mono">sha256 4371c82e3b8339b8… · 418,912,844 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr><tr><td class="mono">data/labels.tif</td><td class="small mono">7ba308ccdc4418b31a178f4f…</td><td class="small mono">sha256 7ba308ccdc4418b3… · 425,830 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr><tr><td class="mono">data/sample_submission.tif</td><td class="small mono">2176d08e485aa2cd2860ce8d…</td><td class="small mono">sha256 2176d08e485aa2cd… · 1,599,597 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr></tbody></table>
 <table class="kv">
 <tr><th>Where the bytes came from</th><td>Dropbox mirrors printed on the official DrivenData data tab (data tab requires login; mirrors are public share links)</td></tr>
 <tr><th>Where the pins came from</th><td><code>data/evidence/inventory.json</code>, measured on a runner by <code>scripts/inspect_competition_data.py</code>; the placement workflow fails if any sha256 drifts</td></tr>
 <tr><th>Placement evidence</th><td><code>data/evidence/data_placement.json</code> (2026-09-17T01:18:57Z) — The official competition rasters are present in data/ with sha256-verified provenance; scripts/prepare_data.py PASSES on them. The &#x27;single remaining blocker to training&#x27; (data placement) is resolved.</td></tr>
 <tr><th>Pre-flight result</th><td>PASS (exit 0) - OK: data/ passes every pre-flight check; next: python -m src.train --config configs/config.yaml</td></tr>
 </table>
-<div class="note warn"><strong>data/ is not populated in this checkout.</strong> Run the two commands above (the bridge is committed, so this works with no access to DrivenData); every later step needs those three files.</div>
+<div class="note ok"><strong>Ready.</strong> All three canonical rasters are present in this checkout with the pinned sha256, so every step below can be run offline — no DrivenData login needed.</div>
 
 <h2 id="step3">3. Pick the raster you are going to upload</h2>
 <table><thead><tr><th>Route</th><th>Command</th><th>When to use it</th><th>Cost</th></tr></thead><tbody>
-<tr class="hl"><td><b>A — the committed, validated artifact</b><br><span class="small">what we would upload today</span></td>
-<td class="mono small">data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</td>
-<td>Immediately. It is the 11-fold ensemble mean shaped with the adopted policy and its format validation is committed.</td>
+<tr class="hl"><td><b>A — the primary Recall-Union v1 artifact</b><br><span class="small">what we would upload today</span></td>
+<td class="mono small">docs/gemsdoe2_recall_union_submission.tif<br>sha256 8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</td>
+<td>Immediately. It is the fixed deep-ensemble ∪ CPU-classical field, deliberately separate from the known-label backbone and old adopted policy. Its local diagnostics are surrogates only.</td>
 <td class="num">0 min</td></tr>
+<tr><td><b>A2 — the secondary browser-builder artifact</b></td>
+<td class="mono small">data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</td>
+<td>Retained for reproducibility and comparison; the in-browser generator writes this adopted ensemble field, not the primary Recall-Union candidate.</td>
+<td class="num">seconds</td></tr>
 <tr><td><b>B — local inference</b></td>
 <td class="mono small">python -m src.inference --config configs/config.yaml --out submission.tif</td>
 <td>You trained locally (<code>python -m src.train --config configs/config.yaml</code>) and want predictions from your own weights. The adopted shaping is applied automatically from <code>data/evidence/emission_decision.json</code>.</td>
@@ -264,7 +269,7 @@ result) is on <a href="sources.html">sources</a> and in <code>docs/data_catalog.
 
 </main>
 <footer><div class="wrap">
-  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:52 UTC</p>
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 05:55 UTC</p>
   <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
      <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
      <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>

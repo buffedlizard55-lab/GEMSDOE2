@@ -29,16 +29,35 @@ from pathlib import Path
 
 import numpy as np
 import rasterio
-import torch
+try:  # torch is needed only for model inference, not for policy/audit helpers
+    import torch
+except ModuleNotFoundError:  # keep format and shaping utilities usable in a light environment
+    torch = None
 import yaml
 from scipy.ndimage import gaussian_filter
-from tqdm import tqdm
+try:
+    from tqdm import tqdm
+except ModuleNotFoundError:  # progress is optional for the importable inference helpers
+    def tqdm(iterable, **_kwargs):
+        return iterable
 
 from .dataset import (apply_norm_stats, band_names, fit_norm_stats, load_features_and_labels,
                       load_norm_stats, resolve_path, FEATURE_NAME_CANDIDATES, SAMPLE_NAME_CANDIDATES)
-from .models import get_model
 from .postprocess import postprocess_pipeline
 from .submission_io import clean_profile, conform_to_template, write_submission
+
+
+def _require_torch():
+    if torch is None:
+        raise RuntimeError(
+            "model inference requires torch; install the training dependencies from "
+            "requirements.txt. Policy inspection and GeoTIFF validation do not require torch."
+        )
+
+
+def _no_grad(fn):
+    """Apply torch.no_grad when available without making lightweight imports require torch."""
+    return torch.no_grad()(fn) if torch is not None else fn
 
 
 def _gaussian_weight(p: int, sigma_frac: float = 0.25) -> np.ndarray:
@@ -129,10 +148,11 @@ def _tta_variants(x: torch.Tensor, tta: bool):
         yield torch.rot90(xf, k, dims=[2, 3]), (lambda t, k=k: torch.flip(torch.rot90(t, -k, dims=[2, 3]), dims=[3]))
 
 
-@torch.no_grad()
+@_no_grad
 def sliding_window_inference(model, X, patch_size, overlap=0.5, batch_size=16, device="cpu",
                              tta=True, gaussian=True, sigma_frac=0.25):
     """X: (H,W,C) float normalised -> (H,W) probability map."""
+    _require_torch()
     model.eval()
     H, W, C = X.shape
     stride = max(1, int(round(patch_size * (1 - overlap))))
@@ -176,6 +196,12 @@ def R_px_infer(cfg):
 
 
 def main():
+    _require_torch()
+    # Import the model stack only for the executable inference path. This lets the
+    # submission-format checker and emission-policy tests run without a multi-gigabyte
+    # training install.
+    from .models import get_model
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="configs/config.yaml")
     ap.add_argument("--model-dir", default=None, help="defaults to data.output_dir")

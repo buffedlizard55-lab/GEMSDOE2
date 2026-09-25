@@ -22,39 +22,40 @@
 
 <div class="note ok"><strong>Executive Notice:</strong> This subpage is the authoritative operational guide for creating, validating, and submitting an eligible, top-tier entry into the U.S. Department of Energy (DOE) Geologic Enhanced Mapping System (GEMS) Prize challenge. Every requirement, constraint, and metric below is drawn directly from the official competition documents and machine-verified evidence.</div>
 
-<div class="stats"><div class="stat"><div class="k">Total Cash Prize Pool</div><div class="v"><b>$300,000</b></div><div class="s">DOE Geothermal Technologies Office · 15 U.S.C. § 3719</div></div><div class="stat"><div class="k">Phase 1 / Initial</div><div class="v"><b>$50,000</b></div><div class="s">Top 5 split $10k each · Private test set</div></div><div class="stat"><div class="k">Phase 2 / Final</div><div class="v"><b>$250,000</b></div><div class="s">Top 5 ($100k, $70k, $40k, $25k, $15k) · Expanded labels</div></div><div class="stat"><div class="k">Raster Format</div><div class="v"><b>EPSG:32611 · 100 m</b></div><div class="s">3292×3730 single-band float32 [0, 1]</div></div><div class="stat"><div class="k">Submission Limit</div><div class="v"><b>Up to 3 / week</b></div><div class="s">1 final submission selected before deadline (§3.4, §3.5)</div></div><div class="stat"><div class="k">Official Deadline</div><div class="v"><b>Dec 3, 2026</b></div><div class="s">platform close 11:59 PM UTC · §A.1 form due 5:00 PM ET (22:00 UTC) the same day — act on the earlier</div></div><div class="stat"><div class="k">Recommended Policy</div><div class="v"><b>Floor 0.1 / thin / w=0</b></div><div class="s">Rank 1 of 132 candidates · +0.1118 contrast</div></div><div class="stat"><div class="k">Shipped Submission</div><div class="v"><b>570.9 KB GeoTIFF</b></div><div class="s">11-fold ensemble mean · sha256 7f00890a…</div></div></div>
+<div class="stats"><div class="stat"><div class="k">Total Cash Prize Pool</div><div class="v"><b>$300,000</b></div><div class="s">DOE Geothermal Technologies Office · 15 U.S.C. § 3719</div></div><div class="stat"><div class="k">Phase 1 / Initial</div><div class="v"><b>$50,000</b></div><div class="s">Top 5 split $10k each · Private test set</div></div><div class="stat"><div class="k">Phase 2 / Final</div><div class="v"><b>$250,000</b></div><div class="s">Top 5 ($100k, $70k, $40k, $25k, $15k) · Expanded labels</div></div><div class="stat"><div class="k">Raster Format</div><div class="v"><b>EPSG:32611 · 100 m</b></div><div class="s">3292×3730 single-band float32 [0, 1]</div></div><div class="stat"><div class="k">Submission Limit</div><div class="v"><b>Up to 3 / week</b></div><div class="s">1 final submission selected before deadline (§3.4, §3.5)</div></div><div class="stat"><div class="k">Official Deadline</div><div class="v"><b>Dec 3, 2026</b></div><div class="s">platform close 11:59 PM UTC · §A.1 form due 5:00 PM ET (22:00 UTC) the same day — act on the earlier</div></div><div class="stat"><div class="k">Primary Candidate</div><div class="v"><b>Recall-Union v1</b></div><div class="s">deep+classical union · sha256 8fc82777… · local diagnostics only</div></div><div class="stat"><div class="k">Browser Builder (secondary)</div><div class="v"><b>570.9 KB GeoTIFF</b></div><div class="s">adopted 11-fold ensemble field · sha256 7f00890a…</div></div></div>
 
-<div class="note ok"><strong>🚀 TL;DR — Submit in 5 commands (tested 2026-09-18, data placement verified)</strong><br>
-If you need a valid submission <em>today</em>, this is the fastest measured path — no training, no GPU, format-validated and ready to upload:<br>
-<pre><code>git pull
-python scripts/assemble_data_bridge.py   # re-verify &amp; place 418 MB feature stack (sha256 pinned)
-python scripts/prepare_data.py           # PASS: 3292×3730, 19 bands, EPSG:32611, 100 m
-python scripts/validate_submission.py --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif --sample data/sample_submission.tif --train data/training_features.tif
-# → ✅ Validation PASSED — upload data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif at https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></pre>
-<strong>Artifact:</strong> <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> — 570.9 KB, sha256 <code>7f00890a…</code>, 11-fold ensemble mean with adopted policy <code>floor 0.1, thin, width 0 px</code> (rank 1 of 132).<br>
-<strong>Then:</strong> paste the Generative AI disclosure (§3.2) into the submission narrative, and before <strong>Dec 3, 2026 11:59 PM UTC</strong> select this as your single final submission (3/week limit). <a href="#generate-here">Or skip the commands entirely:</a> the generator <b>directly below</b> writes this exact file in your browser, with nothing installed — no Python, no GPU, no download of the 418 MB feature stack — and refuses to hand it over unless its own re-read of the bytes matches every pinned check. <a href="how_to_submit.html">The full subpage</a> lists six routes to the file, their costs, and the gates this checkout passes.</div>
+<div class="note ok"><strong>🚀 TL;DR — Primary submission in three steps</strong><br>
+The selected research candidate is <b>Recall-Union v1</b>, a fixed union of the independent deep-ensemble and CPU classical fields. It is already built, template-validated, and available as a one-click GeoTIFF or single-member ZIP above — no training, GPU, or competition-data download is required to obtain it.<br>
+<pre><code># Optional local re-check of the shipped primary artifact
+python scripts/validate_submission.py --pred docs/gemsdoe2_recall_union_submission.tif --sample data/sample_submission.tif --train data/training_features.tif
+# → ✅ Validation PASSED — upload the downloaded .tif (or its .zip) at https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</code></pre>
+<strong>Primary artifact:</strong> <code>docs/gemsdoe2_recall_union_submission.tif</code> — 1982.6 KB, sha256 <code>8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</code>, suggested unique name <code>gems-recall-union-v1-8fc82777.tif</code>, suggested Note <code>Recall-Union v1 · deep+classical union · build 8fc82777</code>.<br>
+<strong>Important:</strong> the SGMC and provided-label measurements below are local diagnostics, not leaderboard scores; only an authenticated DrivenData submission can provide the official score. Paste the required Generative AI disclosure (§3.2) into the submission narrative, and follow the platform's current enrollment and final-submission rules before the deadline. <a href="#generate-here">The secondary browser-builder route</a> is available for reproducibility, and <a href="how_to_submit.html">the full subpage</a> lists the exact gates.</div>
 
 <section id="build-submission" class="build-hero">
-<h2 id="generate-here">The file to submit &mdash; build and download it here, in your browser</h2>
-<div class="card" style="border: 2px solid #1a7f37; background: #f6f8fa; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 6px;">
-<h3 style="margin-top:0; color:#1a7f37;">🚀 GEMSDOE2 Breakthrough: Fault Backbone + Multiscale Geophysical Fusion</h3>
-<p><b>Targeting &gt;0.3049 DTI (Highest Public Score):</b> Previous baseline scored <code>0.1563</code> on the DrivenData leaderboard. GEMSDOE2 fuses the verified USGS tectonic fault backbone (1.0), multiscale gradient-boosted geophysics (magnetic horizontal gradient, gravity slope, tilt curvature, detrended elevation), and the 11-fold deep neural ensemble with connected-component noise filtering (&ge;3 px). <b>Measured union surrogate DTI: 0.6367</b> (vs baseline 0.2074).</p>
-<div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
-<a href="gemsdoe2_fusion_submission.tif" download="gems-submission-20260925T010000Z-a8dc50f3.tif" class="btn" style="background:#1a7f37; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download GEMSDOE2 Fusion GeoTIFF (.tif)</a>
-<a href="gemsdoe2_fusion_submission.zip" download="gems-submission-20260925T010000Z-a8dc50f3.zip" class="btn" style="background:#0969da; color:#fff; padding: 10px 18px; border-radius: 6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download GEMSDOE2 Fusion Archive (.zip)</a>
+
+<div class="card candidate-card" style="border: 2px solid #8250df; background: #fbf8ff; padding: 1.25rem; margin-bottom: 1.5rem; border-radius: 8px;">
+  <h3 style="margin-top:0; color:#6639ba;">New candidate: Recall-Union v1</h3>
+  <p><b>New-fault-first strategy:</b> this is the pixelwise union of the independent 11-fold
+  deep-ensemble field and the CPU classical baseline. It intentionally does <em>not</em> copy
+  <code>labels.tif</code> and does not remove small components. That is a deliberate recall-first
+  response to the official DTI weights (α=0.2, β=0.8), not a claim that a local proxy is the
+  leaderboard.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin: 1rem 0;">
+    <a href="gemsdoe2_recall_union_submission.tif" download="gems-recall-union-v1-8fc82777.tif" class="btn" style="background:#8250df; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📥 Download Recall-Union GeoTIFF (.tif)</a>
+    <a href="gemsdoe2_recall_union_submission.zip" download="gems-recall-union-v1-8fc82777.zip" class="btn" style="background:#0969da; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:bold; display:inline-block;">📦 Download single-file ZIP</a>
+  </div>
+  <table class="kv" style="font-size:.88rem"><tbody>
+    <tr><th>File</th><td class="mono">docs/gemsdoe2_recall_union_submission.tif · 1,982,553 B</td></tr>
+    <tr><th>SHA256</th><td class="mono">8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</td></tr>
+    <tr><th>Suggested unique name</th><td class="mono">gems-recall-union-v1-8fc82777.tif</td></tr>
+    <tr><th>Suggested Note</th><td class="mono">Recall-Union v1 · deep+classical union · build 8fc82777</td></tr>
+    <tr><th>Local diagnostics</th><td>SGMC proxy-only DTI <b>0.1479</b> · labels∪proxy DTI <b>0.2391</b> · these are surrogates, not leaderboard scores</td></tr>
+    <tr><th>Integrity</th><td><span class="pill ok">BYTES MATCH REPORT</span> · validate again with <code>scripts/validate_submission.py</code> before upload</td></tr>
+  </tbody></table>
 </div>
-<table class="kv" style="margin: 0.5rem 0; font-size: 0.88rem;"><tbody>
-<tr><th>Unique File Name:</th><td class="mono">gems-submission-20260925T010000Z-a8dc50f3.tif</td></tr>
-<tr><th>Copyable Note:</th><td class="mono">GEMSDOE2: Fault Backbone + 11-Fold Ensemble + Edge Fusion · build a8dc50f3 · 20260925T010000Z</td></tr>
-<tr><th>Format Verification:</th><td>EPSG:32611 · 3292&times;3730 · 100 m float32 · 5,167,373 valid px in [0, 1] · 0 NaNs in valid mask · nodata=nan</td></tr>
-<tr><th>SHA256 Checksum:</th><td class="mono">a8dc50f3b0b2c77c9829da8875ae23007d5efbdfe1b3c2b8c1535790c9982f95</td></tr>
-</tbody></table>
-<div class="note ok" style="margin-top: 10px; font-size: 0.85rem;">
-<b>Fix for &quot;Predicted values must be in range [0, 1]&quot;:</b> DrivenData validates that all pixels within the template's active footprint evaluate to float values between 0.0 and 1.0. Unmasked NaN pixels inside the valid footprint trigger this rejection. GEMSDOE2 conforms exactly to <code>sample_submission.tif</code>: finite in [0, 1] within the 5,167,373 active pixels, NaN outside, with <code>GDAL_NODATA=nan</code>. Fully verified by <code>scripts/validate_submission.py</code>.
-</div>
-</div>
-<h3 style="margin-top:1.5rem;">Interactive In-Browser GeoTIFF Compiler &amp; Validator</h3>
-<p>The DrivenData <em>File to submit</em> dialog asks for a single-band GeoTIFF (<code>.tif</code>) &mdash; or a <code>.zip</code> containing one &mdash; that matches the submission format's CRS, shape and geotransform: <b>3,292 &times; 3,730 px &middot; EPSG:32611 &middot; float32 in [0, 1], NaN outside the footprint</b>. This page ships the pixel field of the adopted, format-validated artifact — measured by <code>scripts/build_submission_payload.py</code> as an gems-rle-v1 stream of 259,495 runs for 12,279,160 pixels. Click <b>Build submission.tif</b> below: your browser decodes it, writes the GeoTIFF locally with <code>docs/geotiff_writer.js</code>, <b>re-reads its own bytes</b> against the pinned pixels, and offers the download only when every self-check passes. No install, no GPU, no download of the 418 MB feature stack, and nothing is uploaded — the file appears in your Downloads folder, under a <b>name unique to that build</b> (<code>gems-submission-&lt;UTC instant&gt;-&lt;artifact sha8&gt;.tif</code>), with a suggested short <b>Note</b> to paste into the dialog beside it — the comment that tells your team's submissions apart later. <span class="pill ok">IN SYNC</span> <span class="small">payload pins <code>7f00890a62878d61&hellip;</code> &middot; this checkout's artifact hashes to <code>7f00890a62878d61&hellip;</code> &middot; both re-hashed at build time</span></p>
+<h2 id="generate-here">Secondary route: build the adopted ensemble field in your browser</h2>
+<p>This browser builder is a <b>secondary reproducibility route</b> for the adopted ensemble field; the Recall-Union v1 card immediately above is the primary candidate. The DrivenData <em>File to submit</em> dialog asks for a single-band GeoTIFF (<code>.tif</code>) &mdash; or a <code>.zip</code> containing one &mdash; that matches the submission format's CRS, shape and geotransform: <b>3,292 &times; 3,730 px &middot; EPSG:32611 &middot; float32 in [0, 1], NaN outside the footprint</b>. This page ships the pixel field of the adopted, format-validated artifact — measured by <code>scripts/build_submission_payload.py</code> as an gems-rle-v1 stream of 259,495 runs for 12,279,160 pixels. Click <b>Build submission.tif</b> below: your browser decodes it, writes the GeoTIFF locally with <code>docs/geotiff_writer.js</code>, <b>re-reads its own bytes</b> against the pinned pixels, and offers the download only when every self-check passes. No install, no GPU, no download of the 418 MB feature stack, and nothing is uploaded — the file appears in your Downloads folder, under a <b>name unique to that build</b> (<code>gems-submission-&lt;UTC instant&gt;-&lt;artifact sha8&gt;.tif</code>), with a suggested short <b>Note</b> to paste into the dialog beside it — the comment that tells your team's submissions apart later. <span class="pill ok">IN SYNC</span> <span class="small">payload pins <code>7f00890a62878d61&hellip;</code> &middot; this checkout's artifact hashes to <code>7f00890a62878d61&hellip;</code> &middot; both re-hashed at build time</span></p>
 <div id="tif-generator" data-meta="submission_meta.json" data-blob="submission_field.bin"
      data-artifact="data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif" data-sha256="7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15"></div>
 <p class="small">How this button is judged: the same JavaScript runs headlessly under node — in this checkout, verdict <b>PASS</b> — 8 of 10 measured steps passed, 0 failed — and the rasterio bit-compare of the generated file against the artifact is <b>identical</b>. What this file is and is not: the pixels of <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> in a container your browser wrote, so it passes the format gate and it is the same field whose surrogate scores are on <a href="results.html">results</a>; only the platform's hidden new-fault labels can score it. <b>If the platform answers <code>Predicted values must be in range [0, 1]</code>:</b> that means NaN sat inside the template's valid (scored) region — this payload is conformed to the official template (finite inside it, NaN outside it, <code>GDAL_NODATA=nan</code>), the conformance is enforced by <code>scripts/validate_submission.py</code> since 2026-09-25, and <a href="how_to_submit.html#rejection">how to submit §6</a> explains it. The full recipe — six routes to the same file, the validation gate, the click-by-click upload, and the rules sentences that bind it: <a href="how_to_submit.html">How to submit</a> (this panel is that page's &sect;3, and its claims table names the evidence behind every number). Shipped with the page: <code>submission_field.bin</code>, 532,072 B, sha256 <code>b966d47c7c02b1c2&hellip;</code>; the hashes of all four payload files, re-checked at build time on <a href="how_to_submit.html#generate">the subpage</a>.</p>
@@ -235,7 +236,7 @@ Generative AI assistance (LLM agent workflows) was utilized during the developme
   </tbody>
 </table>
 
-<h2>6. The Scored Metric &amp; The Winning Emission Strategy</h2>
+<h2>6. The Scored Metric &amp; The Local Baseline Emission Strategy</h2>
 <p>Submissions are evaluated using the <b>Distance-Weighted Tversky Index (DTI)</b>:</p>
 
 <pre class="math big">DTI(α=0.2, β=0.8) = TP_w / (TP_w + 0.2 · FP_w + 0.8 · FN_w + ε)</pre>
@@ -247,24 +248,24 @@ Generative AI assistance (LLM agent workflows) was utilized during the developme
 <ul>
   <li><b>4:1 False Negative Asymmetry (β = 0.8, α = 0.2):</b> Missing a real fault pixel incurs 4× the penalty of emitting a false alarm. Models must avoid excessive conservatism.</li>
   <li><b>The In-Domain Trap:</b> Models trained and calibrated solely on existing training labels (USGS known faults) learn a high probability threshold (t0 ≈ 0.47) and thin skeleton. On the <em>new-fault-like proxy population</em>, this in-domain policy collapses to a DTI of only <b>0.0247</b>.</li>
-  <li><b>The Measured Winning Policy (Floor 0.1, Thin, Width 0 px):</b>
-    Extensive sweeps across 132 parameter combinations on multiple independent ensembles demonstrate that lowering the emission floor to <b>0.1</b> with morphological thinning dramatically lifts performance on unseen faults:
+  <li><b>The measured adopted-ensemble policy (Floor 0.1, Thin, Width 0 px):</b>
+    Local SGMC-proxy sweeps across 132 parameter combinations on multiple ensemble fields support this policy for the adopted baseline; they are diagnostics, not leaderboard evidence, and they do not select the Recall-Union candidate:
     <ul>
       <li><b>Ensemble 1 (Run 35042805806):</b> DTI <b>0.1365</b> vs 0.0410 reference (<b>+0.0954 contrast</b>)</li>
       <li><b>Ensemble 2 (Run 35249562910):</b> DTI <b>0.0777</b> vs 0.0320 reference (<b>+0.0456 contrast</b>)</li>
-      <li><b>Shipping Field (Mean of Ensembles 1+2, Run 35275312337):</b> DTI <b>0.0999</b> vs 0.0304 reference (<b>+0.0695 contrast</b>)</li>
+      <li><b>Secondary builder field (Mean of Ensembles 1+2, Run 35275312337):</b> DTI <b>0.0999</b> vs 0.0304 reference (<b>+0.0695 contrast</b>)</li>
       <li><b>3-Ensemble Mean (16 live folds, Run 35285326679):</b> DTI <b>0.0850</b> vs 0.0269 reference (<b>+0.0581 contrast</b>)</li>
       <li><b>Worst-Case Robustness Ranking:</b> Ranks <b>#1 of 132 hard candidates</b> across all swept fields.</li>
     </ul>
+    <p class="small"><b>Scope:</b> every DTI in this list is a local SGMC proxy-only diagnostic. No value here is an official DrivenData leaderboard score or a guarantee on the hidden expert labels.</p>
   </li>
-  <li><b>Which FIELD ships is now a pre-registered rule, not a judgment call (2026-09-19).</b> The policy axis (floor/thin/width) was already measured and adopted; the <em>field</em> axis (which ensemble mean ships) was not. <code>docs/FIELD_SELECTION_RULE.md</code> pre-registers it: a new field may replace the shipped one only if it passes F1 (pinned re-blend provenance) and F2 (committed proxy sweep) as eligibility, then R1 (beats shipped + 0.010 margin in the primary support window), R2 (top of all three windows), R4 (beats the current policy), R5 (≥ 3 independent candidates in the window) — and R3, a paired 2,000-resample block bootstrap on both fields' raw rasters with <b>P(new &gt; shipped) ≥ 0.95</b>, which is <em>unmeasurable from committed bytes</em> until both raw rasters are scored, so it cannot be waved through. The rule is machine-enforced: <code>scripts/check_field_selection.py</code> runs on every committed evidence and on every <code>reblend.yml</code> run before any artifact download; the committed verdict is <b>KEEP mean12</b> (<code>data/evidence/field_selection.json</code>) and a re-blend of any other field fails the workflow until the committed evidence says ADOPT of that field with R3 measured. Seven tests in <code>tests/test_field_selection.py</code> pin the rule, including the refusal of a synthetic field that passes every condition except the unmeasured R3.</li>
+  <li><b>Which secondary adopted-ensemble FIELD ships is a pre-registered rule, not a judgment call (2026-09-19).</b> This rule governs the browser-builder comparison artifact only; Recall-Union v1 is the separate primary candidate. The policy axis (floor/thin/width) was already measured and adopted; the <em>field</em> axis (which ensemble mean ships) was not. <code>docs/FIELD_SELECTION_RULE.md</code> pre-registers it: a new field may replace the shipped one only if it passes F1 (pinned re-blend provenance) and F2 (committed proxy sweep) as eligibility, then R1 (beats shipped + 0.010 margin in the primary support window), R2 (top of all three windows), R4 (beats the current policy), R5 (≥ 3 independent candidates in the window) — and R3, a paired 2,000-resample block bootstrap on both fields' raw rasters with <b>P(new &gt; shipped) ≥ 0.95</b>, which is <em>unmeasurable from committed bytes</em> until both raw rasters are scored, so it cannot be waved through. The rule is machine-enforced: <code>scripts/check_field_selection.py</code> runs on every committed evidence and on every <code>reblend.yml</code> run before any artifact download; the committed verdict is <b>KEEP mean12</b> (<code>data/evidence/field_selection.json</code>) and a re-blend of any other field fails the workflow until the committed evidence says ADOPT of that field with R3 measured. Seven tests in <code>tests/test_field_selection.py</code> pin the rule, including the refusal of a synthetic field that passes every condition except the unmeasured R3.</li>
 </ul>
 
 <h2>7. Step-by-Step Practical Submission Workflow</h2>
 
 <div class="note ok">
-  <strong>Fastest Route to Submit:</strong> The repository includes a pre-computed, fully validated submission raster that applies the adopted winning policy to the 11-fold ensemble mean:
-  <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> (sha256: <code>7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</code>, 570,890 bytes). It is verified and ready for immediate upload to DrivenData — its template conformance (finite inside the sample's valid region, NaN outside, GDAL_NODATA=nan) is enforced by <code>scripts/validate_submission.py</code> and was added 2026-09-25 after the platform rejected a pre-fix file with "Predicted values must be in range [0, 1]".
+  <strong>Primary Route to Submit: Recall-Union v1.</strong> Download the one-click GeoTIFF or its single-member ZIP from the candidate card above. The published primary bytes are <code>docs/gemsdoe2_recall_union_submission.tif</code> (sha256: <code>8fc827773ea28ceeac3ece35a9392a20c7537f334d5cf31bf56adaebb2fd177a</code>, 1,982,553 bytes) and passed <code>scripts/validate_submission.py</code>: EPSG:32611, 3292×3730, float32, finite [0, 1] throughout the template-valid region, NaN only outside it, and template nodata <code>nan</code>. Use the suggested unique file name and Note shown above. This validates format only; it does not predict the hidden leaderboard score.
 </div>
 
 <p>To generate, validate, and submit from scratch, follow these exact steps:</p>
@@ -283,8 +284,9 @@ python scripts/assemble_data_bridge.py
 # Run pre-flight check to verify projection, bounds, resolution, and band tags
 python scripts/prepare_data.py</code></pre>
 
-<h3>Step 3: Generate Predictions with Adopted Policy</h3>
-<p>Choose your generation route:</p>
+<h3>Step 3: Choose the prediction route</h3>
+<p><b>Primary route:</b> use the Recall-Union v1 card at the top of this page. It is the selected new-fault-first candidate and requires no local generation. The commands below are the <b>secondary adopted-ensemble browser/model routes</b>; they remain available for reproducibility and comparison, but they are not the primary candidate advertised for upload.</p>
+<p>Secondary generation routes:</p>
 <ul>
   <li><b>Route A (Local Model Inference):</b>
 <pre><code># src/inference.py automatically reads data/evidence/emission_decision.json
@@ -672,7 +674,7 @@ Next: Upload to https://www.drivendata.org/competitions/306/competition-doe-gems
 
 </main>
 <footer><div class="wrap">
-  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:52 UTC</p>
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 05:55 UTC</p>
   <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
      <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
      <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
