@@ -1,0 +1,243 @@
+{
+ "generated_utc": "2026-09-25T03:46:22Z",
+ "script": "scripts/check_submission_readiness.py",
+ "purpose": "every gate on docs/how_to_submit.html is a measurement from this checkout",
+ "root": "/home/user/GEMSDOE2",
+ "data_dir": "data",
+ "seconds": 12.61,
+ "checks": [
+  {
+   "id": "data_placed",
+   "label": "Official competition rasters placed in data/",
+   "status": "PASS",
+   "measured": {
+    "files": [
+     {
+      "file": "training_features.tif",
+      "mirror": "gems-geodawn-numerical-features.tif",
+      "status": "VERIFIED",
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "bytes": 418912844,
+      "pinned_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "pinned_bytes": 418912844
+     },
+     {
+      "file": "labels.tif",
+      "mirror": "existing_faults.tif",
+      "status": "VERIFIED",
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830,
+      "pinned_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "pinned_bytes": 425830
+     },
+     {
+      "file": "sample_submission.tif",
+      "mirror": "example_submission.tif",
+      "status": "VERIFIED",
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597,
+      "pinned_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "pinned_bytes": 1599597
+     }
+    ]
+   },
+   "source": "data/bridge/manifest.json (pins from data/evidence/inventory.json)",
+   "note": ""
+  },
+  {
+   "id": "preflight",
+   "label": "scripts/prepare_data.py passes on the placed bytes",
+   "status": "PASS",
+   "measured": {
+    "script": "scripts/prepare_data.py",
+    "exit_code": 0,
+    "last_line": "OK: data/ passes every pre-flight check; next: python -m src.train --config configs/config.yaml",
+    "output_sha256": "2acd6210a2f7ce4cb05383584bd52cbc28a0506f4dfe35e8e7f6a483aca92862"
+   },
+   "source": "scripts/prepare_data.py",
+   "note": "the exit code of the real pre-flight, re-executed now"
+  },
+  {
+   "id": "artifact",
+   "label": "Shippable artifact present and hash-consistent",
+   "status": "PASS",
+   "measured": {
+    "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+    "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+    "bytes": 570890,
+    "recorded_sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+    "recorded_in": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.sha256"
+   },
+   "source": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.sha256",
+   "note": ""
+  },
+  {
+   "id": "artifact_validated",
+   "label": "Committed validator log reports PASSED",
+   "status": "PASS",
+   "measured": {
+    "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log",
+    "log_sha256": "a2030f9a785c80d61679f4a3899c1aae11c99f8c6353a3fb9f8a254ce39eda6d",
+    "checks": [
+     "\u2713 CRS EPSG:32611",
+     "\u2713 Resolution 100m",
+     "\u2713 Single band",
+     "\u2713 Dtype float32",
+     "\u2713 Values in [0,1] (min 0.0000 max 1.0000)",
+     "\u2713 Size matches sample 3292x3730",
+     "\u2713 Transform matches sample",
+     "\u2713 All 5,167,373 template-valid px are finite in [0,1]",
+     "\u2713 NaN exactly outside the template's valid region",
+     "\u2713 GDAL_NODATA matches the template ('nan')",
+     "\u2713 Size matches training_features"
+    ]
+   },
+   "source": "data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log",
+   "note": ""
+  },
+  {
+   "id": "rules_quotes",
+   "label": "Official rules sentences verified verbatim",
+   "status": "PASS",
+   "measured": {
+    "n_quotes": 29,
+    "n_found": 29,
+    "all_found": true,
+    "not_exact": [],
+    "source_pdf_sha256": "50d854b1e0239fe6b9648d9fa5c7537bc7b6e5bc10cf6b37a2ff9aa401c36938",
+    "generated_utc": "2026-09-21T12:53:40Z"
+   },
+   "source": "data/evidence/rules_quotes.json",
+   "note": ""
+  },
+  {
+   "id": "cpu_baseline",
+   "label": "CPU-only route (no GPU, no torch) can produce a submission",
+   "status": "PASS",
+   "measured": {
+    "report": "data/evidence/baseline/baseline_report.json",
+    "generated_utc": "2026-09-20T16:55:53Z",
+    "policy": "floor0.000974_thin1_w0",
+    "submission_sha256": "9f2577cff20d97717dc42afbdc08faff149bf5fcf237b3bc3daffa9d81dc1163",
+    "bytes": 545798,
+    "emitted_px": 155889,
+    "global_scores": {
+     "catalogue": 0.061149,
+     "proxy": 0.119071,
+     "combined": 0.111924
+    },
+    "held_out_fold": 0,
+    "measurement_fold": 1,
+    "generalisation": {
+     "catalogue": 0.06597,
+     "proxy": 0.071107,
+     "combined": 0.078916
+    },
+    "audit_reproduced": true,
+    "audit_max_delta": 0.00016874,
+    "minutes": 5.1
+   },
+   "source": "data/evidence/baseline/baseline_report.json",
+   "note": ""
+  },
+  {
+   "id": "site_generator",
+   "label": "The site can generate the .tif itself (in-browser writer)",
+   "status": "PASS",
+   "measured": {
+    "exit_code": 0,
+    "verdict": "PASS",
+    "node": "v22.22.3",
+    "steps": 10,
+    "passed": [
+     "payload matches the artifact",
+     "node ran the page's writer",
+     "rasterio reads it; pixels are the artifact's",
+     "scripts/validate_submission.py on the generated bytes",
+     "the zipped route is a single-member zip of that file",
+     "variant: uncompressed strips",
+     "variant: one row per strip",
+     "variant: whole grid in one strip"
+    ],
+    "failed": [],
+    "generated_utc": "2026-09-25T03:46:14Z",
+    "seconds": 7.83,
+    "container_note": "generated, artifact and template all declare nan since the 2026-09-25 template-conformance fix"
+   },
+   "source": "scripts/check_site_generator.py -> data/evidence/site_generator.json",
+   "note": ""
+  },
+  {
+   "id": "human_steps",
+   "label": "Steps only a person can complete",
+   "status": "HUMAN",
+   "measured": {
+    "steps": [
+     {
+      "action": "Create the DrivenData profile and accept the competition rules",
+      "source": "rules \u00a73.1 verbatim quote"
+     },
+     {
+      "action": "Confirm prize eligibility (citizenship / residence; rules \u00a71.3, App. A)",
+      "source": "rules \u00a71.3 verbatim quote"
+     },
+     {
+      "action": "Upload the chosen .tif on the competition's Submit tab",
+      "source": "competition data tab (login required)"
+     },
+     {
+      "action": "Read the public leaderboard score the platform returns",
+      "source": "competition leaderboard"
+     },
+     {
+      "action": "Choose the single final submission before the deadline (rules \u00a73.5, \u00a73.6.2)",
+      "source": "rules quotes"
+     },
+     {
+      "action": "Paste the generative-AI disclosure into the submission narrative (rules \u00a73.2)",
+      "source": "rules \u00a73.2 verbatim quote"
+     }
+    ]
+   },
+   "source": "competition site + rules PDF",
+   "note": "no program in this repository can create an account, upload a file or read a private leaderboard; these stay open until a human does them"
+  },
+  {
+   "id": "candidates",
+   "label": "Artifacts that exist in this checkout",
+   "status": "PASS",
+   "measured": {
+    "candidates": [
+     {
+      "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+      "kind": "deep ensemble (11-fold blend, adopted policy)",
+      "sha256": "7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15",
+      "bytes": 570890
+     },
+     {
+      "path": "data/evidence/runs/local-sandbox-smoke/submission.tif",
+      "kind": "CPU smoke run (pipeline proof)",
+      "sha256": "b9f2bc4d7e63df5f79f28c941eb3d6077d8b89f2a03ff1bbe3ae96183c7d4fb6",
+      "bytes": 602678
+     },
+     {
+      "path": "data/evidence/baseline/submission.tif",
+      "kind": "CPU-only classical baseline",
+      "sha256": "9f2577cff20d97717dc42afbdc08faff149bf5fcf237b3bc3daffa9d81dc1163",
+      "bytes": 545798
+     }
+    ]
+   },
+   "source": "repository",
+   "note": "existence is not a quality claim - the measured quality of each field is on the results page"
+  }
+ ],
+ "summary": {
+  "total": 9,
+  "passed": 8,
+  "failed": 0,
+  "human": 1,
+  "missing": 0,
+  "failing_ids": []
+ }
+}

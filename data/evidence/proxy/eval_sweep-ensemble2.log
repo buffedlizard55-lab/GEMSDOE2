@@ -1,0 +1,179 @@
+  floor grid: explicit --shaping-values (11 candidates)
+  t0=0        thin=1 band=0px hard           -> proxy DTI 0.0142  kept 14285 px
+  t0=0        thin=1 band=1px hard           -> proxy DTI 0.0202  kept 42883 px
+  t0=0        thin=1 band=2px hard           -> proxy DTI 0.0251  kept 71583 px
+  t0=0        thin=1 band=3px hard           -> proxy DTI 0.0307  kept 108521 px
+  t0=0        thin=1 band=4px hard           -> proxy DTI 0.0335  kept 137602 px
+  t0=0        thin=1 band=6px hard           -> proxy DTI 0.0391  kept 205520 px
+  t0=0        thin=1 band=8px hard           -> proxy DTI 0.0429  kept 272254 px
+  t0=0        thin=1 band=10px hard          -> proxy DTI 0.0456  kept 341945 px
+  t0=0        thin=1 band=12px hard          -> proxy DTI 0.0473  kept 401172 px
+  t0=0        thin=1 band=16px hard          -> proxy DTI 0.0508  kept 538835 px
+  t0=0        thin=1 band=20px hard          -> proxy DTI 0.0539  kept 675707 px
+  t0=0.05     thin=1 band=0px hard           -> proxy DTI 0.0953  kept 293072 px
+  t0=0.05     thin=1 band=1px hard           -> proxy DTI 0.0679  kept 897248 px
+  t0=0.05     thin=1 band=2px hard           -> proxy DTI 0.0597  kept 1405605 px
+  t0=0.05     thin=1 band=3px hard           -> proxy DTI 0.0580  kept 1818232 px
+  t0=0.05     thin=1 band=4px hard           -> proxy DTI 0.0581  kept 2090502 px
+  t0=0.05     thin=1 band=6px hard           -> proxy DTI 0.0593  kept 2600341 px
+  t0=0.05     thin=1 band=8px hard           -> proxy DTI 0.0603  kept 2984657 px
+  t0=0.05     thin=1 band=10px hard          -> proxy DTI 0.0610  kept 3328236 px
+  t0=0.05     thin=1 band=12px hard          -> proxy DTI 0.0613  kept 3573185 px
+  t0=0.05     thin=1 band=16px hard          -> proxy DTI 0.0616  kept 4018590 px
+  t0=0.05     thin=1 band=20px hard          -> proxy DTI 0.0612  kept 4359730 px
+  t0=0.1      thin=1 band=0px hard           -> proxy DTI 0.0777  kept 131117 px
+  t0=0.1      thin=1 band=1px hard           -> proxy DTI 0.0734  kept 396579 px
+  t0=0.1      thin=1 band=2px hard           -> proxy DTI 0.0704  kept 666962 px
+  t0=0.1      thin=1 band=3px hard           -> proxy DTI 0.0683  kept 990009 px
+  t0=0.1      thin=1 band=4px hard           -> proxy DTI 0.0668  kept 1262050 px
+  t0=0.1      thin=1 band=6px hard           -> proxy DTI 0.0651  kept 1819389 px
+  t0=0.1      thin=1 band=8px hard           -> proxy DTI 0.0647  kept 2253587 px
+  t0=0.1      thin=1 band=10px hard          -> proxy DTI 0.0648  kept 2642245 px
+  t0=0.1      thin=1 band=12px hard          -> proxy DTI 0.0645  kept 2924641 px
+  t0=0.1      thin=1 band=16px hard          -> proxy DTI 0.0640  kept 3449198 px
+  t0=0.1      thin=1 band=20px hard          -> proxy DTI 0.0634  kept 3862993 px
+  t0=0.2      thin=1 band=0px hard           -> proxy DTI 0.0550  kept 71715 px
+  t0=0.2      thin=1 band=1px hard           -> proxy DTI 0.0611  kept 226365 px
+  t0=0.2      thin=1 band=2px hard           -> proxy DTI 0.0632  kept 394839 px
+  t0=0.2      thin=1 band=3px hard           -> proxy DTI 0.0644  kept 610914 px
+  t0=0.2      thin=1 band=4px hard           -> proxy DTI 0.0642  kept 808311 px
+  t0=0.2      thin=1 band=6px hard           -> proxy DTI 0.0635  kept 1249264 px
+  t0=0.2      thin=1 band=8px hard           -> proxy DTI 0.0635  kept 1627744 px
+  t0=0.2      thin=1 band=10px hard          -> proxy DTI 0.0642  kept 1991529 px
+  t0=0.2      thin=1 band=12px hard          -> proxy DTI 0.0645  kept 2271332 px
+  t0=0.2      thin=1 band=16px hard          -> proxy DTI 0.0648  kept 2823751 px
+  t0=0.2      thin=1 band=20px hard          -> proxy DTI 0.0645  kept 3284456 px
+  t0=0.3      thin=1 band=0px hard           -> proxy DTI 0.0396  kept 43225 px
+  t0=0.3      thin=1 band=1px hard           -> proxy DTI 0.0499  kept 138456 px
+  t0=0.3      thin=1 band=2px hard           -> proxy DTI 0.0557  kept 246016 px
+  t0=0.3      thin=1 band=3px hard           -> proxy DTI 0.0600  kept 389258 px
+  t0=0.3      thin=1 band=4px hard           -> proxy DTI 0.0617  kept 526280 px
+  t0=0.3      thin=1 band=6px hard           -> proxy DTI 0.0636  kept 853068 px
+  t0=0.3      thin=1 band=8px hard           -> proxy DTI 0.0647  kept 1159158 px
+  t0=0.3      thin=1 band=10px hard          -> proxy DTI 0.0654  kept 1476833 px
+  t0=0.3      thin=1 band=12px hard          -> proxy DTI 0.0654  kept 1733838 px
+  t0=0.3      thin=1 band=16px hard          -> proxy DTI 0.0656  kept 2272597 px
+  t0=0.3      thin=1 band=20px hard          -> proxy DTI 0.0652  kept 2751759 px
+  t0=0.36209  thin=1 band=0px hard           -> proxy DTI 0.0320  kept 33341 px
+  t0=0.36209  thin=1 band=1px hard           -> proxy DTI 0.0423  kept 107356 px
+  t0=0.36209  thin=1 band=2px hard           -> proxy DTI 0.0491  kept 191778 px
+  t0=0.36209  thin=1 band=3px hard           -> proxy DTI 0.0548  kept 304889 px
+  t0=0.36209  thin=1 band=4px hard           -> proxy DTI 0.0577  kept 414481 px
+  t0=0.36209  thin=1 band=6px hard           -> proxy DTI 0.0617  kept 682391 px
+  t0=0.36209  thin=1 band=8px hard           -> proxy DTI 0.0638  kept 942375 px
+  t0=0.36209  thin=1 band=10px hard          -> proxy DTI 0.0653  kept 1221753 px
+  t0=0.36209  thin=1 band=12px hard          -> proxy DTI 0.0660  kept 1454361 px
+  t0=0.36209  thin=1 band=16px hard          -> proxy DTI 0.0668  kept 1958676 px
+  t0=0.36209  thin=1 band=20px hard          -> proxy DTI 0.0667  kept 2424778 px
+  t0=0.4      thin=1 band=0px hard           -> proxy DTI 0.0289  kept 28658 px
+  t0=0.4      thin=1 band=1px hard           -> proxy DTI 0.0394  kept 92638 px
+  t0=0.4      thin=1 band=2px hard           -> proxy DTI 0.0467  kept 166094 px
+  t0=0.4      thin=1 band=3px hard           -> proxy DTI 0.0532  kept 264815 px
+  t0=0.4      thin=1 band=4px hard           -> proxy DTI 0.0567  kept 360989 px
+  t0=0.4      thin=1 band=6px hard           -> proxy DTI 0.0617  kept 598265 px
+  t0=0.4      thin=1 band=8px hard           -> proxy DTI 0.0647  kept 832999 px
+  t0=0.4      thin=1 band=10px hard          -> proxy DTI 0.0668  kept 1090006 px
+  t0=0.4      thin=1 band=12px hard          -> proxy DTI 0.0674  kept 1307316 px
+  t0=0.4      thin=1 band=16px hard          -> proxy DTI 0.0681  kept 1788379 px
+  t0=0.4      thin=1 band=20px hard          -> proxy DTI 0.0677  kept 2247380 px
+  t0=0.5      thin=1 band=0px hard           -> proxy DTI 0.0211  kept 19401 px
+  t0=0.5      thin=1 band=1px hard           -> proxy DTI 0.0306  kept 62744 px
+  t0=0.5      thin=1 band=2px hard           -> proxy DTI 0.0381  kept 112971 px
+  t0=0.5      thin=1 band=3px hard           -> proxy DTI 0.0456  kept 180876 px
+  t0=0.5      thin=1 band=4px hard           -> proxy DTI 0.0503  kept 247552 px
+  t0=0.5      thin=1 band=6px hard           -> proxy DTI 0.0583  kept 415097 px
+  t0=0.5      thin=1 band=8px hard           -> proxy DTI 0.0632  kept 585967 px
+  t0=0.5      thin=1 band=10px hard          -> proxy DTI 0.0663  kept 781147 px
+  t0=0.5      thin=1 band=12px hard          -> proxy DTI 0.0679  kept 951409 px
+  t0=0.5      thin=1 band=16px hard          -> proxy DTI 0.0700  kept 1345927 px
+  t0=0.5      thin=1 band=20px hard          -> proxy DTI 0.0700  kept 1743611 px
+  t0=0.6      thin=1 band=0px hard           -> proxy DTI 0.0157  kept 13211 px
+  t0=0.6      thin=1 band=1px hard           -> proxy DTI 0.0236  kept 42722 px
+  t0=0.6      thin=1 band=2px hard           -> proxy DTI 0.0304  kept 76990 px
+  t0=0.6      thin=1 band=3px hard           -> proxy DTI 0.0379  kept 123334 px
+  t0=0.6      thin=1 band=4px hard           -> proxy DTI 0.0433  kept 168899 px
+  t0=0.6      thin=1 band=6px hard           -> proxy DTI 0.0529  kept 284383 px
+  t0=0.6      thin=1 band=8px hard           -> proxy DTI 0.0593  kept 404221 px
+  t0=0.6      thin=1 band=10px hard          -> proxy DTI 0.0639  kept 544704 px
+  t0=0.6      thin=1 band=12px hard          -> proxy DTI 0.0662  kept 669839 px
+  t0=0.6      thin=1 band=16px hard          -> proxy DTI 0.0694  kept 967083 px
+  t0=0.6      thin=1 band=20px hard          -> proxy DTI 0.0709  kept 1276112 px
+  t0=0.7      thin=1 band=0px hard           -> proxy DTI 0.0105  kept 8819 px
+  t0=0.7      thin=1 band=1px hard           -> proxy DTI 0.0165  kept 28616 px
+  t0=0.7      thin=1 band=2px hard           -> proxy DTI 0.0223  kept 51624 px
+  t0=0.7      thin=1 band=3px hard           -> proxy DTI 0.0294  kept 82800 px
+  t0=0.7      thin=1 band=4px hard           -> proxy DTI 0.0347  kept 113248 px
+  t0=0.7      thin=1 band=6px hard           -> proxy DTI 0.0454  kept 190841 px
+  t0=0.7      thin=1 band=8px hard           -> proxy DTI 0.0535  kept 272202 px
+  t0=0.7      thin=1 band=10px hard          -> proxy DTI 0.0599  kept 368418 px
+  t0=0.7      thin=1 band=12px hard          -> proxy DTI 0.0634  kept 455102 px
+  t0=0.7      thin=1 band=16px hard          -> proxy DTI 0.0689  kept 665529 px
+  t0=0.7      thin=1 band=20px hard          -> proxy DTI 0.0718  kept 891025 px
+  t0=0.8      thin=1 band=0px hard           -> proxy DTI 0.0064  kept 5320 px
+  t0=0.8      thin=1 band=1px hard           -> proxy DTI 0.0106  kept 17124 px
+  t0=0.8      thin=1 band=2px hard           -> proxy DTI 0.0150  kept 30761 px
+  t0=0.8      thin=1 band=3px hard           -> proxy DTI 0.0207  kept 49107 px
+  t0=0.8      thin=1 band=4px hard           -> proxy DTI 0.0252  kept 66793 px
+  t0=0.8      thin=1 band=6px hard           -> proxy DTI 0.0349  kept 112102 px
+  t0=0.8      thin=1 band=8px hard           -> proxy DTI 0.0435  kept 160358 px
+  t0=0.8      thin=1 band=10px hard          -> proxy DTI 0.0513  kept 218417 px
+  t0=0.8      thin=1 band=12px hard          -> proxy DTI 0.0561  kept 271295 px
+  t0=0.8      thin=1 band=16px hard          -> proxy DTI 0.0648  kept 402016 px
+  t0=0.8      thin=1 band=20px hard          -> proxy DTI 0.0707  kept 546052 px
+  t0=0.9      thin=1 band=0px hard           -> proxy DTI 0.0027  kept 1943 px
+  t0=0.9      thin=1 band=1px hard           -> proxy DTI 0.0047  kept 6546 px
+  t0=0.9      thin=1 band=2px hard           -> proxy DTI 0.0070  kept 12262 px
+  t0=0.9      thin=1 band=3px hard           -> proxy DTI 0.0102  kept 20503 px
+  t0=0.9      thin=1 band=4px hard           -> proxy DTI 0.0127  kept 28616 px
+  t0=0.9      thin=1 band=6px hard           -> proxy DTI 0.0180  kept 50006 px
+  t0=0.9      thin=1 band=8px hard           -> proxy DTI 0.0231  kept 73173 px
+  t0=0.9      thin=1 band=10px hard          -> proxy DTI 0.0290  kept 101580 px
+  t0=0.9      thin=1 band=12px hard          -> proxy DTI 0.0340  kept 127745 px
+  t0=0.9      thin=1 band=16px hard          -> proxy DTI 0.0451  kept 194486 px
+  t0=0.9      thin=1 band=20px hard          -> proxy DTI 0.0541  kept 270631 px
+  t0=0.36209  thin=1 band=1px ramp gamma=1   -> proxy DTI 0.0313  kept 107356 px
+  t0=0.36209  thin=1 band=2px ramp gamma=1   -> proxy DTI 0.0328  kept 191778 px
+  t0=0.36209  thin=1 band=3px ramp gamma=1   -> proxy DTI 0.0362  kept 304889 px
+  t0=0.36209  thin=1 band=4px ramp gamma=1   -> proxy DTI 0.0392  kept 414481 px
+  t0=0.36209  thin=1 band=6px ramp gamma=1   -> proxy DTI 0.0442  kept 682391 px
+  t0=0.36209  thin=1 band=8px ramp gamma=1   -> proxy DTI 0.0482  kept 942375 px
+  t0=0.36209  thin=1 band=10px ramp gamma=1  -> proxy DTI 0.0511  kept 1221753 px
+  t0=0.36209  thin=1 band=12px ramp gamma=1  -> proxy DTI 0.0536  kept 1454361 px
+  t0=0.36209  thin=1 band=16px ramp gamma=1  -> proxy DTI 0.0569  kept 1958676 px
+  t0=0.36209  thin=1 band=20px ramp gamma=1  -> proxy DTI 0.0591  kept 2424778 px
+  t0=0.36209  thin=1 band=1px ramp gamma=2   -> proxy DTI 0.0314  kept 107356 px
+  t0=0.36209  thin=1 band=2px ramp gamma=2   -> proxy DTI 0.0309  kept 191778 px
+  t0=0.36209  thin=1 band=3px ramp gamma=2   -> proxy DTI 0.0312  kept 304889 px
+  t0=0.36209  thin=1 band=4px ramp gamma=2   -> proxy DTI 0.0322  kept 414481 px
+  t0=0.36209  thin=1 band=6px ramp gamma=2   -> proxy DTI 0.0358  kept 682391 px
+  t0=0.36209  thin=1 band=8px ramp gamma=2   -> proxy DTI 0.0398  kept 942375 px
+  t0=0.36209  thin=1 band=10px ramp gamma=2  -> proxy DTI 0.0432  kept 1221753 px
+  t0=0.36209  thin=1 band=12px ramp gamma=2  -> proxy DTI 0.0462  kept 1454361 px
+  t0=0.36209  thin=1 band=16px ramp gamma=2  -> proxy DTI 0.0506  kept 1958676 px
+  t0=0.36209  thin=1 band=20px ramp gamma=2  -> proxy DTI 0.0538  kept 2424778 px
+
+  projected onto a HIDDEN scored truth of a different size (coverage and false-positive mass held at the measured values):
+    truth px | best policy (floor/thin/band) | best DTI | skeleton DTI | gain
+         500 | 0.6 / 1 / 0px               |   0.0023 |       0.0023 | +0.0000
+        1000 | 0.4 / 1 / 0px               |   0.0041 |       0.0041 | +0.0000
+        2500 | 0.3 / 1 / 0px               |   0.0091 |       0.0091 | +0.0000
+        5000 | 0.1 / 1 / 0px               |   0.0163 |       0.0163 | +0.0000
+       10000 | 0.1 / 1 / 0px               |   0.0286 |       0.0286 | +0.0000
+       20000 | 0.1 / 1 / 0px               |   0.0459 |       0.0459 | +0.0000
+       50000 | 0.05 / 1 / 0px              |   0.0850 |       0.0850 | +0.0000
+      100000 | 0.05 / 1 / 0px              |   0.1193 |       0.1193 | +0.0000
+      250000 | 0.1 / 1 / 20px              |   0.2093 |       0.1574 | +0.0519  <-- wider band passes
+    shipped policy (floor 0.362091, no widening): proxy DTI 0.032022; best candidate +0.063319 vs it
+    wider band passes at: [250000]
+    skeleton still best at: [500, 1000, 2500, 5000, 10000, 20000, 50000, 100000]
+
+truth: only -> 61664 px (6166.4 km of fault trace)
+the raster at --pred (ensemble_mean.tif), scored as provided: DTI 0.0338  (TP_w 2742 FP_w 155981 FN_w 58922)
+blanket baseline support: labels (the competition footprint) (12,279,160 px)
+  baseline zeros                        DTI 0.0000
+  baseline blanket_ones                 DTI 0.0249
+  baseline blanket_ones_whole_grid      DTI 0.0249
+  baseline catalogue_copy               DTI 0.0000
+  baseline catalogue_plus_submission    DTI 0.0585
+  acceptance catalogue-copy == 0: PASS
+wrote data/evidence/proxy/eval_sweep-ensemble2.json

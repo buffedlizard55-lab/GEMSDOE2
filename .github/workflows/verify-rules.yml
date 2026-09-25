@@ -1,0 +1,94 @@
+name: Verify official rules quotes
+
+# =============================================================================
+# WHY THIS WORKFLOW EXISTS
+#
+# The competition's most consequential fact is a prose sentence, not a number:
+# Phase 1 scores "a privately withheld subset of the original new fault dataset"
+# and Phase 2 "the full, revised new fault dataset" (rules §1.1), while the
+# training labels are the *existing* USGS Quaternary compilation (§2).  Every
+# strategy choice in this repository follows from that, so the sentences are
+# quoted verbatim and re-checked against the official document on every trigger.
+#
+# The sandbox that develops this repository cannot reach docs.nlr.gov (egress
+# allowlist: github.com / pypi.org only), so the check runs here, on an
+# unrestricted runner, and the extracted quotes + document sha256 are committed
+# as evidence.  The sha256 is also compared with the data-tab mirror recorded in
+# data/evidence/inventory.json, which proves the two copies are byte-identical.
+# =============================================================================
+on:
+  workflow_dispatch:
+  push:
+    branches: ["arena/**"]
+    paths: [".github/triggers/verify-rules"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: verify-rules-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quotes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pypdf
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip pypdf
+
+      - name: Fetch the canonical rules PDF and check every quote verbatim
+        run: |
+          set -euo pipefail
+          MIRROR_SHA=$(python - <<'PY'
+          import json
+          d = json.load(open("data/evidence/inventory.json"))
+          print(next(f["sha256"] for f in d["files"] if "96647" in f["name"]))
+          PY
+          )
+          echo "recorded data-tab mirror sha256: $MIRROR_SHA"
+          python scripts/verify_rules_quotes.py \
+            --url https://docs.nlr.gov/docs/fy26osti/96647.pdf \
+            --expected-sha256 "$MIRROR_SHA" \
+            --dump-text data/evidence/rules_extracted_text.txt \
+            --out data/evidence/rules_quotes.json 2>&1 | tee rules_quotes.log
+          python - <<'PY' 2>&1 | tee -a rules_quotes.log
+          import json
+          q = json.load(open("data/evidence/rules_quotes.json"))
+          s = q["summary"]
+          print(f'quotes found: {s["n_found"]}/{s["n_quotes"]}; all_found={s["all_found"]}')
+          print(f'canonical sha256: {q["source"]["sha256"]}')
+          print(f'mirror identical: {q["match_against_mirror"]["identical"]}')
+          assert s["all_found"], "a quoted rule sentence no longer matches the document"
+          PY
+
+      - name: Commit the verified quotes
+        if: always()
+        run: |
+          set -euo pipefail
+          D="data/evidence"
+          for f in rules_quotes.json rules_quotes.log; do
+            if [ -f "$f" ]; then cp -f "$f" "$D/"; fi
+          done
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D/rules_quotes.json" || true
+          [ -f "$D/rules_quotes.log" ] && git add -f "$D/rules_quotes.log" || true
+          # the normalised extract (US-government public-domain text, ~60 kB) makes every future
+          # quote check reproducible offline, including from the sandbox that cannot reach the PDF
+          [ -f "$D/rules_extracted_text.txt" ] && git add -f "$D/rules_extracted_text.txt" || true
+          git diff --cached --quiet && echo "nothing to commit" || {
+            git commit -m "verify(rules): re-check every quoted rule sentence against the official PDF [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }

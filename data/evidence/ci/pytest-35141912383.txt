@@ -1,0 +1,31 @@
+workflow: Tests
+run: 35141912383
+sha: 48f6357cfa47ae4dd3b979fb7112a72e702de165
+branch: arena/01a0ab54-gemsdoe
+
+--- pytest tail ---
+......F.....................................                             [100%]
+=================================== FAILURES ===================================
+E   ModuleNotFoundError: No module named 'tqdm'
+/home/runner/work/GEMSDOE/GEMSDOE/src/train.py:33: ModuleNotFoundError: No module named 'tqdm'
+=============================== warnings summary ===============================
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:366: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = writer(
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_metric.py::test_submission_writing_helpers
+tests/test_submission_writer.py::test_old_approach_reproduced_the_crash
+tests/test_submission_writer.py::test_clean_profile_drops_stale_block_geometry_and_pins_legal_tiles
+tests/test_submission_writer.py::test_writer_succeeds_on_the_actual_competition_width
+tests/test_submission_writer.py::test_writer_refuses_degenerate_or_illegal_output
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    return Affine.translation(west, north) * Affine.scale(xsize, -ysize)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_ensemble.py::test_compact_window_subset_picks_contiguous_faulty_run - ModuleNotFoundError: No module named 'tqdm'
+1 failed, 43 passed, 7 warnings in 5.90s

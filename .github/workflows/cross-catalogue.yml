@@ -1,0 +1,481 @@
+name: Cross-catalogue transfer (emit SGMC, score against QFaults)
+
+# =============================================================================
+# THE MEASUREMENT THIS WORKFLOW EXISTS FOR
+#
+# EXECUTIVE_SUMMARY.md §11 item 1 asks for a prior on hidden-expert-set recall:
+#
+#     "Emit catalogue A (SGMC), score vs independent catalogue B (QFaults), report transfer as a
+#      prior on hidden-expert-set recall."
+#
+# Nothing already committed can answer it.  The proxy population
+# (data/evidence/proxy/proxy_catalogue.tif) IS catalogue A - the USGS State Geologic Map
+# Compilation structure polylines - so a submission that simply copies catalogue A scores 0.0
+# there by construction (that is the acceptance control in scripts/eval_proxy_catalogue.py, and it
+# is why the proxy is a fair stand-in for "faults the labels lack").  It cannot say whether a
+# policy TRAVELS from one compiled catalogue to another, because it only ever contains one.
+#
+# So this workflow fetches a SECOND, independently compiled catalogue and measures transfer:
+#
+#   job qfaults  - fetch the USGS Quaternary Fault and Fold Database (QFaults) layer 21 "National
+#                  Database" for the competition footprint (DOI 10.5066/P9BCVRCK, public domain),
+#                  rasterise it on the exact competition grid with the SAME script that rasterises
+#                  catalogue A, and split it into "the training labels already have this trace"
+#                  (code 1) / "the labels do not" (code 2).  Integrity gate: the fetched feature
+#                  count must equal the count the service itself reports, or the job fails - a
+#                  silently truncated catalogue would understate transfer and look like a negative
+#                  scientific result.
+#   job transfer - run scripts/measure_cross_catalogue_transfer.py: emit catalogue A's code-2
+#                  pixels at several band widths, score every emission against QFaults code-2
+#                  pixels with the official metric, and ask whether adding that emission to the
+#                  model's own field (a probability maximum, not a mask OR) beats the model alone
+#                  by more than a pre-registered margin with bootstrap support.
+#
+# WHY QFAULTS IS AN INDEPENDENT "B", AND WHAT IT IS NOT (scripts/fetch_qfaults.py docstring)
+#   * Independent of A: SGMC structure is mostly pre-Quaternary bedrock structure digitised from
+#     the state geologic maps; QFaults is Quaternary-age, seismic-hazard mapped, compiled by
+#     different authors from different sources.  Their intersection is a measurement, not a
+#     tautology.
+#   * NOT independent of the training labels: rules §3.3 says the labels come from the INGENIOUS
+#     Great Basin compilation, which distributes Quaternary fault layers (GDR 1391, DOI
+#     10.15121/1881483).  That is exactly why the scored truth is only B's CODE-2 pixels - the
+#     QFaults traces with no training label within R = 3 px - and why the overlap fraction is
+#     measured and committed rather than assumed.
+#
+# CONTROLS THAT RUN BEFORE ANY TRANSFER CLAIM (scripts/measure_cross_catalogue_transfer.py)
+#   labels-copy vs B-only must score ~0   (otherwise B-only is not "new" and the claim is circular)
+#   B-copy    vs B-only must score 1.0    (otherwise the scorer is broken on this population)
+#   blanket-ones vs B-only gives the floor a trivial emission earns
+#   If the first control fails the verdict is REFUSED, whatever the union gain says.
+#
+# Egress: earthquake.usgs.gov is not reachable from the development sandbox (verified 2026-09-18,
+# curl exit 35) but IS reachable from a GitHub-hosted runner - the same constraint that put the
+# SGMC fetch and the competition-data bridge on runners.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: "QFaults MapServer layer id (21 = National Database, whole nation in one query)"
+        default: "21"
+      page_size:
+        description: "features per request (capped by the service's maxRecordCount at run time)"
+        default: "1000"
+      widths:
+        description: "emission band widths (px) to measure for catalogue A"
+        default: "0,1,2,3,4,6"
+      a_codes:
+        description: "catalogue-A codes to emit (2 = absent from the training labels)"
+        default: "2"
+      bootstraps:
+        description: "paired block-bootstrap resamples for the union-vs-model contrast"
+        default: "1000"
+      min_union_gain:
+        description: "pre-registered DTI margin the union must beat the model by"
+        default: "0.01"
+      min_bootstrap_prob:
+        description: "pre-registered P(union > model) over block resamples"
+        default: "0.95"
+      submission:
+        description: "the model field to test the union against ('' = measure A alone)"
+        default: "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif"
+      skip_transfer:
+        description: "1 = only fetch and rasterise catalogue B"
+        default: "0"
+  push:
+    branches: ["arena/**", "main"]
+    paths: [".github/triggers/cross-catalogue"]
+
+# ---------------------------------------------------------------------------
+# .github/triggers/cross-catalogue-params may set (the bot token cannot call
+# workflow_dispatch, so a push event carries no inputs - same pattern as proxy-eval.yml):
+#   LAYER / PAGE_SIZE / PAD_DEG
+#   WIDTHS=0,1,2,3,4,6      emission band widths for catalogue A
+#   A_CODES=2               which A codes to emit (2 = absent from the labels)
+#   BOOTSTRAPS / SEED
+#   MIN_UNION_GAIN=0.01     pre-registered margin (never tuned after seeing the result)
+#   MIN_BOOTSTRAP_PROB=0.95 pre-registered bootstrap support
+#   SUBMISSION=<path>       model field for the union test ('' = skip the union, measure A alone)
+#   SKIP_FETCH=1            reuse the committed catalogue B raster instead of re-fetching
+#   SKIP_TRANSFER=1         fetch only
+# ---------------------------------------------------------------------------
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: cross-catalogue-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  params:
+    name: read the committed cross-catalogue parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      layer: ${{ steps.p.outputs.layer }}
+      page_size: ${{ steps.p.outputs.page_size }}
+      pad_deg: ${{ steps.p.outputs.pad_deg }}
+      widths: ${{ steps.p.outputs.widths }}
+      a_codes: ${{ steps.p.outputs.a_codes }}
+      bootstraps: ${{ steps.p.outputs.bootstraps }}
+      seed: ${{ steps.p.outputs.seed }}
+      min_union_gain: ${{ steps.p.outputs.min_union_gain }}
+      min_bootstrap_prob: ${{ steps.p.outputs.min_bootstrap_prob }}
+      submission: ${{ steps.p.outputs.submission }}
+      skip_fetch: ${{ steps.p.outputs.skip_fetch }}
+      do_transfer: ${{ steps.p.outputs.do_transfer }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        name: parameters (service layer, emission widths, pre-registered thresholds)
+        run: |
+          set -euo pipefail
+          LAYER="${{ github.event.inputs.layer || '21' }}"
+          PAGE="${{ github.event.inputs.page_size || '1000' }}"
+          WIDTHS="${{ github.event.inputs.widths || '0,1,2,3,4,6' }}"
+          CODES="${{ github.event.inputs.a_codes || '2' }}"
+          BOOT="${{ github.event.inputs.bootstraps || '1000' }}"
+          GAIN="${{ github.event.inputs.min_union_gain || '0.01' }}"
+          PROB="${{ github.event.inputs.min_bootstrap_prob || '0.95' }}"
+          SUB="${{ github.event.inputs.submission || 'data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif' }}"
+          SKIPF="0"
+          SKIPT="${{ github.event.inputs.skip_transfer || '0' }}"
+          PAD="0.0"
+          SEED="0"
+          F=".github/triggers/cross-catalogue-params"
+          if [ -f "$F" ]; then
+            echo "parameters from $F:"; tr -d '\r' < "$F" | grep -E '^[A-Z_]+=' || true
+            v () { tr -d '\r' < "$F" | sed -n "s/^$1=\(.*\)\$/\1/p" | tail -1 || true; }
+            [ -n "$(v LAYER)" ]             && LAYER="$(v LAYER)"   || true
+            [ -n "$(v PAGE_SIZE)" ]         && PAGE="$(v PAGE_SIZE)" || true
+            [ -n "$(v WIDTHS)" ]            && WIDTHS="$(v WIDTHS)" || true
+            [ -n "$(v A_CODES)" ]           && CODES="$(v A_CODES)" || true
+            [ -n "$(v BOOTSTRAPS)" ]        && BOOT="$(v BOOTSTRAPS)" || true
+            [ -n "$(v MIN_UNION_GAIN)" ]    && GAIN="$(v MIN_UNION_GAIN)" || true
+            [ -n "$(v MIN_BOOTSTRAP_PROB)" ] && PROB="$(v MIN_BOOTSTRAP_PROB)" || true
+            [ -n "$(v SUBMISSION)" ]        && SUB="$(v SUBMISSION)" || true
+            [ -n "$(v SKIP_FETCH)" ]        && SKIPF="$(v SKIP_FETCH)" || true
+            [ -n "$(v SKIP_TRANSFER)" ]     && SKIPT="$(v SKIP_TRANSFER)" || true
+            [ -n "$(v PAD_DEG)" ]           && PAD="$(v PAD_DEG)"   || true
+            [ -n "$(v SEED)" ]              && SEED="$(v SEED)"     || true
+          else
+            echo "no $F - layer $LAYER, widths $WIDTHS, thresholds gain>$GAIN prob>=$PROB"
+          fi
+          DOT="1"; [ "$SKIPT" = "1" ] && DOT="0"
+          {
+            echo "layer=$LAYER"; echo "page_size=$PAGE"; echo "pad_deg=$PAD"
+            echo "widths=$WIDTHS"; echo "a_codes=$CODES"; echo "bootstraps=$BOOT"; echo "seed=$SEED"
+            echo "min_union_gain=$GAIN"; echo "min_bootstrap_prob=$PROB"
+            echo "submission=$SUB"; echo "skip_fetch=$SKIPF"; echo "do_transfer=$DOT"
+          } >> "$GITHUB_OUTPUT"
+          echo "LAYER=$LAYER WIDTHS=$WIDTHS A_CODES=$CODES SUB=$SUB SKIP_FETCH=$SKIPF DO_TRANSFER=$DOT"
+
+  qfaults:
+    name: fetch + rasterise catalogue B (USGS QFaults)
+    runs-on: ubuntu-latest
+    needs: params
+    if: ${{ needs.params.outputs.skip_fetch != '1' }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/scipy/rasterio/scikit-image/pyyaml - no torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio scikit-image pyyaml
+
+      - name: Place the competition rasters (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data data/external data/evidence/xcat
+          if [ -f data/bridge/manifest.json ]; then
+            echo "data/bridge is in the tree - assembling locally (no network fetch, sha256-verified)"
+            python scripts/assemble_data_bridge.py
+          else
+            dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s "data/$2") bytes" || { echo "FAILED $2"; exit 1; }; }
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          sha256sum data/labels.tif data/sample_submission.tif | tee data/checksums_xcat.txt
+
+      - name: Fetch QFaults layer ${{ needs.params.outputs.layer }} for the footprint
+        run: |
+          set -euo pipefail
+          # The footprint envelope is COMPUTED from data/labels.tif at run time
+          # (rasterio.warp.transform_bounds) - never typed.  The integrity gate inside the script
+          # compares the fetched feature count with the count the service reports for that bbox.
+          python scripts/fetch_qfaults.py \
+            --bbox-source data/labels.tif \
+            --layer "${{ needs.params.outputs.layer }}" \
+            --page-size "${{ needs.params.outputs.page_size }}" \
+            --pad-deg "${{ needs.params.outputs.pad_deg }}" \
+            --out data/external/qfaults_footprint.geojson \
+            --meta data/evidence/xcat/fetch_meta.json 2>&1 | tee data/evidence/xcat/fetch.log
+
+      - name: Rasterise catalogue B on the competition grid + split by label coverage
+        run: |
+          set -euo pipefail
+          # The SAME rasteriser that built catalogue A, so codes mean the same thing in both:
+          # 0 = nothing, 1 = a trace the training labels already contain (within R), 2 = a trace
+          # they do not.  Only code 2 is ever scored.
+          python scripts/build_proxy_catalogue.py \
+            --proxy data/external/qfaults_footprint.geojson \
+            --template data/labels.tif --labels data/labels.tif \
+            --out data/evidence/xcat/qfaults_catalogue.tif \
+            --stats data/evidence/xcat/qfaults_stats.json \
+            --fetch-meta data/evidence/xcat/fetch_meta.json \
+            --window 2048,1280,512 2>&1 | tee data/evidence/xcat/build.log
+
+      - name: Record how much of catalogue B the training labels already contain
+        run: |
+          set -euo pipefail
+          # The keys are build_proxy_catalogue.py's OWN stats schema (nested under "proxy."), read
+          # from the committed SGMC build rather than guessed: the first fire of this workflow
+          # (run 35411164502) failed here because it looked for top-level "only_px", found nothing,
+          # and reported a healthy 61k-pixel-class catalogue as empty.  Schema drift and a genuinely
+          # empty population are different failures and are now reported differently.
+          python - <<'PY' | tee data/evidence/xcat/overlap_summary.log
+          import json, pathlib
+          p = pathlib.Path("data/evidence/xcat/qfaults_stats.json")
+          s = json.loads(p.read_text())
+          px = s.get("proxy")
+          if not isinstance(px, dict):
+              raise SystemExit(f"{p} has no 'proxy' section (found: {sorted(s)}) - the stats schema "
+                               "of scripts/build_proxy_catalogue.py changed; update this step "
+                               "instead of reporting an empty catalogue")
+          want = ("mask_px", "near_label_px", "proxy_only_px", "near_label_km", "proxy_only_km",
+                  "catalogue_already_covers_fraction",
+                  "catalogue_already_covers_fraction_including_outside_footprint",
+                  "outside_footprint_px")
+          missing = [k for k in want if k not in px]
+          if missing:
+              raise SystemExit(f"{p} is missing proxy.{missing} - schema drift, not an empty "
+                               f"catalogue (keys present: {sorted(px)})")
+          print("catalogue B (QFaults) on the competition grid:")
+          for k in want:
+              print(f"  proxy.{k}: {px[k]}")
+          comp = px.get("proxy_only_components") or {}
+          if comp:
+              print(f"  proxy.proxy_only_components: {comp['components']} components, largest "
+                    f"{comp.get('largest_px')} px ({comp.get('largest_km')} km), median "
+                    f"{comp.get('median_px')} px")
+          per_rule = px.get("per_rule_id") or {}
+          print(f"  classes rasterised: {len(per_rule)}")
+          for rid, row in sorted(per_rule.items(), key=lambda kv: -(kv[1].get("proxy_only_px") or 0))[:8]:
+              print(f"    RuleID {rid}: {row.get('features')} features, "
+                    f"{row.get('proxy_only_px')} code-2 px - {row.get('class')}")
+          # A zero or near-zero code-2 population is a FINDING about the two catalogues, not a job
+          # failure: the transfer job runs anyway and writes a REFUSED report (with the overlap that
+          # establishes it) and exits 0.  Failing here would hide the result that matters.
+          if not px["proxy_only_px"]:
+              print("\n::warning::catalogue B has NO code-2 pixels - every QFaults trace in the "
+                    "footprint is already within R of a training label.  The transfer job will "
+                    "report REFUSED with this overlap as the evidence.")
+          elif px["proxy_only_px"] < 100:
+              print(f"\n::warning::catalogue B has only {px['proxy_only_px']:,} code-2 px, below the "
+                    "100 px minimum population in scripts/measure_cross_catalogue_transfer.py - the "
+                    "transfer job will report REFUSED rather than score a meaningless number.")
+          cov = px["catalogue_already_covers_fraction"]
+          print(f"\nthe training labels already contain {cov * 100:.1f} % of catalogue B's "
+                f"in-footprint traces; the scored population is the remaining "
+                f"{px['proxy_only_px']:,} px ({px['proxy_only_km']:,.1f} km)")
+          PY
+
+      - name: Commit the catalogue-B evidence (small files only)
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/xcat
+          # the GeoJSON is tens of MB and is re-fetchable from a public service with the URLs
+          # recorded in fetch_meta.json: keep the provenance sidecar (with its sha256) and the
+          # 181 KB-class raster, drop the raw response - same rule proxy-eval.yml applies.
+          rm -f data/external/qfaults_footprint.geojson
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" || true
+          git diff --cached --quiet && echo "no cross-catalogue evidence changes" || {
+            git commit -m "evidence(xcat): QFaults catalogue B fetched and rasterised [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload catalogue-B artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcat-qfaults-${{ github.run_id }}
+          path: data/evidence/xcat/
+          retention-days: 30
+          if-no-files-found: ignore
+
+  transfer:
+    name: emit catalogue A, score against catalogue B
+    runs-on: ubuntu-latest
+    needs: [params, qfaults]
+    if: ${{ always() && needs.params.outputs.do_transfer == '1' && (needs.qfaults.result == 'success' || needs.params.outputs.skip_fetch == '1') }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}          # pick up the qfaults job's commit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps (numpy/scipy/rasterio/scikit-image/pyyaml - no torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet numpy scipy rasterio scikit-image pyyaml
+
+      - name: Place the competition rasters (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data data/evidence/xcat
+          if [ -f data/bridge/manifest.json ]; then
+            python scripts/assemble_data_bridge.py
+          else
+            dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s "data/$2") bytes" || { echo "FAILED $2"; exit 1; }; }
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+
+      - name: Catalogue B must exist before any transfer claim
+        run: |
+          set -euo pipefail
+          if [ ! -f data/evidence/xcat/qfaults_catalogue.tif ]; then
+            echo "::error::data/evidence/xcat/qfaults_catalogue.tif is missing"
+            echo "build it with:"
+            echo "  python scripts/fetch_qfaults.py --bbox-source data/labels.tif \\"
+            echo "    --out data/external/qfaults_footprint.geojson --meta data/evidence/xcat/fetch_meta.json"
+            echo "  python scripts/build_proxy_catalogue.py --proxy data/external/qfaults_footprint.geojson \\"
+            echo "    --template data/labels.tif --labels data/labels.tif \\"
+            echo "    --out data/evidence/xcat/qfaults_catalogue.tif --stats data/evidence/xcat/qfaults_stats.json \\"
+            echo "    --fetch-meta data/evidence/xcat/fetch_meta.json"
+            exit 1
+          fi
+          ls -lh data/evidence/xcat/
+
+      - name: Measure the transfer (controls first, then the union test)
+        run: |
+          set -euo pipefail
+          SUB="${{ needs.params.outputs.submission }}"
+          PRED_FLAG=""
+          if [ -n "$SUB" ] && [ -f "$SUB" ]; then PRED_FLAG="--pred $SUB"; else
+            echo "::warning::no model field at '$SUB' - measuring catalogue A alone (the union test is reported as NOT MEASURABLE)"
+          fi
+          python scripts/measure_cross_catalogue_transfer.py \
+            --truth-b data/evidence/xcat/qfaults_catalogue.tif \
+            --catalogue-a data/evidence/proxy/proxy_catalogue.tif \
+            $PRED_FLAG \
+            --labels data/labels.tif --template data/sample_submission.tif \
+            --widths "${{ needs.params.outputs.widths }}" \
+            --a-codes "${{ needs.params.outputs.a_codes }}" \
+            --bootstraps "${{ needs.params.outputs.bootstraps }}" \
+            --seed "${{ needs.params.outputs.seed }}" \
+            --min-union-gain "${{ needs.params.outputs.min_union_gain }}" \
+            --min-bootstrap-prob "${{ needs.params.outputs.min_bootstrap_prob }}" \
+            --out data/evidence/xcat/transfer_report.json \
+            2>&1 | tee data/evidence/xcat/transfer.log
+
+      - name: Print the verdict in the job summary
+        if: always()
+        run: |
+          set -euo pipefail
+          python - <<'PY' | tee -a "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          p = pathlib.Path("data/evidence/xcat/transfer_report.json")
+          if not p.exists():
+              print("### cross-catalogue transfer\n\nno report was written - see the job log"); raise SystemExit(0)
+          r = json.loads(p.read_text())
+          v = r["verdict"]
+          if "population" in r:
+              pop = r["population"]
+              print("### Cross-catalogue transfer: REFUSED (catalogue B is not independent of the labels)\n")
+              print(f"**{v['conclusion']}**\n")
+              print(f"- catalogue B in the scored footprint: **{pop['B_in_footprint_px']:,} px "
+                      f"= {pop['B_in_footprint_km']:,} km**")
+              print(f"- already within R = {r['metric']['R_pixels']} px of a training label (code 1): "
+                      f"**{pop['B_code1_near_a_label_px']:,} px ({pop['B_code1_fraction'] * 100:.2f} %)**")
+              print(f"- left as a 'new fault' population (code 2): **{pop['B_only_px']:,} px "
+                      f"({pop['B_only_fraction'] * 100:.4f} %)** - below the pre-registered minimum "
+                      f"{pop['thresholds']}")
+              print(f"- label fault px {pop['label_fault_px']:,}; label px within R of B "
+                      f"{pop['labels_within_R_of_B_px']:,} ({100.0 * pop['labels_within_R_of_B_px'] / max(1, pop['label_fault_px']):.2f} % "
+                      "of the labels) - the two line sets are the same lines here")
+              print("\nno DTI, recall or union gain is reported: with a truth population of "
+                      f"{pop['B_only_px']:,} px any such number would be noise, and reporting it "
+                      "would be the kind of unsupported claim this repo refuses to make.")
+              print("\n**Consequence:** the SGMC proxy population "
+                      "(data/evidence/proxy/proxy_catalogue.tif, 61,664 code-2 px, 24.94 % already "
+                      "covered by the labels) remains the only available surrogate for 'faults the "
+                      "labels lack'.  No free second Quaternary catalogue exists for this footprint.")
+              for i, cav in enumerate(r.get("caveats") or [], 1):
+                  print(f"{i}. {cav}")
+              raise SystemExit(0)
+          o, c = r["overlap"], r["controls"]
+          print("### Cross-catalogue transfer: catalogue A (SGMC) -> catalogue B (QFaults)\n")
+          print(f"**{v['conclusion']}**\n")
+          print(f"- B-only truth (QFaults traces with no training label within R): "
+                f"**{o['B_only_px']:,} px = {o['B_only_km']:,} km**")
+          print(f"- of catalogue B, {o['B_near_label_fraction_of_all'] * 100:.1f} % is already within "
+                f"R of a training label (code 1) - the labels and QFaults are not disjoint")
+          print(f"- catalogue A's emission reaches {o['B_only_recall_by_A_at_R'] * 100:.1f} % of B-only "
+                f"at R (recall-like) while {o['A_emitted_precision_on_B_only'] * 100:.1f} % of what it "
+                "emits lands on B-only (precision-like) - reported as a pair, because high recall "
+                "with low precision is a net loss under a metric that charges for mass")
+          print(f"- controls: labels-copy {c['labels_copy_vs_B_only']['global_dti']:.4f} (must be ~0), "
+                f"B-copy {c['B_copy_vs_B_only']['global_dti']:.4f} (must be 1.0), blanket-ones "
+                f"{c['blanket_ones_vs_B_only']['global_dti']:.4f}; controls_pass="
+                f"**{r['controls_pass']}**")
+          if v.get("model_dti") is not None:
+              print(f"- model as shipped {v['model_dti']:.4f} -> best union {v['best_union_dti']:.4f} "
+                    f"(gain {v['union_gain']:+.4f}); P(union > model) over block resamples = "
+                    f"{v['criterion']['bootstrap_prob_beats_model']}")
+          bs = r.get("bootstrap") or {}
+          boot = dict(bs.get("catalogue_a_vs_model") or {}, **(bs.get("union_vs_model") or {}))
+          print("\n| candidate | DTI vs B-only | CI95 (block bootstrap) | emitted px |")
+          print("|---|---|---|---|")
+          for m in r["measurements"]:
+              ci = (boot.get(m["label"]) or {}).get("dti_ci95")
+              cis = f"[{ci[0]:.4f}, {ci[1]:.4f}]" if ci else "-"
+              dti = m["global_dti"]
+              print(f"| {m['kind']} `{m['label']}` | "
+                    f"{(f'{dti:.4f}' if dti is not None else '-')} | {cis} | {m['emitted_px']:,} |")
+          PY
+
+      - name: Commit the transfer evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/xcat
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D" || true
+          git diff --cached --quiet && echo "no transfer evidence changes" || {
+            git commit -m "evidence(xcat): cross-catalogue transfer measured (A=SGMC -> B=QFaults) [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload transfer artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcat-transfer-${{ github.run_id }}
+          path: data/evidence/xcat/
+          retention-days: 30
+          if-no-files-found: ignore

@@ -1,0 +1,31 @@
+# Proxy-eval sweep parameters (read by .github/workflows/proxy-eval.yml, job `params`).
+#
+# 2026-09-17 (session 13, second fire) - THE 3-ENSEMBLE FIELD.
+#
+# Why this run: ensemble 3 (run 35263581931, folds 12-17, seed 44) has landed with five live folds
+# (fold 4 died in training; folds 0,1,2,3,5 uploaded artifacts), so the blend that would be
+# submitted is now a mean over THREE ensembles - 16 live folds, not the 11 the adopted policy was
+# measured on.  A floor is a threshold on the MEAN field, so the field has changed and must be
+# re-measured before anything else ships.
+#
+# The previous fire (run 35275312337) measured the 1+2 mean with the identical grid and confirmed
+# the adopted policy there: floor 0.1 scored 0.0999 against the reference policy's 0.0304, i.e.
+# +0.0695 (committed as data/evidence/proxy/eval_sweep-mean12.json).  This run measures the 1+2+3
+# mean the same way, and the decide step hands EVERY committed labelled sweep to the decision, so
+# condition 3 gains a fourth independent field.
+#
+# What it can change: if floor 0.1 stops beating the shipped policy by > 0.01 on this field, the
+# decision record says so and the adoption is re-opened by the same rule that adopted it.  Nothing
+# re-blends until this record is read - an unmeasured field is never shipped.
+#
+# What it cannot do is flatter the candidate: the sweep's acceptance control (a catalogue-copy
+# submission must score 0 on the proxy-only truth) is checked before any candidate is scored.
+#
+# RUN_ID=a,b,c blends every run's fold-* artifacts into ONE mean (folds/folds2/folds3) before
+# sweeping that field; SWEEP_LABEL names the evidence file.
+RUN_ID=35042805806,35249562910,35263581931
+SWEEP_LABEL=ens123
+DILATE_GRID=0,1,2,3,4,6,8,10,12,16,20
+SHAPING_VALUES=0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9
+SOFT_BAND=1
+BAND_GAMMAS=1,2

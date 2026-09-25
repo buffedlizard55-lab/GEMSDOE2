@@ -1,0 +1,57 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: ["main", "arena/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Stdlib-only gate: documentation must not cite artefacts that do not exist, the audit
+  # table must stay internally consistent, and the code must compile.  Pages will not deploy
+  # if this fails - see scripts/audit_docs.py for what it checks and why.
+  docs-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Audit docs + data catalog
+        run: python scripts/audit_docs.py
+      - name: Byte-compile the pipeline
+        run: python -m compileall -q src scripts tests
+      - name: Metric self-test (needs numpy/scipy/rasterio)
+        run: |
+          python -m pip install --quiet numpy scipy rasterio scikit-image
+          python src/metrics.py --self-test
+
+  deploy:
+    # GitHub Pages in this repo is protected so only `main` may deploy (the environment
+    # policy rejects other branches, which used to show up as a red "deploy" check on every
+    # working branch).  The audit job still runs on every branch and every PR.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: docs-audit
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

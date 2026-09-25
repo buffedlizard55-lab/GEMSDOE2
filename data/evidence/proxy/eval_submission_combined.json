@@ -1,0 +1,141 @@
+{
+ "generated_utc": "2026-09-25T03:50:26+00:00",
+ "generated_by": "scripts/eval_proxy_catalogue.py",
+ "purpose": "score a prediction against faults the training labels do not contain (docs/DISCOVERY_PLAN.md 3b) - the only local measurement aligned with the scored 'new fault' population",
+ "inputs": {
+  "pred": "data/evidence/runs/35042805806/submission.tif",
+  "pred_sha256": "a5ae61d572b0cd95eac111cab86954eca2219ad310fc0febddcda7ab92fb7969",
+  "pred_meta": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "nodata": null
+  },
+  "proxy": "data/evidence/proxy/proxy_catalogue.tif",
+  "proxy_sha256": "7563e187171f7210d70295f958b0b2714c1fa504afa35f9a4688fc99b1e1122a",
+  "proxy_meta": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "uint8",
+   "nodata": null
+  },
+  "labels": "data/labels.tif",
+  "truth_mode": "combined",
+  "reference_t0": null,
+  "reference_source": null,
+  "metric": {
+   "R_pixels": 3,
+   "R_meters": 300,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "eps": 1e-07
+  }
+ },
+ "truth": {
+  "mode": "combined",
+  "px": 139426,
+  "km": 13942.6,
+  "proxy_only_px": 61664,
+  "proxy_near_label_px": 20491,
+  "catalogue_coverage_of_proxy": 0.2494
+ },
+ "prediction": {
+  "emission_px": 21492,
+  "mass": 21492.0
+ },
+ "baseline_support": {
+  "source": "labels (the competition footprint)",
+  "px": 12279160,
+  "why": "the blanket baseline is taken over this support so it does not change with the raster being scored; the metric itself sums over the whole raster, exactly as the official one does"
+ },
+ "results": {
+  "as_provided": {
+   "dti": 0.101492,
+   "TP_w": 11820.367,
+   "FP_w": 12803.14,
+   "FN_w": 127605.633,
+   "mass": 21492.0,
+   "emission_px": 21492
+  },
+  "as_submitted": {
+   "dti": 0.101492,
+   "TP_w": 11820.367,
+   "FP_w": 12803.14,
+   "FN_w": 127605.633,
+   "mass": 21492.0,
+   "emission_px": 21492
+  },
+  "prediction_role": "the raster at --pred as provided: equals the committed submission only when --pred points at one; check inputs.pred_sha256 before quoting this as a submission score",
+  "baselines": {
+   "zeros": {
+    "dti": 0.0,
+    "TP_w": 0.0,
+    "FP_w": 0.0,
+    "FN_w": 139426.0,
+    "mass": 0.0,
+    "emission_px": 0
+   },
+   "blanket_ones": {
+    "dti": 0.055588,
+    "TP_w": 139426.0,
+    "FP_w": 11843974.932,
+    "FN_w": 0.0,
+    "mass": 12279160.0,
+    "emission_px": 12279160
+   },
+   "blanket_ones_whole_grid": {
+    "dti": 0.055588,
+    "TP_w": 139426.0,
+    "FP_w": 11843974.932,
+    "FN_w": 0.0,
+    "mass": 12279160.0,
+    "emission_px": 12279160
+   },
+   "catalogue_copy": {
+    "dti": 0.548228,
+    "TP_w": 68680.349,
+    "FP_w": 0.0,
+    "FN_w": 70745.651,
+    "mass": 60988.0,
+    "emission_px": 60988
+   },
+   "catalogue_plus_submission": {
+    "dti": 0.552898,
+    "TP_w": 70929.876,
+    "FP_w": 12803.14,
+    "FN_w": 68496.124,
+    "mass": 79887.0,
+    "emission_px": 79887
+   }
+  },
+  "acceptance": {
+   "catalogue_copy_dti_on_proxy_only": 0.548228,
+   "expected": 0.0,
+   "passed": false,
+   "meaning": "a catalogue-copy submission earns nothing here, so this population is not a restatement of the training labels"
+  }
+ },
+ "caveats": [
+  "Population, not score: SGMC faults are published surface mapping; the scored faults are expert interpretations of the GeoDAWN geophysics. Compare policies, not leaderboards.",
+  "The FP term is a global sum over the whole raster, exactly as the official metric - the truth set is sparse, so a broad, diffuse prediction is punished here too.",
+  "Code-2 pixels are 'absent from the training labels', which is not the same as 'absent from the literature'."
+ ]
+}

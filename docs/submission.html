@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make a submission — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html" class="active">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Make a submission</h1>
+<p class="lede">Exactly how to enter the DOE GEMS Prize and upload a valid GeoTIFF — every step verified against the official rules and re-executed in this repository.</p>
+
+<div class="note ok"><strong>This is the operational page.</strong> It answers one question: <em>what exactly do I do to put a valid entry into the GEMS Prize?</em> Background, eligibility analysis and the full source catalogue live on the <a href='executive_summary.html'>executive summary</a>; the numbers behind the model live on <a href='results.html'>results</a>. Every fact below is either (a) measured from the committed bytes while this page was built, (b) copied from a committed evidence JSON, or (c) quoted verbatim from the official rules PDF by quote id.</div>
+<div class="stats"><div class="stat"><div class="k">File to upload</div><div class="v"><b class='mono' style='font-size:.9rem'>submission.tif</b></div><div class="s">570,890 bytes · single-band float32 GeoTIFF</div></div><div class="stat"><div class="k">sha256 (measured at build time)</div><div class="v"><b class='mono' style='font-size:.86rem'>7f00890a62878d612fb5eef6…</b></div><div class="s">re-measured by scripts/build_site.py from the committed bytes</div></div><div class="stat"><div class="k">Format validation</div><div class="v"><b>PASSED</b></div><div class="s">11 checks ✓ in the committed validator log</div></div><div class="stat"><div class="k">Emission policy</div><div class="v"><b>floor 0.1 · thin · width 0 px</b></div><div class="s">rank 1 of 132 candidates · adopted by measurement</div></div><div class="stat"><div class="k">Ensemble</div><div class="v"><b>11 live folds</b></div><div class="s">runs 35042805806 + 35249562910 (mean12)</div></div><div class="stat"><div class="k">Submission quota</div><div class="v"><b>3 per week</b></div><div class="s">one final selection before the deadline (rules §3.2/§3.5)</div></div><div class="stat"><div class="k">Deadline</div><div class="v"><b>Dec 3, 2026 · 11:59 PM UTC</b></div><div class="s">the same file is scored in both prize rounds</div></div><div class="stat"><div class="k">Public leaderboard top</div><div class="v"><b>0.2854</b></div><div class="s">this repository is NOT on that leaderboard (no DrivenData account)</div></div></div>
+
+<h2>0. The whole submission in five commands</h2>
+<p>No training, no GPU, no DrivenData credentials needed for the repository side. This is the path
+that was re-executed in the development sandbox; the validator output it produces is committed at
+<code>data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log</code>.</p>
+<pre><code>git pull                                     # get the sha256-pinned raster bridge
+python scripts/assemble_data_bridge.py       # verify + place data/training_features.tif, labels.tif, sample_submission.tif
+python scripts/prepare_data.py               # pre-flight: grid, CRS, resolution, band tags
+python scripts/validate_submission.py \
+    --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif \
+    --sample data/sample_submission.tif --train data/training_features.tif
+# -> "✅ Validation PASSED - Ready for submission!"</code></pre>
+<p>Then upload <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code> at
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a> (account + enrollment required — the one step
+this repository cannot do for you, see <a href="#human">§8</a>).</p>
+
+<h2 id="step1">1. Enter the competition (once, before anything else)</h2>
+<blockquote><p><em>&ldquo;To enter the competition, you must create a profile on the DrivenData platform and agree to abide by the competition rules and restrictions.&rdquo;</em><br><span class="small">— official rules §3.1 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: The one genuinely human step: registration, then the account-gated data tab and upload.</span></p></blockquote>
+<blockquote><p><em>&ldquo;An individual prize competitor (who is not competing as a member of a group) must be a U.S. citizen or permanent resident.&rdquo;</em><br><span class="small">— official rules §1.3 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Eligibility - checked before any prize is contemplated.</span></p></blockquote>
+<ol>
+  <li>Create / sign in to a DrivenData account and open
+      <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">https://www.drivendata.org/competitions/306/competition-doe-gems/</a>.</li>
+  <li>Click <b>Compete!</b> and accept the competition rules and restrictions
+      (the rules are the PDF at <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">https://docs.nlr.gov/docs/fy26osti/96647.pdf</a>, mirrored on
+      <a href="https://www.herox.com/GEMSPrize/resource/2274">HeroX resource 2274</a>).</li>
+  <li>Download the data from the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data tab</a> — this needs the account you
+      just created; the repository does not need it, because the same three rasters are committed
+      as a sha256-pinned bridge under <code>data/bridge/</code> (see §2).</li>
+</ol>
+<div class="note warn"><strong>Irregularity, flagged not hidden:</strong> the data tab's own mirrors are Dropbox links, and the file names there differ from the names the problem page uses (<code>gems-geodawn-numerical-features.tif</code> vs <code>training_features.tif</code>, <code>existing_faults.tif</code> vs <code>labels.tif</code>, <code>example_submission.tif</code> vs <code>sample_submission.tif</code>). <code>scripts/assemble_data_bridge.py</code> maps them by sha256, not by name, so the drift cannot silently substitute a file.</div>
+
+<h2 id="step2">2. Put the official rasters in <code>data/</code> and prove they are the official ones</h2>
+<p><code>data/</code> payloads are gitignored; <code>data/bridge/</code> is committed in ≤ 90 MiB
+parts (GitHub rejects a 419 MB blob) with every part and the whole file pinned by sha256 in
+<code>data/bridge/manifest.json</code>. Reassembly verifies before it writes and aborts on any
+mismatch, so a corrupted or substituted raster cannot enter the pipeline quietly.</p>
+<pre><code>python scripts/assemble_data_bridge.py    # verify parts -> concatenate -> verify whole-file sha256 -> place canonical names
+python scripts/prepare_data.py            # 3292x3730, 19 bands, EPSG:32611, 100 m, aligned bounds, band tags present</code></pre>
+<table><thead><tr><th>Canonical file</th><th>Pinned sha256 (data/bridge/manifest.json)</th>
+<th>In this checkout, measured while building this page</th><th>State</th></tr></thead>
+<tbody><tr><td class="mono">data/training_features.tif</td><td class="small mono">4371c82e3b8339b807bdffcf…</td><td class="small mono">sha256 4371c82e3b8339b8… · 418,912,844 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr><tr><td class="mono">data/labels.tif</td><td class="small mono">7ba308ccdc4418b31a178f4f…</td><td class="small mono">sha256 7ba308ccdc4418b3… · 425,830 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr><tr><td class="mono">data/sample_submission.tif</td><td class="small mono">2176d08e485aa2cd2860ce8d…</td><td class="small mono">sha256 2176d08e485aa2cd… · 1,599,597 B</td><td><span class="pill ok">MATCHES THE PIN</span></td></tr></tbody></table>
+<table class="kv">
+<tr><th>Where the bytes came from</th><td>Dropbox mirrors printed on the official DrivenData data tab (data tab requires login; mirrors are public share links)</td></tr>
+<tr><th>Where the pins came from</th><td><code>data/evidence/inventory.json</code>, measured on a runner by <code>scripts/inspect_competition_data.py</code>; the placement workflow fails if any sha256 drifts</td></tr>
+<tr><th>Placement evidence</th><td><code>data/evidence/data_placement.json</code> (2026-09-17T01:18:57Z) — The official competition rasters are present in data/ with sha256-verified provenance; scripts/prepare_data.py PASSES on them. The &#x27;single remaining blocker to training&#x27; (data placement) is resolved.</td></tr>
+<tr><th>Pre-flight result</th><td>PASS (exit 0) - OK: data/ passes every pre-flight check; next: python -m src.train --config configs/config.yaml</td></tr>
+</table>
+<div class="note ok"><strong>Ready.</strong> All three canonical rasters are present in this checkout with the pinned sha256, so every step below can be run offline — no DrivenData login needed.</div>
+
+<h2 id="step3">3. Pick the raster you are going to upload</h2>
+<table><thead><tr><th>Route</th><th>Command</th><th>When to use it</th><th>Cost</th></tr></thead><tbody>
+<tr class="hl"><td><b>A — the committed, validated artifact</b><br><span class="small">what we would upload today</span></td>
+<td class="mono small">data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</td>
+<td>Immediately. It is the 11-fold ensemble mean shaped with the adopted policy and its format validation is committed.</td>
+<td class="num">0 min</td></tr>
+<tr><td><b>B — local inference</b></td>
+<td class="mono small">python -m src.inference --config configs/config.yaml --out submission.tif</td>
+<td>You trained locally (<code>python -m src.train --config configs/config.yaml</code>) and want predictions from your own weights. The adopted shaping is applied automatically from <code>data/evidence/emission_decision.json</code>.</td>
+<td class="num">CPU hours without a GPU</td></tr>
+<tr><td><b>C — re-blend committed fold artifacts</b></td>
+<td class="mono small">python scripts/blend_submission.py --runs … --shaping-t0 0.1 --shaping-dilate 0 --shaping-source data/evidence/emission_decision.json --out submission.tif</td>
+<td>You want a different <em>field</em> (a different set of training runs). On GitHub Actions this is <code>.github/workflows/reblend.yml</code>, and a field that is not the shipped one only blends if the pre-registered field rule allows it.</td>
+<td class="num">minutes (no training)</td></tr>
+<tr><td><b>D — train the full configuration</b></td>
+<td class="mono small">python -m src.train --config configs/config.yaml &amp;&amp; python -m src.inference …</td>
+<td>You have a ≥ 24 GB GPU. This is the route to a better score, not to a valid file.</td>
+<td class="num">~1 h GPU / ~4 h+ CPU per fold</td></tr>
+</tbody></table>
+<p class="small">The field rule (<code>docs/FIELD_SELECTION_RULE.md</code>, machine-checked by
+<code>scripts/check_field_selection.py</code>) exists so route C cannot quietly change which
+ensemble ships. Current committed verdict:
+<b>KEEP mean12</b>
+(no field passed all of F1-F2 + R1-R5 (or the passing field is not the one proposed); the default is to do nothing - a field change is a claim and requires positive evidence on every axis).</p>
+
+
+<h3 id="generator">3a. Where the file can come from — including from this page</h3>
+<p><a href="how_to_submit.html#generate">docs/how_to_submit.html §3</a> carries a generator that
+runs entirely in the reader's browser. <code>scripts/build_submission_payload.py</code> measured the
+artifact and wrote its pixel field into this site as a run-length stream
+(<code>docs/submission_field.bin</code>, 532,072 B for a 49,116,640 B float32 buffer);
+<code>docs/geotiff_writer.js</code> rebuilds a single-band float32 GeoTIFF on the grid the platform
+asks for, then re-reads its own bytes and refuses to hand over a download unless every pinned check
+agrees — and the command-line twin of it writes nothing at all when a check fails, so a refused
+build cannot be picked up later by mistake.</p>
+<p class="small">A browser cannot be driven by CI, so the same JavaScript is executed headlessly under
+node and judged by rasterio plus <code>scripts/validate_submission.py</code>:
+<code>data/evidence/site_generator.json</code> (verdict <b>PASS</b>, 10 measured steps).
+<code>tests/test_site_generator.py</code> re-runs it in every container the writer can emit (deflate
+and uncompressed strips, one-row strips, a single strip for the whole grid), because a raster proven
+only in the shape it was authored in is not proven.</p>
+<p class="small">The claim is about <em>pixels</em>, not bytes: deflate (zlib-wrapped, per strip — tag 8, as GDAL writes) against the artifact's
+lzw tiles. That is the deliberate boundary — what the platform enforces is grid, CRS,
+geotransform, single band, float32 and the [0,1] range, and each of those is an assertion in the
+page's own self-check table. A byte-identical copy would have been <code>curl</code> (route A), not a
+generator.</p>
+<h2 id="step4">4. Validate the file before you upload it (mandatory gate)</h2>
+<pre><code>python scripts/validate_submission.py \
+    --pred data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif \
+    --sample data/sample_submission.tif --train data/training_features.tif</code></pre>
+<p>The validator checks CRS, resolution, band count, dtype, value range, grid size and transform
+against the competition template — i.e. exactly the requirements the
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">problem page's submission format</a> lists. Its committed output
+for the artifact in route A:</p>
+<table><thead><tr><th>State</th><th>Validator check (verbatim from data/evidence/runs/ens12-adopted-floor0.1-w0/validation.log)</th></tr></thead><tbody><tr><td class="mono">✓</td><td>CRS EPSG:32611</td></tr><tr><td class="mono">✓</td><td>Resolution 100m</td></tr><tr><td class="mono">✓</td><td>Single band</td></tr><tr><td class="mono">✓</td><td>Dtype float32</td></tr><tr><td class="mono">✓</td><td>Values in [0,1] (min 0.0000 max 1.0000)</td></tr><tr><td class="mono">✓</td><td>Size matches sample 3292x3730</td></tr><tr><td class="mono">✓</td><td>Transform matches sample</td></tr><tr><td class="mono">✓</td><td>All 5,167,373 template-valid px are finite in [0,1]</td></tr><tr><td class="mono">✓</td><td>NaN exactly outside the template&#x27;s valid region</td></tr><tr><td class="mono">✓</td><td>GDAL_NODATA matches the template (&#x27;nan&#x27;)</td></tr><tr><td class="mono">✓</td><td>Size matches training_features</td></tr><tr><td class="mono">i</td><td>NaN fraction 57.92% (NaN is expected outside the GeoDAWN footprint)</td></tr></tbody></table>
+<div class="note ok"><strong>Validation PASSED</strong> — the file is uploadable as-is.</div>
+<h3>The format spec, line by line</h3>
+<table><thead><tr><th>Requirement</th><th>Mandated value</th>
+<th>Official source</th><th>What the shipped file actually contains (committed evidence)</th>
+</tr></thead><tbody><tr><td><b>Projected CRS</b></td><td>EPSG:32611 (UTM zone 11N)</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: EPSG:32611</td></tr><tr><td><b>Pixel size</b></td><td>100 m × 100 m</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: [100.0, 100.0]</td></tr><tr><td><b>Grid size</b></td><td>3292 × 3730 px (same bounds as the training data)</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: 3292×3730</td></tr><tr><td><b>Bands</b></td><td>exactly 1</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: 1</td></tr><tr><td><b>Data type</b></td><td>float32</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: float32</td></tr><tr><td><b>Value range</b></td><td>0…1, higher = more likely to be a fault</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: min 0.0, max 1.0</td></tr><tr><td><b>Outside the survey footprint</b></td><td>null / NaN</td><td class="small"><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">…/page/967/#submission-format</a></td><td class="small mono">written: 5,167,373 finite px of 12,279,160 (57.92 % NaN, outside the GeoDAWN footprint)</td></tr><tr><td><b>Emitted support</b></td><td>not mandated — this is the policy choice</td><td class="small"><code>data/evidence/emission_decision.json</code></td><td class="small mono">written: 172,974 px > 0</td></tr></tbody></table>
+
+<h2 id="step5">5. Upload it on DrivenData</h2>
+<ol>
+  <li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/</a>.</li>
+  <li>Click <b>Make new submission</b>.</li>
+  <li>Upload the validated <code>.tif</code> (route A: <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code>,
+      570,890 bytes
+      · sha256 <code class="small">7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</code>).</li>
+  <li>In the narrative box paste the generative-AI disclosure from §6 (it is not counted in the
+      word count, per the rules).</li>
+  <li>Submit, then confirm on the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/">public leaderboard</a> that the
+      submission parsed and scored. A file that fails ingestion shows no score.</li>
+</ol>
+<div class="note warn"><strong>This is the human-only step.</strong> This repository has no DrivenData credentials and the data tab redirects to a login, so no number in this repository has ever been confirmed by the official scorer. Everything here is measured against local surrogate populations; the public leaderboard is the first unbiased signal, and it needs a person with an account.</div>
+
+<h2 id="step6">6. Generative-AI disclosure (required if you used it — we did)</h2>
+<blockquote><p><em>&ldquo;you must indicate in the narrative (not included in the word count) the extent to which, if any, you used generative AI technology&rdquo;</em><br><span class="small">— official rules §3.2 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Required in the final narrative; this repository documents its own AI use.</span></p></blockquote>
+<p>Ready-to-paste narrative for a submission produced by this repository:</p>
+<pre><code>Generative AI Technology Disclosure (GEMS Prize Rules Section 3.2)
+
+Generative AI assistance (an LLM coding agent working in this repository) was used to write and
+review the code, the tests, the documentation and the verification tooling of this submission:
+the training and inference pipeline (PyTorch / segmentation-models-pytorch UNet, UNet++ and
+DeepLabV3+ encoders), the distance-weighted Tversky loss, the emission-policy measurement scripts
+and the pre-registered decision rules. Every quantitative claim in the accompanying documentation
+is produced by a committed script from committed evidence files, and the repository records which
+numbers are surrogate measurements rather than official scores. External data used is free and
+public (USGS SGMC, DOI 10.3133/ds1052; INGENIOUS Great Basin compilation, DOI 10.15121/1881483).
+The entrant is responsible for the accuracy, authenticity and authorship of this submission,
+including all content developed with generative AI tools.</code></pre>
+<p class="small">Edit the architecture list and the external-data list to match what your own run
+used; the disclosure must describe <em>your</em> submission.</p>
+
+<h2 id="step7">7. Quota, deadline and the single final selection</h2>
+<blockquote><p><em>&ldquo;You can make multiple submissions, subject to the limits specified on the competition website (three submissions per week).&rdquo;</em><br><span class="small">— official rules §3.2 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Three measured shots per week at the real metric - the only honest feedback available.</span></p></blockquote>
+<blockquote><p><em>&ldquo;Before the end of the competition, you must choose only one submission for evaluation across both prize rounds.&rdquo;</em><br><span class="small">— official rules §3.5 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: One artefact must serve both rounds; nothing can be tuned for one and swapped for the other.</span></p></blockquote>
+<blockquote><p><em>&ldquo;You must choose only one submission to use for scoring across both prize rounds, and you must make your decision without knowledge of your scores on the private test set.&rdquo;</em><br><span class="small">— official rules §3.6.2 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Explicit anti-overfitting rule: the public leaderboard is the only feedback there is.</span></p></blockquote>
+<blockquote><p><em>&ldquo;Submissions will be reevaluated against the full, revised new fault dataset using the same distance-weighted Tversky index.&rdquo;</em><br><span class="small">— official rules §1.1 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Phase 2 is the same metric on the same population - one objective, two label revisions.</span></p></blockquote>
+<table><thead><tr><th>Constraint</th><th>What it means for us</th></tr></thead><tbody>
+<tr><td><b>3 submissions / week</b></td><td>A scarce resource: each upload is an experiment whose only read-out is the public split. The repository's surrogate measurements decide what to upload; the quota decides how often we can check.</td></tr>
+<tr><td><b>One final selection</b></td><td>Before the deadline, exactly one submission is marked final and is scored in <em>both</em> prize rounds — so the file that wins the public split is not automatically the right final choice.</td></tr>
+<tr><td><b>No private-score knowledge</b></td><td>The final selection is made blind on the private test set. This is why the repository pre-registers decision rules (<code>docs/FIELD_SELECTION_RULE.md</code>, <code>data/evidence/emission_decision.json</code>) instead of picking the best-looking local number.</td></tr>
+<tr><td><b>Phase 2 re-scores the same file</b></td><td>Against the full expert-revised fault set. A file tuned to restate the training catalogue can only lose there; this is the argument for the emission policy that is measured on faults the labels do <em>not</em> contain.</td></tr>
+</tbody></table>
+
+<h2 id="human">8. What only a human can do (the project's real blocker)</h2>
+<table><thead><tr><th>Task</th><th>Why the repository cannot do it</th><th>What it unlocks</th></tr></thead><tbody>
+<tr><td><b>Create the DrivenData account, enroll, upload</b></td>
+<td>No credentials, and <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">the data tab</a> redirects to a login (verified: HTTP 302 to the login page).</td>
+<td>The first official score for this model, and the only unbiased read-out of the emission policy.</td></tr>
+<tr><td><b>Confirm eligibility</b> (rules §1.3, Appendix A)</td>
+<td>An individual competitor must be a U.S. citizen or permanent resident; entity paperwork and finalist certifications are legal acts.</td>
+<td>Being able to accept an award.</td></tr>
+<tr><td><b>Choose the final submission before Dec 3, 2026 11:59 PM UTC</b></td>
+<td>Irreversible, blind on the private split, and one per entity.</td>
+<td>Both prize rounds.</td></tr>
+<tr><td><b>A GPU</b> (≥ 24 GB) for the full configuration</td>
+<td>GitHub-hosted CPU runners take ~300 min per fold at the reduced configuration; the full one (EfficientNet-B5, 60 epochs, 10 MC splits) is not reachable on them.</td>
+<td>Detection gains, which the committed evidence says are the binding constraint — not the emission policy.</td></tr>
+</tbody></table>
+
+<h2 id="state">9. What we would upload today, and what would change it</h2>
+<p><b>Today:</b> route A, <code>data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif</code>
+— sha256 <code class="small">7f00890a62878d612fb5eef67a9a364a2df819433dde74b6762ce4fc0fc4fe15</code>, 570,890 bytes, both measured while building this page.
+It is the only artifact in the repository whose format validation is committed and whose emission
+policy was adopted by a pre-registered rule rather than by hand.</p>
+<table><thead><tr><th>Measurement</th><th>Value</th><th>Committed evidence</th></tr></thead><tbody><tr><td>Shipped artifact on the new-fault-like surrogate</td><td>DTI <b>0.0999</b> CI95 [0.0883, 0.1119]</td><td class='small mono'>data/evidence/block_holdout/block_stratified.json (block bootstrap, reproduced digit-for-digit on a runner)</td></tr><tr><td>Generalisation gap over the committed block-holdout folds</td><td>mean <b>+0.0069</b> (min -0.0070, max +0.0139) over 4 fold(s)</td><td class='small mono'>data/evidence/block_holdout/fold_gap_summary.json</td></tr><tr><td>SGMC pseudo-labels, fold 0, held-out blocks — new-fault-like population</td><td>0.0806 → <b>0.1483</b> (+0.0677, P=0.988)</td><td class='small mono'>data/evidence/pseudo_labels/fold0_two_population_contrast.json</td></tr><tr><td>…the same change on the catalogue population (independent of the pseudo-label source)</td><td>0.2113 → <b>0.1034</b> (-0.1079, P=0.0)</td><td class='small mono'>same file — the two populations move in opposite directions</td></tr><tr><td>…and on the <b>combined</b> surrogate — the only population holding both fault kinds (held-out blocks)</td><td>0.1972 → <b>0.2285</b> (+0.0313, P=0.916, CI95 [-0.0102, +0.0822])</td><td class='small mono'>same file — the union is scored from the rasters because FP_w sums over prediction pixels and does not decompose</td></tr><tr><td>…the same union population on the blocks that fold <em>trained</em> on (the memorisation check)</td><td>0.2273 → <b>0.1898</b> (-0.0375, P=0.0025, CI95 [-0.0650, -0.0080])</td><td class='small mono'>same file, complement scope — the two scopes disagree in sign, so one fold cannot settle it</td></tr><tr><td>Shipped artifact on the combined surrogate (labels ∪ new-fault-like trace)</td><td>DTI <b>0.2074</b> CI95 [0.1929, 0.2229]</td><td class='small mono'>data/evidence/proxy/combined_truth_shipped.json</td></tr><tr><td>Public leaderboard top score (snapshot, not ours)</td><td><b>0.2854</b> over 50 ranked entrants</td><td class='small mono'>https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/</td></tr></tbody></table>
+<p><b>Pseudo-label verdict (derived):</b> <code>GAIN_ON_THE_COMBINED_SURROGATE</code> — the combined (Phase-2-like) population is the only committed population that contains BOTH fault kinds, and it moves +0.031280; proxy +0.067719, catalogue -0.107890. No shipping decision is made here.  A pseudo-labelled field reaches the leaderboard only through docs/FIELD_SELECTION_RULE.md as a new reblend.yml RUN_ID with R3 measured on both fields&#x27; raw probability rasters, and the proxy arm of this contrast is source-circular (see pseudo_provenance.circular_source) so it cannot carry an adoption on its own.</p>
+<div class="note warn"><strong>Read this before believing any number above.</strong> None of them is an official score. The surrogate populations are (a) the training catalogue, (b) USGS SGMC traces the catalogue does not contain, and (c) their union as a stand-in for the Phase-2 'complete updated test set'. The scored population is the expert-revised new-fault set (rules §1.1/§3.6), which nobody outside the organisers has. Fold-restricted bootstraps also resample only 8–9 blocks, below the 12 the scorer itself requires before it calls an interval readable, so they are spread indicators, not confidence statements.</div>
+
+<h2 id="flags">10. Irregularities flagged before you submit</h2>
+<table><thead><tr><th>#</th><th>Finding</th><th>How it was established</th><th>Consequence for the submission</th></tr></thead><tbody>
+<tr><td>1</td><td><code>example_submission.tif</code> is bit-identical to the labels raster, although the problem page describes the sample submission as predicting total fault absence.</td>
+<td class="small">sha256 equality + pixel comparison, <code>data/evidence/transfer_analysis.json</code></td>
+<td>Do not use the sample as a "no fault" baseline; use it only as the grid/CRS template (which is what <code>scripts/validate_submission.py</code> does).</td></tr>
+<tr><td>2</td><td>File-name drift between the problem page, the reference solution and the data tab's mirrors.</td>
+<td class="small"><code>data/bridge/manifest.json</code> maps mirror name → canonical name by sha256</td>
+<td>Handled; placement is by checksum, so a name cannot substitute a file.</td></tr>
+<tr><td>3</td><td>The 1 m DEM links file is a scan with no text layer; the competition JSON inside it contains duplicate rows and path/filename project mismatches.</td>
+<td class="small">three extractors + OCR, then every tile URL checked against the USGS bucket (<code>scripts/download_dem_tiles.py --complete-listing</code>)</td>
+<td>DEM derivatives are still unused (<code>external_dem_path: null</code>); the canonical tile list is enumerable without the PDF.</td></tr>
+<tr><td>4</td><td>Submission cadence: an earlier project instruction said 2 per 7 days, the rules PDF says three per week.</td>
+<td class="small">verbatim quote <code>weekly_limit</code> in <code>data/evidence/rules_quotes.json</code></td>
+<td>Plan on 3/week (the official document wins) and check the number the platform shows at submission time.</td></tr>
+<tr><td>5</td><td>The cross-catalogue transfer measurement refused itself: QFaults and the training labels are the same lines (60,938 of 60,939 in-footprint QFaults px already within R = 3 px of a label).</td>
+<td class="small"><code>data/evidence/xcat/transfer_report.json</code>, measured on a runner</td>
+<td>No free second Quaternary catalogue is independent of these labels, so external-catalogue signal is limited to SGMC — and §9 shows what that buys.</td></tr>
+<tr><td>6</td><td>The two official-format files disagree about the NODATA tag: <code>sample_submission.tif</code> declares <code>NODATA=nan</code>, the shipped artifact declares none, and both read as NaN outside the footprint.</td>
+<td class="small">rasterio profiles of both files, compared by <code>scripts/check_site_generator.py</code> (step "NODATA tag: artifact vs the official template") and recorded in <code>data/evidence/site_generator.json</code></td>
+<td>Declare <code>NODATA=nan</code>, like the template — which is what the in-browser generator does. It changes no pixel and no score, but a check that inspects tags rather than values could read an absent NODATA differently.</td></tr>
+<tr><td>7</td><td>"or a .zip file containing a single GeoTIFF" is a sentence of the platform's submit dialog, not of the rules PDF — §3.2 says a single GeoTIFF.</td>
+<td class="small">the dialog sits behind a login this sandbox cannot reach, so the sentence is transcribed by the team; a full-text search of the extracted rules PDF for "zip" returns nothing, so it is recorded as an unverified-source claim rather than promoted to a rule</td>
+<td>Both containers are offered (<code>scripts/package_submission.py</code> writes the stored single-member zip the dialog describes and verifies it reads back). When in doubt upload the .tif: the rules wording is the half that can be verified from here.</td></tr>
+</tbody></table>
+
+<h2 id="finalist">11. If you place: the finalist package</h2>
+<blockquote><p><em>&ldquo;The solution assets must contain a description of the resources required to build and run the solution, and they should be able to sufficiently reproduce the winning results and generate predictions on new data samples.&rdquo;</em><br><span class="small">— official rules §3.2 · <span class="pill ok">VERBATIM MATCH</span> <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">docs.nlr.gov/docs/fy26osti/96647.pdf</a> · sha256 <code>50d854b1e0239fe6…</code> · checked by <code>scripts/verify_rules_quotes.py</code> 2026-09-21 · why it matters: Why every run here commits its logs, hashes, environment pins and reproduce steps.</span></p></blockquote>
+<ul>
+  <li>This repository is that package: pinned dependencies (<code>requirements.verified.txt</code>),
+      the configs that produced the shipped artifact, the blend provenance
+      (<code>data/evidence/runs/ens12-adopted-floor0.1-w0/usable_folds.txt</code>, <code>fold_provenance.txt</code>,
+      <code>blend_report.json</code>) and the reproduction route
+      (<a href="reproduce.html">reproduce</a>).</li>
+  <li>Documentation must follow DrivenData's winning-model template (provided to winners after the
+      competition closes) — hardware, dependencies, preprocessing, training time, inference commands.</li>
+  <li>It must be able to generate predictions on <b>new data samples</b>, which is what
+      <code>src/inference.py</code> + <code>scripts/validate_submission.py</code> do end to end.</li>
+</ul>
+
+<h2 id="checklist">12. Pre-flight checklist</h2>
+<pre><code>[ ] DrivenData account created and competition joined ("Compete!" accepted)
+[ ] python scripts/assemble_data_bridge.py      -> all sha256 verified
+[ ] python scripts/prepare_data.py              -> "OK: data/ passes every pre-flight check"
+[ ] raster chosen (route A/B/C/D) and, if not route A, generated
+[ ] python scripts/validate_submission.py --pred &lt;file&gt; --sample data/sample_submission.tif --train data/training_features.tif
+                                                -> "✅ Validation PASSED"
+[ ] sha256 of the uploaded file recorded next to the submission (compare with this page's build-time hash)
+[ ] generative-AI disclosure pasted into the narrative
+[ ] public leaderboard shows a score for the submission
+[ ] weekly quota used deliberately (3/week) and the final selection diarised before Dec 3, 2026 11:59 PM UTC</code></pre>
+<p class="small">Sources for every requirement on this page:
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">problem description · submission format</a> ·
+<a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules PDF</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition home</a> ·
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data tab</a> ·
+<a href="https://www.herox.com/GEMSPrize/resource/2274">HeroX rules mirror</a> ·
+<a href="https://github.com/drivendataorg/gems-prize-reference-solution">reference solution</a> ·
+<a href="https://gdr.openei.org/submissions/1391">INGENIOUS Great Basin compilation (label source)</a>.
+The full auditable table (92 rows, each with a verification method, date and
+result) is on <a href="sources.html">sources</a> and in <code>docs/data_catalog.csv</code>.</p>
+
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

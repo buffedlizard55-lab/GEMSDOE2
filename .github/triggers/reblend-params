@@ -1,0 +1,34 @@
+# Re-blend parameters (read by .github/workflows/reblend.yml, job `params`).
+#
+# 2026-09-17 (session 13) - SHIP THE MEASURED POLICY.
+#
+# data/evidence/emission_decision.json now passes all three pre-registered conditions for the joint
+# policy floor 0.1 / thin / width 0 px:
+#   cond 1  +0.1118 on the new-fault-like population (shipped policy on the same field: 0.0247)
+#   cond 2  3/3 plausible scored-truth anchors, crossover 2,718 px (272 km)
+#   cond 3  reproduced on the independent ensemble 2 (+0.0456 against that sweep's own reference)
+# and the cross-ensemble ranking in the same record puts it first of 132 candidates by worst-case
+# contrast.  SHAPING_T0/SHAPING_DILATE make the blend write THAT policy instead of the in-domain
+# calibration (which maximises DTI against the faults the model trained on and therefore prefers a
+# narrow, high-floor skeleton).  SHAPING_SOURCE is copied into the report and the submission's TIFF
+# tags so the shipped raster is traceable to the measurement it came from.
+#
+# RUN_ID: ensembles 1 and 2 - the two fields the policy was measured on, 11 live folds in total
+# (ensemble 1: fold 0-5; ensemble 2: fold 0,1,2,3,5).  MIN_FOLDS is set to that exact count, so a
+# silently short download fails the run instead of shipping a thinner ensemble.
+#
+# FIELD-SELECTION GATE (2026-09-19): the RUN_ID set above identifies the FIELD the blend ships
+# (the pinned re-blend = the shipped field mean12, which passes the gate without measurement).
+# Changing RUN_ID to any other set makes the blend job run docs/FIELD_SELECTION_RULE.md first
+# (scripts/check_field_selection.py --gate --runs): a NEW field blends only if the committed
+# data/evidence/field_selection.json says ADOPT of exactly that field with R3 measured on both
+# fields' raw probability rasters.  To ship a new field: (1) commit its proxy sweep
+# (proxy-eval.yml), (2) measure R3 (check_field_selection.py --pred-shipped/--pred on the raw
+# rasters), (3) commit field_selection.json, (4) THEN change RUN_ID here.
+RUN_ID=35042805806,35249562910
+EVIDENCE_DIR=data/evidence/runs/ens12-adopted-floor0.1-w0
+MIN_FOLDS=11
+CALIBRATE=loo
+SHAPING_T0=0.1
+SHAPING_DILATE=0
+SHAPING_SOURCE=data/evidence/emission_decision.json

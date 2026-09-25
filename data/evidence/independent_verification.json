@@ -1,0 +1,226 @@
+{
+ "generated_utc": "2026-09-16T21:45:11+00:00",
+ "generated_by": "independent verification pass (Arena agent session, 2026-09-16)",
+ "purpose": "A second, independent pass over the load-bearing external claims in this repository: the competition pages and leaderboard, the official rules document, the reference solution's real contents, and the provenance of the external data.  Every row names the URL, how it was reached, what was observed, and which repository claim it supports.  Nothing here is transcribed from memory, and the two facts that could not be reached from this environment are listed as such.",
+ "environment": {
+  "fetch_tool": "fetch_page / web_search (server-side fetch)",
+  "sandbox_bash_egress": "measured again this session: 200 from github.com and pypi.org only; drivendata.org, dropbox.com, sciencebase.gov, pubs.usgs.gov, doi.org, gdr.openei.org and www.nlr.gov are all refused from bash",
+  "consequence": "official pages can be *read* here but not *downloaded* from bash; the workflows on GitHub runners remain the only route for bulk files"
+ },
+ "checks": [
+  {
+   "id": "cv_metric_definition",
+   "topic": "The scoring function, its parameters and the official worked example",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "method": "fetch_page (problem description, 'Performance metric' section)",
+   "observed": "TP_w = sum_g max_x p(x)k(d(x,g)); FP_w = sum_{x:p>0} p(x)[1 - max_g k(d(x,g))]; FN_w = sum_g [1 - max_x p(x)k(d(x,g))]; DTI = TP_w/(TP_w + a*FP_w + b*FN_w + eps); k(d) = max(1 - d/R, 0); R = 300 m = 3 px at 100 m; alpha = 0.2, beta = 0.8; official worked example TP_w=3.00, FP_w=1.89, FN_w=2.00 -> 0.60",
+   "repo_claim_affected": "src/metrics.py, docs/METRIC_STRATEGY.md, the metric page",
+   "verdict": "CONFIRMED - identical equations and constants; `python src/metrics.py --self-test` check [3] reproduces the published 0.60 from the published components.  Check [4] (reconstruct the example's raster geometrically) still reports FP_w = 2.00 against the published 1.89, because the example PNG is not fetchable from here; the arithmetic check is exact, the raster reconstruction is not."
+  },
+  {
+   "id": "cv_submission_format",
+   "topic": "Submission format requirements",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "method": "fetch_page ('Submission format')",
+   "observed": "single layer; CRS EPSG:32611 (UTM 11N); 100 m; same bounds as the training data with null/NaN outside; float32; values 0-1 (probability/confidence)",
+   "repo_claim_affected": "src/submission_io.py, scripts/validate_submission.py, SUBMISSION_GUIDE.md",
+   "verdict": "CONFIRMED - the writer's contract matches every bullet; the committed submission is float32, one band, 3292x3730, EPSG:32611, NaN outside the data footprint."
+  },
+  {
+   "id": "cv_public_private_split",
+   "topic": "Public test split + public leaderboard, private scoring for the prize round",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "method": "fetch_page ('Competition structure')",
+   "observed": "\"The GeoDAWN region is chunked and split into a public test set and a private test set. Competitors' performance against the public test set is shown on the public leaderboard during the competition.\" / \"In the Initial Prize Round, submissions are evaluated by their performance on the private test set at the close of the competition.\"",
+   "repo_claim_affected": "REQUIREMENTS.md 3.6.1/3.6.2, LIMITATIONS.md, STATUS.md",
+   "verdict": "CONFIRMED - and it makes the public leaderboard the only honest feedback loop available, which the repository already says."
+  },
+  {
+   "id": "cv_labels_provenance",
+   "topic": "Where the training labels come from",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+   "method": "fetch_page ('Labels')",
+   "observed": "\"The labels for this challenge come from the USGS quaternary fault maps and from INGENIOUS.\"",
+   "repo_claim_affected": "docs/data_catalog.csv rows D2/E4/E12",
+   "verdict": "CONFIRMED - and this is also the reason the SGMC proxy is valid: the proxy sources are *not* QFFD/INGENIOUS, so faults absent from labels.tif are genuinely additional mapped faults."
+  },
+  {
+   "id": "cv_reference_solution",
+   "topic": "The reference solution's actual contents",
+   "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+   "method": "git clone --depth 1 (sandbox bash reaches github.com); the notebook parsed and read",
+   "observed": "commit aebe92f7c8a990f0e3443451b7a825d9afd6336b (2026-06-16, single commit, author chrisjkuch; README credits Prof. John Lipor): smp.Unet, MC = 5 random train/test splits, patch_size 128, test_proportion 0.5, batch 32, epochs 5, lr 1e-4, TverskyLoss(alpha=0.2, beta=0.8, mode='binary'), per-channel min-max normalisation over the whole raster, RandomResizedCrop(128, scale 0.5-1.0) + flips + 30 deg rotation, view_as_windows patchify, sliding-window inference, 'NOTE: it may be advantageous to threshold this map for better scoring' with a display threshold of 0.1",
+   "repo_claim_affected": "README.md / docs/method.html comparisons with the reference",
+   "verdict": "CONFIRMED (and now sourced from the code rather than from the README): the reference is a 5-epoch, 128-px, single-UNet baseline.  This repository's 6-fold, 3-architecture, 45-epoch ensemble with metric-aligned loss and calibrated shaping is a different class of solution, not a re-implementation of it."
+  },
+  {
+   "id": "cv_rules_document_identity",
+   "topic": "The official rules document and its second official host",
+   "url": "https://www.herox.com/GEMSPrize/resource/2274",
+   "method": "fetch_page (the competition's /rules/ page points here; this page links the document)",
+   "observed": "GEMS Prize Official Rules resource links exactly https://www.nlr.gov/docs/fy26osti/96647.pdf - the same URL this repository quotes and whose sha256 (50d854b1e0239fe6b9648d9fa5c7537bc7b6e5bc10cf6b37a2ff9aa401c36938) the verify-rules workflow re-checks on every run",
+   "repo_claim_affected": "data/evidence/rules_quotes.json",
+   "verdict": "CONFIRMED - one document, two official hosts; the competition's own rules page delegates to the NLR-hosted PDF."
+  },
+  {
+   "id": "cv_geodawn_release",
+   "topic": "GeoDAWN data release (the feature source)",
+   "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+   "method": "fetch_page (ScienceBase item)",
+   "observed": "Glen, J.M.G., and Earney, T.E., 2024, GeoDAWN ... USGS data release, https://doi.org/10.5066/P93LGLVQ; 149,030 line-km over 51,857 sq km; four acquisition blocks (Winnemucca, Fallon, Hawthorne, Tonopah); flown 2021-11-01 to 2022-11-20",
+   "repo_claim_affected": "docs/data_catalog.csv E1-E3",
+   "verdict": "CONFIRMED."
+  },
+  {
+   "id": "cv_sgmc_report",
+   "topic": "The SGMC report and the appendix that documents the DESCRIPTION field the proxy selects on",
+   "url": "https://pubs.usgs.gov/publication/ds1052",
+   "method": "fetch_page (USGS Publications Warehouse)",
+   "observed": "Horton, San Juan & Stoeser, 2017 (ver. 1.1), USGS Data Series 1052, 46 p., https://doi.org/10.3133/ds1052; four state maps are 1:50,000-1:1,000,000; Appendix 5 = 'DESCRIPTION (SGMC_Structure Feature Class) Data Dictionary'; data release https://doi.org/10.5066/F7WH2N65",
+   "repo_claim_affected": "scripts/fetch_proxy_faults.py, docs/data_catalog.csv E31/E32/E34",
+   "verdict": "CONFIRMED - the proxy's fault classes are chosen from the coded-value domain of a feature class whose own data dictionary is published as Appendix 5 of an official USGS report."
+  },
+  {
+   "id": "cv_ingenious_compilation",
+   "topic": "The INGENIOUS regional compilation (the label source, publicly downloadable)",
+   "url": "https://gdr.openei.org/submissions/1391",
+   "method": "fetch_page (GDR submission, the URL supplied by the user)",
+   "observed": "DOI 10.15121/1881483, CC-BY-4.0, 116.98 MB across 9 resources + linked datasets; includes 'Quaternary Faults v1.zip' and 'Quaternary Faults v2.zip' ('Attributes conform to USGS Qfault Database schema'), plus conductance, detrended elevation, geodetics, gravity/magnetics, heat flow, seismicity, springs/wells, thermal conductivity, volcanics, study-area boundary",
+   "repo_claim_affected": "docs/data_catalog.csv E12-E21",
+   "verdict": "CONFIRMED, WITH A WARNING FOR THE PROXY DESIGN: the INGENIOUS quaternary fault files are the same lineage as labels.tif, so this source must never be used as an independent fault catalogue - a proxy built from it would be circular.  The SGMC proxy (state geologic maps, largely pre-Quaternary faults, no QFFD/INGENIOUS content) is the independent one."
+  },
+  {
+   "id": "cv_qffd",
+   "topic": "The USGS Quaternary Fault and Fold Database",
+   "url": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
+   "method": "fetch_page (ScienceBase item + web_search for the current landing page)",
+   "observed": "USGS 2020 update; DOI 10.5066/P9BCVRCK; Qfaults_GIS.zip 30.87 MB + qfaults.kmz + Change_Log; current web page https://www.usgs.gov/programs/earthquake-hazards/faults; the historical URL https://earthquake.usgs.gov/hazfaults/ now returns 404",
+   "repo_claim_affected": "docs/data_catalog.csv E4",
+   "verdict": "CONFIRMED - the catalogued link is the live one; only legacy documentation of the old earthquake.usgs.gov path is stale (recorded here so a reviewer following an old link is not misled)."
+  },
+  {
+   "id": "cv_data_tab",
+   "topic": "The data download page",
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+   "method": "fetch_page",
+   "observed": "HTTP redirect to https://www.drivendata.org/accounts/login/?next=/competitions/306/competition-doe-gems/data/ - the file list and the submission form are behind the account",
+   "repo_claim_affected": "scripts/download_competition_data.sh, STATUS.md/LIMITATIONS.md",
+   "verdict": "CONFIRMED (irregularity, not a defect): no data and no submission is possible without the entrant's DrivenData account.  The runners use the Dropbox mirrors instead, which is why the pipeline can be verified at all."
+  }
+ ],
+ "competition_standing": {
+  "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+  "observed_utc": "2026-09-21T04:09:25+00:00",
+  "metric_column": "Best public DW-Tversky",
+  "n_ranked": 50,
+  "top_dti": 0.2854,
+  "median_dti": 0.11335,
+  "rows": [
+   {
+    "rank": 1,
+    "participant": "HardcoreTechGod",
+    "best_public_dti": 0.2854
+   },
+   {
+    "rank": 2,
+    "participant": "mzoorob",
+    "best_public_dti": 0.2432
+   },
+   {
+    "rank": 3,
+    "participant": "alexoktaba",
+    "best_public_dti": 0.2387
+   },
+   {
+    "rank": 4,
+    "participant": "DARD",
+    "best_public_dti": 0.2339
+   },
+   {
+    "rank": 5,
+    "participant": "joeyfezster",
+    "best_public_dti": 0.2084
+   }
+  ],
+  "how_to_read_it": "The public leaderboard scores a *public split* of the expert-labelled NEW fault dataset - the same kind of population the prize round scores privately - so it is the only honest signal available. The bar moved in the five days since the previous snapshot (top 0.1972 with 43 ranked, 2026-09-16, now in competition_standing_history): it is a moving target, read it close to the moment you act.",
+  "this_repository_is_on_it": false,
+  "gap": "This repository has never been scored by the competition. Producing a submission file is automated (train -> blend -> validate -> committed GeoTIFF), but uploading one needs the entrant's account: the data tab and the submission form both sit behind the login, and the competition rules require the entrant to be a US citizen or permanent resident. Until a human uploads submission.tif (three chances a week), every number in this repository is a local proxy - catalogue DTI, proxy-catalogue DTI, held-out-crop DTI - and none of them is the leaderboard.",
+  "note": "Snapshot taken from the public leaderboard page (readable without an account) on 2026-09-21 via server-side fetch; the standings move continuously - the 2026-09-16 snapshot is preserved in competition_standing_history.",
+  "beyond_the_top_five": {
+   "ranks_6_to_50_range": [
+    0.0211,
+    0.1903
+   ],
+   "rank_12": 0.1498,
+   "last_place": 0.0211,
+   "note": "only the top five names and scores were transcribed; the rows below them are recorded as a range, and no entrant name below rank 5 is claimed here"
+  }
+ },
+ "not_reachable_from_this_environment": [
+  {
+   "what": "the data download page and the submission form",
+   "why": "both redirect to /accounts/login/ - no credentials exist in this environment",
+   "impact": "submission files are produced and validated here but must be uploaded by the entrant"
+  },
+  {
+   "what": "the example PNGs behind the official metric worked example",
+   "why": "drivendata-public-assets.s3.amazonaws.com is not on the sandbox allowlist and fetch_page returns page text, not pixel data",
+   "impact": "src/metrics.py --self-test check [4] cannot reconstruct the example raster exactly; the arithmetic check [3] against the published components is exact"
+  },
+  {
+   "what": "the Dropbox mirrors of the competition rasters",
+   "why": "www.dropbox.com is refused from this sandbox's bash (the GitHub Actions runners download them successfully and record the sha256 in data/evidence/)",
+   "impact": "the official files cannot be pulled into this sandbox; all training, inference and scoring in this repository therefore happens on the runners, and the numbers below come from the evidence those runs committed"
+  }
+ ],
+ "competition_standing_history": [
+  {
+   "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+   "observed_utc": "2026-09-16T21:45:11+00:00",
+   "metric_column": "Best public DW-Tversky",
+   "n_ranked": 43,
+   "top_dti": 0.1972,
+   "median_dti": 0.0555,
+   "rows": [
+    {
+     "rank": 1,
+     "participant": "mzoorob",
+     "best_public_dti": 0.1972
+    },
+    {
+     "rank": 2,
+     "participant": "joeyfezster",
+     "best_public_dti": 0.1752
+    },
+    {
+     "rank": 3,
+     "participant": "alexoktaba",
+     "best_public_dti": 0.1521
+    },
+    {
+     "rank": 4,
+     "participant": "Milieunomics",
+     "best_public_dti": 0.1466
+    },
+    {
+     "rank": 5,
+     "participant": "kbrodt",
+     "best_public_dti": 0.1454
+    }
+   ],
+   "how_to_read_it": "The public leaderboard scores a *public split* of the expert-labelled NEW fault dataset - the same kind of population the prize round scores privately - so it is the only honest signal available, and it is a hard number: the bar to beat is 0.1972, the median entrant is at 0.0555 and the floor is 0.0000.",
+   "this_repository_is_on_it": false,
+   "gap": "This repository has never been scored by the competition.  Producing a submission file is automated (train -> blend -> validate -> committed GeoTIFF), but uploading one needs the entrant's account: the data tab and the submission form both sit behind the login, and the competition rules require the entrant to be a US citizen or permanent resident.  Until a human uploads submission.tif (three chances a week), every number in this repository is a local proxy - catalogue DTI, proxy-catalogue DTI, held-out-crop DTI - and none of them is the leaderboard.",
+   "note": "Snapshot taken from the public leaderboard page (readable without an account) during this session; the standings move continuously.",
+   "beyond_the_top_five": {
+    "ranks_6_to_11_range": [
+     0.135,
+     0.1407
+    ],
+    "rank_12": 0.1256,
+    "last_place": 0.0,
+    "note": "only the top five names and scores were transcribed; the rows below them are recorded as ranges, and no entrant name below rank 5 is claimed here"
+   }
+  }
+ ]
+}

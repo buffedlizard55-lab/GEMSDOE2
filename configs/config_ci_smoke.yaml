@@ -1,0 +1,87 @@
+# CI SMOKE config - runs the REAL competition data end-to-end on a CPU-only
+# GitHub-hosted runner (4 vCPU / 16 GB) inside the 6 h job limit.
+#
+# Purpose: prove train -> inference -> validate -> score works on the official
+# 3292x3730x19 rasters and produce a correctly-formatted submission.tif.
+# It is NOT a leaderboard-competitive run: configs/config.yaml (GPU) is that.
+#
+# Sizing rationale (measured, not guessed):
+#   official grid 3292 x 3730, 19 bands, float32 -> 933 MB in RAM as float32;
+#   the loader holds X (float32) + Xn (float32) -> ~1.9 GB, fits in 16 GB.
+#   patch 128 / step 128 keeps the training window count and per-epoch cost low.
+#   pretrained: false because ImageNet weights are downloaded from a host that is
+#   fine on the runner but the run must stay reproducible with the sandbox; set
+#   true on a GPU box (configs/config.yaml does).
+data:
+  feature_path: "data/training_features.tif"
+  label_path: "data/labels.tif"
+  sample_submission_path: "data/sample_submission.tif"
+  external_dir: "data/external"
+  output_dir: "outputs"
+  norm_mode: "clip_zscore"
+  clip_percentile: [1.0, 99.0]
+  use_external_dem: false
+  use_ingenious_extra: false
+
+training:
+  patch_size: 128
+  train_step: 128
+  test_proportion: 0.3
+  neg_fraction: 0.25
+  mc_splits: 1
+  batch_size: 8
+  epochs: 2
+  init_lr: 5.0e-4
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2
+  beta: 0.8
+  loss: combined_dw
+  use_global_fp_weight: true
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.9, 1.0]
+  early_stopping_patience: 3
+  num_workers: 2
+  seed: 42
+  good_channels: null
+  calibrate_shaping: true
+  shaping_grid: 9
+  shaping_windows: 12
+
+model:
+  architectures: ["unet"]
+  encoder: "mobilenet_v2"
+  segformer_encoder: "mit_b0"
+  pretrained: false
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.5
+  batch_size: 8
+  tta: false
+  threshold: null
+  blend_mode: gaussian
+  ensemble_weights: null
+  submission_shaping:
+    t0: null
+    thin: null
+    hard: true
+    gamma: 1.0
+
+postprocess:
+  frangi_filter: false        # expensive at 3292x3730 on CPU; enabled in config.yaml
+  frangi_scale_range: [1, 4]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 4
+  skeletonize: false
+
+metric:
+  R_meters: 300
+  resolution_m: 100
+  alpha: 0.2
+  beta: 0.8
+  epsilon: 1.0e-7

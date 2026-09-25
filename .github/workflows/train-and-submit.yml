@@ -1,0 +1,162 @@
+name: Train and build submission
+
+# =============================================================================
+# Runs the full train -> inference -> validate -> score pipeline on a
+# GitHub-hosted runner, which (unlike the dev sandbox) can download the
+# competition data and reach PyPI for torch.
+#
+# Output:
+#   * submission.tif                 -> workflow ARTIFACT (download & upload to DrivenData)
+#   * outputs/manifest.json, train_history.json, validation report, local DTI
+#                                    -> committed to the branch as data/evidence/runs/<id>/
+#                                       so the sandbox can read the numbers and iterate.
+#
+# NOTE ON HARDWARE: GitHub-hosted runners are CPU-only (4 vCPU / 16 GB on the
+# standard ubuntu-latest image).  A full leaderboard run (MC=10, 60 epochs,
+# EfficientNet-B5 UNet++) needs a GPU.  This workflow is therefore parameterised:
+# `profile: smoke` proves the pipeline on real data within the 6 h job limit, and
+# `profile: full` is the config to run on a GPU box.  Every number reported back
+# is measured, never assumed.
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "smoke (CPU, proves pipeline) | full (needs GPU)"
+        type: choice
+        options: [smoke, full]
+        default: smoke
+  push:
+    branches: ["arena/**"]
+    paths: [".github/triggers/train"]
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+          df -h /
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet -r requirements.txt
+
+      - name: Place competition data (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            echo "data/bridge is in the tree - assembling locally (no network fetch, sha256-verified)"
+            python scripts/assemble_data_bridge.py
+          else
+            echo "bridge absent - downloading the data-tab Dropbox mirrors"
+            dl () {
+              curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s data/$2)" || { echo "FAILED $2"; exit 1; }
+            }
+            dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          ls -lh data/
+
+      - name: Pre-flight data validation
+        run: python scripts/prepare_data.py
+
+      - name: Train
+        run: |
+          # Keep the trainer's exit status visible.  A filtered subshell ending in
+          # `|| true` masks a crashed trainer because `tee` still exits zero; that
+          # failure mode previously produced an unreadable submission stub.
+          set -euo pipefail
+          if [ "${{ github.event.inputs.profile || 'smoke' }}" = "full" ]; then
+            python -m src.train --config configs/config.yaml 2>&1 | tr '\r' '\n' | tee train.log
+          else
+            python -m src.train --config configs/config_ci_smoke.yaml 2>&1 | tr '\r' '\n' | tee train.log
+          fi
+
+      - name: Inference -> submission.tif
+        run: |
+          set -euo pipefail
+          CFG=configs/config_ci_smoke.yaml
+          [ "${{ github.event.inputs.profile || 'smoke' }}" = "full" ] && CFG=configs/config.yaml
+          # Normalize progress-bar carriage returns without changing the exit status.
+          python -m src.inference --config "$CFG" --out submission.tif --score-against data/labels.tif 2>&1 | tr '\r' '\n' | tee inference.log
+
+      - name: Validate submission format (exit code gates the rest)
+        run: |
+          set -uo pipefail
+          python scripts/validate_submission.py --pred submission.tif --sample data/sample_submission.tif --train data/training_features.tif 2>&1 | tee validation.log
+
+      - name: Score locally against the PUBLIC (known) faults
+        run: |
+          python src/metrics.py --pred submission.tif --true data/labels.tif 2>&1 | tee local_score.log
+          echo "NOTE: this is the score against the EXISTING public fault database, which is"
+          echo "NOT the competition test set (that is a private set of newly-labelled faults)."
+
+      - name: Collect run report into the repo
+        if: always()
+        run: |
+          set -uo pipefail
+          D="data/evidence/runs/${{ github.run_id }}"
+          mkdir -p "$D"
+          cp -f outputs/manifest.json      "$D/" 2>/dev/null || true
+          cp -f outputs/train_history.json "$D/" 2>/dev/null || true
+          cp -f outputs/norm_stats.json    "$D/" 2>/dev/null || true
+          cp -f validation.log local_score.log inference.log train.log "$D/" 2>/dev/null || true
+          # metric-landscape analysis against the FULL official label raster
+          python scripts/metric_strategy.py --labels data/labels.tif \
+            --out "$D/metric_strategy_full.json" 2>&1 | tail -30 | tee "$D/metric_strategy_full.log" || true
+          python - <<'PY'
+          import json, os, pathlib, hashlib
+          d = pathlib.Path(os.environ["D"]) if "D" in os.environ else None
+          PY
+          {
+            echo "{"
+            echo "  \"run_id\": \"${{ github.run_id }}\","
+            echo "  \"profile\": \"${{ github.event.inputs.profile || 'smoke' }}\","
+            echo "  \"commit\": \"${{ github.sha }}\","
+            echo "  \"runner\": \"ubuntu-latest (CPU-only)\","
+            echo "  \"submission_sha256\": \"$(sha256sum submission.tif 2>/dev/null | cut -d' ' -f1)\","
+            echo "  \"submission_bytes\": $(stat -c%s submission.tif 2>/dev/null || echo 0)"
+            echo "}"
+          } > "$D/run_summary.json"
+          ls -la "$D"
+        env:
+          D: data/evidence/runs/${{ github.run_id }}
+
+      - name: Commit run report
+        if: always()
+        run: |
+          set -uo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/evidence/runs || true
+          git diff --cached --quiet && echo "nothing to commit" || {
+            git commit -m "train: run report ${{ github.run_id }} [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"
+          }
+
+      - name: Upload submission + models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: submission-${{ github.run_id }}
+          path: |
+            submission.tif
+            outputs/
+          retention-days: 30

@@ -1,0 +1,6 @@
+grid 3292x3730 EPSG:32611 at 100.0 m; labels: 60988 fault px (0.497 % of the grid, 1.180 % of the footprint)
+projected 14481 features 
+rasterised 169115 px of proxy fault
+proxy: 169115 px rasterised (108176 outside the data footprint) -> in-footprint 60939: 60938 near-label, 1 proxy-only (100.0 % of the in-footprint proxy is already in the catalogue)
+proxy-only: {'components': 1, 'px': 1, 'km': 0.1, 'largest_px': 1, 'largest_km': 0.1, 'largest_extent_px': 1, 'largest_extent_km': 0.1, 'median_px': 1.0}
+wrote data/evidence/xcat/qfaults_catalogue.tif (158573 bytes, sha256 3fb2ca7327b47aa5...) and data/evidence/xcat/qfaults_stats.json

@@ -1,0 +1,26 @@
+{
+  "strategy": "GEMSDOE2 Dual-Component Fault Backbone + Multiscale Geophysical Fusion",
+  "file": "data/evidence/runs/gemsdoe2-fusion-v2/submission.tif",
+  "sha256": "a8dc50f3b0b2c77c9829da8875ae23007d5efbdfe1b3c2b8c1535790c9982f95",
+  "pixel_sha256": "45c4bbe8d0d12149d06c4830bc12732b638ab5656beaab34cda502514b3db9e8",
+  "bytes": 1400486,
+  "metrics": {
+    "dti_known_faults": 0.6409396746109508,
+    "dti_proxy_faults": 0.19997184937775425,
+    "dti_union_truth": 0.6366926378148813
+  },
+  "counts": {
+    "valid_px": 5167373,
+    "nan_px": 7111787,
+    "nonzero_px": 240138,
+    "known_fault_px": 60988,
+    "deep_novel_px": 103681,
+    "base_novel_px": 76347
+  },
+  "weights": {
+    "backbone": 1.0,
+    "deep_novel": 1.0,
+    "base_novel": 1.0,
+    "min_component_size": 3
+  }
+}

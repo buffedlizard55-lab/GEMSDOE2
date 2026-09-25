@@ -1,0 +1,45 @@
+
+block-holdout generalisation gap over 4 committed fold(s) (of 4 in the partition):
+  fold 0: held-out 0.0806 [0.0586, 0.1021] on 8 blocks | trained-on 0.0920 on 26 blocks | gap +0.0114 | CI readable: False (8 resampling units)
+  fold 1: held-out 0.0789 [0.0644, 0.0963] on 9 blocks | trained-on 0.0719 on 25 blocks | gap -0.0070 | CI readable: False (9 resampling units)
+  fold 2: held-out 0.0480 [0.0238, 0.0803] on 9 blocks | trained-on 0.0619 on 25 blocks | gap +0.0139 | CI readable: False (9 resampling units)
+  fold 3: held-out 0.0892 [0.0581, 0.1197] on 8 blocks | trained-on 0.0985 on 26 blocks | gap +0.0093 | CI readable: False (8 resampling units)
+  mean gap +0.006904 (min -0.007019, max +0.013916, spread 0.020935); positive in 3 fold(s), negative in 1
+
+pseudo-label contrast, fold 1, candidate floor0.1_w0px (adopted policy sweep_best_t0_0.1_width0px):
+  heldout (9 blocks):
+    proxy_only  baseline 0.0789 -> pseudo 0.1450  contrast +0.0661  P(pseudo>baseline)=1.0  support 121,991 -> 193,460 px
+    labels      baseline 0.1851 -> pseudo 0.1234  contrast -0.0617  P(pseudo>baseline)=0.0  support 121,991 -> 193,460 px
+    combined    baseline 0.2024 -> pseudo 0.2223  contrast +0.0198  P(pseudo>baseline)=0.7905  support 121,991 -> 193,460 px
+  complement (25 blocks):
+    proxy_only  baseline 0.0719 -> pseudo 0.1071  contrast +0.0352  P(pseudo>baseline)=0.9985  support 374,297 -> 689,560 px
+    labels      baseline 0.1606 -> pseudo 0.1125  contrast -0.0481  P(pseudo>baseline)=0.0  support 374,297 -> 689,560 px
+    combined    baseline 0.1761 -> pseudo 0.1864  contrast +0.0103  P(pseudo>baseline)=0.847  support 374,297 -> 689,560 px
+  pseudo-label source: data/evidence/proxy/proxy_catalogue.tif code 2 (source-circular with the proxy truth: True)
+  VERDICT (derived): GAIN_ON_THE_COMBINED_SURROGATE - the combined (Phase-2-like) population is the only committed population that contains BOTH fault kinds, and it moves +0.019836; proxy +0.066099, catalogue -0.061700
+  shippable on this evidence: False
+
+POOLED pseudo-label contrast over folds [0, 1, 2, 3] (scope heldout, blocks scoreable):
+  combined    folds [0, 1] -> 16 pooled blocks (readable: True)
+              baseline 0.200064 -> pseudo 0.226661  contrast p50 +0.026648 CI95 [-0.005138, +0.059875]  P(pseudo>baseline) = 0.952
+              per fold: f0 +0.0313(7blk), f1 +0.0198(9blk)
+              bars: P(pseudo > baseline) = 0.952 (bar >= 0.95), pooled contrast p50 = +0.026648 (bar > +0.010), resampling units = 16 (bar >= 12)
+              MISSING fold 2: an arm is not committed for this fold/scope
+              MISSING fold 3: an arm is not committed for this fold/scope
+  proxy_only  folds [0, 1] -> 16 pooled blocks (readable: True)
+              baseline 0.079837 -> pseudo 0.147485  contrast p50 +0.069518 CI95 [+0.025004, +0.111620]  P(pseudo>baseline) = 0.9995
+              per fold: f0 +0.0677(7blk), f1 +0.0661(9blk)
+              bars: P(pseudo > baseline) = 0.9995 (bar >= 0.95), pooled contrast p50 = +0.069518 (bar > +0.010), resampling units = 16 (bar >= 12)
+              MISSING fold 2: an arm is not committed for this fold/scope
+              MISSING fold 3: an arm is not committed for this fold/scope
+  labels      folds [0, 1] -> 15 pooled blocks (readable: True)
+              baseline 0.197054 -> pseudo 0.110083  contrast p50 -0.087342 CI95 [-0.118187, -0.061294]  P(pseudo>baseline) = 0.0
+              per fold: f0 -0.1079(7blk), f1 -0.0617(8blk)
+              bars: P(pseudo > baseline) = 0.0 (bar >= 0.95), pooled contrast p50 = -0.087342 (bar > +0.010), resampling units = 15 (bar >= 12) - at least one bar is not cleared
+              MISSING fold 2: an arm is not committed for this fold/scope
+              MISSING fold 3: an arm is not committed for this fold/scope
+  VERDICT (derived): POOL_CLEARS_THE_BARS_ON_THE_COMBINED_SURROGATE - pooled over 2 folds / 16 disjoint blocks: contrast +0.026648 at P = 0.952, both above the pre-registered bars and the interval is readable (16 >= 12 units)
+  shippable on this evidence: True
+wrote /home/runner/work/GEMSDOE/GEMSDOE/data/evidence/block_holdout/fold_gap_summary.json (6,216 bytes)
+wrote /home/runner/work/GEMSDOE/GEMSDOE/data/evidence/pseudo_labels/fold1_two_population_contrast.json (10,988 bytes)
+wrote /home/runner/work/GEMSDOE/GEMSDOE/data/evidence/pseudo_labels/pooled_two_population_contrast.json (12,679 bytes)

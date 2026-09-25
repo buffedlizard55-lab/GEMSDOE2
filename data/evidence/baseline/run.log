@@ -1,0 +1,54 @@
+grid 3292x3730  labels 60,988 fault px / 5,167,373 valid px  footprint 5,167,373 px  proxy-only 61,664 px
+holdout: fold 0/4 selects the policy -> 1,947,648 px, 14,442 fault px, 20,191 proxy-only px; fold 1 measures it -> 1,984,512 px, 16,598 fault px, 14,117 proxy-only px; 3,982,911 px excluded from training (both folds, buffer 3)
+training matrix (917011, 19) in 3.3s (736 all-NaN rows dropped); fit 20.7s on 29,519 pos / 886,756 neg
+full-grid prediction in 57.3s; finite 5,164,312 px
+  [ 1/40] floor 0        thin=1 width=0  union 0.014023  catalogue 0.011579  proxy 0.01515  emitted 14,284 px
+  [ 2/40] floor 0        thin=1 width=1  union 0.020541  catalogue 0.015698  proxy 0.021555  emitted 42,878 px
+  [ 3/40] floor 0        thin=0 width=0  union None  catalogue None  proxy None  emitted 5,164,312 px  NOT ELIGIBLE
+  [ 4/40] floor 0        thin=0 width=1  union None  catalogue None  proxy None  emitted 5,164,312 px  NOT ELIGIBLE
+  [ 5/40] floor 0.0001   thin=1 width=0  union 0.019493  catalogue 0.015644  proxy 0.021035  emitted 16,211 px
+  [ 6/40] floor 0.0001   thin=1 width=1  union 0.028249  catalogue 0.020561  proxy 0.029187  emitted 48,645 px
+  [ 7/40] floor 0.0001   thin=0 width=0  union None  catalogue None  proxy None  emitted 5,164,076 px  NOT ELIGIBLE
+  [ 8/40] floor 0.0001   thin=0 width=1  union None  catalogue None  proxy None  emitted 5,164,076 px  NOT ELIGIBLE
+  [ 9/40] floor 0.00031209 thin=1 width=0  union 0.059456  catalogue 0.038193  proxy 0.064935  emitted 44,809 px
+  [10/40] floor 0.00031209 thin=1 width=1  union 0.07527  catalogue 0.041046  proxy 0.073514  emitted 132,913 px
+  [11/40] floor 0.00031209 thin=0 width=0  union None  catalogue None  proxy None  emitted 5,158,608 px  NOT ELIGIBLE
+  [12/40] floor 0.00031209 thin=0 width=1  union None  catalogue None  proxy None  emitted 5,158,608 px  NOT ELIGIBLE
+  [13/40] floor 0.000974 thin=1 width=0  union 0.160259  catalogue 0.070878  proxy 0.16958  emitted 155,889 px
+  [14/40] floor 0.000974 thin=1 width=1  union 0.158489  catalogue 0.056603  proxy 0.144656  emitted 448,402 px  NOT ELIGIBLE
+  [15/40] floor 0.000974 thin=0 width=0  union None  catalogue None  proxy None  emitted 5,062,184 px  NOT ELIGIBLE
+  [16/40] floor 0.000974 thin=0 width=1  union None  catalogue None  proxy None  emitted 5,062,184 px  NOT ELIGIBLE
+  [17/40] floor 0.0030398 thin=1 width=0  union 0.167615  catalogue 0.089842  proxy 0.140374  emitted 325,584 px  NOT ELIGIBLE
+  [18/40] floor 0.0030398 thin=1 width=1  union 0.144857  catalogue 0.063028  proxy 0.106228  emitted 907,656 px  NOT ELIGIBLE
+  [19/40] floor 0.0030398 thin=0 width=0  union None  catalogue None  proxy None  emitted 4,569,390 px  NOT ELIGIBLE
+  [20/40] floor 0.0030398 thin=0 width=1  union None  catalogue None  proxy None  emitted 4,569,390 px  NOT ELIGIBLE
+  [21/40] floor 0.0094868 thin=1 width=0  union 0.197198  catalogue 0.125715  proxy 0.13653  emitted 487,813 px  NOT ELIGIBLE
+  [22/40] floor 0.0094868 thin=1 width=1  union 0.161237  catalogue 0.085505  proxy 0.09836  emitted 1,310,720 px  NOT ELIGIBLE
+  [23/40] floor 0.0094868 thin=0 width=0  union None  catalogue None  proxy None  emitted 3,310,580 px  NOT ELIGIBLE
+  [24/40] floor 0.0094868 thin=0 width=1  union None  catalogue None  proxy None  emitted 3,310,580 px  NOT ELIGIBLE
+  [25/40] floor 0.029607 thin=1 width=0  union 0.177787  catalogue 0.171187  proxy 0.096242  emitted 399,356 px  NOT ELIGIBLE
+  [26/40] floor 0.029607 thin=1 width=1  union 0.164148  catalogue 0.127623  proxy 0.07754  emitted 1,045,742 px  NOT ELIGIBLE
+  [27/40] floor 0.029607 thin=0 width=0  union None  catalogue None  proxy None  emitted 1,397,442 px  NOT ELIGIBLE
+  [28/40] floor 0.029607 thin=0 width=1  union None  catalogue None  proxy None  emitted 1,397,442 px  NOT ELIGIBLE
+  [29/40] floor 0.092402 thin=1 width=0  union 0.051503  catalogue 0.080092  proxy 0.02482  emitted 76,987 px
+  [30/40] floor 0.092402 thin=1 width=1  union 0.069405  catalogue 0.094439  proxy 0.032232  emitted 213,353 px
+  [31/40] floor 0.092402 thin=0 width=0  union 0.064301  catalogue 0.092977  proxy 0.029774  emitted 233,578 px
+  [32/40] floor 0.092402 thin=0 width=1  union 0.078139  catalogue 0.100652  proxy 0.035469  emitted 349,892 px  NOT ELIGIBLE
+  [33/40] floor 0.28838  thin=1 width=0  union 0.005266  catalogue 0.008927  proxy 0.002609  emitted 6,491 px
+  [34/40] floor 0.28838  thin=1 width=1  union 0.008355  catalogue 0.013971  proxy 0.004154  emitted 19,669 px
+  [35/40] floor 0.28838  thin=0 width=0  union 0.006521  catalogue 0.011256  proxy 0.003054  emitted 12,939 px
+  [36/40] floor 0.28838  thin=0 width=1  union 0.009641  catalogue 0.016127  proxy 0.004733  emitted 26,216 px
+  [37/40] floor 0.9      thin=1 width=0  union 0.0  catalogue 0.0  proxy 0.0  emitted 0 px  NOT ELIGIBLE
+  [38/40] floor 0.9      thin=1 width=1  union 0.0  catalogue 0.0  proxy 0.0  emitted 0 px  NOT ELIGIBLE
+  [39/40] floor 0.9      thin=0 width=0  union 0.0  catalogue 0.0  proxy 0.0  emitted 0 px  NOT ELIGIBLE
+  [40/40] floor 0.9      thin=0 width=1  union 0.0  catalogue 0.0  proxy 0.0  emitted 0 px  NOT ELIGIBLE
+policy search: 40 candidates on fold 0, 14 eligible; best union DTI 0.1603 at floor 0.000974, thin=True, width=0 (catalogue 0.070878, proxy 0.16958)
+  rejected by the support cap: floor 0.009487 thin=1 width=0 would score union 0.1972 but emits 487,813 px (emitted 487,813 px = 9.4% of the footprint > cap 5%)
+generalisation on fold 1 (never trained, never selected): catalogue 0.06597, proxy 0.071107, combined 0.078916
+wrote data/evidence/baseline/prob_raw.tif (22,706,681 B) and data/evidence/baseline/submission.tif (545,798 B, 155,889 emitted px, policy floor0.000974_thin1_w0)
+wrote data/evidence/baseline/submission.sha256 (verify: sha256sum -c data/evidence/baseline/submission.sha256)
+global DTI of the shipped baseline: catalogue 0.061149, proxy 0.119071, combined 0.111924
+audit of the generalisation claim: reproduced=True max|delta|=0.00016874 (tolerance 0.0005); audit report at data/evidence/baseline/reproduce_audit.json
+
+report -> data/evidence/baseline/baseline_report.json
+validate: python scripts/validate_submission.py --pred data/evidence/baseline/submission.tif --sample data/sample_submission.tif --train data/training_features.tif

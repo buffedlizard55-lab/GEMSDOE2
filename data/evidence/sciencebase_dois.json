@@ -1,0 +1,75 @@
+{
+  "generated_utc": "2026-09-16T18:13:40Z",
+  "method": "The platform page fetcher followed https://doi.org/<id> and read the ScienceBase landing page (title, citation, publication date, attached-file list). These are the three INGENIOUS sub-dataset DOIs catalogued as E16/E17/E18; two of them previously carried only indirect verification.",
+  "irregularity": "Runner-side HTTP verification (scripts/verify_links.py) intermittently times out on sciencebase.gov DOI redirects - exactly one DOI per run, and it is a different DOI each run (P9Z6SA1Z, then P9MQRCBY; P9TWT2LU resolved). Both were resolved on the same day by the platform fetcher, so this is ScienceBase latency or bot-throttling, not a dead link. Recorded here rather than silently retried.",
+  "items": [
+    {
+      "catalog_id": "E16",
+      "doi": "10.5066/P9TWT2LU",
+      "sciencebase_item": "62979746d34ec53d276c113b",
+      "sciencebase_url": "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b",
+      "title": "Electrical Conductance Maps of the Great Basin, USA",
+      "citation": "Peacock, J.R., and Bedrosian, P.A., 2022, Electrical Conductance Maps of the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9TWT2LU.",
+      "verification": "VERIFIED DIRECTLY (platform fetch of the DOI, 2026-09-16)",
+      "role": "magnetotelluric conductance 2-200 km depth; INGENIOUS structural framework"
+    },
+    {
+      "catalog_id": "E18",
+      "doi": "10.5066/P9Z6SA1Z",
+      "sciencebase_item": "628d4fabd34ef70cdba3c4a4",
+      "sciencebase_url": "https://www.sciencebase.gov/catalog/item/628d4fabd34ef70cdba3c4a4",
+      "title": "Regional geophysical maps of the Great Basin, USA",
+      "publication_date": "2022-07-28",
+      "citation": "Glen, J.M.G, Earney, T.E., Zielinski, L.A., Schermerhorn, W.D., Dean, B.J., and Hardwick, C., 2022, Regional geophysical maps of the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9Z6SA1Z.",
+      "contents": [
+        "provisional regional gravity grid (USGS + Utah Geological Survey + Ponce 1997 + Hildenbrand et al. 2002)",
+        "regional magnetic grid (Bankey et al. 2002 North American compilation)",
+        "depth-to-basement grid (Shah and Boyd 2018)"
+      ],
+      "files": [
+        {
+          "name": "GB_geophysics_grids.zip",
+          "size": "6.5 MB"
+        },
+        {
+          "name": "Regional_geophysical_maps_of_the_Great_Basin_USA_readme.txt",
+          "size": "3.86 KB"
+        },
+        {
+          "name": "Regional_geophysical_maps_of_the_Great_Basin_USA_Metadata.xml",
+          "size": "36.73 KB"
+        }
+      ],
+      "funding": "USGS Energy Program; INGENIOUS, DOE Geothermal Technologies Office award DE-EE0009254",
+      "verification": "VERIFIED DIRECTLY (platform fetch of the DOI, 2026-09-16) - first direct fetch; the runner HTTP check timed out on 2026-09-16",
+      "role": "gravity/magnetics/depth-to-basement are classic structural controls on faulting; candidate extra input bands for the external-feature experiment"
+    },
+    {
+      "catalog_id": "E17",
+      "doi": "10.5066/P9MQRCBY",
+      "sciencebase_item": "64e597dfd34e736b81e198d2",
+      "sciencebase_url": "https://www.sciencebase.gov/catalog/item/64e597dfd34e736b81e198d2",
+      "title": "Maps of elevation trend and detrended elevation for the Great Basin, USA",
+      "publication_date": "2023-09-29",
+      "citation": "DeAngelo, J., Burns, E.R., Mordensky, S.P., and Lindsey, C.R., 2023, Maps of elevation trend and detrended elevation for the Great Basin, USA: U.S. Geological Survey data release, https://doi.org/10.5066/P9MQRCBY.",
+      "contents": [
+        "regional elevation trend (local linear regression on a 30 m DEM)",
+        "three detrended-elevation maps at different smoothness",
+        "study-area shapefile"
+      ],
+      "files": [
+        {
+          "name": "maps_of_elevation_trend_and_detrended_elevation_for_the_Great_Basin_USA.zip",
+          "size": "12.34 GB"
+        },
+        {
+          "name": "USGS_detrendedElevation_gbStudyArea.zip (shapefile)",
+          "size": "21 KB"
+        }
+      ],
+      "funding": "USGS Energy Program; INGENIOUS, DOE Geothermal Technologies Office award DE-EE0009254",
+      "verification": "VERIFIED DIRECTLY (platform fetch of the DOI, 2026-09-16)",
+      "role": "detrended elevation is a fault-emphasising transform of topography - a free, official stand-in for the 1 m DEM pilot at 30 m over the whole study area"
+    }
+  ]
+}

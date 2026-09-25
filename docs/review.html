@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Current review — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html" class="active">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Current review</h1>
+<p class="lede">What was re-checked on 2026-09-17, what changed, and what remains blocked.</p>
+<h2>Source review dated 2026-09-17 UTC</h2>
+<p>This page is a concise, reader-friendly companion to the full
+<a href="https://github.com/buffedlizard55-lab/GEMSDOE2/blob/main/REVIEW_2026-09-17.md">repository review</a>. The official competition pages
+were fetched and read on that date. The table below maps each load-bearing statement to the official
+page where it can be checked manually; the repository's generated evidence and the official rules PDF
+remain authoritative over any summary here.</p>
+<table class="wide"><thead><tr><th>topic</th><th>review result</th><th>manual check</th></tr></thead>
+<tbody><tr><td><b>Task</b></td><td>develop models that identify geological faults</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">official source</a></td></tr><tr><td><b>Scored target</b></td><td>new expert-labelled faults; final round uses the expanded labels</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#competition-structure">official source</a></td></tr><tr><td><b>Format</b></td><td>EPSG:32611, 100 m, one float32 probability layer</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">official source</a></td></tr><tr><td><b>Metric</b></td><td>distance-weighted Tversky; 300 m support; alpha 0.2, beta 0.8</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric">official source</a></td></tr><tr><td><b>Data context</b></td><td>GeoDAWN, USGS/INGENIOUS labels and 1 m DEM links</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#datasets">official source</a></td></tr><tr><td><b>Deadline / prize</b></td><td>Dec. 3, 2026 at 11:59 p.m. UTC; $300,000 total</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">official source</a></td></tr><tr><td><b>External data</b></td><td>allowed when licensing permits challenge use and sponsor sharing</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/#use-of-external-data">official source</a></td></tr><tr><td><b>Scientific references</b></td><td>automatic fault mapping and Western USA fault mapping</td><td><a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/#additional-information">official source</a></td></tr></tbody></table>
+<h2>What changed in the code</h2>
+<ul>
+<li><b>Submission reliability:</b> direct inference now uses the same fail-loud writer as blending;
+read-back checks reject invalid, empty or incorrectly tiled GeoTIFFs.</li>
+<li><b>Workflow reliability:</b> trainer and inference exit codes are no longer hidden by a
+successful filtering subshell; incomplete fold matrices cannot be blended.</li>
+<li><b>Optional DEM path:</b> a local USGS 3DEP mosaic is reprojected to the feature grid and five
+well-defined derivatives are added symmetrically to train and inference. It is disabled by default
+until a path is supplied.</li>
+</ul>
+<h2>Access still required</h2>
+<div class="note warn"><b>No leaderboard claim is made.</b> The data tab and submission form require an
+entrant account. Full training also needs GPU compute and external-data storage. The private test
+labels are intentionally withheld. The repository can fetch through a GitHub runner, train, create
+and validate a submission artifact; it cannot enroll an entrant, upload a submission or observe a
+private score.</div>
+<p>See <a href="verification.html">Verification</a> for the independent-source checks and
+<a href="reproduce.html">Reproduce</a> for commands.</p>
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

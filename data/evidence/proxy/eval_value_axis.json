@@ -1,0 +1,593 @@
+{
+ "generated_utc": "2026-09-17T19:16:43+00:00",
+ "generated_by": "scripts/eval_proxy_catalogue.py",
+ "purpose": "score a prediction against faults the training labels do not contain (docs/DISCOVERY_PLAN.md 3b) - the only local measurement aligned with the scored 'new fault' population",
+ "inputs": {
+  "pred": "data/evidence/runs/35042805806-experiment/submission.tif",
+  "pred_sha256": "45d50773d2313de651b0b804c7f4520fc241d2038136150b8b17ad8d28f6bb73",
+  "pred_meta": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "float32",
+   "nodata": null
+  },
+  "proxy": "data/evidence/proxy/proxy_catalogue.tif",
+  "proxy_sha256": "7563e187171f7210d70295f958b0b2714c1fa504afa35f9a4688fc99b1e1122a",
+  "proxy_meta": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "dtype": "uint8",
+   "nodata": null
+  },
+  "labels": "data/labels.tif",
+  "truth_mode": "only",
+  "reference_t0": 0.0,
+  "reference_source": "--reference-t0",
+  "metric": {
+   "R_pixels": 3,
+   "R_meters": 300,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "eps": 1e-07
+  }
+ },
+ "truth": {
+  "mode": "only",
+  "px": 61664,
+  "km": 6166.4,
+  "proxy_only_px": 61664,
+  "proxy_near_label_px": 20491,
+  "catalogue_coverage_of_proxy": 0.2494
+ },
+ "prediction": {
+  "emission_px": 21492,
+  "mass": 21492.0
+ },
+ "baseline_support": {
+  "source": "labels (the competition footprint)",
+  "px": 12279160,
+  "why": "the blanket baseline is taken over this support so it does not change with the raster being scored; the metric itself sums over the whole raster, exactly as the official one does"
+ },
+ "results": {
+  "as_provided": {
+   "dti": 0.024685,
+   "TP_w": 1324.081,
+   "FP_w": 20211.052,
+   "FN_w": 60339.919,
+   "mass": 21492.0,
+   "emission_px": 21492
+  },
+  "as_submitted": {
+   "dti": 0.024685,
+   "TP_w": 1324.081,
+   "FP_w": 20211.052,
+   "FN_w": 60339.919,
+   "mass": 21492.0,
+   "emission_px": 21492
+  },
+  "prediction_role": "the raster at --pred as provided: equals the committed submission only when --pred points at one; check inputs.pred_sha256 before quoting this as a submission score",
+  "baselines": {
+   "zeros": {
+    "dti": 0.0,
+    "TP_w": 0.0,
+    "FP_w": 0.0,
+    "FN_w": 61664.0,
+    "mass": 0.0,
+    "emission_px": 0
+   },
+   "blanket_ones": {
+    "dti": 0.024901,
+    "TP_w": 61664.0,
+    "FP_w": 12073458.832,
+    "FN_w": 0.0,
+    "mass": 12279160.0,
+    "emission_px": 12279160
+   },
+   "blanket_ones_whole_grid": {
+    "dti": 0.024901,
+    "TP_w": 61664.0,
+    "FP_w": 12073458.832,
+    "FN_w": 0.0,
+    "mass": 12279160.0,
+    "emission_px": 12279160
+   },
+   "catalogue_copy": {
+    "dti": 0.0,
+    "TP_w": 0.0,
+    "FP_w": 60988.0,
+    "FN_w": 61664.0,
+    "mass": 60988.0,
+    "emission_px": 60988
+   },
+   "catalogue_plus_submission": {
+    "dti": 0.020272,
+    "TP_w": 1324.081,
+    "FP_w": 78606.052,
+    "FN_w": 60339.919,
+    "mass": 79887.0,
+    "emission_px": 79887
+   }
+  },
+  "acceptance": {
+   "catalogue_copy_dti_on_proxy_only": 0.0,
+   "expected": 0.0,
+   "passed": true,
+   "meaning": "a catalogue-copy submission earns nothing here, so this population is not a restatement of the training labels"
+  },
+  "field_mass_profile": {
+   "rows": [
+    {
+     "t0": 0.0,
+     "support_px_above_floor": 21492,
+     "mass_above_floor": 21492.0
+    }
+   ],
+   "distinct_supports": 1,
+   "reading": "support_px_above_floor is the floor's effect on the emitted set BEFORE thinning; identical values across floors mean the floor axis is binary on this field and a finer floor grid cannot change any emission"
+  },
+  "shaping_sweep": [
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 16,
+    "soft": false,
+    "gamma": 1.0,
+    "dti": 0.071317,
+    "TP_w": 23519.683,
+    "FP_w": 1378776.977,
+    "FN_w": 38144.317,
+    "mass": 1453792.0,
+    "emission_px": 1453792,
+    "mean_kept_px": 1453792
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 12,
+    "soft": false,
+    "gamma": 1.0,
+    "dti": 0.070967,
+    "TP_w": 17620.889,
+    "FP_w": 977201.041,
+    "FN_w": 44043.111,
+    "mass": 1032370.0,
+    "emission_px": 1032370,
+    "mean_kept_px": 1032370
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 6,
+    "soft": false,
+    "gamma": 1.0,
+    "dti": 0.063707,
+    "TP_w": 8636.988,
+    "FP_w": 422572.927,
+    "FN_w": 53027.012,
+    "mass": 447896.0,
+    "emission_px": 447896,
+    "mean_kept_px": 447896
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 16,
+    "soft": true,
+    "gamma": 1.0,
+    "dti": 0.059525,
+    "TP_w": 11074.815,
+    "FP_w": 672530.149,
+    "FN_w": 50589.185,
+    "mass": 710659.9,
+    "emission_px": 1453792,
+    "mean_kept_px": 1453792
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 12,
+    "soft": true,
+    "gamma": 1.0,
+    "dti": 0.055239,
+    "TP_w": 8156.428,
+    "FP_w": 483476.481,
+    "FN_w": 53507.572,
+    "mass": 511640.1,
+    "emission_px": 1032370,
+    "mean_kept_px": 1032370
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 16,
+    "soft": true,
+    "gamma": 2.0,
+    "dti": 0.051382,
+    "TP_w": 6914.143,
+    "FP_w": 419251.137,
+    "FN_w": 54749.857,
+    "mass": 443667.6,
+    "emission_px": 1453792,
+    "mean_kept_px": 1453792
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 3,
+    "soft": false,
+    "gamma": 1.0,
+    "dti": 0.050879,
+    "TP_w": 4428.294,
+    "FP_w": 184093.451,
+    "FN_w": 57235.706,
+    "mass": 195520.0,
+    "emission_px": 195520,
+    "mean_kept_px": 195520
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 12,
+    "soft": true,
+    "gamma": 2.0,
+    "dti": 0.045509,
+    "TP_w": 5030.227,
+    "FP_w": 300980.108,
+    "FN_w": 56633.773,
+    "mass": 318891.6,
+    "emission_px": 1032370,
+    "mean_kept_px": 1032370
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 6,
+    "soft": true,
+    "gamma": 1.0,
+    "dti": 0.04221,
+    "TP_w": 3968.787,
+    "FP_w": 219500.78,
+    "FN_w": 57695.213,
+    "mass": 232876.8,
+    "emission_px": 447896,
+    "mean_kept_px": 447896
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 6,
+    "soft": true,
+    "gamma": 2.0,
+    "dti": 0.032326,
+    "TP_w": 2509.393,
+    "FP_w": 138978.007,
+    "FN_w": 59154.607,
+    "mass": 147545.4,
+    "emission_px": 447896,
+    "mean_kept_px": 447896
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 3,
+    "soft": true,
+    "gamma": 1.0,
+    "dti": 0.031559,
+    "TP_w": 2237.114,
+    "FP_w": 105535.067,
+    "FN_w": 59426.886,
+    "mass": 112124.5,
+    "emission_px": 195520,
+    "mean_kept_px": 195520
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 3,
+    "soft": true,
+    "gamma": 2.0,
+    "dti": 0.026147,
+    "TP_w": 1664.824,
+    "FP_w": 70040.874,
+    "FN_w": 59999.176,
+    "mass": 74433.5,
+    "emission_px": 195520,
+    "mean_kept_px": 195520
+   },
+   {
+    "t0": 0.0,
+    "thin": true,
+    "dilate": 0,
+    "soft": false,
+    "gamma": 1.0,
+    "dti": 0.024686,
+    "TP_w": 1324.024,
+    "FP_w": 20193.776,
+    "FN_w": 60339.976,
+    "mass": 21474.0,
+    "emission_px": 21474,
+    "mean_kept_px": 21474
+   }
+  ],
+  "sweep_best": {
+   "t0": 0.0,
+   "thin": true,
+   "dilate": 16,
+   "soft": false,
+   "gamma": 1.0,
+   "dti": 0.071317,
+   "TP_w": 23519.683,
+   "FP_w": 1378776.977,
+   "FN_w": 38144.317,
+   "mass": 1453792.0,
+   "emission_px": 1453792,
+   "mean_kept_px": 1453792
+  },
+  "best_per_emission_width": {
+   "0": 0.024686,
+   "3": 0.050879,
+   "6": 0.063707,
+   "12": 0.070967,
+   "16": 0.071317
+  },
+  "best_per_emission": {
+   "hard": 0.071317,
+   "ramp": 0.059525,
+   "ramp_n_candidates": 8,
+   "note": "hard = probability 1 inside the band; ramp = the same support with values decaying linearly to 0 at the band edge (src/submission_optim.soft_band). A tie means the values written into the support do not matter here."
+  },
+  "sweep_verdict": {
+   "skeleton_dti": 0.024686,
+   "best_dti": 0.071317,
+   "reference_t0": 0.0,
+   "reference_source": "--reference-t0",
+   "current_policy_dti": 0.024686,
+   "beats_current_policy_by": 0.046631,
+   "acceptance_rule": "change the default shaping only if a candidate beats the SHIPPED policy (the reference floor with no widening) by > 0.01 proxy DTI here AND is reproduced on a second ensemble; this population is the closest measurable stand-in for the scored one, not the scored one"
+  },
+  "sensitivity": {
+   "rows": [
+    {
+     "t0": 0.0,
+     "thin": true,
+     "dilate": 16,
+     "coverage_fraction": 0.381417,
+     "FP_w": 1378776.977,
+     "projected_dti": {
+      "500": 0.00069,
+      "1000": 0.001379,
+      "2500": 0.003431,
+      "5000": 0.006808,
+      "10000": 0.013406,
+      "20000": 0.02601,
+      "50000": 0.059677,
+      "100000": 0.104963,
+      "250000": 0.192702
+     }
+    },
+    {
+     "t0": 0.0,
+     "thin": true,
+     "dilate": 12,
+     "coverage_fraction": 0.285757,
+     "FP_w": 977201.041,
+     "projected_dti": {
+      "500": 0.000729,
+      "1000": 0.001456,
+      "2500": 0.003616,
+      "5000": 0.007154,
+      "10000": 0.014007,
+      "20000": 0.026884,
+      "50000": 0.059958,
+      "100000": 0.101637,
+      "250000": 0.174357
+     }
+    },
+    {
+     "t0": 0.0,
+     "thin": true,
+     "dilate": 6,
+     "coverage_fraction": 0.140065,
+     "FP_w": 422572.927,
+     "projected_dti": {
+      "500": 0.000825,
+      "1000": 0.001641,
+      "2500": 0.004044,
+      "5000": 0.007899,
+      "10000": 0.015094,
+      "20000": 0.027715,
+      "50000": 0.055619,
+      "100000": 0.083713,
+      "250000": 0.120117
+     }
+    },
+    {
+     "t0": 0.0,
+     "thin": true,
+     "dilate": 3,
+     "coverage_fraction": 0.071813,
+     "FP_w": 184093.451,
+     "projected_dti": {
+      "500": 0.000965,
+      "1000": 0.001908,
+      "2500": 0.004621,
+      "5000": 0.008781,
+      "10000": 0.015972,
+      "20000": 0.027045,
+      "50000": 0.046309,
+      "100000": 0.060728,
+      "250000": 0.074678
+     }
+    },
+    {
+     "t0": 0.0,
+     "thin": true,
+     "dilate": 0,
+     "coverage_fraction": 0.021472,
+     "FP_w": 20193.776,
+     "projected_dti": {
+      "500": 0.002417,
+      "1000": 0.004433,
+      "2500": 0.008873,
+      "5000": 0.013319,
+      "10000": 0.017772,
+      "20000": 0.021339,
+      "50000": 0.02426,
+      "100000": 0.02542,
+      "250000": 0.026171
+     }
+    }
+   ],
+   "per_size": [
+    {
+     "truth_px": 500,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 0,
+     "best_dti": 0.002417,
+     "skeleton_dti": 0.002417,
+     "best_is_wider_than_skeleton": false,
+     "gain_over_skeleton": 0.0,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 1000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 0,
+     "best_dti": 0.004433,
+     "skeleton_dti": 0.004433,
+     "best_is_wider_than_skeleton": false,
+     "gain_over_skeleton": 0.0,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 2500,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 0,
+     "best_dti": 0.008873,
+     "skeleton_dti": 0.008873,
+     "best_is_wider_than_skeleton": false,
+     "gain_over_skeleton": 0.0,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 5000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 0,
+     "best_dti": 0.013319,
+     "skeleton_dti": 0.013319,
+     "best_is_wider_than_skeleton": false,
+     "gain_over_skeleton": 0.0,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 10000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 0,
+     "best_dti": 0.017772,
+     "skeleton_dti": 0.017772,
+     "best_is_wider_than_skeleton": false,
+     "gain_over_skeleton": 0.0,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 20000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 6,
+     "best_dti": 0.027715,
+     "skeleton_dti": 0.021339,
+     "best_is_wider_than_skeleton": true,
+     "gain_over_skeleton": 0.006376,
+     "passes_acceptance": false
+    },
+    {
+     "truth_px": 50000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 12,
+     "best_dti": 0.059958,
+     "skeleton_dti": 0.02426,
+     "best_is_wider_than_skeleton": true,
+     "gain_over_skeleton": 0.035698,
+     "passes_acceptance": true
+    },
+    {
+     "truth_px": 100000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 16,
+     "best_dti": 0.104963,
+     "skeleton_dti": 0.02542,
+     "best_is_wider_than_skeleton": true,
+     "gain_over_skeleton": 0.079543,
+     "passes_acceptance": true
+    },
+    {
+     "truth_px": 250000,
+     "best_t0": 0.0,
+     "best_thin": true,
+     "best_dilate": 16,
+     "best_dti": 0.192702,
+     "skeleton_dti": 0.026171,
+     "best_is_wider_than_skeleton": true,
+     "gain_over_skeleton": 0.166531,
+     "passes_acceptance": true
+    }
+   ],
+   "verdict": {
+    "sizes_px": [
+     500,
+     1000,
+     2500,
+     5000,
+     10000,
+     20000,
+     50000,
+     100000,
+     250000
+    ],
+    "sizes_where_a_wider_band_passes": [
+     50000,
+     100000,
+     250000
+    ],
+    "sizes_where_the_skeleton_wins": [
+     500,
+     1000,
+     2500,
+     5000,
+     10000
+    ],
+    "acceptance_rule": "a wider band is only worth changing the default for if it beats the skeleton by more than 0.01 at a truth size that is plausible for the scored set - the proxy truth is not that size"
+   }
+  }
+ },
+ "caveats": [
+  "Population, not score: SGMC faults are published surface mapping; the scored faults are expert interpretations of the GeoDAWN geophysics. Compare policies, not leaderboards.",
+  "The FP term is a global sum over the whole raster, exactly as the official metric - the truth set is sparse, so a broad, diffuse prediction is punished here too.",
+  "Code-2 pixels are 'absent from the training labels', which is not the same as 'absent from the literature'."
+ ]
+}

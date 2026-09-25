@@ -1,0 +1,11 @@
+Firing this file runs .github/workflows/place-competition-data.yml: download the three
+official competition rasters from the data-tab Dropbox mirrors on an unrestricted GitHub
+runner, verify their sha256 against data/evidence/inventory.json, run the pre-flight
+validation, and commit them to this branch as sha256-pinned parts (data/bridge/) so the
+egress-restricted dev sandbox can receive them over the only allowed channel (git).
+
+# 2026-09-17 (session 9): initial placement run. The single remaining blocker to training
+# was data placement in data/; this bridge resolves it. Receiving side:
+#   python scripts/assemble_data_bridge.py && python scripts/prepare_data.py
+# 2026-09-17 (fix): re-fire after fixing the YAML defect found by tests/test_workflow_yaml.py
+# (unquoted ": " inside a step name; first firing run 35168727415 failed with zero jobs).

@@ -1,0 +1,383 @@
+name: SGMC pseudo-label experiment (spatial hold-out, paired vs no-pseudo baseline)
+
+# =============================================================================
+# WHY THIS WORKFLOW EXISTS
+#
+# The scored faults are NEW (rules 1.1/3.3 - the catalogue is a lower bound on the truth), so
+# external fault catalogues are the only allowed way to see MORE fault geography than the
+# labels do (problem page #external-datasets -> rules PDF 3.2).  The cross-catalogue experiment
+# tried that with QFaults and was REFUSED: 100 % of its features overlapped the training labels
+# (data/evidence/xcat/transfer_report.json, 2026-09-19) - no independent information.  The SGMC
+# proxy catalogue is the other side of that coin: its code-2 population (61,664 px of mapped
+# trace the labels do NOT contain) IS independent of the labels by construction.
+#
+# This workflow trains ONE fold of the block-holdout model on configs/config_pseudo_labels.yaml,
+# i.e. the block-holdout config plus the pseudo pixels as extra training signal, and measures the
+# result the only way the question permits:
+#
+#   * pseudo pixels enter TRAINING WINDOWS ONLY (src/dataset.py::make_patches): the block
+#     partition and the window selection use the original labels alone, so the pseudo run and
+#     the baseline run train on exactly the same windows;
+#   * the held-out region is zeroed out of the pseudo mask before it touches the loss (both the
+#     label mass and the FP-weight map), so the model NEVER sees the pseudo pixels of the
+#     blocks it is scored on;
+#   * the measurement is a PAIRED bootstrap over the 51 km blocks: the pseudo run's raw
+#     probability field, scored with the same policy (floor 0.1, w0) on the fold's held-out
+#     blocks, against the committed no-pseudo baseline (data/evidence/block_holdout/).  A
+#     gain on the held-out blocks is generalisation of the SGMC-mapped fault STYLE; a gain
+#     that exists only on the trained-on blocks is memorisation;
+#   * BOTH arms are scored on THREE truth populations (--combined-population): the catalogue
+#     labels, the new-fault-like proxy pixels the labels do not contain, and their disjoint
+#     union.  The union is the closest available stand-in for the private leaderboard's
+#     population and it is the population the shipping decision is read on: the two component
+#     populations move in OPPOSITE directions for this signal (fold 0: proxy +0.1036,
+#     catalogue -0.0874), so either one alone can be quoted in favour of either answer, while
+#     the union cannot.  FP_w is NOT decomposable across truth populations (it is a sum over
+#     PREDICTION pixels), so the union's DTI must be scored from the rasters - it can never be
+#     inferred from the two components' numbers;
+#   * the baseline arm's raw field is downloaded from the runner artifact of the run that
+#     produced its committed report (BASELINE_RUN_ID) and re-scored on the union here.  The
+#     sha256 the committed report recorded for its own input is checked first, so a wrong run
+#     id fails the job instead of contrasting two different fields.  This is a download, not a
+#     second 300-minute training run;
+#   * scripts/read_landed_reports.py --strict then recomposes the same contrast from the
+#     committed per-block rows, independently of the bootstrap step above, and FAILS the run
+#     if the two disagree - a derived number is only committed when an independent
+#     recomputation reproduces it.
+#
+# NO SHIPPING DECISION IS MADE HERE.  A pseudo-labelled model reaches the leaderboard only
+# through the existing gated path: it would be a new ensemble field, i.e. a new reblend.yml
+# RUN_ID, which the FIELD-selection gate (docs/FIELD_SELECTION_RULE.md) refuses unless the
+# committed evidence ADOPTs that field with R3 measured on both fields' raw rasters.  This
+# workflow produces the measurement that such an adoption would need.
+#
+# BASELINE PAIR (fold 0, seed 46, identical partition):
+#   no pseudo:  data/evidence/block_holdout/fold0_heldout.json
+#               held-out proxy DTI 0.0806 [0.0586, 0.1021] (8 scoreable blocks)
+#               raw field: artifact block-holdout-fold-0 of run 35413207736 (BASELINE_RUN_ID)
+#   with pseudo: data/evidence/pseudo_labels/fold0_heldout.json  (this workflow)
+#
+# Egress: competition rasters from the sha256-pinned git bridge when in the tree
+# (scripts/assemble_data_bridge.py), Dropbox mirrors otherwise - same as block-holdout.yml.
+#
+# HOW IT IS FIRED: pushing .github/triggers/pseudo-label (the bot token cannot call
+# workflow_dispatch; same pattern as block-holdout.yml).  Parameters live in
+# .github/triggers/pseudo-label-params (FOLD, SEED, PSEUDO_WEIGHT, BASELINE_RUN_ID).
+# =============================================================================
+on:
+  workflow_dispatch:
+    inputs:
+      fold:
+        description: "which block fold to train with pseudo labels (must have a committed no-pseudo baseline)"
+        default: "0"
+      seed:
+        description: "training seed (46 = the baseline's seed, required for the paired reading)"
+        default: "46"
+      pseudo_weight:
+        description: "training-label value of a pseudo pixel (1.0 = hard pseudo-label)"
+        default: "1.0"
+      baseline_run_id:
+        description: "Actions run whose block-holdout-fold-K artifact holds the baseline raw field (empty = do not re-score it)"
+        default: "35413207736"
+  push:
+    branches: ["arena/**", "main"]
+    paths: [".github/triggers/pseudo-label"]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: pseudo-label-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  params:
+    name: read the committed pseudo-label parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      fold: ${{ steps.p.outputs.fold }}
+      seed: ${{ steps.p.outputs.seed }}
+      pseudo_weight: ${{ steps.p.outputs.pseudo_weight }}
+      baseline_run_id: ${{ steps.p.outputs.baseline_run_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: p
+        name: parameters (fold, seed, pseudo weight)
+        run: |
+          set -euo pipefail
+          FOLD="${{ github.event.inputs.fold || '0' }}"
+          SEED="${{ github.event.inputs.seed || '46' }}"
+          W="${{ github.event.inputs.pseudo_weight || '1.0' }}"
+          BRUN="${{ github.event.inputs.baseline_run_id || '35413207736' }}"
+          F=".github/triggers/pseudo-label-params"
+          if [ -f "$F" ]; then
+            echo "parameters from $F:"; tr -d '\r' < "$F" | grep -E '^[A-Z_]+=' || true
+            v () { tr -d '\r' < "$F" | sed -n "s/^$1=\(.*\)\$/\1/p" | tail -1 || true; }
+            [ -n "$(v FOLD)" ]           && FOLD="$(v FOLD)"           || true
+            [ -n "$(v SEED)" ]           && SEED="$(v SEED)"           || true
+            [ -n "$(v PSEUDO_WEIGHT)" ]  && W="$(v PSEUDO_WEIGHT)"     || true
+            [ -n "$(v BASELINE_RUN_ID)" ] && BRUN="$(v BASELINE_RUN_ID)" || true
+          else
+            echo "no $F - defaults"
+          fi
+          case "$BRUN" in
+            ''|*[!0-9]*) echo "::warning::BASELINE_RUN_ID='$BRUN' is not a run id - the baseline re-score will be skipped"; BRUN="" ;;
+          esac
+          {
+            echo "fold=$FOLD"
+            echo "seed=$SEED"
+            echo "pseudo_weight=$W"
+            echo "baseline_run_id=$BRUN"
+          } >> "$GITHUB_OUTPUT"
+          echo "FOLD=$FOLD SEED=$SEED PSEUDO_WEIGHT=$W BASELINE_RUN_ID=$BRUN"
+
+  train:
+    name: fold ${{ needs.params.outputs.fold }} trained with pseudo labels, scored on its held-out blocks
+    runs-on: ubuntu-latest
+    needs: params
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (CPU torch)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet -r requirements.txt
+
+      - name: Place competition data (sha256-pinned git bridge; Dropbox fallback)
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          if [ -f data/bridge/manifest.json ]; then
+            python scripts/assemble_data_bridge.py
+          else
+            dl () { curl -fL --retry 3 --retry-delay 5 -o "data/$2" "$1" && echo "OK $2 $(stat -c%s "$2") bytes" || { echo "FAILED $2"; exit 1; }; }
+            dl "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&dl=1" training_features.tif
+            dl "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&dl=1" labels.tif
+            dl "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&dl=1" sample_submission.tif
+          fi
+          sha256sum data/*.tif | tee data/checksums.txt
+
+      - name: Pre-flight data validation
+        run: python scripts/prepare_data.py
+
+      - name: Train fold ${{ needs.params.outputs.fold }} with spatial block holdout + pseudo labels
+        run: |
+          # Same overrides as the block-holdout train job (configs/config_block_holdout.yaml):
+          # mc_id doubles as the block fold, so fold identity = held-out geography, seed 46 =
+          # the baseline's seed.  The config is the ONLY thing different: data.pseudo_label_path
+          # points at the SGMC proxy catalogue and training.pseudo_weight=1.0.
+          set -euo pipefail
+          python -m src.train --config configs/config_pseudo_labels.yaml \
+            --override training.mc_id=${{ needs.params.outputs.fold }} \
+                       training.block_fold=${{ needs.params.outputs.fold }} \
+                       training.seed=${{ needs.params.outputs.seed }} \
+                       training.pseudo_weight=${{ needs.params.outputs.pseudo_weight }} \
+            2>&1 | tr '\r' '\n' | tee train_pseudo_labels.log
+
+      - name: Inference (raw, no shaping) -> probability map
+        run: |
+          set -euo pipefail
+          python -m src.inference --config configs/config_pseudo_labels.yaml --raw \
+            --out outputs/prob_raw.tif 2>&1 | tr '\r' '\n' | tee inference_pseudo_labels.log
+
+      - name: Score the fold on the blocks it never saw, and on the blocks it trained on
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet scikit-image
+          mkdir -p data/evidence/pseudo_labels
+          for MODE in "" "--complement"; do
+            TAG=$([ -n "$MODE" ] && echo complement || echo heldout)
+            python scripts/block_holdout_eval.py \
+              --config configs/config_pseudo_labels.yaml \
+              --pred outputs/prob_raw.tif \
+              --labels data/labels.tif \
+              --proxy data/evidence/proxy/proxy_catalogue.tif \
+              --template data/sample_submission.tif \
+              --score-fold ${{ needs.params.outputs.fold }} $MODE \
+              --combined-population \
+              --crosscheck-sweep "" \
+              --out "data/evidence/pseudo_labels/fold${{ needs.params.outputs.fold }}_${TAG}.json" \
+              2>&1 | tee "data/evidence/pseudo_labels/fold${{ needs.params.outputs.fold }}_${TAG}.log"
+          done
+
+      - name: Download the baseline field from its runner artifact
+        # WHY: the paired contrast on the COMBINED (Phase-2-like) population needs both arms' raw
+        # probability fields.  The baseline fold's field was never committed (49 MB of float32) but
+        # it is still on the artifact of the run that produced its committed report, so re-scoring
+        # it costs a download instead of a second 300-minute training job.  The next step gates on
+        # the sha256 the committed report recorded for its own input, so a wrong run id fails
+        # instead of quietly contrasting two different fields.
+        id: dlbase
+        if: needs.params.outputs.baseline_run_id != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: block-holdout-fold-${{ needs.params.outputs.fold }}
+          run-id: ${{ needs.params.outputs.baseline_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: baseline_artifact
+
+      - name: Score the baseline field on the same three populations (no retraining)
+        if: steps.dlbase.outcome == 'success'
+        run: |
+          set -euo pipefail
+          K=${{ needs.params.outputs.fold }}
+          SRC=baseline_artifact/outputs/prob_raw.tif
+          if [ ! -f "$SRC" ]; then
+            echo "::warning::$SRC is not in the downloaded artifact - the baseline arm keeps its two committed populations and the combined contrast is reported NOT_SCORED"
+            exit 0
+          fi
+          WANT=$(python -c "import json,sys;print(json.load(open(f'data/evidence/block_holdout/fold{$K}_heldout.json'))['inputs']['pred_grid']['sha256'])")
+          GOT=$(sha256sum "$SRC" | cut -d' ' -f1)
+          if [ "$WANT" != "$GOT" ]; then
+            echo "::error::the downloaded baseline field is sha256 $GOT but the committed report data/evidence/block_holdout/fold${K}_heldout.json records $WANT - refusing to contrast two different fields (is BASELINE_RUN_ID the run that produced it?)"
+            exit 1
+          fi
+          echo "baseline field verified: $GOT == the committed report's input"
+          for MODE in "" "--complement"; do
+            TAG=$([ -n "$MODE" ] && echo complement || echo heldout)
+            python scripts/block_holdout_eval.py \
+              --config configs/config_block_holdout.yaml \
+              --pred "$SRC" \
+              --labels data/labels.tif \
+              --proxy data/evidence/proxy/proxy_catalogue.tif \
+              --template data/sample_submission.tif \
+              --score-fold "$K" $MODE \
+              --combined-population \
+              --crosscheck-sweep "" \
+              --out "data/evidence/block_holdout/fold${K}_${TAG}_combined.json" \
+              2>&1 | tee "data/evidence/block_holdout/fold${K}_${TAG}_combined.log"
+          done
+
+      - name: Paired bootstrap vs the committed no-pseudo baseline
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, sys
+          sys.path.insert(0, ".")
+          K = int("${{ needs.params.outputs.fold }}")
+          SEED = int("${{ needs.params.outputs.seed }}")
+          d = pathlib.Path("data/evidence/pseudo_labels")
+          pl = json.loads((d / f"fold{K}_heldout.json").read_text())
+          base_path = pathlib.Path(f"data/evidence/block_holdout/fold{K}_heldout.json")
+          out = d / f"fold{K}_paired_vs_baseline.json"
+          if not base_path.exists():
+              print(f"baseline {base_path} is not committed - paired comparison deferred "
+                    f"(train this fold without pseudo first)")
+              sys.exit(0)
+          base = json.loads(base_path.read_text())
+          if int(base["inputs"].get("seed", -1) or -1) not in (-1, SEED):
+              print(f"NOTE: baseline report records seed {base['inputs'].get('seed')}, "
+                    f"this run uses {SEED} - the paired reading assumes the same seed")
+          from src.metrics import bootstrap_from_blocks
+          def cand(rep, name):
+              v = rep["verdict"]["reference_candidate"]
+              c = next(x for x in rep["populations"]["proxy_only"]["candidates"]
+                       if x["label"] == v)
+              return v, c
+          vb, cb = cand(base, "baseline")
+          vp, cp = cand(pl, "pseudo")
+          assert vb == vp, f"reference candidates differ ({vb} vs {vp}) - the two configs must " \
+                           f"sweep the same policy grid"
+          bs = bootstrap_from_blocks(
+              [dict(label="baseline_no_pseudo", blocks=cb["blocks"]),
+               dict(label="pseudo", blocks=cp["blocks"])],
+              n_boot=2000, seed=0)
+          out.write_text(json.dumps(dict(
+              purpose=("paired block bootstrap of the SGMC pseudo-label signal: same 51 km "
+                       "blocks, same policy, no-pseudo baseline (data/evidence/block_holdout) vs "
+                       "pseudo run; the pseudo model NEVER saw the held-out blocks' pseudo "
+                       "pixels, so a gain here is generalisation of the SGMC-mapped fault style, "
+                       "not label leakage"),
+              fold=K, seed=SEED, policy=vb,
+              baseline_report=str(base_path), pseudo_report=str(d / f"fold{K}_heldout.json"),
+              baseline_held_out_dti=round(cb["global_dti"], 6),
+              pseudo_held_out_dti=round(cp["global_dti"], 6),
+              baseline_held_out_px=int(cb["pred_px"]), pseudo_held_out_px=int(cp["pred_px"]),
+              bootstrap=bs,
+              reading=("row 0 = baseline (no pseudo), row 1 = pseudo; "
+                       "prob_beats_reference is the paired P(pseudo > baseline) over 2000 block "
+                       "resamples on the fold's HELD-OUT blocks"),
+              shipping_note=("no decision is made here: a pseudo-labelled ensemble ships only "
+                             "through the field-selection gate (docs/FIELD_SELECTION_RULE.md) as "
+                             "a new reblend.yml RUN_ID with measured R3"),
+          ), indent=1))
+          print(json.dumps(dict(
+              baseline=round(cb["global_dti"], 6), pseudo=round(cp["global_dti"], 6),
+              prob_pseudo_beats_baseline=bs["pseudo"]["prob_beats_reference"],
+              contrast_ci95=bs["pseudo"]["contrast_vs_reference_ci95"]), indent=1))
+          PY
+
+      - name: Read both arms on every population (derived, cross-checked with --strict)
+        # scripts/read_landed_reports.py recomposes the paired contrast from the committed per-block
+        # components for EVERY population (proxy-only, catalogue, combined) instead of only the one
+        # whose truth is cut from the pseudo-labels' own raster, and --strict makes the run fail if
+        # that independent recomputation disagrees with the step above.  It also refreshes the
+        # fold-gap summary from every committed fold.
+        run: |
+          set -euo pipefail
+          K=${{ needs.params.outputs.fold }}
+          python scripts/read_landed_reports.py --fold "$K" --strict --pool \
+            2>&1 | tee "data/evidence/pseudo_labels/fold${K}_derived_reading.log"
+
+      - name: Keep the trainer's logs when the fold fails
+        if: failure()
+        run: |
+          set +e
+          ls -la outputs || true
+          tail -n 120 train_pseudo_labels.log || true
+          tail -n 120 inference_pseudo_labels.log || true
+
+      - name: Commit the pseudo-label evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          D=data/evidence/pseudo_labels
+          K=${{ needs.params.outputs.fold }}
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "$D"/fold${K}_*.json "$D"/fold${K}_*.log || true
+          # the pooled multi-fold contrast is refreshed by --pool above; it is named for the pool,
+          # not the fold, so it needs its own add (EXECUTIVE_SUMMARY §11 item 7)
+          git add -f "$D"/pooled_two_population_contrast.json || true
+          B=data/evidence/block_holdout
+          git add -f "$B"/fold${K}_heldout_combined.json "$B"/fold${K}_complement_combined.json \
+                     "$B"/fold${K}_heldout_combined.log "$B"/fold${K}_complement_combined.log \
+                     "$B"/fold_gap_summary.json || true
+          # a block-holdout fire can land at the same moment (both workflows are triggered by the
+          # same trigger push) and both rewrite the derived fold_gap_summary.json
+          bash scripts/push_evidence.sh \
+            "evidence(pseudo-labels): fold $K with SGMC pseudo, paired vs no-pseudo baseline [skip ci]"
+
+      - name: Upload fold artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pseudo-label-fold-${{ needs.params.outputs.fold }}
+          path: |
+            outputs/prob_raw.tif
+            outputs/manifest.json
+            data/evidence/pseudo_labels/
+            data/evidence/pseudo_labels/pooled_two_population_contrast.json
+            data/evidence/block_holdout/fold${{ needs.params.outputs.fold }}_heldout_combined.json
+            data/evidence/block_holdout/fold${{ needs.params.outputs.fold }}_complement_combined.json
+            train_pseudo_labels.log
+            inference_pseudo_labels.log
+          retention-days: 30
+          if-no-files-found: ignore

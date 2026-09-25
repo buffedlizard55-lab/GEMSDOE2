@@ -1,0 +1,412 @@
+{
+ "generated_utc": "2026-09-18T23:53:01+00:00",
+ "generated_by": "scripts/compare_emission_fields.py",
+ "purpose": "scale-free comparison of the ensemble FIELDS behind the committed sweeps: at a fixed floor the support shrinks as more folds are averaged, so fields must be compared at matched support, not at a shared threshold",
+ "metric_source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric",
+ "adopted_policy": {
+  "t0": 0.1,
+  "thin": true,
+  "dilate": 0,
+  "soft": false
+ },
+ "shipped_support": {
+  "support_px": 172974,
+  "sources": {
+   "adopted_policy_row_of_eval_sweep-mean12.json": 172974,
+   "block_stratified_report": 172974
+  },
+  "sources_agree": true,
+  "fallback_used": false,
+  "note": "the shipped artifact is a hard band, so its written support equals the adopted-policy row of the sweep that measured the field it was blended from; the block-stratified report counts the same pixels independently"
+ },
+ "support_windows": [
+  0.15,
+  0.25,
+  0.4
+ ],
+ "primary_window": 0.25,
+ "fields": [
+  {
+   "field": "ens123",
+   "sweep_file": "eval_sweep-ens123.json",
+   "run_ids": "35042805806,35249562910,35263581931",
+   "pred_sha256": "bde875bf23911dcf87724f06ce5af3059498d6da80c0719da4a8062157695d38",
+   "n_hard_candidates": 132,
+   "adopted_policy": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.084962,
+    "emission_px": 144738,
+    "TP_w": 6648.217,
+    "FP_w": 137944.517,
+    "FN_w": 55015.783
+   },
+   "matched_support": {
+    "best_in_window": {
+     "0.15": {
+      "t0": 0.2,
+      "width_px": 1,
+      "dti": 0.061173,
+      "emission_px": 185079,
+      "support_deviation": 0.069982,
+      "TP_w": 5228.418,
+      "FP_w": 175465.237,
+      "FN_w": 56435.582
+     },
+     "0.25": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.084962,
+      "emission_px": 144738,
+      "support_deviation": -0.163238,
+      "TP_w": 6648.217,
+      "FP_w": 137944.517,
+      "FN_w": 55015.783
+     },
+     "0.4": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.084962,
+      "emission_px": 144738,
+      "support_deviation": -0.163238,
+      "TP_w": 6648.217,
+      "FP_w": 137944.517,
+      "FN_w": 55015.783
+     }
+    },
+    "closest": {
+     "t0": 0.8,
+     "width_px": 12,
+     "dti": 0.044026,
+     "emission_px": 168868,
+     "support_deviation": -0.023738,
+     "TP_w": 3593.368,
+     "FP_w": 157847.457,
+     "FN_w": 58070.632
+    },
+    "n_candidates_in_window": {
+     "0.15": 7,
+     "0.25": 12,
+     "0.4": 21
+    }
+   },
+   "unconstrained_best": {
+    "t0": 0.05,
+    "width_px": 0,
+    "dti": 0.102306,
+    "emission_px": 433253
+   },
+   "is_shipped_field": false
+  },
+  {
+   "field": "ensemble2",
+   "sweep_file": "eval_sweep-ensemble2.json",
+   "run_ids": "35249562910",
+   "pred_sha256": "270648b8c8cf1cb93850d00a0832bd325a732bd9e926913d653ee38a5a6bf79b",
+   "n_hard_candidates": 132,
+   "adopted_policy": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.077671,
+    "emission_px": 131117,
+    "TP_w": 5868.117,
+    "FP_w": 125232.492,
+    "FN_w": 55795.883
+   },
+   "matched_support": {
+    "best_in_window": {
+     "0.15": {
+      "t0": 0.362091,
+      "width_px": 2,
+      "dti": 0.049084,
+      "emission_px": 191778,
+      "support_deviation": 0.10871,
+      "TP_w": 4250.173,
+      "FP_w": 182039.912,
+      "FN_w": 57413.827
+     },
+     "0.25": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.077671,
+      "emission_px": 131117,
+      "support_deviation": -0.241984,
+      "TP_w": 5868.117,
+      "FP_w": 125232.492,
+      "FN_w": 55795.883
+     },
+     "0.4": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.077671,
+      "emission_px": 131117,
+      "support_deviation": -0.241984,
+      "TP_w": 5868.117,
+      "FP_w": 125232.492,
+      "FN_w": 55795.883
+     }
+    },
+    "closest": {
+     "t0": 0.6,
+     "width_px": 4,
+     "dti": 0.043303,
+     "emission_px": 168899,
+     "support_deviation": -0.023558,
+     "TP_w": 3544.079,
+     "FP_w": 159014.47,
+     "FN_w": 58119.921
+    },
+    "n_candidates_in_window": {
+     "0.15": 7,
+     "0.25": 11,
+     "0.4": 20
+    }
+   },
+   "unconstrained_best": {
+    "t0": 0.05,
+    "width_px": 0,
+    "dti": 0.095341,
+    "emission_px": 293072
+   },
+   "is_shipped_field": false
+  },
+  {
+   "field": "mean12",
+   "sweep_file": "eval_sweep-mean12.json",
+   "run_ids": "35042805806,35249562910",
+   "pred_sha256": "32eda32d151398458f5ecdb789c1562ccf2cbbf362fc0ca3731a42003959565f",
+   "n_hard_candidates": 132,
+   "adopted_policy": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.099859,
+    "emission_px": 172974,
+    "TP_w": 8378.12,
+    "FP_w": 164461.741,
+    "FN_w": 53285.88
+   },
+   "matched_support": {
+    "best_in_window": {
+     "0.15": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.099859,
+      "emission_px": 172974,
+      "support_deviation": 0.0,
+      "TP_w": 8378.12,
+      "FP_w": 164461.741,
+      "FN_w": 53285.88
+     },
+     "0.25": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.099859,
+      "emission_px": 172974,
+      "support_deviation": 0.0,
+      "TP_w": 8378.12,
+      "FP_w": 164461.741,
+      "FN_w": 53285.88
+     },
+     "0.4": {
+      "t0": 0.1,
+      "width_px": 0,
+      "dti": 0.099859,
+      "emission_px": 172974,
+      "support_deviation": 0.0,
+      "TP_w": 8378.12,
+      "FP_w": 164461.741,
+      "FN_w": 53285.88
+     }
+    },
+    "closest": {
+     "t0": 0.1,
+     "width_px": 0,
+     "dti": 0.099859,
+     "emission_px": 172974,
+     "support_deviation": 0.0,
+     "TP_w": 8378.12,
+     "FP_w": 164461.741,
+     "FN_w": 53285.88
+    },
+    "n_candidates_in_window": {
+     "0.15": 5,
+     "0.25": 11,
+     "0.4": 20
+    }
+   },
+   "unconstrained_best": {
+    "t0": 0.05,
+    "width_px": 0,
+    "dti": 0.126017,
+    "emission_px": 770741
+   },
+   "is_shipped_field": true
+  },
+  {
+   "field": "ensemble1",
+   "sweep_file": "eval_sweep.json",
+   "run_ids": "35042805806",
+   "pred_sha256": "1dcbb20771581fd56a09860e4482ab774abcc5ee777c717723363b5980882f5a",
+   "n_hard_candidates": 132,
+   "adopted_policy": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.136452,
+    "emission_px": 464736,
+    "TP_w": 19378.175,
+    "FP_w": 444037.371,
+    "FN_w": 42285.825
+   },
+   "matched_support": {
+    "best_in_window": {
+     "0.15": {
+      "t0": 0.3,
+      "width_px": 1,
+      "dti": 0.064417,
+      "emission_px": 173286,
+      "support_deviation": 0.001804,
+      "TP_w": 5354.05,
+      "FP_w": 163567.961,
+      "FN_w": 56309.95
+     },
+     "0.25": {
+      "t0": 0.3,
+      "width_px": 1,
+      "dti": 0.064417,
+      "emission_px": 173286,
+      "support_deviation": 0.001804,
+      "TP_w": 5354.05,
+      "FP_w": 163567.961,
+      "FN_w": 56309.95
+     },
+     "0.4": {
+      "t0": 0.3,
+      "width_px": 1,
+      "dti": 0.064417,
+      "emission_px": 173286,
+      "support_deviation": 0.001804,
+      "TP_w": 5354.05,
+      "FP_w": 163567.961,
+      "FN_w": 56309.95
+     }
+    },
+    "closest": {
+     "t0": 0.3,
+     "width_px": 1,
+     "dti": 0.064417,
+     "emission_px": 173286,
+     "support_deviation": 0.001804,
+     "TP_w": 5354.05,
+     "FP_w": 163567.961,
+     "FN_w": 56309.95
+    },
+    "n_candidates_in_window": {
+     "0.15": 5,
+     "0.25": 11,
+     "0.4": 20
+    }
+   },
+   "unconstrained_best": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.136452,
+    "emission_px": 464736
+   },
+   "is_shipped_field": false
+  }
+ ],
+ "verdict": {
+  "shipped_field": "mean12",
+  "shipped_support_px": 172974,
+  "adopted_policy": "floor 0.1 / thin / width 0 px",
+  "primary_rule": "best hard candidate within +-25 % of the shipped support, the same rule applied to every field",
+  "ranking_at_matched_support": {
+   "0.15": [
+    [
+     "mean12",
+     0.099859
+    ],
+    [
+     "ensemble1",
+     0.064417
+    ],
+    [
+     "ens123",
+     0.061173
+    ],
+    [
+     "ensemble2",
+     0.049084
+    ]
+   ],
+   "0.25": [
+    [
+     "mean12",
+     0.099859
+    ],
+    [
+     "ens123",
+     0.084962
+    ],
+    [
+     "ensemble2",
+     0.077671
+    ],
+    [
+     "ensemble1",
+     0.064417
+    ]
+   ],
+   "0.4": [
+    [
+     "mean12",
+     0.099859
+    ],
+    [
+     "ens123",
+     0.084962
+    ],
+    [
+     "ensemble2",
+     0.077671
+    ],
+    [
+     "ensemble1",
+     0.064417
+    ]
+   ]
+  },
+  "ranking_at_the_adopted_floor": [
+   [
+    "ensemble1",
+    0.136452
+   ],
+   [
+    "mean12",
+    0.099859
+   ],
+   [
+    "ens123",
+    0.084962
+   ],
+   [
+    "ensemble2",
+    0.077671
+   ]
+  ],
+  "top_field_by_window": {
+   "0.15": "mean12",
+   "0.25": "mean12",
+   "0.4": "mean12"
+  },
+  "ranking_stable_across_windows": true,
+  "knife_edge_note": "the single nearest-support candidate is reported per field as matched_support.closest; for fields whose value distribution differs from the shipped one it can be a different (floor, width) than the best-in-window candidate, which is why the verdict uses the window rule and reports all three windows",
+  "conclusion": "The shipped field (mean12) is also the surrogate's best at matched support (0.0999 proxy DTI within +-25 % of 172,974 px), and it stays best in every window tested.  The higher absolute DTI other fields reach at floor 0.1 is a SUPPORT effect - they emit several times more pixels at that floor - not better detection: at the shipped support they score lower.  No field change is indicated."
+ },
+ "caveats": [
+  "the new-fault-like proxy population (USGS SGMC structure absent from the labels) is a SURROGATE for the scored truth, not the scored truth; every ranking here inherits that limitation (data/evidence/emission_decision.json caveats)",
+  "matched support equalises the NUMBER of emitted pixels, not their spatial distribution: two fields at equal support can still differ in how much of that support is wrong mass",
+  "the unconstrained-best column is a maximum over ~130 candidates on the same population the comparison is judged by - it is upward biased and is reported for completeness, never as a shipping recommendation",
+  "no rule in this repository currently selects the field; this script reports the measurement and says so rather than deciding"
+ ]
+}

@@ -1,0 +1,68 @@
+widest swept emission: 20 px at floor 0.6
+ramp emission candidates scored: 20; best per width: {1: 0.0399, 2: 0.040564, 3: 0.04388, 4: 0.046911, 6: 0.051578, 8: 0.055018, 10: 0.057486, 12: 0.059487, 16: 0.061963, 20: 0.063429}
+proxy truth |G_proxy| = 61,664 px (6,166 km)
+
+measured policies on the new-fault-like population (population C):
+  sweep_best_t0_0.1_width0px         DTI 0.1365  coverage  31.43%  wrong mass FP_w     444037.4  emitted    464736 px
+  sweep_best_t0_0.2_width1px         DTI 0.0886  coverage  15.85%  wrong mass FP_w     295393.1  emitted    313181 px
+  sweep_best_t0_0.6_width20px        DTI 0.0741  coverage  27.83%  wrong mass FP_w     894446.8  emitted    949174 px
+  sweep_t0_0.6_width20px             DTI 0.0741  coverage  27.83%  wrong mass FP_w     894446.8  emitted    949174 px
+  sweep_best_t0_0.3_width4px         DTI 0.0738  coverage  20.93%  wrong mass FP_w     614359.2  emitted    649259 px
+  sweep_best_t0_0.7_width20px        DTI 0.0717  coverage  18.87%  wrong mass FP_w     553288.6  emitted    590017 px
+  sweep_best_t0_0.5_width20px        DTI 0.0715  coverage  41.78%  wrong mass FP_w    1530396.5  emitted   1612924 px
+  sweep_best_t0_0.4_width12px        DTI 0.0709  coverage  38.01%  wrong mass FP_w    1383925.6  emitted   1457814 px
+  sweep_best_t0_0.362091_width10px   DTI 0.0706  coverage  37.43%  wrong mass FP_w    1365515.9  emitted   1437501 px
+  sweep_ramp_t0_0.362091_width20px_gamma1 DTI 0.0634  coverage  33.85%  wrong mass FP_w    1377934.5  emitted   2736127 px
+  sweep_ramp_t0_0.362091_width16px_gamma1 DTI 0.0620  coverage  27.71%  wrong mass FP_w    1114951.1  emitted   2251125 px
+  sweep_ramp_t0_0.362091_width12px_gamma1 DTI 0.0595  coverage  21.11%  wrong mass FP_w     834446.0  emitted   1700985 px
+  sweep_best_t0_0.8_width20px        DTI 0.0590  coverage  10.49%  wrong mass FP_w     294801.5  emitted    315054 px
+  sweep_ramp_t0_0.362091_width10px_gamma1 DTI 0.0575  coverage  17.70%  wrong mass FP_w     691649.0  emitted   1437501 px
+  sweep_ramp_t0_0.362091_width8px_gamma1 DTI 0.0550  coverage  14.24%  wrong mass FP_w     542621.9  emitted   1111579 px
+  sweep_best_t0_0_width20px          DTI 0.0542  coverage  15.79%  wrong mass FP_w     642559.3  emitted    672738 px
+  sweep_best_t0_0.05_width20px       DTI 0.0542  coverage  15.79%  wrong mass FP_w     642559.3  emitted    672738 px
+  sweep_ramp_t0_0.362091_width6px_gamma1 DTI 0.0516  coverage  10.88%  wrong mass FP_w     396803.9  emitted    800612 px
+  ensemble_soft_map                  DTI 0.0478  coverage  12.47%  wrong mass FP_w     549544.5  emitted   5165852 px
+  sweep_ramp_t0_0.362091_width4px_gamma1 DTI 0.0469  coverage   7.71%  wrong mass FP_w     255117.1  emitted    481429 px
+  sweep_ramp_t0_0.362091_width3px_gamma1 DTI 0.0439  coverage   6.31%  wrong mass FP_w     192481.7  emitted    354385 px
+  reblend_hard_39517px               DTI 0.0410  coverage   3.81%  wrong mass FP_w      37269.1  emitted     39517 px
+  sweep_ramp_t0_0.362091_width2px_gamma1 DTI 0.0406  coverage   4.99%  wrong mass FP_w     129811.9  emitted    222731 px
+  sweep_ramp_t0_0.362091_width1px_gamma2 DTI 0.0399  coverage   3.97%  wrong mass FP_w      57567.5  emitted    125543 px
+  sweep_t0_0_width6px                DTI 0.0395  coverage   5.72%  wrong mass FP_w     195635.3  emitted    205477 px
+  sweep_t0_0_width3px                DTI 0.0312  coverage   3.56%  wrong mass FP_w     103170.5  emitted    108521 px
+  baseline_blanket_ones              DTI 0.0249  coverage 100.00%  wrong mass FP_w   12073458.8  emitted  12279160 px
+  baseline_blanket_ones_whole_grid   DTI 0.0249  coverage 100.00%  wrong mass FP_w   12073458.8  emitted  12279160 px
+  shipped_skeleton_dilate0           DTI 0.0247  coverage   2.15%  wrong mass FP_w      20211.1  emitted     21492 px
+  baseline_catalogue_plus_submission DTI 0.0203  coverage   2.15%  wrong mass FP_w      78606.1  emitted     79887 px
+  sweep_t0_0_width0px                DTI 0.0144  coverage   1.22%  wrong mass FP_w      13609.8  emitted     14285 px
+  sweep_best_t0_0.9_width6px         DTI 0.0000  coverage   0.00%  wrong mass FP_w        129.4  emitted       139 px
+
+crossovers (the truth size at which the wider/higher-coverage policy takes over):
+  wide_vs_shipped        shipped_skeleton_dilate0 wins below 13223.6 px (1322.4 km); sweep_t0_0.6_width20px wins above
+  candidate_vs_shipped   shipped_skeleton_dilate0 wins below 2718.3 px (271.8 km); sweep_best_t0_0.1_width0px wins above
+  widest_swept_px        20
+  blanket_vs_shipped     shipped_skeleton_dilate0 wins below 61072.0 px (6107.2 km); baseline_blanket_ones wins above
+  blanket_vs_wide        sweep_t0_0.6_width20px wins below 853873.4 px (85387.3 km); baseline_blanket_ones wins above
+
+projected DTI at the plausible anchors (best measured candidate vs the shipped policy):
+  same density over the GeoDAWN blocks     shipped 0.0224  candidate 0.0735  CANDIDATE WINS
+  same density over the whole AOI          shipped 0.0247  candidate 0.1365  CANDIDATE WINS
+  the public catalogue (labels.tif) alone  shipped 0.0247  candidate 0.1355  CANDIDATE WINS
+
+best measured candidate on this population: sweep_best_t0_0.1_width0px
+  DTI 0.1365 (+0.1118 vs the shipped policy); best hard candidate at floor 0.1 (thinning on): width 0 px
+  reproduction on data/evidence/proxy/eval_sweep-mean12.json: DTI 0.0999 vs its own reference 0.0304 -> +0.0695  REPRODUCED
+  reproduction on data/evidence/proxy/eval_sweep-ensemble2.json: DTI 0.0777 vs its own reference 0.0320 -> +0.0456  REPRODUCED
+
+cross-ensemble robustness (worst contrast against each sweep's own reference):
+   1. floor 0.1      width  0 px  worst +0.0456  mean +0.0702  per-ensemble eval_sweep.json: +0.0954, eval_sweep-mean12.json: +0.0695, eval_sweep-ensemble2.json: +0.0456
+   2. floor 0.1      width  1 px  worst +0.0414  mean +0.0499  per-ensemble eval_sweep.json: +0.0508, eval_sweep-mean12.json: +0.0574, eval_sweep-ensemble2.json: +0.0414
+   3. floor 0.1      width  2 px  worst +0.0371  mean +0.0425  per-ensemble eval_sweep.json: +0.0371, eval_sweep-mean12.json: +0.0520, eval_sweep-ensemble2.json: +0.0384
+   4. floor 0.6      width 20 px  worst +0.0330  mean +0.0387  per-ensemble eval_sweep.json: +0.0330, eval_sweep-mean12.json: +0.0441, eval_sweep-ensemble2.json: +0.0389
+   5. floor 0.2      width 12 px  worst +0.0325  mean +0.0348  per-ensemble eval_sweep.json: +0.0344, eval_sweep-mean12.json: +0.0375, eval_sweep-ensemble2.json: +0.0325
+   6. floor 0.2      width  3 px  worst +0.0324  mean +0.0396  per-ensemble eval_sweep.json: +0.0460, eval_sweep-mean12.json: +0.0404, eval_sweep-ensemble2.json: +0.0324
+  floor 0.1, width 0 px ranks 1 of 132
+
+conclusion: SHIP the measured policy: sweep_best_t0_0.1_width0px (floor 0.1, thin, width 0 px) beats the shipped policy on the new-fault-like population by +0.1118 (condition 1), at 3/3 plausible scored-truth anchors with a crossover of 2,718 px (272 km) (condition 2), and the contrast reproduces on 2 independent ensemble(s) (data/evidence/proxy/eval_sweep-mean12.json: +0.0695, data/evidence/proxy/eval_sweep-ensemble2.json: +0.0456) (condition 3). Ship it through the re-blend workflow's SHAPING_T0/SHAPING_DILATE, which is the only path that writes an adopted policy
+top priority: beating the constant-ones baseline on the new-fault-like population is worth more than the width choice: the shipped skeleton (0.0247) sits below the blanket baseline (0.0249) measured in this same record, and the leaderboard's top score (0.1972) is 7.9x it
+
+wrote data/evidence/emission_decision.json

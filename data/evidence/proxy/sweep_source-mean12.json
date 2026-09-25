@@ -1,0 +1,5 @@
+{
+ "swept_run_id": "35042805806,35249562910",
+ "note": "fold-* artifacts of these Actions runs were re-blended into ONE mean and swept",
+ "sweep_file": "eval_sweep-mean12.json"
+}

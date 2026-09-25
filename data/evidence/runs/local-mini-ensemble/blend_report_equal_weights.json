@@ -1,0 +1,242 @@
+{
+ "generated_utc": "2026-09-16T00:17:13Z",
+ "script": "scripts/blend_submission.py",
+ "minutes": 0.12,
+ "n_folds": 2,
+ "folds": [
+  {
+   "dir": "outputs_e0",
+   "models": [
+    "model_mc0_unetplusplus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.14972612355895248
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  },
+  {
+   "dir": "outputs_e1",
+   "models": [
+    "model_mc1_deeplabv3plus_resnet34.pt"
+   ],
+   "fold_best_dti": [
+    0.048843456346641036
+   ],
+   "grid": {
+    "width": 512,
+    "height": 512,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     371350.0,
+     0.0,
+     -100.0,
+     4303750.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "res": [
+     100.0,
+     100.0
+    ]
+   }
+  }
+ ],
+ "metric": {
+  "R_pixels": 3,
+  "alpha": 0.2,
+  "beta": 0.8
+ },
+ "shaping": {
+  "t0": 0.45999999999999996,
+  "thin": true,
+  "mean_heldout_dti": 0.10614597201360848,
+  "unshaped_mean_heldout_dti": 0.09242875314586979,
+  "calibration_table": [
+   {
+    "t0": null,
+    "thin": null,
+    "mean_dti": 0.09242875314586979,
+    "raw": 0.09242875314586979
+   },
+   {
+    "t0": 0.02,
+    "thin": false,
+    "mean_dti": 0.10500825736931199
+   },
+   {
+    "t0": 0.02,
+    "thin": true,
+    "mean_dti": 0.030479547253880447
+   },
+   {
+    "t0": 0.108,
+    "thin": false,
+    "mean_dti": 0.10502908154509517
+   },
+   {
+    "t0": 0.108,
+    "thin": true,
+    "mean_dti": 0.03616609801589965
+   },
+   {
+    "t0": 0.19599999999999998,
+    "thin": false,
+    "mean_dti": 0.10509725706391751
+   },
+   {
+    "t0": 0.19599999999999998,
+    "thin": true,
+    "mean_dti": 0.05948498183134427
+   },
+   {
+    "t0": 0.28400000000000003,
+    "thin": false,
+    "mean_dti": 0.10384878382943849
+   },
+   {
+    "t0": 0.28400000000000003,
+    "thin": true,
+    "mean_dti": 0.09669987589518991
+   },
+   {
+    "t0": 0.372,
+    "thin": false,
+    "mean_dti": 0.10033591693872854
+   },
+   {
+    "t0": 0.372,
+    "thin": true,
+    "mean_dti": 0.08311021146199583
+   },
+   {
+    "t0": 0.45999999999999996,
+    "thin": false,
+    "mean_dti": 0.10312071975836026
+   },
+   {
+    "t0": 0.45999999999999996,
+    "thin": true,
+    "mean_dti": 0.10614597201360848
+   },
+   {
+    "t0": 0.548,
+    "thin": false,
+    "mean_dti": 0.10483280981721727
+   },
+   {
+    "t0": 0.548,
+    "thin": true,
+    "mean_dti": 0.06090194818565678
+   },
+   {
+    "t0": 0.636,
+    "thin": false,
+    "mean_dti": 0.028720757009071913
+   },
+   {
+    "t0": 0.636,
+    "thin": true,
+    "mean_dti": 0.010353739866132482
+   },
+   {
+    "t0": 0.724,
+    "thin": false,
+    "mean_dti": 0.028526175634790714
+   },
+   {
+    "t0": 0.724,
+    "thin": true,
+    "mean_dti": 0.009192646809111858
+   },
+   {
+    "t0": 0.8119999999999999,
+    "thin": false,
+    "mean_dti": 0.027737274133557262
+   },
+   {
+    "t0": 0.8119999999999999,
+    "thin": true,
+    "mean_dti": 0.007494179005868822
+   },
+   {
+    "t0": 0.9,
+    "thin": false,
+    "mean_dti": 0.024878710302730388
+   },
+   {
+    "t0": 0.9,
+    "thin": true,
+    "mean_dti": 0.00681325791390358
+   }
+  ]
+ },
+ "probability_mass": {
+  "pre_shaping": 157037.25392630696,
+  "post_shaping": 616.0,
+  "collapse_factor": 254.93060702322558
+ },
+ "fold_weights": "equal",
+ "submission": {
+  "path": "outputs_mini2/sub_equal.tif",
+  "bytes": 12443,
+  "sha256": "34b2a72d00044faf8692e8ef5ff4be76fbde266320a88f3cf15849045845cbb5",
+  "grid": {
+   "width": 512,
+   "height": 512,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    371350.0,
+    0.0,
+    -100.0,
+    4303750.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "res": [
+    100.0,
+    100.0
+   ]
+  },
+  "finite_px": 261835,
+  "total_px": 262144,
+  "nonzero_px": 616,
+  "min": 0.0,
+  "max": 1.0,
+  "mean": 0.0023526267614215612
+ },
+ "local_score_vs_known": {
+  "dti_known_faults": 0.01425927434366911,
+  "TP_w": 60.59581613159273,
+  "FP_w": 571.265284552812,
+  "FN_w": 5093.404183868407,
+  "closed_form": 0.01425927434366911,
+  "closed_form_matches": true,
+  "blanket_ones_dti": 0.09550081915407606,
+  "note": "scored against the PUBLIC known-fault raster \u2014 NOT the competition test set (private expert-labelled NEW faults). Optimistic AND wrong-universe: reported for pipeline monitoring only."
+ }
+}

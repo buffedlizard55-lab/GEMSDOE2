@@ -1,0 +1,30 @@
+grid (3730, 3292)  |G|=60988  valid=5167373  fault frac=1.1803%
+
+--- trivial baselines ---
+  all zeros                              DTI=0.00000  TP=      0.0 FP=       0.0 FN=  60988.0 mass=         0
+  all ones (blanket coverage)            DTI=0.05795  TP=  60988.0 FP= 4956731.5 FN=      0.0 mass=   5167373
+  uniform p=0.05                         DTI=0.03081  TP=   3049.4 FP=  247836.6 FN=  57938.6 mass=    258369
+  uniform p=0.1                          DTI=0.04089  TP=   6098.8 FP=  495673.2 FN=  54889.2 mass=    516737
+  uniform p=0.25                         DTI=0.05088  TP=  15247.0 FP= 1239182.9 FN=  45741.0 mass=   1291843
+  uniform p=0.5                          DTI=0.05539  TP=  30494.0 FP= 2478365.7 FN=  30494.0 mass=   2583686
+
+--- oracle-ish: the known public faults themselves ---
+  exact known faults, p=1                DTI=1.00000  TP=  60988.0 FP=       0.0 FN=      0.0 mass=     60988
+  known faults dilated r=1, p=1          DTI=0.88182  TP=  60988.0 FP=   40865.7 FN=      0.0 mass=    183585
+  known faults dilated r=2, p=1          DTI=0.73299  TP=  60988.0 FP=  111079.5 FN=      0.0 mass=    304548
+  known faults dilated r=3, p=1          DTI=0.58922  TP=  60988.0 FP=  212592.3 FN=      0.0 mass=    421926
+  known faults dilated r=4, p=1          DTI=0.48380  TP=  60988.0 FP=  325366.5 FN=      0.0 mass=    536008
+  known faults dilated r=6, p=1          DTI=0.35884  TP=  60988.0 FP=  544865.5 FN=      0.0 mass=    755507
+
+--- soft distance ramps around the truth (what a well-calibrated model looks like) ---
+  triangular ramp radius 3px             DTI=0.81577  TP=  60988.0 FP=   68864.4 FN=      0.0 mass=    210642
+  triangular ramp radius 5px             DTI=0.62787  TP=  60988.0 FP=  180730.9 FN=      0.0 mass=    350054
+  triangular ramp radius 8px             DTI=0.45566  TP=  60988.0 FP=  364286.1 FN=      0.0 mass=    549104
+
+--- partial recall: what fraction of faults must be found? ---
+  25% of known faults, p=1               DTI=0.55493  TP=  30455.6 FP=       0.0 FN=  30532.4 mass=     15247
+  50% of known faults, p=1               DTI=0.79431  TP=  46074.2 FP=       0.0 FN=  14913.8 mass=     30494
+  75% of known faults, p=1               DTI=0.91867  TP=  54911.3 FP=       0.0 FN=   6076.7 mass=     45741
+
+best: exact known faults, p=1 DTI=1.00000
+wrote data/evidence/runs/35169168957/metric_strategy_full.json

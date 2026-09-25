@@ -1,0 +1,14 @@
+Touching this file fire- starts the "Re-blend existing fold artifacts" workflow
+(.github/workflows/reblend.yml), which re-runs ONLY the blend step against the fold
+artifacts of run 35042805806 (those artifacts trained successfully; the blend crashed
+on the TIFF block-size bug fixed on 2026-09-16).
+
+# 2026-09-16T20:xxZ run the emission-width A/B + leave-one-fold-out aggregation audit on the
+# existing six fold artifacts (no retraining). Writes data/evidence/runs/35042805806-dilate-ab/.
+
+# 2026-09-16 (post-merge, fast path): re-run the emission-width + LOO experiment on the six saved
+# folds with the O(offsets x |G|) scoring and the incremental thinning so the audit finishes well
+# inside the job timeout, and write the refined submission to its own evidence directory.
+
+# 2026-09-17 (session 13): fire the re-blend that ADOPTS the measured policy (floor 0.1, thin,
+# width 0 px) over ensembles 1+2.  Parameters: .github/triggers/reblend-params.

@@ -1,0 +1,49 @@
+{
+  "generated_utc": "2026-09-17T01:29:10+00:00",
+  "generated_by": "scripts/inspect_competition_data.py on a GitHub-hosted runner",
+  "note": "All values measured from the downloaded bytes. Not transcribed from docs.",
+  "files": [
+    {
+      "name": "Digital-elevation-model-links-JSON.pdf",
+      "bytes": 23032446,
+      "sha256": "c2996eaf0adcc76bb81975ec21155dbf32ddac3fbbe71f71d89a5ff465f2c775",
+      "magic": "PDF"
+    },
+    {
+      "name": "GEMS_96647.pdf",
+      "bytes": 455140,
+      "sha256": "50d854b1e0239fe6b9648d9fa5c7537bc7b6e5bc10cf6b37a2ff9aa401c36938",
+      "magic": "PDF"
+    },
+    {
+      "name": "README.md",
+      "bytes": 10197,
+      "sha256": "21e628b288900606960371868040e273e6681dd38b35cbe923865393fe138dcf",
+      "magic": "unknown (first bytes: b'# data/ ')"
+    },
+    {
+      "name": "dem_links.json",
+      "bytes": 541953,
+      "sha256": "c070c991dae8debdc80d99091539e6ae4152feba71c4f4d3041e57364238865c",
+      "magic": "unknown (first bytes: b'{\\n  \"gen')"
+    },
+    {
+      "name": "example_submission.tif",
+      "bytes": 1599597,
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "magic": "TIFF (little-endian)"
+    },
+    {
+      "name": "existing_faults.tif",
+      "bytes": 425830,
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "magic": "TIFF (little-endian)"
+    },
+    {
+      "name": "gems-geodawn-numerical-features.tif",
+      "bytes": 418912844,
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "magic": "TIFF (little-endian)"
+    }
+  ]
+}

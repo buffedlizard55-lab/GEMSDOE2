@@ -1,0 +1,350 @@
+{
+ "generated_utc": "2026-09-24T22:11:57+00:00",
+ "generated_by": "scripts/read_landed_reports.py",
+ "purpose": "the SGMC pseudo-label contrast on EVERY committed truth population, not only the one whose truth shares the pseudo-labels' source: derived from the committed per-block metric components of both arms (no re-scoring, no re-training)",
+ "fold": 1,
+ "policy": {
+  "floor": 0.1,
+  "width": 0,
+  "policy": "sweep_best_t0_0.1_width0px",
+  "candidate_label": "floor0.1_w0px",
+  "measured_dti": 0.136452,
+  "source": "data/evidence/emission_decision.json"
+ },
+ "pseudo_provenance": {
+  "config": "configs/config_pseudo_labels.yaml",
+  "pseudo_label_path": "data/evidence/proxy/proxy_catalogue.tif",
+  "pseudo_code": 2,
+  "pseudo_weight": 1.0,
+  "holdout": "spatial_blocks",
+  "block_fold": null,
+  "seed": 42,
+  "circular_source": true,
+  "circular_source_meaning": "the pseudo-label mask is the code-2 layer of data/evidence/proxy/proxy_catalogue.tif, which is ALSO the raster the 'proxy_only' truth population is cut from - so a gain on that population is measured against the same catalogue the extra training signal came from (spatially held out, but not source-held-out).  The 'labels' population is independent of that source and is the non-circular arm of the same measurement."
+ },
+ "arms": {
+  "heldout": {
+   "status": "MEASURED",
+   "baseline_report": "data/evidence/block_holdout/fold1_heldout.json",
+   "pseudo_report": "data/evidence/pseudo_labels/fold1_heldout.json",
+   "blocks_scored": 9,
+   "restriction_note": "only the blocks of fold 1 (the blocks held out from that fold's training); this is a generalisation reading ONLY if --pred came from a model trained with training.holdout=spatial_blocks and training.block_fold=1 on the same partition (block_px=512, folds=4, seed 0, mode balanced)",
+   "populations": {
+    "proxy_only": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_heldout.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_heldout.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.078892,
+     "candidate_dti": 0.144991,
+     "contrast": 0.066099,
+     "reference_support_px": 121991,
+     "candidate_support_px": 193460,
+     "reference_components": {
+      "TP_w": 2750.5181676730745,
+      "FP_w": 115103.2163745341,
+      "FN_w": 11366.481832326925,
+      "n_gt": 14117
+     },
+     "candidate_components": {
+      "TP_w": 6879.2350146355375,
+      "FP_w": 173883.26902529015,
+      "FN_w": 7237.7649853644625,
+      "n_gt": 14117
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.06442,
+       0.096274
+      ],
+      "candidate_ci95": [
+       0.095707,
+       0.194454
+      ],
+      "contrast_p50": 0.064588,
+      "contrast_ci95": [
+       0.028701,
+       0.112249
+      ],
+      "prob_candidate_beats_reference": 1.0
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": false,
+     "resampling_units": 9
+    },
+    "labels": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_heldout.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_heldout.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.185089,
+     "candidate_dti": 0.123389,
+     "contrast": -0.061700000000000005,
+     "reference_support_px": 121991,
+     "candidate_support_px": 193460,
+     "reference_components": {
+      "TP_w": 6578.707919604354,
+      "FP_w": 104746.59466570654,
+      "FN_w": 10019.292080395646,
+      "n_gt": 16598
+     },
+     "candidate_components": {
+      "TP_w": 6131.500509666303,
+      "FP_w": 175938.53928455143,
+      "FN_w": 10466.499490333697,
+      "n_gt": 16598
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.151363,
+       0.228405
+      ],
+      "candidate_ci95": [
+       0.102622,
+       0.151144
+      ],
+      "contrast_p50": -0.06171,
+      "contrast_ci95": [
+       -0.083869,
+       -0.044335
+      ],
+      "prob_candidate_beats_reference": 0.0
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": false,
+     "resampling_units": 9
+    },
+    "combined": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_heldout_combined.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_heldout.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.202439,
+     "candidate_dti": 0.222275,
+     "contrast": 0.019835999999999993,
+     "reference_support_px": 121991,
+     "candidate_support_px": 193460,
+     "reference_components": {
+      "TP_w": 9329.22608727743,
+      "FP_w": 98231.5442873296,
+      "FN_w": 21385.773912722572,
+      "n_gt": 30715
+     },
+     "candidate_components": {
+      "TP_w": 13010.73552430184,
+      "FP_w": 156801.01855702337,
+      "FN_w": 17704.26447569816,
+      "n_gt": 30715
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.179067,
+       0.228921
+      ],
+      "candidate_ci95": [
+       0.178215,
+       0.278737
+      ],
+      "contrast_p50": 0.018104,
+      "contrast_ci95": [
+       -0.022395,
+       0.069594
+      ],
+      "prob_candidate_beats_reference": 0.7905
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": false,
+     "resampling_units": 9
+    }
+   }
+  },
+  "complement": {
+   "status": "MEASURED",
+   "baseline_report": "data/evidence/block_holdout/fold1_complement.json",
+   "pseudo_report": "data/evidence/pseudo_labels/fold1_complement.json",
+   "blocks_scored": 25,
+   "restriction_note": "only the blocks of fold 1 (the blocks the model TRAINED on); this is a generalisation reading ONLY if --pred came from a model trained with training.holdout=spatial_blocks and training.block_fold=1 on the same partition (block_px=512, folds=4, seed 0, mode balanced)",
+   "populations": {
+    "proxy_only": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_complement.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_complement.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.071873,
+     "candidate_dti": 0.107072,
+     "contrast": 0.035198999999999994,
+     "reference_support_px": 374297,
+     "candidate_support_px": 689560,
+     "reference_components": {
+      "TP_w": 7952.10512131452,
+      "FP_w": 355063.88601186394,
+      "FN_w": 39594.89487868548,
+      "n_gt": 47547
+     },
+     "candidate_components": {
+      "TP_w": 18099.47617997959,
+      "FP_w": 636915.0727438773,
+      "FN_w": 29447.52382002041,
+      "n_gt": 47547
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.055884,
+       0.088434
+      ],
+      "candidate_ci95": [
+       0.08128,
+       0.13468
+      ],
+      "contrast_p50": 0.034607,
+      "contrast_ci95": [
+       0.01049,
+       0.06282
+      ],
+      "prob_candidate_beats_reference": 0.9985
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": true,
+     "resampling_units": 25
+    },
+    "labels": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_complement.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_complement.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.160625,
+     "candidate_dti": 0.112537,
+     "contrast": -0.04808799999999999,
+     "reference_support_px": 374297,
+     "candidate_support_px": 689560,
+     "reference_components": {
+      "TP_w": 16803.177355114178,
+      "FP_w": 328691.4776347735,
+      "FN_w": 27586.822644885822,
+      "n_gt": 44390
+     },
+     "candidate_components": {
+      "TP_w": 18674.00022529166,
+      "FP_w": 633451.7417212012,
+      "FN_w": 25715.99977470834,
+      "n_gt": 44390
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.138003,
+       0.187214
+      ],
+      "candidate_ci95": [
+       0.096714,
+       0.130706
+      ],
+      "contrast_p50": -0.047614,
+      "contrast_ci95": [
+       -0.06788,
+       -0.032303
+      ],
+      "prob_candidate_beats_reference": 0.0
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": true,
+     "resampling_units": 25
+    },
+    "combined": {
+     "status": "MEASURED",
+     "sources": {
+      "baseline": "data/evidence/block_holdout/fold1_complement_combined.json",
+      "pseudo": "data/evidence/pseudo_labels/fold1_complement.json"
+     },
+     "reference": "baseline_no_pseudo",
+     "candidate": "pseudo",
+     "reference_dti": 0.176097,
+     "candidate_dti": 0.186393,
+     "contrast": 0.010296,
+     "reference_support_px": 374297,
+     "candidate_support_px": 689560,
+     "reference_components": {
+      "TP_w": 24755.2824764287,
+      "FP_w": 310385.61232365365,
+      "FN_w": 67181.71752357131,
+      "n_gt": 91937
+     },
+     "candidate_components": {
+      "TP_w": 36773.47640527125,
+      "FP_w": 581930.7862911294,
+      "FN_w": 55163.52359472875,
+      "n_gt": 91937
+     },
+     "bootstrap": {
+      "n_boot": 2000,
+      "seed": 0,
+      "reference_ci95": [
+       0.156615,
+       0.193187
+      ],
+      "candidate_ci95": [
+       0.165111,
+       0.209633
+      ],
+      "contrast_p50": 0.009694,
+      "contrast_ci95": [
+       -0.00768,
+       0.030541
+      ],
+      "prob_candidate_beats_reference": 0.847
+     },
+     "recomposition_exact": {
+      "baseline_no_pseudo": true,
+      "pseudo": true
+     },
+     "interval_readable": true,
+     "resampling_units": 25
+    }
+   }
+  }
+ },
+ "verdict": "GAIN_ON_THE_COMBINED_SURROGATE",
+ "verdict_reason": "the combined (Phase-2-like) population is the only committed population that contains BOTH fault kinds, and it moves +0.019836; proxy +0.066099, catalogue -0.061700",
+ "shippable_evidence": false,
+ "shipping_note": "no shipping decision is made here.  A pseudo-labelled field reaches the leaderboard only through docs/FIELD_SELECTION_RULE.md as a new reblend.yml RUN_ID with R3 measured on both fields' raw probability rasters, and the proxy arm of this contrast is source-circular (see pseudo_provenance.circular_source) so it cannot carry an adoption on its own.",
+ "caveat": "fold-restricted bootstraps resample only that fold's scoreable blocks; below 12 units the scorer marks the interval COARSE, so P(candidate > reference) here is a spread indicator on a small number of 51 km regions, not a confidence statement (scripts/block_holdout_eval.py::bootstrap_reliability)"
+}

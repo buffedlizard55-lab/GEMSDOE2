@@ -1,0 +1,139 @@
+{
+ "generated_utc": "2026-09-19T01:39:02+00:00",
+ "generated_by": "scripts/measure_cross_catalogue_transfer.py",
+ "purpose": "REFUSED cross-catalogue transfer measurement: catalogue B turned out not to be independent of the training labels, so there is no 'new fault' population to score against and no transfer claim is possible",
+ "sources": {
+  "catalogue_A": {
+   "path": "data/evidence/proxy/proxy_catalogue.tif",
+   "grid": {
+    "path": "data/evidence/proxy/proxy_catalogue.tif",
+    "width": 3292,
+    "height": 3730,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "nodata": null,
+    "dtype": "uint8",
+    "sha256": "7563e187171f7210d70295f958b0b2714c1fa504afa35f9a4688fc99b1e1122a",
+    "bytes": 181017
+   },
+   "provenance": "USGS SGMC structure, DOI 10.3133/ds1052 (scripts/fetch_proxy_faults.py -> build_proxy_catalogue.py)"
+  },
+  "catalogue_B": {
+   "path": "data/evidence/xcat/qfaults_catalogue.tif",
+   "grid": {
+    "path": "data/evidence/xcat/qfaults_catalogue.tif",
+    "width": 3292,
+    "height": 3730,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "nodata": null,
+    "dtype": "uint8",
+    "sha256": "3fb2ca7327b47aa5a3f73c8b2ad3272d8d26ab25df35bc940944758d4c0885f2",
+    "bytes": 158573
+   },
+   "provenance": "USGS Quaternary Fault and Fold Database, DOI 10.5066/P9BCVRCK (scripts/fetch_qfaults.py -> build_proxy_catalogue.py)"
+  },
+  "labels": {
+   "path": "data/labels.tif",
+   "grid": {
+    "path": "data/labels.tif",
+    "width": 3292,
+    "height": 3730,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "nodata": -1.0,
+    "dtype": "int8",
+    "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "bytes": 425830
+   }
+  },
+  "prediction": {
+   "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+   "grid": {
+    "path": "data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif",
+    "width": 3292,
+    "height": 3730,
+    "crs": "EPSG:32611",
+    "transform": [
+     100.0,
+     0.0,
+     243350.0,
+     0.0,
+     -100.0,
+     4508550.0
+    ],
+    "nodata": null,
+    "dtype": "float32",
+    "sha256": "a3dcd6d51303f312fd3e13667a1890d8eeab0752483432ddd46bc74231168009",
+    "bytes": 569531
+   }
+  }
+ },
+ "footprint_px": 5167373,
+ "metric": {
+  "R_pixels": 3,
+  "R_meters": 300.0,
+  "alpha": 0.2,
+  "beta": 0.8,
+  "eps": 1e-07
+ },
+ "population": {
+  "B_in_footprint_px": 60939,
+  "B_in_footprint_km": 6093.9,
+  "B_code1_near_a_label_px": 60938,
+  "B_code1_fraction": 0.999984,
+  "B_only_px": 1,
+  "B_only_km": 0.1,
+  "B_only_fraction": 1.6e-05,
+  "label_fault_px": 60988,
+  "labels_within_R_of_B_px": 60986,
+  "thresholds": {
+   "min_b_only_px": 100,
+   "min_b_only_fraction": 0.005,
+   "min_b_all_px": 1000
+  }
+ },
+ "controls_pass": false,
+ "measurements": [],
+ "verdict": {
+  "best_union_candidate": null,
+  "best_union_dti": null,
+  "model_dti": null,
+  "union_gain": null,
+  "criterion": {
+   "min_union_gain": 0.01,
+   "min_bootstrap_prob": 0.95,
+   "controls_pass": false,
+   "union_gain": null,
+   "bootstrap_prob_beats_model": null
+  },
+  "conclusion": "REFUSED - catalogue B is NOT independent of the training labels: 60,938 of its 60,939 in-footprint pixels (100.00 %) are already within R = 3 px of a label, leaving 1 px (0.0016 %) as a 'new fault' population - below the pre-registered minimum of 100 px and 0.50 %. Scoring against 1 pixel(s) would produce a number with no meaning, so none is reported. This is a FINDING about the two catalogues, not a bug: it means the training labels and catalogue B are the same lines in this footprint, and it is recorded with the overlap that establishes it."
+ },
+ "caveats": [
+  "the refusal is quantitative: the overlap fraction above is the evidence, and it is reproducible from the committed rasters with scripts/build_proxy_catalogue.py",
+  "a REFUSED verdict says nothing about whether a POLICY transfers - it says this pair of catalogues cannot answer the question",
+  "the new-fault-like SGMC population (data/evidence/proxy/proxy_catalogue.tif, 61,664 code-2 px, 24.94 % already covered by the labels) remains the only available surrogate, with the limitation that it is pre-Quaternary bedrock structure rather than an expert interpretation of the geophysics"
+ ],
+ "exit_code": 0
+}

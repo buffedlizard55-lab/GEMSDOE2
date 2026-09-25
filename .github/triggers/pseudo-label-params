@@ -1,0 +1,32 @@
+# Parameters for .github/workflows/pseudo-label.yml (read by the `params` job).
+#
+# FOLD  0 = the fold whose NO-PSEUDO baseline is already committed
+#       (data/evidence/block_holdout/fold0_heldout.json, seed 46).  A paired reading needs
+#       both arms on the same fold; any other fold must be trained without pseudo first.
+# SEED  46 = the baseline's seed (required for the paired comparison to be honest: fold
+#       identity is its held-out blocks, so the seed must match, not just the partition).
+# PSEUDO_WEIGHT  1.0 = hard pseudo-labels (the pre-registered first measurement).  Must be
+#       >= 0.5 (FaultDataset binarises labels at 0.5).  A soft-weight arm is a follow-up
+#       experiment, not a re-tune.
+# 2026-09-24 (session 24): FOLD 1.  The pooled reader (scripts/read_landed_reports.py --pool)
+# needs >=12 resampling units to be readable; fold 0 alone gives 7 (8 held-out blocks, one not
+# scoreable in the combined scope), and fold 1's held-out scope has 9 scoreable blocks
+# (data/evidence/block_holdout/fold_gap_summary.json), so fold 0 + fold 1 (>= 15 units) should
+# already cross the bar - the pool verdict then stops saying "under powered" for lack of units.  Folds 2-3 follow the same params edit
+# once this run lands (the workflow's concurrency group cancels a second fire while the first
+# runs).  Verified sources for the baseline run id below: STATUS.md (session 18: "Fold 3 landed
+# ... run 35451858112") and SUGGESTIONS.md ("block-holdout-fold-1/2/3 of run 35451858112,
+# 14-day retention from 2026-09-19, i.e. until ~2026-10-03").
+FOLD=1
+SEED=46
+PSEUDO_WEIGHT=1.0
+# BASELINE_RUN_ID  35413207736 = the Actions run whose artifact block-holdout-fold-0 still
+#       holds the baseline fold-0 RAW probability field (outputs/prob_raw.tif, 24.8 MB).  The
+#       workflow downloads it, checks its sha256 against the one recorded in
+#       data/evidence/block_holdout/fold0_heldout.json (inputs.pred_grid.sha256) and re-scores
+#       it on the COMBINED population, so both arms of the paired contrast exist on all three
+#       populations without a second 300-minute training run.  Verified present on 2026-09-19
+#       (artifact id 10576951939, expires 2026-10-03).  Set it empty to skip the re-score - the
+#       combined contrast is then reported NOT_SCORED rather than being guessed.  A different
+#       FOLD needs the run that trained THAT fold (folds 1-3: run 35451858112).
+BASELINE_RUN_ID=35451858112

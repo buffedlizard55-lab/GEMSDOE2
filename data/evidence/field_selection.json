@@ -1,0 +1,284 @@
+{
+ "generated_utc": "2026-09-19T05:02:42+00:00",
+ "generated_by": "scripts/check_field_selection.py",
+ "rule": {
+  "id": "field-selection-rule-v1",
+  "doc": "docs/FIELD_SELECTION_RULE.md",
+  "registered": "2026-09-19",
+  "committed_before": "any re-blend after 2026-09-19 (session 18)",
+  "constants": {
+   "contrast_margin": 0.01,
+   "boot_p_threshold": 0.95,
+   "bootstraps": 2000,
+   "min_candidates_primary_window": 3,
+   "support_windows": [
+    0.15,
+    0.25,
+    0.4
+   ],
+   "primary_window": 0.25
+  }
+ },
+ "shipped_field": "mean12",
+ "shipped_support_px": 172974,
+ "shipped_support_sources": {
+  "adopted_policy_row_of_eval_sweep-mean12.json": 172974,
+  "block_stratified_report": 172974
+ },
+ "adopted_policy": {
+  "t0": 0.1,
+  "thin": true,
+  "dilate": 0,
+  "soft": false
+ },
+ "proxy_population": "data/evidence/proxy/proxy_catalogue.tif code 2 (61,664 px SGMC trace absent from labels.tif - the standing surrogate for the scored new faults)",
+ "proposal": null,
+ "fields": {
+  "ens123": {
+   "run_ids": [
+    "35042805806",
+    "35249562910",
+    "35263581931"
+   ],
+   "run_evidence": {
+    "committed": [],
+    "not_committed": [
+     "35042805806",
+     "35249562910",
+     "35263581931"
+    ]
+   },
+   "eligibility": {
+    "F1_fold_completeness": {
+     "status": "UNVERIFIED",
+     "note": "runs ['35042805806', '35249562910', '35263581931'] are not the pinned re-blend and have no committed fold-liveness evidence (run dirs with usable_folds.txt / fold_provenance.txt); completeness is enforced by the re-blend MIN_FOLDS gate when this field is pinned and blended"
+    },
+    "F2_committed_own_sweep": {
+     "status": "PASS",
+     "note": "own sweep committed, inputs.reference_t0 recorded, adopted-policy row present"
+    }
+   },
+   "conditions": {
+    "R1_matched_support_contrast": {
+     "status": "FAIL",
+     "note": "best-in-window(+-25 %) 0.084962 vs shipped 0.099859 (margin 0.01); candidate (0.1, w0px, 144,738 px)"
+    },
+    "R2_window_stability": {
+     "status": "FAIL",
+     "note": "top field per window: {'0.15': 'mean12', '0.25': 'mean12', '0.4': 'mean12'}"
+    },
+    "R4_policy_transfer": {
+     "status": "PASS",
+     "note": "adopted policy 0.084962 vs the field's own in-domain reference policy 0.026861 (reference_t0=0.362091); transfer +0.058101 vs margin 0.01"
+    },
+    "R5_window_sampling": {
+     "min_candidates": 3,
+     "status": "PASS",
+     "note": "12 hard candidates within +-25 % of 172,974 px (need >= 3)"
+    },
+    "R3_block_bootstrap": {
+     "status": "NOT_MEASURABLE_FROM_COMMITTED_BYTES",
+     "note": "paired block bootstrap of the per-block DTI difference needs both fields' raw probability rasters (the sweep inputs); only the shipped field's emission raster is committed.  Until measured, R3 cannot pass and the verdict cannot be ADOPT - this is the rule working as pre-registered, not a fallback",
+     "threshold": 0.95,
+     "bootstraps": 2000
+    }
+   },
+   "matched_candidate": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.084962,
+    "emission_px": 144738,
+    "support_deviation": -0.163238,
+    "TP_w": 6648.217,
+    "FP_w": 137944.517,
+    "FN_w": 55015.783
+   },
+   "matched_dti": 0.084962,
+   "is_shipped_field": false
+  },
+  "ensemble2": {
+   "run_ids": [
+    "35249562910"
+   ],
+   "run_evidence": {
+    "committed": [],
+    "not_committed": [
+     "35249562910"
+    ]
+   },
+   "eligibility": {
+    "F1_fold_completeness": {
+     "status": "UNVERIFIED",
+     "note": "runs ['35249562910'] are not the pinned re-blend and have no committed fold-liveness evidence (run dirs with usable_folds.txt / fold_provenance.txt); completeness is enforced by the re-blend MIN_FOLDS gate when this field is pinned and blended"
+    },
+    "F2_committed_own_sweep": {
+     "status": "PASS",
+     "note": "own sweep committed, inputs.reference_t0 recorded, adopted-policy row present"
+    }
+   },
+   "conditions": {
+    "R1_matched_support_contrast": {
+     "status": "FAIL",
+     "note": "best-in-window(+-25 %) 0.077671 vs shipped 0.099859 (margin 0.01); candidate (0.1, w0px, 131,117 px)"
+    },
+    "R2_window_stability": {
+     "status": "FAIL",
+     "note": "top field per window: {'0.15': 'mean12', '0.25': 'mean12', '0.4': 'mean12'}"
+    },
+    "R4_policy_transfer": {
+     "status": "PASS",
+     "note": "adopted policy 0.077671 vs the field's own in-domain reference policy 0.032022 (reference_t0=0.362091); transfer +0.045649 vs margin 0.01"
+    },
+    "R5_window_sampling": {
+     "min_candidates": 3,
+     "status": "PASS",
+     "note": "11 hard candidates within +-25 % of 172,974 px (need >= 3)"
+    },
+    "R3_block_bootstrap": {
+     "status": "NOT_MEASURABLE_FROM_COMMITTED_BYTES",
+     "note": "paired block bootstrap of the per-block DTI difference needs both fields' raw probability rasters (the sweep inputs); only the shipped field's emission raster is committed.  Until measured, R3 cannot pass and the verdict cannot be ADOPT - this is the rule working as pre-registered, not a fallback",
+     "threshold": 0.95,
+     "bootstraps": 2000
+    }
+   },
+   "matched_candidate": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.077671,
+    "emission_px": 131117,
+    "support_deviation": -0.241984,
+    "TP_w": 5868.117,
+    "FP_w": 125232.492,
+    "FN_w": 55795.883
+   },
+   "matched_dti": 0.077671,
+   "is_shipped_field": false
+  },
+  "mean12": {
+   "run_ids": [
+    "35042805806",
+    "35249562910"
+   ],
+   "run_evidence": {
+    "committed": [
+     "35042805806",
+     "35249562910"
+    ],
+    "not_committed": []
+   },
+   "eligibility": {
+    "F1_fold_completeness": {
+     "status": "PASS",
+     "note": "field run ids == pinned re-blend RUN_ID ['35042805806', '35249562910']; evidence dir data/evidence/runs/ens12-adopted-floor0.1-w0: usable_folds.txt 11 live folds, blend_report.n_folds 11, MIN_FOLDS 11"
+    },
+    "F2_committed_own_sweep": {
+     "status": "PASS",
+     "note": "own sweep committed, inputs.reference_t0 recorded, adopted-policy row present"
+    }
+   },
+   "conditions": {
+    "R1_matched_support_contrast": {
+     "status": "NOT_APPLICABLE",
+     "note": "the shipped field IS the reference of the R1 contrast - it cannot beat itself by the margin; KEEP of this field is the rule's default by construction"
+    },
+    "R2_window_stability": {
+     "status": "PASS",
+     "note": "top field per window: {'0.15': 'mean12', '0.25': 'mean12', '0.4': 'mean12'}"
+    },
+    "R4_policy_transfer": {
+     "status": "PASS",
+     "note": "adopted policy 0.099859 vs the field's own in-domain reference policy 0.030380 (reference_t0=0.362091); transfer +0.069479 vs margin 0.01"
+    },
+    "R5_window_sampling": {
+     "min_candidates": 3,
+     "status": "PASS",
+     "note": "11 hard candidates within +-25 % of 172,974 px (need >= 3)"
+    },
+    "R3_block_bootstrap": {
+     "status": "NOT_APPLICABLE",
+     "note": "the shipped field is the reference; R3 applies to a proposed NEW field"
+    }
+   },
+   "matched_candidate": {
+    "t0": 0.1,
+    "width_px": 0,
+    "dti": 0.099859,
+    "emission_px": 172974,
+    "support_deviation": 0.0,
+    "TP_w": 8378.12,
+    "FP_w": 164461.741,
+    "FN_w": 53285.88
+   },
+   "matched_dti": 0.099859,
+   "is_shipped_field": true,
+   "note": "the current shipped field: re-blending it changes nothing about which field ships, so it passes the re-blend gate without R3"
+  },
+  "ensemble1": {
+   "run_ids": [
+    "35042805806"
+   ],
+   "run_evidence": {
+    "committed": [],
+    "not_committed": [
+     "35042805806"
+    ]
+   },
+   "eligibility": {
+    "F1_fold_completeness": {
+     "status": "UNVERIFIED",
+     "note": "runs ['35042805806'] are not the pinned re-blend and have no committed fold-liveness evidence (run dirs with usable_folds.txt / fold_provenance.txt); completeness is enforced by the re-blend MIN_FOLDS gate when this field is pinned and blended"
+    },
+    "F2_committed_own_sweep": {
+     "status": "PASS",
+     "note": "own sweep committed, inputs.reference_t0 recorded, adopted-policy row present"
+    }
+   },
+   "conditions": {
+    "R1_matched_support_contrast": {
+     "status": "FAIL",
+     "note": "best-in-window(+-25 %) 0.064417 vs shipped 0.099859 (margin 0.01); candidate (0.3, w1px, 173,286 px)"
+    },
+    "R2_window_stability": {
+     "status": "FAIL",
+     "note": "top field per window: {'0.15': 'mean12', '0.25': 'mean12', '0.4': 'mean12'}"
+    },
+    "R4_policy_transfer": {
+     "status": "PASS",
+     "note": "adopted policy 0.136452 vs the field's own in-domain reference policy 0.041041 (reference_t0=0.362091); transfer +0.095411 vs margin 0.01"
+    },
+    "R5_window_sampling": {
+     "min_candidates": 3,
+     "status": "PASS",
+     "note": "11 hard candidates within +-25 % of 172,974 px (need >= 3)"
+    },
+    "R3_block_bootstrap": {
+     "status": "NOT_MEASURABLE_FROM_COMMITTED_BYTES",
+     "note": "paired block bootstrap of the per-block DTI difference needs both fields' raw probability rasters (the sweep inputs); only the shipped field's emission raster is committed.  Until measured, R3 cannot pass and the verdict cannot be ADOPT - this is the rule working as pre-registered, not a fallback",
+     "threshold": 0.95,
+     "bootstraps": 2000
+    }
+   },
+   "matched_candidate": {
+    "t0": 0.3,
+    "width_px": 1,
+    "dti": 0.064417,
+    "emission_px": 173286,
+    "support_deviation": 0.001804,
+    "TP_w": 5354.05,
+    "FP_w": 163567.961,
+    "FN_w": 56309.95
+   },
+   "matched_dti": 0.064417,
+   "is_shipped_field": false
+  }
+ },
+ "verdict": {
+  "decision": "KEEP mean12",
+  "why": "no field passed all of F1-F2 + R1-R5 (or the passing field is not the one proposed); the default is to do nothing - a field change is a claim and requires positive evidence on every axis"
+ },
+ "caveats": [
+  "the proxy population is a surrogate for the scored truth (emission_decision.json caveats)",
+  "matched support equalises the NUMBER of emitted pixels, not their spatial distribution",
+  "R3 measured on the surrogate population only; the rule cannot see the scored truth either - that is what the public leaderboard upload is for"
+ ]
+}

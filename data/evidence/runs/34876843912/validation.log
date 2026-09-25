@@ -1,0 +1,3 @@
+usage: validate_submission.py [-h] --pred PRED [--sample SAMPLE]
+                              [--train TRAIN]
+validate_submission.py: error: the following arguments are required: --pred

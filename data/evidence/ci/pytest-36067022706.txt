@@ -1,0 +1,31 @@
+workflow: Tests
+run: 36067022706
+sha: 533b19dd502a2269ad7686617797f90bd6b199fc
+branch: arena/01a0d54d-gemsdoe
+
+--- pytest tail ---
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:366: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = writer(
+
+tests/test_ensemble.py::test_blend_refuses_all_zero_submission
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_ensemble.py::test_save_ensemble_writes_the_pre_shaping_input
+  /home/runner/work/GEMSDOE/GEMSDOE/tests/test_ensemble.py:416: RuntimeWarning: Mean of empty slice
+    expect = np.nanmean(np.stack([p for _, p in folds]), axis=0)
+
+tests/test_proxy_catalogue.py: 54 warnings
+  /home/runner/work/GEMSDOE/GEMSDOE/tests/test_proxy_catalogue.py:63: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    x, y = transform * (col + 0.5, r)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_template_conformance.py::test_runner_gate_accepts_the_shipped_artifact - AssertionError: assert 2 == 0
+ +  where 2 = cli_validate(['validate-conformant', '/home/runner/work/GEMSDOE/GEMSDOE/data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif'])
+1 failed, 518 passed, 3 skipped, 142 warnings in 89.92s (0:01:29)

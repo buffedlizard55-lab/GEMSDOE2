@@ -1,0 +1,31 @@
+workflow: Tests
+run: 35152929721
+sha: ccc61d2e03c4c202c1836d11c91fcda70b658344
+branch: arena/01a0ac0c-gemsdoe
+
+--- pytest tail ---
+tests/test_submission_identity.py::test_pixel_hash_ignores_metadata_but_the_file_hash_does_not
+tests/test_submission_identity.py::test_nan_footprint_is_part_of_the_pixel_identity
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+    dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+
+tests/test_ensemble.py: 3 warnings
+tests/test_metric.py: 1 warning
+tests/test_proxy_catalogue.py: 8 warnings
+tests/test_submission_writer.py: 4 warnings
+  /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/rasterio/transform.py:178: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    return Affine.translation(west, north) * Affine.scale(xsize, -ysize)
+
+tests/test_ensemble.py::test_save_ensemble_writes_the_pre_shaping_input
+  /home/runner/work/GEMSDOE/GEMSDOE/tests/test_ensemble.py:389: RuntimeWarning: Mean of empty slice
+    expect = np.nanmean(np.stack([p for _, p in folds]), axis=0)
+
+tests/test_proxy_catalogue.py: 54 warnings
+  /home/runner/work/GEMSDOE/GEMSDOE/tests/test_proxy_catalogue.py:63: PendingDeprecationWarning: Use `@` matmul instead of `*` mul operator for matrix multiplication
+    x, y = transform * (col + 0.5, r)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_site.py::test_scoring_universe_badge_matches_committed_evidence - AssertionError: no rules-PDF link rendered
+assert ('docs.nlr.gov' in '<h2>What the metric is actually computed against</h2>\n<p>Both prize phases are scored on the <b>new fault dataset</b...stics are\nnever read alone — they are read next to the catalogue DTI, the emitted area and the component sizes.</div>' or 'www.nlr.gov' in '<h2>What the metric is actually computed against</h2>\n<p>Both prize phases are scored on the <b>new fault dataset</b...stics are\nnever read alone — they are read next to the catalogue DTI, the emitted area and the component sizes.</div>')
+1 failed, 77 passed, 77 warnings in 6.34s

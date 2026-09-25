@@ -1,0 +1,13 @@
+quantity                       runner          sandbox  ok
+reference_candidate     floor0.1_w0px    floor0.1_w0px  yes
+proxy DTI                    0.099859         0.099859  yes
+TP_w                 8378.119828821162 8378.119828821162  yes
+FP_w                 164461.74055865733 164461.74055865733  yes
+FN_w                 53285.88017117884 53285.88017117884  yes
+emitted px                     172974           172974  yes
+scoreable blocks                   34               34  yes
+footprint px                  5167373          5167373  yes
+bootstrap CI95 low           0.088338         0.088338  yes
+bootstrap CI95 high          0.111886         0.111886  yes
+
+agreement: YES - every quantity matches

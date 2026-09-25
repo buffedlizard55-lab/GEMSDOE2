@@ -1,0 +1,2126 @@
+{
+ "generated_utc": "2026-09-20T16:56:05+00:00",
+ "generated_by": "scripts/block_holdout_eval.py",
+ "purpose": "block-stratified error bars on the emission policy, on the catalogue and on the new-fault-like proxy population, from an exact additive decomposition of the official metric plus a block bootstrap",
+ "inputs": {
+  "pred": "data/evidence/baseline/submission.tif",
+  "labels": "data/labels.tif",
+  "proxy": "data/evidence/proxy/proxy_catalogue.tif",
+  "template": "data/sample_submission.tif",
+  "pred_grid": {
+   "width": 3292,
+   "height": 3730,
+   "crs": "EPSG:32611",
+   "transform": [
+    100.0,
+    0.0,
+    243350.0,
+    0.0,
+    -100.0,
+    4508550.0
+   ],
+   "nodata": NaN,
+   "dtype": "float32",
+   "sha256": "9f2577cff20d97717dc42afbdc08faff149bf5fcf237b3bc3daffa9d81dc1163",
+   "bytes": 545798
+  }
+ },
+ "metric": {
+  "R_pixels": 3,
+  "R_meters": 300.0,
+  "alpha": 0.2,
+  "beta": 0.8,
+  "eps": 1e-07,
+  "source": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#performance-metric"
+ },
+ "blocks": {
+  "block_px": 512,
+  "block_km": 51.2,
+  "n_blocks": 56,
+  "n_blocks_scoreable": 9,
+  "block_ids": [
+   8,
+   12,
+   17,
+   24,
+   31,
+   38,
+   46,
+   52,
+   53
+  ],
+  "partition": {
+   "grid": {
+    "height": 3730,
+    "width": 3292
+   },
+   "block_px": 512,
+   "block_shape": [
+    8,
+    7
+   ],
+   "n_blocks": 56,
+   "n_folds": 4,
+   "seed": 0,
+   "buffer_px": 3,
+   "resolution_m": 100.0,
+   "block_km": 51.2,
+   "mode": "balanced",
+   "assignment": "greedy LPT: blocks dealt by descending fault mass to the fold with the smallest normalised load (fault/target + valid/target)",
+   "per_fold": [
+    {
+     "fold": 0,
+     "blocks": 8,
+     "block_ids": [
+      3,
+      4,
+      5,
+      6,
+      10,
+      15,
+      29,
+      32
+     ],
+     "valid_px": 1352377,
+     "fault_px": 14442,
+     "fault_km": 1444.2,
+     "valid_frac_of_grid": 0.110136,
+     "fault_frac_of_scored": 0.236801,
+     "collar_excluded_px": 28425
+    },
+    {
+     "fold": 1,
+     "blocks": 9,
+     "block_ids": [
+      8,
+      12,
+      17,
+      24,
+      31,
+      38,
+      46,
+      52,
+      53
+     ],
+     "valid_px": 1170054,
+     "fault_px": 16598,
+     "fault_km": 1659.8,
+     "valid_frac_of_grid": 0.095288,
+     "fault_frac_of_scored": 0.272152,
+     "collar_excluded_px": 34758
+    },
+    {
+     "fold": 2,
+     "blocks": 9,
+     "block_ids": [
+      0,
+      7,
+      11,
+      16,
+      21,
+      23,
+      30,
+      37,
+      39
+     ],
+     "valid_px": 1274570,
+     "fault_px": 15404,
+     "fault_km": 1540.4,
+     "valid_frac_of_grid": 0.103799,
+     "fault_frac_of_scored": 0.252574,
+     "collar_excluded_px": 36999
+    },
+    {
+     "fold": 3,
+     "blocks": 8,
+     "block_ids": [
+      1,
+      2,
+      9,
+      13,
+      14,
+      22,
+      44,
+      45
+     ],
+     "valid_px": 1370372,
+     "fault_px": 14544,
+     "fault_km": 1454.4,
+     "valid_frac_of_grid": 0.111601,
+     "fault_frac_of_scored": 0.238473,
+     "collar_excluded_px": 32130
+    }
+   ],
+   "balance": {
+    "fault_px_min": 14442,
+    "fault_px_max": 16598,
+    "fault_px_spread": 0.141405
+   },
+   "empty_blocks_excluded": 22
+  }
+ },
+ "footprint": {
+  "px": 1170054,
+  "frac_of_grid": 0.095288
+ },
+ "prediction": {
+  "px": 1170054,
+  "minv": 0.0,
+  "maxv": 1.0,
+  "nonzero_px": 22411,
+  "distinct_values": 2,
+  "frac_at_max": 0.019154,
+  "hard_band": true,
+  "note": "A shaped submission written with hard=True carries two values (0 and the band value), so raising the floor above the applied floor selects the SAME support: the floor axis is degenerate for this input and only the width axis is measured. Sweeping floors needs the pre-shaping ensemble field, which only the runner has (.github/workflows/proxy-eval.yml re-blends the saved fold artifacts)."
+ },
+ "restriction": {
+  "mode": "fold_heldout",
+  "score_fold": 1,
+  "complement": false,
+  "blocks_included": 9,
+  "blocks_excluded": 47,
+  "blocks_scoreable": 9,
+  "px_included": 1170054,
+  "px_excluded": 3997319,
+  "blocks": [
+   8,
+   12,
+   17,
+   24,
+   31,
+   38,
+   46,
+   52,
+   53
+  ],
+  "note": "only the blocks of fold 1 (the blocks held out from that fold's training); this is a generalisation reading ONLY if --pred came from a model trained with training.holdout=spatial_blocks and training.block_fold=1 on the same partition (block_px=512, folds=4, seed 0, mode balanced)"
+ },
+ "populations": {
+  "labels": {
+   "n_gt": 16598,
+   "truth_km": 1659.8,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "R_pixels": 3,
+   "eps": 1e-07,
+   "candidates": [
+    {
+     "label": "floor0.5_w0px",
+     "floor": 0.5,
+     "width": 0,
+     "support_px": 22411,
+     "emission_key": "5116bd668721afe5",
+     "global_dti": 0.06592,
+     "TP_w": 1172.026926701786,
+     "FP_w": 21333.71497796701,
+     "FN_w": 15425.973073298213,
+     "n_gt": 16598,
+     "pred_px": 22411,
+     "blocks": [
+      {
+       "block": 0,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 1,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 2,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 3,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 4,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 5,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 6,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 7,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 8,
+       "dti": 0.049406,
+       "TP_w": 152.16378186236173,
+       "FP_w": 3999.043921556902,
+       "FN_w": 2659.8362181376383,
+       "n_gt": 2812,
+       "pred_px": 4133,
+       "scoreable": true
+      },
+      {
+       "block": 9,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 10,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 11,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 12,
+       "dti": 0.063529,
+       "TP_w": 116.7083245153619,
+       "FP_w": 4148.717892367394,
+       "FN_w": 1113.291675484638,
+       "n_gt": 1230,
+       "pred_px": 4267,
+       "scoreable": true
+      },
+      {
+       "block": 13,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 14,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 15,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 16,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 17,
+       "dti": 0.13276,
+       "TP_w": 338.48545313438837,
+       "FP_w": 2717.5602964389404,
+       "FN_w": 2084.5145468656115,
+       "n_gt": 2423,
+       "pred_px": 3005,
+       "scoreable": true
+      },
+      {
+       "block": 18,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 19,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 20,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 21,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 22,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 23,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 24,
+       "dti": 0.030064,
+       "TP_w": 55.71645678732742,
+       "FP_w": 866.7112229638442,
+       "FN_w": 2030.2835432126726,
+       "n_gt": 2086,
+       "pred_px": 920,
+       "scoreable": true
+      },
+      {
+       "block": 25,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 26,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 27,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 28,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 29,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 30,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 31,
+       "dti": 0.076393,
+       "TP_w": 296.16368176901375,
+       "FP_w": 3232.09597878519,
+       "FN_w": 3667.8363182309863,
+       "n_gt": 3964,
+       "pred_px": 3534,
+       "scoreable": true
+      },
+      {
+       "block": 32,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 33,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 34,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 35,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 36,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 37,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 38,
+       "dti": 0.059411,
+       "TP_w": 140.06921816773254,
+       "FP_w": 3952.1112423026325,
+       "FN_w": 1783.9307818322675,
+       "n_gt": 1924,
+       "pred_px": 4071,
+       "scoreable": true
+      },
+      {
+       "block": 39,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 40,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 41,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 42,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 43,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 44,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 45,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 46,
+       "dti": 0.045083,
+       "TP_w": 72.72001046560283,
+       "FP_w": 1500.4744235521357,
+       "FN_w": 1550.2799895343971,
+       "n_gt": 1623,
+       "pred_px": 1564,
+       "scoreable": true
+      },
+      {
+       "block": 47,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 48,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 49,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 50,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 51,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 52,
+       "dti": 0.0,
+       "TP_w": 0.0,
+       "FP_w": 846.0,
+       "FN_w": 536.0,
+       "n_gt": 536,
+       "pred_px": 846,
+       "scoreable": true
+      },
+      {
+       "block": 53,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 71.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 71,
+       "scoreable": false
+      },
+      {
+       "block": 54,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 55,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      }
+     ],
+     "duplicate_of": null
+    }
+   ]
+  },
+  "proxy_only": {
+   "n_gt": 14117,
+   "truth_km": 1411.7,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "R_pixels": 3,
+   "eps": 1e-07,
+   "candidates": [
+    {
+     "label": "floor0.5_w0px",
+     "floor": 0.5,
+     "width": 0,
+     "support_px": 22411,
+     "emission_key": "5116bd668721afe5",
+     "global_dti": 0.070938,
+     "TP_w": 1119.8447621972823,
+     "FP_w": 21343.10102375842,
+     "FN_w": 12997.155237802717,
+     "n_gt": 14117,
+     "pred_px": 22411,
+     "blocks": [
+      {
+       "block": 0,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 1,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 2,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 3,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 4,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 5,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 6,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 7,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 8,
+       "dti": 0.053031,
+       "TP_w": 113.73858649560334,
+       "FP_w": 4021.9520868118298,
+       "FN_w": 1533.2614135043966,
+       "n_gt": 1647,
+       "pred_px": 4133,
+       "scoreable": true
+      },
+      {
+       "block": 9,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 10,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 11,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 12,
+       "dti": 0.123876,
+       "TP_w": 442.94005846431617,
+       "FP_w": 3859.389648385755,
+       "FN_w": 2951.0599415356837,
+       "n_gt": 3394,
+       "pred_px": 4267,
+       "scoreable": true
+      },
+      {
+       "block": 13,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 14,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 15,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 16,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 17,
+       "dti": 0.070363,
+       "TP_w": 79.00063134086038,
+       "FP_w": 2914.774672661163,
+       "FN_w": 575.9993686591396,
+       "n_gt": 655,
+       "pred_px": 3005,
+       "scoreable": true
+      },
+      {
+       "block": 18,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 19,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 20,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 21,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 22,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 23,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 24,
+       "dti": 0.015961,
+       "TP_w": 14.85681557192076,
+       "FP_w": 903.3242523503679,
+       "FN_w": 919.1431844280793,
+       "n_gt": 934,
+       "pred_px": 920,
+       "scoreable": true
+      },
+      {
+       "block": 25,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 26,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 27,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 28,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 29,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 30,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 31,
+       "dti": 0.038344,
+       "TP_w": 71.80819483847068,
+       "FP_w": 3463.944051233791,
+       "FN_w": 1385.1918051615294,
+       "n_gt": 1457,
+       "pred_px": 3534,
+       "scoreable": true
+      },
+      {
+       "block": 32,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 33,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 34,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 35,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 36,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 37,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 38,
+       "dti": 0.043595,
+       "TP_w": 113.82740560875067,
+       "FP_w": 3957.3156821254024,
+       "FN_w": 2132.1725943912493,
+       "n_gt": 2246,
+       "pred_px": 4071,
+       "scoreable": true
+      },
+      {
+       "block": 39,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 40,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 41,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 42,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 43,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 44,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 45,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 46,
+       "dti": 0.071542,
+       "TP_w": 203.77669066602326,
+       "FP_w": 1377.9816207572783,
+       "FN_w": 2961.223309333977,
+       "n_gt": 3165,
+       "pred_px": 1564,
+       "scoreable": true
+      },
+      {
+       "block": 47,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 48,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 49,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 50,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 51,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 52,
+       "dti": 0.114561,
+       "TP_w": 73.89637921133847,
+       "FP_w": 783.3144399331935,
+       "FN_w": 518.1036207886615,
+       "n_gt": 592,
+       "pred_px": 846,
+       "scoreable": true
+      },
+      {
+       "block": 53,
+       "dti": 0.171326,
+       "TP_w": 6.000000000000001,
+       "FP_w": 61.1045694996616,
+       "FN_w": 21.0,
+       "n_gt": 27,
+       "pred_px": 71,
+       "scoreable": true
+      },
+      {
+       "block": 54,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 55,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      }
+     ],
+     "duplicate_of": null
+    }
+   ]
+  },
+  "combined": {
+   "n_gt": 30715,
+   "truth_km": 3071.5,
+   "alpha": 0.2,
+   "beta": 0.8,
+   "R_pixels": 3,
+   "eps": 1e-07,
+   "candidates": [
+    {
+     "label": "floor0.5_w0px",
+     "floor": 0.5,
+     "width": 0,
+     "support_px": 22411,
+     "emission_key": "5116bd668721afe5",
+     "global_dti": 0.078795,
+     "TP_w": 2291.8716888990684,
+     "FP_w": 20281.484345137884,
+     "FN_w": 28423.128311100932,
+     "n_gt": 30715,
+     "pred_px": 22411,
+     "blocks": [
+      {
+       "block": 0,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 1,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 2,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 3,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 4,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 5,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 6,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 7,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 8,
+       "dti": 0.060459,
+       "TP_w": 265.9023683579654,
+       "FP_w": 3888.422225251486,
+       "FN_w": 4193.097631642035,
+       "n_gt": 4459,
+       "pred_px": 4133,
+       "scoreable": true
+      },
+      {
+       "block": 9,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 10,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 11,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 12,
+       "dti": 0.122736,
+       "TP_w": 559.6483829796787,
+       "FP_w": 3743.297689658405,
+       "FN_w": 4064.351617020321,
+       "n_gt": 4624,
+       "pred_px": 4267,
+       "scoreable": true
+      },
+      {
+       "block": 13,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 14,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 15,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 16,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 17,
+       "dti": 0.135882,
+       "TP_w": 417.486084475249,
+       "FP_w": 2632.647849470947,
+       "FN_w": 2660.513915524751,
+       "n_gt": 3078,
+       "pred_px": 3005,
+       "scoreable": true
+      },
+      {
+       "block": 18,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 19,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 20,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 21,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 22,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 23,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 24,
+       "dti": 0.027141,
+       "TP_w": 70.57327235924822,
+       "FP_w": 850.8780966625457,
+       "FN_w": 2949.426727640752,
+       "n_gt": 3020,
+       "pred_px": 920,
+       "scoreable": true
+      },
+      {
+       "block": 25,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 26,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 27,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 28,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 29,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 30,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 31,
+       "dti": 0.072956,
+       "TP_w": 367.9718766074854,
+       "FP_w": 3166.631975102159,
+       "FN_w": 5053.028123392514,
+       "n_gt": 5421,
+       "pred_px": 3534,
+       "scoreable": true
+      },
+      {
+       "block": 32,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 33,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 34,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 35,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 36,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 37,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 38,
+       "dti": 0.061114,
+       "TP_w": 253.89662377648355,
+       "FP_w": 3838.484115386452,
+       "FN_w": 3916.1033762235165,
+       "n_gt": 4170,
+       "pred_px": 4071,
+       "scoreable": true
+      },
+      {
+       "block": 39,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 40,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 41,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 42,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 43,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 44,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 45,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 46,
+       "dti": 0.066641,
+       "TP_w": 276.4967011316266,
+       "FP_w": 1316.7033841730859,
+       "FN_w": 4511.503298868373,
+       "n_gt": 4788,
+       "pred_px": 1564,
+       "scoreable": true
+      },
+      {
+       "block": 47,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 48,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 49,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 50,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 51,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 52,
+       "dti": 0.068815,
+       "TP_w": 73.89637921133847,
+       "FP_w": 783.3144399331935,
+       "FN_w": 1054.1036207886616,
+       "n_gt": 1128,
+       "pred_px": 846,
+       "scoreable": true
+      },
+      {
+       "block": 53,
+       "dti": 0.171326,
+       "TP_w": 6.000000000000001,
+       "FP_w": 61.1045694996616,
+       "FN_w": 21.0,
+       "n_gt": 27,
+       "pred_px": 71,
+       "scoreable": true
+      },
+      {
+       "block": 54,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      },
+      {
+       "block": 55,
+       "dti": null,
+       "TP_w": 0.0,
+       "FP_w": 0.0,
+       "FN_w": 0.0,
+       "n_gt": 0,
+       "pred_px": 0,
+       "scoreable": false
+      }
+     ],
+     "duplicate_of": null
+    }
+   ]
+  }
+ },
+ "bootstrap": {
+  "n": 2000,
+  "seed": 0,
+  "unit": "spatial block, resampled with replacement, recomposed from the additive metric components",
+  "reliability": {
+   "resampling_units": 9,
+   "blocks_in_partition": 56,
+   "n_boot": 2000,
+   "min_units_for_a_readable_ci": 12,
+   "interval_readable": false,
+   "scope": "fold_heldout",
+   "note": "ONLY 9 independent resampling units (below 12), so the interval is COARSE: a bootstrap that redraws 9 blocks cannot separate a regional preference from sampling noise. A candidate whose contrast flips sign against the full-grid measurement is expected sampling variation at this sample size, NOT evidence that the policy should change; the global full-grid number remains the selection statistic. This happens whenever the measurement is restricted (--score-fold) or the footprint is small.",
+   "warning": "sign flips against the full-grid run are sampling noise at 9 resampling units"
+  },
+  "proxy_only": {
+   "floor0.5_w0px": {
+    "dti_p50": 0.069381,
+    "dti_ci95": [
+     0.044101,
+     0.099409
+    ],
+    "contrast_vs_reference_p50": 0.0,
+    "contrast_vs_reference_ci95": [
+     0.0,
+     0.0
+    ],
+    "prob_beats_reference": null,
+    "n_blocks": 56,
+    "n_scoreable_blocks": 9
+   }
+  },
+  "labels": {
+   "floor0.5_w0px": {
+    "dti_p50": 0.064973,
+    "dti_ci95": [
+     0.041596,
+     0.091997
+    ],
+    "contrast_vs_reference_p50": 0.0,
+    "contrast_vs_reference_ci95": [
+     0.0,
+     0.0
+    ],
+    "prob_beats_reference": null,
+    "n_blocks": 56,
+    "n_scoreable_blocks": 8
+   }
+  },
+  "combined": {
+   "floor0.5_w0px": {
+    "dti_p50": 0.078305,
+    "dti_ci95": [
+     0.055701,
+     0.104345
+    ],
+    "contrast_vs_reference_p50": 0.0,
+    "contrast_vs_reference_ci95": [
+     0.0,
+     0.0
+    ],
+    "prob_beats_reference": null,
+    "n_blocks": 56,
+    "n_scoreable_blocks": 9
+   }
+  }
+ },
+ "combined_population": {
+  "provenance": {
+   "definition": "labels.tif fault pixels UNION proxy_catalogue.tif code-2 pixels, inside the footprint",
+   "inputs": {
+    "labels": "data/labels.tif",
+    "proxy": "data/evidence/proxy/proxy_catalogue.tif",
+    "proxy_code": 2
+   },
+   "px": {
+    "labels": 16598,
+    "proxy_only": 14117,
+    "combined": 30715
+   },
+   "disjoint": true,
+   "surrogacy": "surrogate for the Phase-2 'complete updated test set' (rules 3.6: the same submission is scored again against all fault labels in the set the expert panel updates after the competition closes).  It is NOT that set: the updated set is written by experts, partly FROM the predictions, so it can contain faults no free catalogue maps and can omit SGMC traces the panel rejects.",
+   "why_not_decomposable": "FP_w is a sum over PREDICTION pixels of 1 - max_g k(d(x,g)), so the combined FP_w cannot be recomposed from the two component populations' FP_w (TP_w and FN_w can: both are sums over truth pixels, and the two truth sets are disjoint).  The combined population is therefore scored from the rasters, never inferred from the two committed reports."
+  },
+  "reference": {
+   "label": "floor0.5_w0px",
+   "dti": 0.078795,
+   "ci95": [
+    0.055701,
+    0.104345
+   ],
+   "support_px": 22411,
+   "TP_w": 2291.8716888990684,
+   "FP_w": 20281.484345137884,
+   "FN_w": 28423.128311100932
+  },
+  "best_swept": {
+   "label": "floor0.5_w0px",
+   "dti": 0.078795,
+   "support_px": 22411,
+   "contrast_vs_reference": 0.0,
+   "prob_beats_reference": null
+  },
+  "component_dti": {
+   "labels": 0.06592,
+   "proxy_only": 0.070938,
+   "combined": 0.078795
+  },
+  "caveat": "best_swept is a maximum over the swept grid ON THE JUDGING POPULATION: upward biased, never a shipping recommendation (the same caveat docs/FIELD_SELECTION_RULE.md records).  The combined population is a surrogate, not the Phase-2 set - see provenance.surrogacy."
+ },
+ "population_agreement": {
+  "reference": "floor0.5_w0px",
+  "per_candidate": [
+   {
+    "label": "floor0.5_w0px",
+    "blocks_scoreable_proxy": 9,
+    "blocks_proxy_gain": 0,
+    "blocks_both_populations": 8,
+    "blocks_agree_in_sign": 8,
+    "blocks_labels_lose": 0,
+    "blocks_conflict_labels_lose_proxy_gains": 0,
+    "blocks_conflict_proxy_lose_labels_gain": 0,
+    "agreement_fraction": 1.0,
+    "worst_block_contrast_proxy": 0.0
+   }
+  ]
+ },
+ "interpretation": {
+  "per_block_majority_conflicts_with_global": [],
+  "n_conflicts": 0,
+  "interpretation": "DTI is not decomposable over blocks: TP_w sums over truth pixels while the FP penalty is a global mass term, so a candidate can win in most blocks and still lose globally.  Per-block numbers are for VARIANCE (the block bootstrap) and for locating where a score comes from; the global DTI stays the selection statistic.  No candidate won a majority of blocks while losing globally in this run."
+ },
+ "verdict": {
+  "reference_candidate": "floor0.5_w0px",
+  "n_candidates_swept": 1,
+  "n_distinct_emissions": 1,
+  "floor_axis_degenerate": true,
+  "best_alternative_candidate": null,
+  "best_alternative_proxy_dti": null,
+  "best_alternative_contrast": null,
+  "best_alternative_prob_beats_reference": null,
+  "best_alternative_worst_block_contrast": null,
+  "reference_proxy_dti": 0.070938,
+  "reference_proxy_ci95": [
+   0.044101,
+   0.099409
+  ],
+  "reference_labels_dti": 0.06592,
+  "reference_combined_dti": 0.078795,
+  "best_swept_candidate": "floor0.5_w0px",
+  "best_swept_proxy_dti": 0.070938,
+  "best_swept_contrast": 0.0,
+  "reference_is_best_of_sweep": true,
+  "worst_block_contrast_proxy": 0.0,
+  "blocks_where_reference_gains": 0,
+  "blocks_scoreable_proxy": 9,
+  "note": "Candidates are derived from the SHIPPED raster, so floors below the applied floor and un-thinned variants are not recoverable here; the runner sweep (.github/workflows/proxy-eval.yml) covers those.  Per-block catalogue DTI is in-domain (the shipped model trained on every label); per-block proxy-only DTI is not, because those pixels are absent from the training labels by construction."
+ },
+ "reproduction": {
+  "sweep_file": "''",
+  "reference_candidate": "floor0.5_w0px",
+  "status": "not_available",
+  "reason": "'' does not exist"
+ },
+ "pruning": {
+  "candidates_pruned": 0,
+  "rule": "per-block rows dropped only for emissions that duplicate another candidate's emission; global numbers and the twin reference kept",
+  "applied_after": "bootstrap, sign agreement, verdict and the reproduction check (none of which read a duplicate's rows)"
+ }
+}

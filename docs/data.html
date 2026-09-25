@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html" class="active">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Data</h1>
+<p class="lede">Exactly what the competition files contain — measured, with the irregularities found.</p>
+<h2>Placement status: the official rasters are in <code>data/</code></h2>
+<p>Generated from <code>data/evidence/data_placement.json</code> (2026-09-17T01:18:57Z).
+The development sandbox cannot reach Dropbox, DrivenData, S3 or the Actions artifact host, so the bytes
+travel as sha256-pinned git parts (<code>data/bridge/</code>, &le; 90 MiB each because GitHub rejects
+blobs &ge; 100 MB). A runner downloaded them from the data-tab mirrors and verified each sha256 against
+<code>data/evidence/inventory.json</code>;
+the sandbox re-verified every part and the concatenated whole before writing the canonical names.
+<strong>PASS (exit 0)</strong>.</p>
+<table class="bands"><thead><tr><th>Placed file</th><th>Size</th><th>sha256 (verified at every hop)</th><th>Mirror name</th></tr></thead>
+<tbody><tr><td><code>data/training_features.tif</code></td><td>399.5 MB</td><td class="mono small">4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5</td><td><code>gems-geodawn-numerical-features.tif (Dropbox mirror name)</code></td></tr><tr><td><code>data/labels.tif</code></td><td>415.8 KB</td><td class="mono small">7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093</td><td><code>existing_faults.tif</code></td></tr><tr><td><code>data/sample_submission.tif</code></td><td>1.5 MB</td><td class="mono small">2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc</td><td><code>example_submission.tif</code></td></tr></tbody></table>
+<p class="small">Reproduce on any checkout: <code>git pull &amp;&amp; python scripts/assemble_data_bridge.py
+&amp;&amp; python scripts/prepare_data.py</code>. Tamper-refusal, unpinned-bytes refusal and verify-only
+mode are regression-tested in <code>tests/test_data_bridge.py</code>.</p>
+<p>The full pipeline has since run <em>inside the sandbox itself</em> on these
+bytes &mdash; train &rarr; inference &rarr; validation <strong>PASSED</strong> &rarr; score
+(held-out DTI 0.0997); see
+<code>data/evidence/runs/local-sandbox-smoke/run_summary.json</code>. Runner-scale run of the same day:
+<code>data/evidence/runs/35169168957/</code>.</p>
+<h2>What the competition ships</h2>
+<p>Files come from the <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/data/">data tab</a> (login required) and are mirrored as public
+Dropbox links from the same tab. The table below is generated from a run that downloaded them and
+measured each one.</p>
+<h3><code>example_submission.tif</code></h3>
+<table class="kv"><tbody>
+<tr><th>Grid</th><td>3292 × 3730 px, 1 band(s)</td></tr>
+<tr><th>CRS</th><td>EPSG:32611 (EPSG:32611)</td></tr>
+<tr><th>Resolution</th><td>100 m × 100 m</td></tr>
+<tr><th>Bounds</th><td class="mono small">243,350, 4,135,550, 572,550, 4,508,550</td></tr>
+<tr><th>Dtype / nodata</th><td>float32 / nan</td></tr>
+<tr><th>Compression</th><td>lzw</td></tr>
+</tbody></table>
+<h3><code>existing_faults.tif</code></h3>
+<table class="kv"><tbody>
+<tr><th>Grid</th><td>3292 × 3730 px, 1 band(s)</td></tr>
+<tr><th>CRS</th><td>EPSG:32611 (EPSG:32611)</td></tr>
+<tr><th>Resolution</th><td>100 m × 100 m</td></tr>
+<tr><th>Bounds</th><td class="mono small">243,350, 4,135,550, 572,550, 4,508,550</td></tr>
+<tr><th>Dtype / nodata</th><td>int8 / -1.0</td></tr>
+<tr><th>Compression</th><td>lzw</td></tr>
+</tbody></table>
+<h3><code>gems-geodawn-numerical-features.tif</code></h3>
+<table class="kv"><tbody>
+<tr><th>Grid</th><td>3292 × 3730 px, 19 band(s)</td></tr>
+<tr><th>CRS</th><td>EPSG:32611 (EPSG:32611)</td></tr>
+<tr><th>Resolution</th><td>100 m × 100 m</td></tr>
+<tr><th>Bounds</th><td class="mono small">243,350, 4,135,550, 572,550, 4,508,550</td></tr>
+<tr><th>Dtype / nodata</th><td>float32 / -3.4028234663852886e+38</td></tr>
+<tr><th>Compression</th><td>lzw</td></tr>
+</tbody></table>
+<table class="bands"><thead><tr><th>#</th><th>Band</th><th>Category</th><th>Description (from the file's own tags)</th><th>Range</th></tr></thead><tbody><tr><td>1</td><td><code>mag_anom</code></td><td>magnetic_data</td><td>Magnetic anomaly - deviation from expected Earth&#x27;s magnetic field</td><td class="mono small">-1052 … 2109</td></tr><tr><td>2</td><td><code>rtp</code></td><td>magnetic_data</td><td>Reduced to pole magnetic data - magnetic anomaly corrected for latitude effects</td><td class="mono small">-2786 … 4509</td></tr><tr><td>3</td><td><code>tmi_hg</code></td><td>magnetic_data</td><td>Total magnetic intensity horizontal gradient - rate of change in horizontal direction</td><td class="mono small">0.00491 … 2200</td></tr><tr><td>4</td><td><code>geod_2ndinv</code></td><td>geodetic_strain</td><td>Geodetic second invariant - measure of strain rate tensor magnitude</td><td class="mono small">1.2 … 87.45</td></tr><tr><td>5</td><td><code>iso_grav_anom_slope</code></td><td>gravity_data</td><td>Isostatic gravity anomaly slope - gradient of gravity after isostatic correction</td><td class="mono small">0.001383 … 0.6517</td></tr><tr><td>6</td><td><code>tc</code></td><td>magnetic_data</td><td>Tilt angle or total curvature - magnetic field derivative for edge detection</td><td class="mono small">2.953 … 88.57</td></tr><tr><td>7</td><td><code>geod_shearrate</code></td><td>geodetic_strain</td><td>Geodetic shear rate - rate of angular deformation from GPS/InSAR</td><td class="mono small">0 … 54.4</td></tr><tr><td>8</td><td><code>geod_dilaterate</code></td><td>geodetic_strain</td><td>Geodetic dilatation rate - rate of volumetric strain (expansion/contraction)</td><td class="mono small">-16.5 … 34.52</td></tr><tr><td>9</td><td><code>tmi_vg</code></td><td>magnetic_data</td><td>Total magnetic intensity vertical gradient - rate of change in vertical direction</td><td class="mono small">-7.651 … 20.51</td></tr><tr><td>10</td><td><code>deq_n100a15</code></td><td>seismic</td><td>Distance to earthquake (n=100km radius, a=15° azimuth parameters)</td><td class="mono small">0 … 4.963e+06</td></tr><tr><td>11</td><td><code>iso_grav_anom_vg</code></td><td>gravity_data</td><td>Isostatic gravity anomaly vertical gradient - vertical rate of change</td><td class="mono small">-18.16 … 12.58</td></tr><tr><td>12</td><td><code>det_elev</code></td><td>topographic</td><td>Detrended elevation - topography with regional trends removed</td><td class="mono small">-590 … 1470</td></tr><tr><td>13</td><td><code>iso_grav_anom</code></td><td>gravity_data</td><td>Isostatic gravity anomaly - gravity after compensating for topographic mass</td><td class="mono small">-45.76 … 24.23</td></tr><tr><td>14</td><td><code>tmi</code></td><td>magnetic_data</td><td>Total magnetic intensity - total strength of magnetic field</td><td class="mono small">-2178 … 4506</td></tr><tr><td>15</td><td><code>depth_to_base_surf</code></td><td>subsurface</td><td>Depth to basement surface - thickness of sedimentary cover</td><td class="mono small">-14.84 … 7135</td></tr><tr><td>16</td><td><code>ieq_n100a15</code></td><td>seismic</td><td>Earthquake intensity or density (n=100km radius, a=15° parameters)</td><td class="mono small">236.8 … 7870</td></tr><tr><td>17</td><td><code>cond_surf</code></td><td>subsurface</td><td>Conductivity surface - electrical conductivity of subsurface</td><td class="mono small">0.1937 … 4.969</td></tr><tr><td>18</td><td><code>iso_grav_anom_hg</code></td><td>gravity_data</td><td>Isostatic gravity anomaly horizontal gradient - horizontal rate of change</td><td class="mono small">-15.44 … 12.86</td></tr><tr><td>19</td><td><code>det_elev_slope</code></td><td>topographic</td><td>Detrended elevation slope - gradient of elevation after detrending</td><td class="mono small">0.001103 … 62.65</td></tr></tbody></table>
+<div class="note ok"><b>19 bands.</b> The problem description lists the feature families in prose; the file itself carries self-describing tags, reproduced verbatim above.</div>
+<h2>Labels</h2>
+<table class="kv"><tbody>
+<tr><th>Grid</th><td>3730 × 3292</td></tr>
+<tr><th>Valid pixels</th><td>5,167,373 of 12,279,160</td></tr>
+<tr><th>Fault pixels</th><td><b>60,988</b>
+  (1.180% of valid)</td></tr>
+<tr><th>Distinct values</th><td>0.0, 1.0</td></tr>
+</tbody></table>
+<p>Strictly binary, and heavily imbalanced — about 1 fault pixel per 85 valid pixels.</p>
+<h2 id="irregularity">⚠ Irregularity: the sample submission is a copy of the labels</h2>
+<div class="note warn">The problem page states: <em>"A sample submission that predicts total fault absence
+is provided for your reference."</em> (<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">source</a>)<br><br>
+Measured instead: <code>example_submission.tif</code> contains
+<b>60,988</b> positive pixels — identical to <code>existing_faults.tif</code>
+(60,988). Binary content identical across all
+5,167,373 commonly-valid pixels: <b>True</b>.<br><br>
+<b>Why it matters:</b> anyone using the "sample" as a zero-filled template gets a file pre-populated
+with the known faults. <b>Practical impact:</b> none for us — we write submissions from the sample's
+<em>georeferencing only</em> and fill values from the model. <b>Flagged for organiser review.</b></div>
+<h2>1 m DEM tile list</h2>
+<p>The competition provides <code>1m_DEM_links.csv</code>; the public mirror is a PDF. Measured: that
+PDF <b>has no text layer</b> — pypdf, pdftotext and pdfplumber each return 0 URLs. It is a scan.</p>
+<table class="kv"><tbody>
+<tr><th>OCR (tesseract, 300 DPI)</th><td>722 (project, tile) pairs parsed</td></tr>
+<tr><th>Confirmed against the USGS bucket</th><td><b>716</b> unique tiles</td></tr>
+<tr><th>Unmatched (flagged)</th><td>3</td></tr>
+</tbody></table>
+<div class="note ok"><b>Why no URL here was typed by a machine-guess.</b> OCR of this scan corrupts
+characters — <code>2020</code> reads as <code>202@</code>, underscores become spaces,
+<code>QL1</code>/<code>QLi</code> are ambiguous. Rather than repair characters and hope, the parser
+extracts only the <em>structure</em> (project name + <code>x##y###</code> tile id) and then resolves
+every URL against a live <code>ListObjectsV2</code> enumeration of the official USGS 3DEP bucket.
+Emitted URLs are verbatim bucket keys. Anything unmatched is listed as an irregularity, never
+guessed.</div>
+<p>Full list with provenance: <a href="https://github.com/buffedlizard55-lab/GEMSDOE2/blob/main/data/dem_links.json"><code>data/dem_links.json</code></a></p>
+<h2>Working around a restricted network</h2>
+<p>The development sandbox can reach only <code>github.com</code> and <code>pypi.org</code>; Dropbox,
+S3, the Azure host serving Actions artifacts, and DrivenData itself are all blocked. Data is
+therefore fetched by a GitHub Actions runner, which has open egress, and results return as commits.
+A 890.0 MB raw feature cube compresses to:</p>
+<table><thead><tr><th>Encoding</th><th>Size</th></tr></thead><tbody><tr><td><code>float32_zstd22_pred3</code></td><td>238.0 MB</td></tr><tr><td><code>float32_deflate9_pred3</code></td><td>240.2 MB</td></tr><tr><td><code>int16_zstd22_pred2</code></td><td>101.1 MB</td></tr></tbody></table>
+<p>Still too large to commit, so a <b>512×512 window of the real rasters</b> is committed instead
+(<code>data/fixture/</code>, ~5 MB, int16-quantised with measured round-trip error 1.6×10⁻⁵ of each
+band's range). That fixture is what lets the pipeline be developed and tested in-sandbox against
+true band semantics.</p>
+<h2>Checksums</h2><table><thead><tr><th>File</th><th>Size</th><th>sha256</th></tr></thead><tbody><tr><td><code>Digital-elevation-model-links-JSON.pdf</code></td><td>22.0 MB</td><td class="mono small">c2996eaf0adcc76bb81975ec21155dbf32ddac3fbbe71f71d89a5ff465f2c775</td></tr><tr><td><code>GEMS_96647.pdf</code></td><td>444.5 KB</td><td class="mono small">50d854b1e0239fe6b9648d9fa5c7537bc7b6e5bc10cf6b37a2ff9aa401c36938</td></tr><tr><td><code>README.md</code></td><td>10.0 KB</td><td class="mono small">21e628b288900606960371868040e273e6681dd38b35cbe923865393fe138dcf</td></tr><tr><td><code>dem_links.json</code></td><td>529.3 KB</td><td class="mono small">c070c991dae8debdc80d99091539e6ae4152feba71c4f4d3041e57364238865c</td></tr><tr><td><code>example_submission.tif</code></td><td>1.5 MB</td><td class="mono small">2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc</td></tr><tr><td><code>existing_faults.tif</code></td><td>415.8 KB</td><td class="mono small">7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093</td></tr><tr><td><code>gems-geodawn-numerical-features.tif</code></td><td>399.5 MB</td><td class="mono small">4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5</td></tr></tbody></table>
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

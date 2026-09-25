@@ -1,0 +1,19 @@
+{
+ "fold": 1,
+ "candidate": "floor0.1_w0px",
+ "held_out_dti": 0.078892,
+ "held_out_ci95": [
+  0.06442,
+  0.096274
+ ],
+ "held_out_blocks": 9,
+ "trained_on_dti": 0.071873,
+ "trained_on_ci95": [
+  0.055884,
+  0.088434
+ ],
+ "trained_on_blocks": 25,
+ "generalisation_gap": -0.007019,
+ "reading": "trained_on minus held_out on the same candidate and the same metric: a positive gap is memorisation of continuous structure, ~0 means the model transfers to 51 km blocks it never saw",
+ "caveat": "both numbers are measured against the new-fault-like proxy population; the catalogue population is reported in the same files under populations.labels"
+}

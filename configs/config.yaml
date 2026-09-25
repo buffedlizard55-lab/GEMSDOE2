@@ -1,0 +1,93 @@
+# GEMS Prize - LEADERBOARD config (run on a GPU box with the official data in data/).
+#
+# Every number here is justified by a verified source; see comments.
+data:
+  # file names are resolved from all documented variants (see data/README.md):
+  #   features: training_features.tif (problem page) == numeric_features.tif (reference
+  #   solution cell 2) == gems-geodawn-numerical-features.tif (Dropbox mirror on data tab)
+  #   labels:   labels.tif == existing_faults.tif
+  feature_path: "data/training_features.tif"
+  label_path: "data/labels.tif"
+  sample_submission_path: "data/sample_submission.tif"
+  dem_links_csv: "data/1m_DEM_links.csv"
+  external_dir: "data/external"
+  external_dem_path: null         # local USGS 3DEP mosaic; set this only after creating it
+  output_dir: "outputs"
+  norm_mode: "clip_zscore"        # percentile-clip -> robust z -> [0,1]; stats persisted
+  clip_percentile: [1.0, 99.0]    # reference solution uses plain min-max; clipping is our
+                                  # robustness change (magnetic/gravity outliers are heavy-tailed)
+  # Optional 1 m DEM derivatives are now wired symmetrically into train and inference.
+  # Keep disabled until a local mosaic is supplied; silently adding bands was a
+  # train/inference mismatch in the previous config.
+  use_external_dem: false
+  use_ingenious_extra: false
+
+training:
+  # reference baseline for comparison (cell 16): MC=5, patch 128, test_prop 0.5, bs 32,
+  # epochs 5, AdamW 1e-4, resnet18 U-Net, TverskyLoss only.
+  patch_size: 256                 # wider context: faults here are km-scale lineaments
+  train_step: 128                 # 2x overlap for training windows
+  test_proportion: 0.3
+  neg_fraction: 0.35              # fraction of empty windows kept (reference keeps none)
+  mc_splits: 10
+  batch_size: 16
+  epochs: 60
+  init_lr: 1.0e-4                 # OneCycleLR peak = 10x this (set in src/train.py)
+  weight_decay: 1.0e-4
+  scheduler: onecycle
+  alpha: 0.2                      # metric's FP weight  (problem page, Performance metric)
+  beta: 0.8                       # metric's FN weight
+  loss: combined_dw               # BCE 0.3 + distance-weighted-Tversky 0.5 + focal 0.2
+  use_global_fp_weight: true      # FP weight map cropped from the GLOBAL EDT (no border bias)
+  augment: true
+  noise_std: 0.01
+  rand_crop_scale: [0.75, 1.0]
+  early_stopping_patience: 10
+  num_workers: 8
+  seed: 42
+  good_channels: null             # null = every band the competition ships
+  calibrate_shaping: true         # pool-tune floor+thin on held-out windows (src/submission_optim.py)
+  shaping_grid: 15                # thresholds searched; x2 for thin on/off
+  shaping_windows: 48             # cap: the search scores the BOUNDING BOX of these windows,
+                                  #      so keep it small on the full GeoDAWN raster (cost, not bias)
+
+model:
+  architectures: ["unetplusplus", "deeplabv3plus", "segformer", "unet"]
+  encoder: "efficientnet-b5"
+  segformer_encoder: "mit_b2"
+  pretrained: true
+  in_channels: null
+  classes: 1
+
+inference:
+  overlap: 0.75                   # dense sliding window; 4x more averaging than 0.5
+  batch_size: 32
+  tta: true                       # 8-way (4 rotations x flip), each inverted exactly
+  threshold: null                 # submission is a probability raster, NOT a binary map
+  blend_mode: gaussian
+  ensemble_weights: null          # equal, like the reference solution. Measured 2026-09-15 on
+                                  # the fixture: DTI-softmax weights help only when folds differ
+                                  # CATASTROPHICALLY (2-fold toy 0.014->0.098) and HURT with 6
+                                  # folds (0.103->0.066: held-out-crop noise). See
+                                  # data/evidence/runs/local-mini-ensemble/README.md
+  submission_shaping:             # null/absent -> use values calibrated in manifest.json
+    t0: null                      # e.g. 0.35: probability floor applied before writing
+    thin: null                    # distance-R dominating thinning (FP mass is an AREA sum)
+    hard: true
+    gamma: 1.0
+
+postprocess:
+  frangi_filter: true             # vesselness line enhancement (skimage>=0.19 kwargs fixed)
+  frangi_scale_range: [1, 10]
+  frangi_weight: 0.35
+  morphological_closing: true
+  closing_kernel: 3
+  min_fault_length: 5
+  skeletonize: false
+
+metric:
+  R_meters: 300                   # official
+  resolution_m: 100               # official
+  alpha: 0.2                      # official
+  beta: 0.8                       # official
+  epsilon: 1.0e-7                 # NOT specified on the problem page (flagged); our choice

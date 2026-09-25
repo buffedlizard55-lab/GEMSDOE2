@@ -1,0 +1,46 @@
+{
+ "purpose": "paired block bootstrap of the SGMC pseudo-label signal: same 51 km blocks, same policy, no-pseudo baseline (data/evidence/block_holdout) vs pseudo run; the pseudo model NEVER saw the held-out blocks' pseudo pixels, so a gain here is generalisation of the SGMC-mapped fault style, not label leakage",
+ "fold": 0,
+ "seed": 46,
+ "policy": "floor0.1_w0px",
+ "baseline_report": "data/evidence/block_holdout/fold0_heldout.json",
+ "pseudo_report": "data/evidence/pseudo_labels/fold0_heldout.json",
+ "baseline_held_out_dti": 0.080584,
+ "pseudo_held_out_dti": 0.148303,
+ "baseline_held_out_px": 90433,
+ "pseudo_held_out_px": 471988,
+ "bootstrap": {
+  "baseline_no_pseudo": {
+   "dti_p50": 0.07985,
+   "dti_ci95": [
+    0.058567,
+    0.102072
+   ],
+   "contrast_vs_reference_p50": 0.0,
+   "contrast_vs_reference_ci95": [
+    0.0,
+    0.0
+   ],
+   "prob_beats_reference": null,
+   "n_blocks": 56,
+   "n_scoreable_blocks": 7
+  },
+  "pseudo": {
+   "dti_p50": 0.151605,
+   "dti_ci95": [
+    0.069679,
+    0.231483
+   ],
+   "contrast_vs_reference_p50": 0.070533,
+   "contrast_vs_reference_ci95": [
+    0.011044,
+    0.133105
+   ],
+   "prob_beats_reference": 0.988,
+   "n_blocks": 56,
+   "n_scoreable_blocks": 7
+  }
+ },
+ "reading": "row 0 = baseline (no pseudo), row 1 = pseudo; prob_beats_reference is the paired P(pseudo > baseline) over 2000 block resamples on the fold's HELD-OUT blocks",
+ "shipping_note": "no decision is made here: a pseudo-labelled ensemble ships only through the field-selection gate (docs/FIELD_SELECTION_RULE.md) as a new reblend.yml RUN_ID with measured R3"
+}

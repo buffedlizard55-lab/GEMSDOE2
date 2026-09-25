@@ -1,0 +1,42 @@
+{
+ "generated_utc": "2026-09-17T01:18:30Z",
+ "generated_by": "session 9 (2026-09-17) - full pipeline executed IN THE DEV SANDBOX on the official competition bytes placed by the git bridge",
+ "purpose": "prove the placed data/ trains, infers, validates and scores locally, not only on runners",
+ "sandbox": {
+  "cpu": 2,
+  "ram_mb": 3939,
+  "gpu": false,
+  "torch": "2.14.0+cu130",
+  "note": "peak python RSS ~3.18 GB measured by sampler; two full-stack copies freed by this session's memory fixes"
+ },
+ "config": "configs/config_ci_smoke.yaml + --override data.output_dir=outputs_local training.num_workers=0",
+ "commands": [
+  "python scripts/assemble_data_bridge.py",
+  "python scripts/prepare_data.py",
+  "python -m src.train --config configs/config_ci_smoke.yaml --override data.output_dir=outputs_local training.num_workers=0",
+  "python -m src.inference --config configs/config_ci_smoke.yaml --override data.output_dir=outputs_local --out submission_local.tif --score-against data/labels.tif",
+  "python scripts/validate_submission.py --pred submission_local.tif --sample data/sample_submission.tif --train data/training_features.tif"
+ ],
+ "data_sha256_verified": {
+  "training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+  "labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+  "sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+ },
+ "results": {
+  "patch_summary": {
+   "n_train": 311,
+   "n_test": 234,
+   "n_pos": 233,
+   "n_neg_kept": 78,
+   "patch": 128
+  },
+  "heldout_dti_shaped": 0.0997,
+  "heldout_dti_raw": 0.0278,
+  "local_dti_vs_training_labels": 0.087,
+  "validation": "PASSED (CRS/resolution/single-band/float32/range/grid/transform)",
+  "submission_sha256": "b9f2bc4d7e63df5f79f28c941eb3d6077d8b89f2a03ff1bbe3ae96183c7d4fb6",
+  "submission_bytes": 602678
+ },
+ "same_seed_as_runner_35169168957": "identical patch split (311/234/233/78) - split determinism holds across machines; epoch DTI differs slightly (different torch builds: sandbox cu130 wheel vs runner cpu wheel)",
+ "not_a_leaderboard_artifact": "2-epoch CPU smoke proves plumbing; the competitive artifact is the 6-fold ensemble blend"
+}

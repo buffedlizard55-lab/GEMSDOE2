@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html" class="active">Method</a><a href="results.html">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Method</h1>
+<p class="lede">How this differs from the reference solution, and the reasoning behind each change.</p>
+
+<h2>Baseline we build on</h2>
+<p>The organisers' <a href="https://github.com/drivendataorg/gems-prize-reference-solution">reference solution</a> (Prof. John Lipor) trains a U-Net
+(ResNet-18 encoder, ImageNet weights) on 128-px patches over 5 Monte-Carlo train/test splits with
+<code>TverskyLoss(α=0.2, β=0.8)</code>, AdamW at 1×10⁻⁴, 5 epochs, and stitches patch predictions
+back into a full raster. Its patching creates the test patches first and zeroes them in the global
+image so training cannot leak test labels.</p>
+
+<h2>What we change, and why</h2>
+<table class="cmp"><thead><tr><th>Choice</th><th>Reference</th><th>Here</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Loss</td><td>pixel-wise Tversky</td><td>differentiable <em>distance-weighted</em> Tversky
+ + BCE + focal</td><td>The metric credits a prediction within 3 px of truth. A pixel-wise loss
+ punishes exactly the rasterisation offset the organisers deliberately forgave.</td></tr>
+<tr><td>Model selection</td><td>final epoch</td><td>best epoch by DTI on the <em>stitched global</em>
+ held-out map</td><td>DTI is not decomposable over patches — the real scorer sees one continuous
+ raster, so selection must too.</td></tr>
+<tr><td>Submission shaping</td><td>none (raw probabilities)</td><td>probability floor + distance-R
+ thinning, tuned on pooled held-out splits</td><td>Follows directly from the metric algebra: TP
+ saturates, FP is an area sum. Measured to help on every run so far.</td></tr>
+<tr><td>Negatives</td><td>fault-containing patches only</td><td>fraction of empty patches retained</td>
+ <td>Without negatives the model never learns what "no fault" looks like and over-predicts — costly
+ when FP is an area sum.</td></tr>
+<tr><td>Normalisation</td><td>global min–max</td><td>percentile-clipped robust z-score, statistics
+ persisted</td><td>Magnetic/gravity bands are heavy-tailed; a single outlier crushes min–max. Saved
+ stats keep training and inference identical (required for reproducibility).</td></tr>
+<tr><td>Inference</td><td>non-overlapping patches</td><td>dense sliding window, Gaussian blending,
+ 8-way TTA</td><td>Box-averaging leaves visible seams; seams are FP mass.</td></tr>
+</tbody></table>
+
+<h2>Guarding against leakage and self-deception</h2>
+<ul>
+<li>Test windows are cut and zeroed globally <em>before</em> overlapping training windows are sampled,
+    and windows overlapping test area beyond a threshold are dropped.</li>
+<li>The false-positive weight map is cropped from a <em>global</em> distance transform, so predictions
+    near a patch border are not spuriously penalised.</li>
+<li>Local scores against the public labels are reported as <b>optimistic</b> wherever they appear —
+    those are the labels the model trained on, and they are not the test set.</li>
+<li><code>src/metrics.py --self-test</code> runs 8 checks including fast-vs-brute-force agreement and
+    the official worked example.</li>
+</ul>
+
+<h2>The strategic problem nobody can shortcut</h2>
+<p>The scored faults are <em>the ones missing from the public database</em>. A model that merely fits
+the public labels is fitting the wrong target. Two implications drive the design:</p>
+<ol>
+<li><b>Don't over-fit the known faults.</b> Held-out DTI against public labels is a plumbing check,
+not a leaderboard proxy.</li>
+<li><b>Generalise geophysically.</b> The useful signal is the physics that <em>produces</em> a fault
+expression — magnetic/gravity gradient discontinuities, strain-rate concentration, detrended-elevation
+lineaments — which is why all 19 bands are kept and line-enhancement filtering is available in
+post-processing. The Final Prize Round explicitly rewards flagging faults experts then confirm.</li>
+</ol>
+
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

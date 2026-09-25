@@ -1,0 +1,23 @@
+catalogue B (QFaults) on the competition grid:
+  proxy.mask_px: 169115
+  proxy.near_label_px: 60938
+  proxy.proxy_only_px: 1
+  proxy.near_label_km: 6093.8
+  proxy.proxy_only_km: 0.1
+  proxy.catalogue_already_covers_fraction: 1.0
+  proxy.catalogue_already_covers_fraction_including_outside_footprint: 0.3603
+  proxy.outside_footprint_px: 108176
+  proxy.proxy_only_components: 1 components, largest 1 px (0.1 km), median 1.0 px
+  classes rasterised: 15
+    RuleID 8: 349 features, 1 code-2 px - late Quaternary Moderately Constrained
+    RuleID 11: 428 features, 0 code-2 px - latest Quaternary Moderately Constrained
+    RuleID 12: 3937 features, 0 code-2 px - latest Quaternary Well Constrained
+    RuleID 9: 1446 features, 0 code-2 px - late Quaternary Well Constrained
+    RuleID 17: 953 features, 0 code-2 px - undifferentiated Quaternary Moderately Constrained
+    RuleID 18: 5433 features, 0 code-2 px - undifferentiated Quaternary Well Constrained
+    RuleID 14: 27 features, 0 code-2 px - middle and late Quaternary Moderately Constrained
+    RuleID 15: 86 features, 0 code-2 px - middle and late Quaternary Well Constrained
+
+::warning::catalogue B has only 1 code-2 px, below the 100 px minimum population in scripts/measure_cross_catalogue_transfer.py - the transfer job will report REFUSED rather than score a meaningless number.
+
+the training labels already contain 100.0 % of catalogue B's in-footprint traces; the scored population is the remaining 1 px (0.1 km)

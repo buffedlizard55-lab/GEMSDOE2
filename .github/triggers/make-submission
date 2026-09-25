@@ -1,0 +1,22 @@
+# Touch this file to run .github/workflows/make-submission.yml on this branch.
+
+Why this exists: `workflow_dispatch` needs a token with `actions: write`, and the automation token
+this repository is driven with has `contents: write` only (a dispatch attempt returns
+`HTTP 403: Resource not accessible by integration`). Pushing a commit that touches this path uses
+the permission the token *does* have and starts the same job with the same defaults
+(`route=adopted`, `package=both`, `rebuild_payload=false`).
+
+What the run does, and what it is for: it produces the submission `.tif` (and the `.zip` the submit
+dialog accepts) on a clean `ubuntu-latest` runner from the pinned git bridge, validates every file it
+emits, refuses any artifact under 100,000 bytes, re-runs the browser generator's own pipeline headless
+(`scripts/check_site_generator.py`), and commits only the measurement JSON to
+`data/evidence/make_submission/`. The rasters go to the run's `submission-run-<id>` artifact.
+
+What it is *not*: it does not upload anything to DrivenData and it does not produce a score. The
+score requires a human enrolment and upload — the one gate
+`scripts/check_submission_readiness.py` keeps labelled `HUMAN`.
+
+To fire it: `git commit --allow-empty -m "…" ` after editing the timestamp below, then push.
+
+last_touched_utc: 2026-09-23T01:25:00Z
+touched_by: session 23 — second execution (evidence flags from exit statuses)

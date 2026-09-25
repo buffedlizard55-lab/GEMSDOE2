@@ -1,0 +1,18 @@
+# Push a change to THIS file to run .github/workflows/verify-rules.yml:
+# fetch the canonical GEMS Prize rules PDF from docs.nlr.gov, re-check every quoted sentence
+# verbatim, compare the document sha256 with the data-tab mirror recorded in
+# data/evidence/inventory.json, and commit the result to data/evidence/rules_quotes.json.
+#
+# 2026-09-16: created together with scripts/verify_rules_quotes.py (19 quoted sentences, incl. the
+# Phase 1 / Phase 2 target sentences that define which population is scored).
+
+# 2026-09-16 (session 7): fire the rules-quote re-check for the 10 sentences added from an
+# independent extraction path, and re-verify every catalog URL including the six new SGMC rows.
+
+# 2026-09-16: re-run with --dump-text and the divergence diagnostic (quote test_set_composition MISS)
+
+# 2026-09-16: page furniture (bare/glued page numbers) is stripped before matching, and recorded
+
+# 2026-09-16: first strip attempt removed nothing; record a per-page trace so the miss is diagnosable
+
+# 2026-09-16: the strip now skips blank lines and records repr + blank-line counts

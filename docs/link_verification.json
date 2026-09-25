@@ -1,0 +1,972 @@
+{
+  "generated_utc": "2026-09-21T12:53:52+00:00",
+  "generated_by": "scripts/verify_links.py on a host with live HTTP (72 of 84 URLs answered)",
+  "n_urls_reached": 72,
+  "catalog": "docs/data_catalog.csv",
+  "n_rows": 92,
+  "n_unique_urls": 84,
+  "summary_counts": {
+    "BOT_BLOCKED_403": 10,
+    "AUTH_REQUIRED": 1,
+    "OK_200": 61,
+    "OK_REDIRECTED": 10,
+    "OK_202": 1,
+    "LOGIN_REQUIRED": 1
+  },
+  "n_problems": 0,
+  "problems": [],
+  "n_expected_non_ok": 12,
+  "expected_non_ok": [
+    {
+      "url": "https://agupubs.onlinelibrary.wiley.com/doi/10.1002/2014JB011145",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JB028044",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://api.github.com/search/code",
+      "status": 401,
+      "result": "AUTH_REQUIRED",
+      "note": "endpoint requires credentials; not a broken or missing resource"
+    },
+    {
+      "url": "https://doi.org/10.1029/2020JB021269",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://doi.org/10.1080/08123985.2023.2299475",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://doi.org/10.1093/gji/ggad491",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/accounts/login/?next=/competitions/306/competition-doe-gems/data/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Login",
+      "redirected": true,
+      "redirected_offsite": false,
+      "result": "LOGIN_REQUIRED"
+    },
+    {
+      "url": "https://www.mdpi.com/2072-4292/16/7/1115",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0098300421000169",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0098300422001765",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0375650525000902",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/pii/S2949673X25000026",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    }
+  ],
+  "results": [
+    {
+      "url": "https://agupubs.onlinelibrary.wiley.com/doi/10.1002/2014JB011145",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023JB028044",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://api.github.com/search/code",
+      "status": 401,
+      "result": "AUTH_REQUIRED",
+      "note": "endpoint requires credentials; not a broken or missing resource"
+    },
+    {
+      "url": "https://apps.nationalmap.gov/downloader/",
+      "status": 200,
+      "final_url": "https://apps.nationalmap.gov/downloader/",
+      "content_type": "text/html",
+      "content_length": 32508,
+      "title": "TNM Downloader - The National Map",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://apps.nationalmap.gov/lidar-explorer/",
+      "status": 200,
+      "final_url": "https://apps.nationalmap.gov/lidar-explorer/",
+      "content_type": "text/html",
+      "content_length": 1109,
+      "title": "USGS Lidar Explorer Map",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://community.drivendata.org/c/gems-prize-challenge/111",
+      "status": 200,
+      "final_url": "https://community.drivendata.org/c/gems-prize-challenge/111",
+      "content_type": "text/html",
+      "content_length": 23158,
+      "title": "GEMS Prize Challenge - DrivenData Community",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+      "status": 200,
+      "final_url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+      "content_type": "application/pdf",
+      "content_length": 455140,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://doi.org/10.1029/2020JB021269",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://doi.org/10.1080/08123985.2023.2299475",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://doi.org/10.1093/gji/ggad491",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://doi.org/10.15121/1881483",
+      "status": 200,
+      "final_url": "https://gdr.openei.org/submissions/1391",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_gdr.openei.org"
+    },
+    {
+      "url": "https://doi.org/10.5066/F7WH2N65",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/5888bf4fe4b05ccb964bab9d",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "The State Geologic Map Compilation (SGMC) Geodatabase of the Conterminous United States - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P93LGLVQ",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GeoDAWN: Airborne magnetic and radiometric surveys of the northwestern Great Basin, Nevada and California - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P9BZPVUC",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/6297d2fad34ec53d276c5b28",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Heat flow maps and supporting data for the Great Basin, USA - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P9MQRCBY",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/64e597dfd34e736b81e198d2",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Maps of elevation trend and detrended elevation for the Great Basin, USA - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P9TWT2LU",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/62979746d34ec53d276c113b",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Electrical Conductance Maps of the Great Basin, USA - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P9YL58W6",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Shapefile for slip tendency and dilation tendency calculated for Quaternary faults in the Great Basin - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5066/P9Z6SA1Z",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/628d4fabd34ef70cdba3c4a4",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Regional geophysical maps of the Great Basin, USA - ScienceBase-Catalog",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_www.sciencebase.gov"
+    },
+    {
+      "url": "https://doi.org/10.5194/essd-14-381-2022",
+      "status": 200,
+      "final_url": "https://essd.copernicus.org/articles/14/381/2022/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "ESSD - Into the Noddyverse: a massive data store of 3D geological models for machine learning and inversion applications",
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_essd.copernicus.org"
+    },
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
+      "status": 200,
+      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "haz/Qfaults (MapServer)",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?returnCountOnly=true",
+      "status": 200,
+      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?returnCountOnly=true",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Query: National Database (ID: 21)",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
+      "status": 200,
+      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
+      "content_type": "application/json",
+      "content_length": null,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://gbcge.org/current-projects/ingenious/",
+      "status": 200,
+      "final_url": "https://gbcge.org/current-projects/ingenious/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "INGENIOUS project - Great Basin Center for Geothermal Energy",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://gdr.openei.org/submissions/1390",
+      "status": 200,
+      "final_url": "https://gdr.openei.org/submissions/1390",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GDR: INGENIOUS Thermal Conductivity Measurement Source Categorization",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://gdr.openei.org/submissions/1391",
+      "status": 200,
+      "final_url": "https://gdr.openei.org/submissions/1391",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://geoconvention.com/wp-content/uploads/abstracts/2019/GC2019_313_Deep_learning_approach_to_automatic_detection_of_faults_and_fractures_CNN.pdf",
+      "status": 200,
+      "final_url": "https://geoconvention.com/wp-content/uploads/abstracts/2019/GC2019_313_Deep_learning_approach_to_automatic_detection_of_faults_and_fractures_CNN.pdf",
+      "content_type": "application/pdf",
+      "content_length": 907926,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://geodataviewer.com/datasets/dem/ned-3dep-usgs/",
+      "status": 200,
+      "final_url": "https://geodataviewer.com/datasets/dem/ned-3dep-usgs/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "NED / 3DEP (USGS) | GeoDataViewer",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://github.com/buffedlizard55-lab/GEMSDOE/blob/main/docs/results.html",
+      "status": 200,
+      "final_url": "https://github.com/buffedlizard55-lab/GEMSDOE/blob/main/docs/results.html",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GEMSDOE/docs/results.html at main \u00b7 buffedlizard55-lab/GEMSDOE \u00b7 GitHub",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://github.com/buffedlizard55-lab/GEMSDOE/tree/main/data",
+      "status": 200,
+      "final_url": "https://github.com/buffedlizard55-lab/GEMSDOE/tree/main/data",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GEMSDOE/data at main \u00b7 buffedlizard55-lab/GEMSDOE \u00b7 GitHub",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+      "status": 200,
+      "final_url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GitHub - drivendataorg/gems-prize-reference-solution: A reference solution for the GEMS Prize Challenge \u00b7 GitHub",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb",
+      "status": 200,
+      "final_url": "https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "gems-prize-reference-solution/unet-mc-cv-reference-solution.ipynb at main \u00b7 drivendataorg/gems-prize-reference-solution \u00b7 GitHub",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://github.com/jklinck/geothermal_research",
+      "status": 200,
+      "final_url": "https://github.com/jklinck/geothermal_research",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GitHub - jklinck/geothermal_research: Data exploration for the INGENIOUS and GeoDAWN datasets for geothermal favorability research. \u00b7 GitHub",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://gsrm2.unavco.org/",
+      "status": 200,
+      "final_url": "https://gsrm2.unavco.org/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GEM Strain Rate Model",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://ieeexplore.ieee.org/document/6854024/",
+      "status": 202,
+      "final_url": "https://ieeexplore.ieee.org/document/6854024/",
+      "content_type": "text/html",
+      "content_length": 0,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_202"
+    },
+    {
+      "url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
+      "status": 200,
+      "final_url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
+      "content_type": "text/html",
+      "content_length": 3038,
+      "title": "Client Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://mrdata.usgs.gov/earthmri/",
+      "status": 200,
+      "final_url": "https://mrdata.usgs.gov/earthmri/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Earth Mapping Resource Initiative: Geoscience data",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://mrdata.usgs.gov/gravity/isostatic/",
+      "status": 200,
+      "final_url": "https://mrdata.usgs.gov/gravity/isostatic/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Isostatic residual gravity anomaly grid for the conterminous US",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://mrdata.usgs.gov/metadata/usgraviso.html",
+      "status": 200,
+      "final_url": "https://mrdata.usgs.gov/metadata/usgraviso.html",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Isostatic residual gravity anomaly data grid for the conterminous US",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://nbmg.unr.edu/staff/faulds/33_AGS22_Faulds_and_Henry_(Walker_Lane)_final.pdf",
+      "status": 200,
+      "final_url": "https://nbmg.unr.edu/staff/faulds/33_AGS22_Faulds_and_Henry_(Walker_Lane)_final.pdf",
+      "content_type": "application/pdf",
+      "content_length": 4389654,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://ngmdb.usgs.gov/Prodesc/proddesc_119417.htm",
+      "status": 200,
+      "final_url": "https://ngmdb.usgs.gov/Prodesc/proddesc_119417.htm",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "NGMDB Product Description Page",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://ngmdb.usgs.gov/emri/",
+      "status": 200,
+      "final_url": "https://ngmdb.usgs.gov/emri/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Earth MRI Acquisitions Viewer | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pangea.stanford.edu/ERE/db/GeoConf/papers/SGW/2025/Hermant.pdf",
+      "status": 200,
+      "final_url": "https://pangea.stanford.edu/ERE/db/GeoConf/papers/SGW/2025/Hermant.pdf",
+      "content_type": "application/pdf",
+      "content_length": 3072200,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11834046/",
+      "status": 200,
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11834046/",
+      "content_type": "text/html",
+      "content_length": 149732,
+      "title": "Integrated structural analysis for geothermal exploration: A new protocol combining remote sensing and aeromagnetic geophysical data - PMC",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/1m/Projects/NV_WestCentral_EarthMRI_2020_D20/TIFF/",
+      "status": 200,
+      "final_url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/1m/Projects/NV_WestCentral_EarthMRI_2020_D20/TIFF/",
+      "content_type": "application/xml",
+      "content_length": null,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pubs.usgs.gov/ds/1052/ds20171052_appendix5.pdf",
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/ds/1052/ds20171052_appendix5.pdf",
+      "content_type": "application/pdf",
+      "content_length": 158241,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pubs.usgs.gov/ds/2007/249/",
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/ds/2007/249/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "USGS Data Series 249: Geologic Map of Nevada",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pubs.usgs.gov/pp/1720/downloads/pdf/p1720D.pdf",
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/pp/1720/downloads/pdf/p1720D.pdf",
+      "content_type": "application/pdf",
+      "content_length": 1573386,
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pubs.usgs.gov/publication/ds1052",
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/publication/ds1052",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "The State Geologic Map Compilation (SGMC) geodatabase of the conterminous United States",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pubs.usgs.gov/publication/fs20203055",
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/publication/fs20203055",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Technical overview of the U.S. Geological Survey Earth Mapping Resources Initiative (Earth MRI)",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://pypi.org/project/torch/",
+      "status": 200,
+      "final_url": "https://pypi.org/project/torch/",
+      "content_type": "text/html",
+      "content_length": 290956,
+      "title": "torch \u00b7 PyPI",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://registry.opendata.aws/usgs-lidar/",
+      "status": 200,
+      "final_url": "https://registry.opendata.aws/usgs-lidar/",
+      "content_type": "text/html",
+      "content_length": 12665,
+      "title": "USGS 3DEP LiDAR Point Clouds - Registry of Open Data on AWS",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/SB_5888bf4fe4b05ccb964bab9d_USGS_SGMC_feature/FeatureServer/1",
+      "status": 200,
+      "final_url": "https://services.arcgis.com/v01gqwM5QqNysAAi/arcgis/rest/services/SB_5888bf4fe4b05ccb964bab9d_USGS_SGMC_feature/FeatureServer/1",
+      "content_type": "text/html",
+      "content_length": 40832,
+      "title": "Layer: SGMC_Structure (ID:1)",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Competition: The Geologic Enhanced Mapping System (GEMS) Prize Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/accounts/login/?next=/competitions/306/competition-doe-gems/data/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Login",
+      "redirected": true,
+      "redirected_offsite": false,
+      "result": "LOGIN_REQUIRED"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Competition: The Geologic Enhanced Mapping System (GEMS) Prize Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Competition: The Geologic Enhanced Mapping System (GEMS) Prize Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/rules/",
+      "status": 200,
+      "final_url": "https://www.drivendata.org/competitions/306/competition-doe-gems/rules/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Competition: The Geologic Enhanced Mapping System (GEMS) Prize Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&st=zj1lag1r&dl=0",
+      "status": 200,
+      "final_url": "https://www.dropbox.com/scl/fi/3vz9o0wwavi26xaeoxlwr/gems-geodawn-numerical-features.tif?rlkey=je8d8fepqfbst9lnwsq9rkplu&st=zj1lag1r&dl=0",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Dropbox",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&st=8junzdyw&dl=0",
+      "status": 200,
+      "final_url": "https://www.dropbox.com/scl/fi/6rgvnuady818ol8yqgis4/example_submission.tif?rlkey=kbykilvau066xuogoosbf4cq8&st=8junzdyw&dl=0",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Dropbox",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&st=wz4kofki&dl=0",
+      "status": 200,
+      "final_url": "https://www.dropbox.com/scl/fi/aemhtutjgcp6tr3tint94/GEMS_96647.pdf?rlkey=rek210cj2smnmzb8n0sla1vmd&st=wz4kofki&dl=0",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Dropbox",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&st=srhhir10&dl=0",
+      "status": 200,
+      "final_url": "https://www.dropbox.com/scl/fi/ig0mban712ns1atphgphe/Digital-elevation-model-links-JSON.pdf?rlkey=zm77f1vbtt2if8hlruymptnu3&st=srhhir10&dl=0",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Dropbox",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&st=rnino7ya&dl=0",
+      "status": 200,
+      "final_url": "https://www.dropbox.com/scl/fi/t7fyt03qdh9egyme0itwo/existing_faults.tif?rlkey=yiao96uluqdkipf0h5vju71jf&st=rnino7ya&dl=0",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Dropbox",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.energy.gov/hgeo/geothermal/office-geothermal",
+      "status": 200,
+      "final_url": "https://www.energy.gov/hgeo/geothermal/office-geothermal",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Office of Geothermal | Department of Energy",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2025.1635344/full",
+      "status": 200,
+      "final_url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2025.1635344/full",
+      "content_type": "text/html",
+      "content_length": 602061,
+      "title": "Frontiers | 3D fault detection method using TransVNet",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.herox.com/GEMSPrize/resource/2274",
+      "status": 200,
+      "final_url": "https://www.herox.com/GEMSPrize/resource/2274",
+      "content_type": "text/html",
+      "content_length": 93976,
+      "title": "GEMS Prize Official Rules",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.mdpi.com/2072-4292/16/7/1115",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41598-025-90823-5",
+      "status": 200,
+      "final_url": "https://www.nature.com/articles/s41598-025-90823-5",
+      "content_type": "text/html",
+      "content_length": 3038,
+      "title": "Client Challenge",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.nlr.gov/",
+      "status": 200,
+      "final_url": "https://www.nlr.gov/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Home | NLR",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.nlr.gov/docs/fy26osti/96647.pdf",
+      "status": 200,
+      "final_url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+      "content_type": "application/pdf",
+      "content_length": 455140,
+      "redirected": true,
+      "redirected_offsite": true,
+      "result": "OK_REDIRECTED_TO_docs.nlr.gov"
+    },
+    {
+      "url": "https://www.osti.gov/biblio/1881483",
+      "status": 200,
+      "final_url": "https://www.osti.gov/biblio/1881483",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "INGENIOUS - Great Basin Regional Dataset Compilation (Dataset) | OSTI.GOV",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.osti.gov/dataexplorer/biblio/dataset/1987556",
+      "status": 200,
+      "final_url": "https://www.osti.gov/dataexplorer/biblio/dataset/1987556",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GBCGE Subsurface Database Explorer and APIs (Dataset) | DOE Data Explorer",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Quaternary Fault and Fold Database of the United States - ScienceBase-Catalog",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GeoDAWN: Airborne magnetic and radiometric surveys of the northwestern Great Basin, Nevada and California - ScienceBase-Catalog",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.sciencebase.gov/catalog/item/66e88690d34e0606a9db9b43",
+      "status": 200,
+      "final_url": "https://www.sciencebase.gov/catalog/item/66e88690d34e0606a9db9b43",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Geothermal resource favorability: select features and predictions for the United States Great Basin curated for DOI 10.1016/j.geothermics.2025.103450 - ScienceBase-Catalog",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0098300421000169",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0098300422001765",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0375650525000902",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/pii/S2949673X25000026",
+      "status": 403,
+      "result": "BOT_BLOCKED_403",
+      "note": "publisher/DOI resolver rejects scripted clients; not a broken link"
+    },
+    {
+      "url": "https://www.seequent.com/",
+      "status": 200,
+      "final_url": "https://www.seequent.com/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Seequent: Solutions for the mining, civil, environmental &amp; energy industries",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.usgs.gov/3d-elevation-program/about-3dep-products-services",
+      "status": 200,
+      "final_url": "https://www.usgs.gov/3d-elevation-program/about-3dep-products-services",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "About 3DEP Products &amp; Services | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+      "status": 200,
+      "final_url": "https://www.usgs.gov/data/geodawn-airborne-magnetic-and-radiometric-surveys-northwestern-great-basin-nevada-and",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "GeoDAWN: Airborne magnetic and radiometric surveys of the northwestern Great Basin, Nevada and California | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.usgs.gov/faqs/where-can-i-find-a-fault-map-united-states-one-available-gis-format",
+      "status": 200,
+      "final_url": "https://www.usgs.gov/faqs/where-can-i-find-a-fault-map-united-states-one-available-gis-format",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Where can I find a fault map of the United States? Is one available in GIS format? | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+      "status": 200,
+      "final_url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Faults | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    },
+    {
+      "url": "https://www.usgs.gov/programs/earthquake-hazards/google-earthtmkml-files",
+      "status": 200,
+      "final_url": "https://www.usgs.gov/programs/earthquake-hazards/google-earthtmkml-files",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Google Earth\u2122/KML Files | U.S. Geological Survey",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
+    }
+  ],
+  "classification": {
+    "expected_ok": [
+      "OK"
+    ],
+    "expected_non_ok": [
+      "BOT_BLOCKED",
+      "LOGIN_REQUIRED",
+      "AUTH_REQUIRED"
+    ],
+    "requires_review": "anything else: BROKEN_*, UNREACHABLE, NOT_A_URL",
+    "note": "A 401 means credentials are required and a 403 from a publisher or DOI resolver means the host refused this scripted client; LOGIN_REQUIRED is the account-gated data tab. None of those says the resource is missing, so they are recorded with their raw status and counted separately from problems."
+  },
+  "note": "Machine-measured. LOGIN_REQUIRED (DrivenData data tab) and BOT_BLOCKED_403/401 (publishers and doi.org rejecting scripted clients) are EXPECTED and are not counted as problems. Only BROKEN_* / UNREACHABLE / NOT_A_URL require review."
+}

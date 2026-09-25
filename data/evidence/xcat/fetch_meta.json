@@ -1,0 +1,161 @@
+{
+ "generated_utc": "2026-09-25T03:50:39+00:00",
+ "generated_by": "scripts/fetch_qfaults.py",
+ "purpose": "second independent fault catalogue (QFaults) for the cross-catalogue transfer measurement: emit catalogue A (SGMC), score against catalogue B (QFaults)",
+ "source": {
+  "citation": "U.S. Geological Survey, 2020, Quaternary fault and fold database for the nation: U.S. Geological Survey data release, https://doi.org/10.5066/P9BCVRCK",
+  "doi": "https://doi.org/10.5066/P9BCVRCK",
+  "sciencebase": "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23",
+  "portal": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+  "license": "Public Domain (U.S. Government work, USGS)",
+  "service": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
+  "layer": 21,
+  "layer_name": "National Database",
+  "geometry_type": "esriGeometryPolyline",
+  "max_record_count": 2000,
+  "page_size_used": 1000,
+  "fields": [
+   "OBJECTID",
+   "Shape",
+   "fault_name",
+   "section_name",
+   "fault_id",
+   "section_id",
+   "Location",
+   "linetype",
+   "age",
+   "dip_direction",
+   "slip_rate",
+   "slip_sense",
+   "mapped_scale",
+   "class",
+   "mapped_certainty",
+   "strike",
+   "total_fault_length",
+   "cooperators",
+   "earthquake",
+   "last_review",
+   "fault_url",
+   "symbology",
+   "ref_id",
+   "Fault_ID_num",
+   "Shape_Length",
+   "archive_pdf"
+  ]
+ },
+ "bbox": {
+  "envelope_4326": [
+   -120.037171,
+   37.331193,
+   -116.140922,
+   40.727878
+  ],
+  "pad_deg": 0.0,
+  "source": {
+   "path": "data/labels.tif",
+   "crs": "EPSG:32611",
+   "width": 3292,
+   "height": 3730,
+   "bounds": [
+    243350.0,
+    4135550.0,
+    572550.0,
+    4508550.0
+   ]
+  }
+ },
+ "counts": {
+  "service_reported": 14481,
+  "fetched": 14481,
+  "line_geometries": 14481,
+  "integrity_gate": "fetched == service_reported (else the run fails)"
+ },
+ "classes": {
+  "vocabulary_field": "symbology",
+  "vocabulary_from": "layer renderer uniqueValueInfos",
+  "n_classes_in_vocabulary": 21,
+  "n_classes_appended_at_runtime": 0,
+  "rule_id_to_class": {
+   "1": "class B Inferred",
+   "2": "class B Moderately Constrained",
+   "3": "class B Well Constrained",
+   "4": "historic Inferred",
+   "5": "historic Moderately Constrained",
+   "6": "historic Well Constrained",
+   "7": "late Quaternary Inferred",
+   "8": "late Quaternary Moderately Constrained",
+   "9": "late Quaternary Well Constrained",
+   "10": "latest Quaternary Inferred",
+   "11": "latest Quaternary Moderately Constrained",
+   "12": "latest Quaternary Well Constrained",
+   "13": "middle and late Quaternary Inferred",
+   "14": "middle and late Quaternary Moderately Constrained",
+   "15": "middle and late Quaternary Well Constrained",
+   "16": "undifferentiated Quaternary Inferred",
+   "17": "undifferentiated Quaternary Moderately Constrained",
+   "18": "undifferentiated Quaternary Well Constrained",
+   "19": "unspecified Inferred",
+   "20": "unspecified Moderately Constrained",
+   "21": "unspecified Well Constrained"
+  },
+  "features_per_class": {
+   "11": 428,
+   "12": 3937,
+   "9": 1446,
+   "17": 953,
+   "18": 5433,
+   "8": 349,
+   "14": 27,
+   "15": 86,
+   "6": 1142,
+   "7": 69,
+   "13": 1,
+   "10": 230,
+   "16": 342,
+   "5": 30,
+   "4": 8
+  }
+ },
+ "requests": {
+  "layer_metadata": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
+  "count_only": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=json&returnCountOnly=true",
+  "pages": 15,
+  "first_page": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=0",
+  "last_page": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=14000",
+  "all_page_urls": [
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=0",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=1000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=2000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=3000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=4000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=5000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=6000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=7000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=8000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=9000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=10000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=11000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=12000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=13000",
+   "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?where=1%3D1&geometry=-120.03717095080793%2C37.33119286569775%2C-116.14092181157623%2C40.72787799633184&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=geojson&outFields=%2A&outSR=4326&resultRecordCount=1000&resultOffset=14000"
+  ],
+  "total_requests": 17
+ },
+ "link_checks": {
+  "https://doi.org/10.5066/P9BCVRCK": "OK_200 (doi)",
+  "https://www.sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23": "OK_200 (sciencebase)",
+  "https://www.usgs.gov/programs/earthquake-hazards/faults": "OK_200 (portal)",
+  "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer?f=json": "OK_200 (service)"
+ },
+ "output": {
+  "path": "data/external/qfaults_footprint.geojson",
+  "sha256": "bdb30d4cb1dbe4d3bd03a2d485815c744814cf0f23483ffd98a4251e8694ed47",
+  "bytes": 19006297,
+  "features": 14481
+ },
+ "elapsed_s": 25.9,
+ "next_steps": [
+  "python scripts/build_proxy_catalogue.py --proxy data/external/qfaults_footprint.geojson --template data/labels.tif --labels data/labels.tif --out data/evidence/xcat/qfaults_catalogue.tif --stats data/evidence/xcat/qfaults_stats.json --fetch-meta data/evidence/xcat/fetch_meta.json",
+  "python scripts/measure_cross_catalogue_transfer.py"
+ ]
+}

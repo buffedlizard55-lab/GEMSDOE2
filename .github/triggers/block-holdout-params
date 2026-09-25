@@ -1,0 +1,38 @@
+# Block-holdout parameters (read by .github/workflows/block-holdout.yml, job `params`).
+#
+# 2026-09-18 (session 16) - FIRST FIRE: measure on a runner + train ONE block-holdout fold.
+#
+# SUBMISSION  the committed adopted artifact (floor 0.1, thin, width 0; sha256 a3dcd6d5...).
+#             The `measure` job scores exactly these bytes, so its output is comparable with
+#             data/evidence/block_holdout/block_stratified.json (the sandbox run) digit for digit.
+# SCORE_FOLD  empty on purpose: restricting the SHIPPED ensemble to one fold's blocks is not a
+#             generalisation reading (that ensemble trained on every block), and the report says so
+#             in restriction.note.  The fold-restricted numbers that DO mean something come from the
+#             `train` job below, which scores a model that never saw those blocks.
+# TRAIN_FOLDS 1,2,3 (2026-09-19, session 18) - fold 0 landed (gap +0.0114, held-out 0.0806
+#             [0.0586, 0.1021] vs trained-on 0.0920 [0.0747, 0.1100], 8/26 scoreable blocks) and
+#             one fold cannot show a SPREAD: the generalisation gap is a per-fold quantity, and
+#             four folds (0-3) give its distribution.  Fold 0's evidence is already committed
+#             (data/evidence/block_holdout/fold0_*.json), so only 1,2,3 are trained here.
+# BLOCK_PX/FOLDS must equal training.block_px / training.block_folds in
+#             configs/config_block_holdout.yaml: block_holdout_eval.py --config refuses to run when
+#             they disagree, because a score computed on a partition the model was not trained
+#             against is not a holdout score.
+# FLOORS      kept at five candidates although the shipped raster is a hard band (only the width
+#             axis can move): the report records verdict.floor_axis_degenerate and counts DISTINCT
+#             emissions, so the degenerate axis is visible instead of implying 50 measurements.
+# WIDTHS      0..20 px - the range the proxy sweep already measured as monotonically harmful
+#             (0.0999 -> 0.0670), re-measured here per block with a bootstrap CI.
+# BOOTSTRAPS  2000 paired block resamples (~40 s); the CI95 half-width is stable to +-0.0002.
+# TRAIN_SEED  46 - never reuses an ensemble seed (42/43/44/45 are taken by ensembles 1-4), because
+#             a fold's identity is its held-out crop and a reused seed would blur two experiments.
+SUBMISSION=data/evidence/runs/ens12-adopted-floor0.1-w0/submission.tif
+SCORE_FOLD=
+TRAIN_FOLDS=1,2,3
+BLOCK_PX=512
+FOLDS=4
+FLOORS=0.1,0.15,0.2,0.3,0.5
+WIDTHS=0,1,2,3,4,6,8,12,16,20
+BOOTSTRAPS=2000
+SEED=0
+TRAIN_SEED=46

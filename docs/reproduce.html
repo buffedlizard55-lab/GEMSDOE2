@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reproduce — GEMS Prize</title>
+<meta name="description" content="Auditable, machine-verified working notes for the DOE GEMS Prize fault-detection challenge.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛰️</text></svg>">
+</head><body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo">⛰️</span>
+      <div><div class="name">GEMS Prize — working notes</div>
+      <div class="tag">Geological fault detection in the GeoDAWN region · every figure below is machine-measured</div></div>
+    </div>
+  </div>
+</header>
+<nav><div class="wrap"><a href="index.html">Overview</a><a href="executive_summary.html">Executive summary</a><a href="how_to_submit.html">↳ How to submit</a><a href="submission.html">Submission details</a><a href="data.html">Data</a><a href="metric.html">Metric</a><a href="method.html">Method</a><a href="results.html">Results</a><a href="sources.html">Sources</a><a href="verification.html">Verification</a><a href="review.html">Current review</a><a href="reproduce.html" class="active">Reproduce</a></div></nav>
+<main class="wrap">
+<h1>Reproduce</h1>
+<p class="lede">Every command needed to rebuild the data, the model and this site.</p>
+
+<h2>Get the data</h2>
+<p><b>Preferred (2026-09-17): reassemble from the committed git bridge</b> — no login, no network:</p>
+<pre><code>git pull                                   # data/bridge/ holds sha256-pinned parts
+python scripts/assemble_data_bridge.py     # re-verifies every part, places canonical names
+python scripts/prepare_data.py             # validates CRS, resolution, bounds, bands</code></pre>
+<p>Every part's sha256 is pinned to the independent inventory
+(<code>data/evidence/inventory.json</code>); the assembler refuses to write anything on a mismatch
+(regression-tested in <code>tests/test_data_bridge.py</code>).</p>
+<p>Alternatively, the competition files require a DrivenData login. With an account:</p>
+<pre><code>bash scripts/download_competition_data.sh   # bridge first, else Dropbox mirrors from the data tab
+python scripts/prepare_data.py              # validates CRS, resolution, bounds, bands</code></pre>
+<p><code>prepare_data.py</code> exits non-zero on any mismatch, so a bad download is caught before
+hours of training.</p>
+
+<h2>Train and build a submission</h2>
+<pre><code># GPU box, full capacity
+python -m src.train     --config configs/config.yaml
+python -m src.inference --config configs/config.yaml --out submission.tif
+python scripts/validate_submission.py --pred submission.tif --sample data/sample_submission.tif
+
+# CPU, proves the pipeline on the real rasters
+python -m src.train --config configs/config_ci_smoke.yaml
+
+# CPU, ensemble: one fold (repeat per fold), raw map, then blend+shape across folds
+python -m src.train --config configs/config_ci_ensemble.yaml --override training.mc_id=0
+python -m src.inference --config configs/config_ci_ensemble.yaml --raw --out outputs/prob_raw.tif
+python scripts/blend_submission.py --folds outputs_f0 outputs_f1 ... --out submission.tif
+
+# In-sandbox, against the committed real-data fixture (no download needed)
+python -m src.fixture                                    # verify the fixture
+python -m src.train --config configs/config_fixture.yaml</code></pre>
+
+<h2>Check the claims on this site</h2>
+<pre><code>python src/metrics.py --self-test         # 8 checks incl. the official worked example
+python scripts/metric_strategy.py         # regenerates the Metric page's table
+python scripts/verify_links.py            # re-checks every source link over HTTP
+python scripts/inspect_competition_data.py --data-dir data   # regenerates the Data page
+python scripts/eval_proxy_catalogue.py --pred submission.tif     --proxy data/evidence/proxy/proxy_catalogue.tif --labels data/labels.tif     --out data/evidence/proxy/eval_submission.json      # the new-fault-like population
+python scripts/decide_emission_width.py   # the emission-policy decision record (metric page)
+python scripts/build_site.py              # rebuilds this site from the JSON above</code></pre>
+
+<h2>Automation</h2>
+<p>GitHub Actions workflows do the work that needs open network access:</p>
+<ul>
+<li><b>Place competition data (git bridge)</b> — downloads the three official rasters from the
+data-tab Dropbox mirrors, verifies each sha256 against the pinned inventory, runs the pre-flight
+validation and commits them as &le; 90 MiB parts so the egress-restricted sandbox can receive them over
+git (<code>data/bridge/</code>).</li>
+<li><b>Fetch competition data</b> — downloads the files, measures them, OCRs the DEM PDF, resolves
+tiles against the USGS bucket, verifies every link, builds the dev fixture, and commits the evidence
+JSON back to the branch.</li>
+<li><b>Train and build submission</b> — single-job smoke: train → inference → validation → scoring,
+uploads <code>submission.tif</code> as an artifact.</li>
+<li><b>Proxy catalogue (independent faults) → evaluate</b> — fetches USGS SGMC structure
+polylines, rasterises them on the competition grid, splits them into "already in the labels" and
+"absent from the labels", scores the committed submission against the absent part with the official
+metric, and sweeps the shaping policy on it. This is the only local measurement on a population that
+resembles the scored one, and its evidence (including the blanket-ones baseline that beats our
+current emission) is committed under <code>data/evidence/proxy/</code>.</li>
+<li><b>Verify official rules quotes</b> — re-downloads the official rules PDF, re-extracts every
+quoted sentence verbatim, and commits the report; <a href="verification.html">Verification</a>
+records what each external claim rests on.</li>
+<li><b>Train MC ensemble (parallel folds) + blend</b> — six fold jobs train one MC split each
+(<code>--override training.mc_id=F</code>) and blend the raw probability maps in a final job with one
+shaping pass calibrated on the pooled held-out DTI. Reports and the shaped submission are committed
+back to the branch under <code>data/evidence/runs/&lt;run_id&gt;/</code>.</li>
+</ul>
+
+<h2>Submitting</h2>
+<p>Upload <code>submission.tif</code> via the Submit tab at
+<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">https://www.drivendata.org/competitions/306/competition-doe-gems/</a>. Requirements checked by
+<code>scripts/validate_submission.py</code>: single band, float32, values in [0,1], EPSG:32611,
+100 m, identical grid and transform to the provided template
+(<a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/#submission-format">spec</a>). Note the competition requires choosing a
+<b>single</b> submission for scoring in both rounds before the deadline.</p>
+
+</main>
+<footer><div class="wrap">
+  <p>Generated by <code>scripts/build_site.py</code> from the evidence JSON in this repository · 2026-09-25 03:46 UTC</p>
+  <p>Unofficial working notes. Authoritative sources: <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/">competition</a> ·
+     <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/">problem description</a> · <a href="https://docs.nlr.gov/docs/fy26osti/96647.pdf">official rules</a> ·
+     <a href="https://github.com/buffedlizard55-lab/GEMSDOE2">repository</a></p>
+</div></footer>
+
+</body></html>

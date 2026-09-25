@@ -1,0 +1,23 @@
+# Ensemble parameters read by .github/workflows/train-ensemble.yml (push-triggered runs).
+# The bot token cannot use workflow_dispatch, so runs are parameterised by this file.
+#
+# DEFAULTS reproduce run 35042805806 (ensemble 1) exactly (offset 0, seed 42).
+#
+# 2026-09-17 (session 9): fired ensemble 2 with FOLD_OFFSET=6 / ENSEMBLE_SEED=43 (run 35170395055).
+# 2026-09-17 (session 10): that run LOST all six folds - the train step did not apply FOLD_OFFSET,
+# so it wrote heldout_mc0..5.npz while staging looked for heldout_mc6..11.npz.  Re-fired as run
+# 35249562910 (five folds trained; fold 4 crashed in training).
+#
+# 2026-09-17 (session 11): fire a THIRD independent ensemble (folds 12-17, seed 44).  Why: the
+# final submission is a nanmean over every live fold set, and reblend.yml can now take several run
+# ids at once (RUN_ID=a,b,c).  More independent seeds is variance reduction at zero cost to the
+# modelling choices already measured - the emission width decision is applied later, at blending
+# time, through MIN_DILATE, so this run only needs to produce fold artifacts.
+#   MIN_DILATE=0 here on purpose: the width is a POLICY decision recorded in
+#   data/evidence/emission_decision.json and must be applied to the final blend, not frozen into a
+#   training run committed before the second-ensemble reproduction lands.
+# 2026-09-17 (session 13): ensemble 3 (folds 12-17, seed 44) is in flight, so the values below were
+# advanced past it.  Fold ids are never reused: a fold's held-out crop is its identity, and a rerun
+# of the same ids would overwrite the artifacts the emission decision's condition 3 was measured on.
+FOLD_OFFSET=18
+ENSEMBLE_SEED=45

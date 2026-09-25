@@ -1,0 +1,12 @@
+2026-09-17T17:30:00Z
+
+# 2026-09-17 (session 10): re-fire the SECOND 6-fold ensemble (folds 6-11, seed 43) after fixing
+# the fold-identity defect that made run 35170395055 lose six fully-trained folds at the staging
+# step.  This is the queued experiment for emission_decision.json condition 3 ("reproduced on a
+# second, independently trained ensemble"): the sweep job of .github/workflows/proxy-eval.yml can
+# now be pointed at a named run (RUN_ID/SWEEP_LABEL in .github/triggers/proxy-eval-params), so the
+# width measurement can finally be repeated on an independent fold set.
+
+
+# 2026-09-17 (session 11): fire the THIRD independent ensemble (folds 12-17, seed 44) to add folds
+# to the final multi-ensemble blend.  Parameters: .github/triggers/ensemble-params.
