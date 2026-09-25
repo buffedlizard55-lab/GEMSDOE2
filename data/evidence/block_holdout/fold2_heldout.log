@@ -2,16 +2,17 @@ config configs/config_block_holdout.yaml: block_holdout_eval={"R": 3, "alpha": 0
 
 blocks: 512 px = 51.2 km; 9 of 56 scoreable (22 footprint-empty)
 footprint: 1,274,570 px (10.38 % of the grid)
-populations: catalogue 15,404 px (1,540.4 km) | proxy-only 12,427 px (1,242.7 km)
+populations: catalogue 15,404 px (1,540.4 km) | proxy-only 12,427 px (1,242.7 km) | combined 27,831 px (2,783.1 km)
 
 reference candidate floor0.1_w0px:
   proxy-only DTI 0.0480  block-bootstrap CI95 [0.0238, 0.0803]
   catalogue  DTI 0.0593  (in-domain - see the note in the JSON)
+  combined   DTI 0.1055  block-bootstrap CI95 [0.0821, 0.1389]  (Phase-2-like surrogate: labels 0.0593 + proxy-only 0.0480; 27,831 truth px, disjoint=True)
   worst single-block contrast +0.0000; 0 of 9 scoreable blocks gain
-  best of the recoverable sweep: floor0.2_w0px 0.0480 (+0.0000); reference is best: False
-  candidates swept 50, DISTINCT emissions 31 (floor axis degenerate: False)
-  best genuinely different alternative: floor0.2_w0px 0.0480 (+0.0000), P(beats reference over block resamples) = 0.9565, worst single block +0.0000
-  prediction field: 1158649 distinct values, 1,273,339 emitted px, hard band False
+  best of the recoverable sweep: floor0.3_w0px 0.0624 (+0.0144); reference is best: False
+  candidates swept 50, DISTINCT emissions 41 (floor axis degenerate: False)
+  best genuinely different alternative: floor0.3_w0px 0.0624 (+0.0144), P(beats reference over block resamples) = 0.712, worst single block -0.0487
+  prediction field: 1154203 distinct values, 1,273,339 emitted px, hard band False
 
   candidate                  proxy DTI   CI95 (block bootstrap)     P(>ref)  catalogue DTI
   floor0.1_w0px              0.0480      [0.0238, 0.0803]       ref    0.0593
@@ -24,14 +25,14 @@ reference candidate floor0.1_w0px:
   floor0.1_w12px             0.0434      [0.0210, 0.0680]      0.00   0.0537
   floor0.1_w16px             0.0420      [0.0202, 0.0643]      0.00   0.0520
   floor0.1_w20px             0.0407      [0.0196, 0.0619]      0.00   0.0504
-  floor0.15_w0px             0.0480      [0.0238, 0.0803]      0.00   0.0593
+  floor0.15_w0px             0.0480      [0.0238, 0.0803]      0.63   0.0593
   floor0.15_w1px             0.0476      [0.0234, 0.0789]      0.00   0.0589
   floor0.15_w2px             0.0472      [0.0232, 0.0777]      0.00   0.0584
   floor0.15_w3px             0.0468      [0.0230, 0.0766]      0.00   0.0579
   floor0.15_w4px             0.0464      [0.0228, 0.0757]      0.00   0.0574
   floor0.15_w6px             0.0456      [0.0223, 0.0734]      0.00   0.0564
 
-  mean per-block sign agreement between the two populations: 0.907 (1.00 = they prefer the same candidate in the same block every time)
-  largest population conflict: floor0.3_w0px gains on the new-fault-like proxy population in 1 of 9 blocks where both populations are scoreable while the catalogue population loses in the same block
+  mean per-block sign agreement between the two populations: 0.876 (1.00 = they prefer the same candidate in the same block every time)
+  largest population conflict: floor0.2_w0px gains on the new-fault-like proxy population in 2 of 9 blocks where both populations are scoreable while the catalogue population loses in the same block
 
-wrote data/evidence/block_holdout/fold2_heldout.json (757,808 bytes)
+wrote data/evidence/block_holdout/fold2_heldout.json (1,439,334 bytes)

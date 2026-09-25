@@ -2,16 +2,17 @@ config configs/config_block_holdout.yaml: block_holdout_eval={"R": 3, "alpha": 0
 
 blocks: 512 px = 51.2 km; 25 of 56 scoreable (22 footprint-empty)
 footprint: 3,892,803 px (31.70 % of the grid)
-populations: catalogue 45,584 px (4,558.4 km) | proxy-only 49,237 px (4,923.7 km)
+populations: catalogue 45,584 px (4,558.4 km) | proxy-only 49,237 px (4,923.7 km) | combined 94,821 px (9,482.1 km)
 
 reference candidate floor0.1_w0px:
   proxy-only DTI 0.0619  block-bootstrap CI95 [0.0439, 0.0807]
   catalogue  DTI 0.0575  (in-domain - see the note in the JSON)
+  combined   DTI 0.1171  block-bootstrap CI95 [0.0992, 0.1357]  (Phase-2-like surrogate: labels 0.0575 + proxy-only 0.0619; 94,821 truth px, disjoint=True)
   worst single-block contrast +0.0000; 0 of 24 scoreable blocks gain
-  best of the recoverable sweep: floor0.2_w0px 0.0619 (+0.0000); reference is best: False
-  candidates swept 50, DISTINCT emissions 31 (floor axis degenerate: False)
-  best genuinely different alternative: floor0.2_w0px 0.0619 (+0.0000), P(beats reference over block resamples) = 1.0, worst single block +0.0000
-  prediction field: 2956786 distinct values, 3,890,973 emitted px, hard band False
+  best of the recoverable sweep: floor0.3_w0px 0.1094 (+0.0475); reference is best: False
+  candidates swept 50, DISTINCT emissions 40 (floor axis degenerate: False)
+  best genuinely different alternative: floor0.3_w0px 0.1094 (+0.0475), P(beats reference over block resamples) = 0.9925, worst single block -0.0997
+  prediction field: 2863232 distinct values, 3,890,973 emitted px, hard band False
 
   candidate                  proxy DTI   CI95 (block bootstrap)     P(>ref)  catalogue DTI
   floor0.1_w0px              0.0619      [0.0439, 0.0807]       ref    0.0575
@@ -31,7 +32,7 @@ reference candidate floor0.1_w0px:
   floor0.15_w4px             0.0611      [0.0433, 0.0796]      0.00   0.0567
   floor0.15_w6px             0.0607      [0.0430, 0.0788]      0.00   0.0563
 
-  mean per-block sign agreement between the two populations: 0.897 (1.00 = they prefer the same candidate in the same block every time)
-  largest population conflict: floor0.3_w16px gains on the new-fault-like proxy population in 3 of 23 blocks where both populations are scoreable while the catalogue population loses in the same block
+  mean per-block sign agreement between the two populations: 0.872 (1.00 = they prefer the same candidate in the same block every time)
+  largest population conflict: floor0.3_w1px gains on the new-fault-like proxy population in 11 of 23 blocks where both populations are scoreable while the catalogue population loses in the same block
 
-wrote data/evidence/block_holdout/fold2_complement.json (779,432 bytes)
+wrote data/evidence/block_holdout/fold2_complement.json (1,449,317 bytes)
