@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-05T14:36:11Z",
+ "generated_utc": "2026-10-12T15:22:44Z",
  "script": "scripts/verify_rules_quotes.py",
  "source": {
   "url": "/tmp/rules_canonical.pdf",
@@ -134,7 +134,7 @@
   },
   {
    "page": 4,
-   "chars": 2152,
+   "chars": 2151,
    "head": "1 Executive Summary",
    "tail": "dataset using the same distance-weighted Tversky index.",
    "raw_head": "4",

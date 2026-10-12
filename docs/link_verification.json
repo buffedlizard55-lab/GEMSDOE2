@@ -1,20 +1,63 @@
 {
-  "generated_utc": "2026-10-05T14:36:27+00:00",
-  "generated_by": "scripts/verify_links.py on a host with live HTTP (72 of 84 URLs answered)",
-  "n_urls_reached": 72,
+  "generated_utc": "2026-10-12T15:23:31+00:00",
+  "generated_by": "scripts/verify_links.py on a host with live HTTP (65 of 84 URLs answered)",
+  "n_urls_reached": 65,
   "catalog": "docs/data_catalog.csv",
   "n_rows": 92,
   "n_unique_urls": 84,
   "summary_counts": {
     "BOT_BLOCKED_403": 10,
     "AUTH_REQUIRED": 1,
-    "OK_200": 61,
+    "OK_200": 54,
     "OK_REDIRECTED": 10,
+    "UNREACHABLE": 5,
+    "BROKEN_HTTP_503": 2,
     "OK_202": 1,
     "LOGIN_REQUIRED": 1
   },
-  "n_problems": 0,
-  "problems": [],
+  "n_problems": 7,
+  "problems": [
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
+    },
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?returnCountOnly=true",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
+    },
+    {
+      "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
+    },
+    {
+      "url": "https://github.com/buffedlizard55-lab/GEMSDOE/blob/main/docs/results.html",
+      "status": 503,
+      "result": "BROKEN_HTTP_503"
+    },
+    {
+      "url": "https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb",
+      "status": 503,
+      "result": "BROKEN_HTTP_503"
+    },
+    {
+      "url": "https://mrdata.usgs.gov/earthmri/",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
+    },
+    {
+      "url": "https://mrdata.usgs.gov/gravity/isostatic/",
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
+    }
+  ],
   "n_expected_non_ok": 12,
   "expected_non_ok": [
     {
@@ -141,7 +184,7 @@
       "status": 200,
       "final_url": "https://community.drivendata.org/c/gems-prize-challenge/111",
       "content_type": "text/html",
-      "content_length": 32421,
+      "content_length": 36243,
       "title": "GEMS Prize Challenge - DrivenData Community",
       "redirected": false,
       "redirected_offsite": false,
@@ -181,7 +224,7 @@
       "final_url": "https://gdr.openei.org/submissions/1391",
       "content_type": "text/html",
       "content_length": null,
-      "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
+      "title": "GDR: New Submission",
       "redirected": true,
       "redirected_offsite": true,
       "result": "OK_REDIRECTED_TO_gdr.openei.org"
@@ -276,35 +319,21 @@
     },
     {
       "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
-      "status": 200,
-      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "haz/Qfaults (MapServer)",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
     },
     {
       "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?returnCountOnly=true",
-      "status": 200,
-      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21/query?returnCountOnly=true",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "Query: National Database (ID: 21)",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
     },
     {
       "url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
-      "status": 200,
-      "final_url": "https://earthquake.usgs.gov/arcgis/rest/services/haz/Qfaults/MapServer/21?f=json",
-      "content_type": "application/json",
-      "content_length": null,
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
     },
     {
       "url": "https://gbcge.org/current-projects/ingenious/",
@@ -323,7 +352,7 @@
       "final_url": "https://gdr.openei.org/submissions/1390",
       "content_type": "text/html",
       "content_length": null,
-      "title": "GDR: INGENIOUS Thermal Conductivity Measurement Source Categorization",
+      "title": "GDR: New Submission",
       "redirected": false,
       "redirected_offsite": false,
       "result": "OK_200"
@@ -334,7 +363,7 @@
       "final_url": "https://gdr.openei.org/submissions/1391",
       "content_type": "text/html",
       "content_length": null,
-      "title": "GDR: INGENIOUS - Great Basin Regional Dataset Compilation",
+      "title": "GDR: New Submission",
       "redirected": false,
       "redirected_offsite": false,
       "result": "OK_200"
@@ -362,14 +391,8 @@
     },
     {
       "url": "https://github.com/buffedlizard55-lab/GEMSDOE/blob/main/docs/results.html",
-      "status": 200,
-      "final_url": "https://github.com/buffedlizard55-lab/GEMSDOE/blob/main/docs/results.html",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "GEMSDOE/docs/results.html at main \u00b7 buffedlizard55-lab/GEMSDOE \u00b7 GitHub",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": 503,
+      "result": "BROKEN_HTTP_503"
     },
     {
       "url": "https://github.com/buffedlizard55-lab/GEMSDOE/tree/main/data",
@@ -395,14 +418,8 @@
     },
     {
       "url": "https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb",
-      "status": 200,
-      "final_url": "https://github.com/drivendataorg/gems-prize-reference-solution/blob/main/unet-mc-cv-reference-solution.ipynb",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "gems-prize-reference-solution/unet-mc-cv-reference-solution.ipynb at main \u00b7 drivendataorg/gems-prize-reference-solution \u00b7 GitHub",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": 503,
+      "result": "BROKEN_HTTP_503"
     },
     {
       "url": "https://github.com/jklinck/geothermal_research",
@@ -449,25 +466,15 @@
     },
     {
       "url": "https://mrdata.usgs.gov/earthmri/",
-      "status": 200,
-      "final_url": "https://mrdata.usgs.gov/earthmri/",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "Earth Mapping Resource Initiative: Geoscience data",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
     },
     {
       "url": "https://mrdata.usgs.gov/gravity/isostatic/",
-      "status": 200,
-      "final_url": "https://mrdata.usgs.gov/gravity/isostatic/",
-      "content_type": "text/html",
-      "content_length": null,
-      "title": "Isostatic residual gravity anomaly grid for the conterminous US",
-      "redirected": false,
-      "redirected_offsite": false,
-      "result": "OK_200"
+      "status": null,
+      "result": "UNREACHABLE",
+      "error": "TimeoutError('The read operation timed out')"
     },
     {
       "url": "https://mrdata.usgs.gov/metadata/usgraviso.html",
@@ -744,7 +751,7 @@
       "status": 200,
       "final_url": "https://www.energy.gov/hgeo/geothermal/office-geothermal",
       "content_type": "text/html",
-      "content_length": null,
+      "content_length": 171793,
       "title": "Office of Geothermal | Department of Energy",
       "redirected": false,
       "redirected_offsite": false,
@@ -755,7 +762,7 @@
       "status": 200,
       "final_url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2025.1635344/full",
       "content_type": "text/html",
-      "content_length": 601749,
+      "content_length": 601368,
       "title": "Frontiers | 3D fault detection method using TransVNet",
       "redirected": false,
       "redirected_offsite": false,
@@ -766,7 +773,7 @@
       "status": 200,
       "final_url": "https://www.herox.com/GEMSPrize/resource/2274",
       "content_type": "text/html",
-      "content_length": 93971,
+      "content_length": 93960,
       "title": "GEMS Prize Official Rules",
       "redirected": false,
       "redirected_offsite": false,
