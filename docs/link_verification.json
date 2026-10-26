@@ -1,39 +1,20 @@
 {
-  "generated_utc": "2026-10-19T13:15:00+00:00",
-  "generated_by": "scripts/verify_links.py on a host with live HTTP (69 of 84 URLs answered)",
-  "n_urls_reached": 69,
+  "generated_utc": "2026-10-26T13:00:26+00:00",
+  "generated_by": "scripts/verify_links.py on a host with live HTTP (72 of 84 URLs answered)",
+  "n_urls_reached": 72,
   "catalog": "docs/data_catalog.csv",
   "n_rows": 92,
   "n_unique_urls": 84,
   "summary_counts": {
     "BOT_BLOCKED_403": 10,
     "AUTH_REQUIRED": 1,
-    "OK_200": 58,
+    "OK_200": 60,
     "OK_REDIRECTED": 10,
-    "UNREACHABLE": 1,
-    "OK_202": 1,
-    "BROKEN_HTTP_500": 2,
+    "OK_202": 2,
     "LOGIN_REQUIRED": 1
   },
-  "n_problems": 3,
-  "problems": [
-    {
-      "url": "https://gbcge.org/current-projects/ingenious/",
-      "status": null,
-      "result": "UNREACHABLE",
-      "error": "URLError(TimeoutError('timed out'))"
-    },
-    {
-      "url": "https://pubs.usgs.gov/publication/ds1052",
-      "status": 500,
-      "result": "BROKEN_HTTP_500"
-    },
-    {
-      "url": "https://pubs.usgs.gov/publication/fs20203055",
-      "status": 500,
-      "result": "BROKEN_HTTP_500"
-    }
-  ],
+  "n_problems": 0,
+  "problems": [],
   "n_expected_non_ok": 12,
   "expected_non_ok": [
     {
@@ -160,7 +141,7 @@
       "status": 200,
       "final_url": "https://community.drivendata.org/c/gems-prize-challenge/111",
       "content_type": "text/html",
-      "content_length": 40446,
+      "content_length": 43517,
       "title": "GEMS Prize Challenge - DrivenData Community",
       "redirected": false,
       "redirected_offsite": false,
@@ -327,9 +308,14 @@
     },
     {
       "url": "https://gbcge.org/current-projects/ingenious/",
-      "status": null,
-      "result": "UNREACHABLE",
-      "error": "URLError(TimeoutError('timed out'))"
+      "status": 200,
+      "final_url": "https://gbcge.org/current-projects/ingenious/",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "INGENIOUS project - Great Basin Center for Geothermal Energy",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
     },
     {
       "url": "https://gdr.openei.org/submissions/1390",
@@ -453,11 +439,11 @@
     {
       "url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
       "status": 200,
-      "final_url": "https://link.springer.com/article/10.1007/s12145-026-02224-5",
+      "final_url": "https://link.springer.com/article/10.1007/s12145-026-02224-5?error=cookies_not_supported&code=e50be653-d442-4904-88b1-d0ff1ff4877b",
       "content_type": "text/html",
-      "content_length": 3038,
-      "title": "Client Challenge",
-      "redirected": false,
+      "content_length": null,
+      "title": "A U-Net-based human-in-the-loop semi-supervised iterative approach to vectorizing linear features on archived geological maps | Earth Science Informatics | Springer Nature Link",
+      "redirected": true,
       "redirected_offsite": false,
       "result": "OK_200"
     },
@@ -541,8 +527,8 @@
       "status": 200,
       "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11834046/",
       "content_type": "text/html",
-      "content_length": null,
-      "title": "Checking your browser - reCAPTCHA",
+      "content_length": 149732,
+      "title": "Integrated structural analysis for geothermal exploration: A new protocol combining remote sensing and aeromagnetic geophysical data - PMC",
       "redirected": false,
       "redirected_offsite": false,
       "result": "OK_200"
@@ -590,21 +576,33 @@
     },
     {
       "url": "https://pubs.usgs.gov/publication/ds1052",
-      "status": 500,
-      "result": "BROKEN_HTTP_500"
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/publication/ds1052",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "The State Geologic Map Compilation (SGMC) geodatabase of the conterminous United States",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
     },
     {
       "url": "https://pubs.usgs.gov/publication/fs20203055",
-      "status": 500,
-      "result": "BROKEN_HTTP_500"
+      "status": 200,
+      "final_url": "https://pubs.usgs.gov/publication/fs20203055",
+      "content_type": "text/html",
+      "content_length": null,
+      "title": "Technical overview of the U.S. Geological Survey Earth Mapping Resources Initiative (Earth MRI)",
+      "redirected": false,
+      "redirected_offsite": false,
+      "result": "OK_200"
     },
     {
       "url": "https://pypi.org/project/torch/",
       "status": 200,
       "final_url": "https://pypi.org/project/torch/",
       "content_type": "text/html",
-      "content_length": 3038,
-      "title": "Client Challenge",
+      "content_length": 329493,
+      "title": "torch \u00b7 PyPI",
       "redirected": false,
       "redirected_offsite": false,
       "result": "OK_200"
@@ -757,7 +755,7 @@
       "status": 200,
       "final_url": "https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2025.1635344/full",
       "content_type": "text/html",
-      "content_length": 603185,
+      "content_length": 603184,
       "title": "Frontiers | 3D fault detection method using TransVNet",
       "redirected": false,
       "redirected_offsite": false,
@@ -765,14 +763,13 @@
     },
     {
       "url": "https://www.herox.com/GEMSPrize/resource/2274",
-      "status": 200,
+      "status": 202,
       "final_url": "https://www.herox.com/GEMSPrize/resource/2274",
       "content_type": "text/html",
-      "content_length": 93880,
-      "title": "GEMS Prize Official Rules",
+      "content_length": 0,
       "redirected": false,
       "redirected_offsite": false,
-      "result": "OK_200"
+      "result": "OK_202"
     },
     {
       "url": "https://www.mdpi.com/2072-4292/16/7/1115",
@@ -783,11 +780,11 @@
     {
       "url": "https://www.nature.com/articles/s41598-025-90823-5",
       "status": 200,
-      "final_url": "https://www.nature.com/articles/s41598-025-90823-5",
+      "final_url": "https://www.nature.com/articles/s41598-025-90823-5?error=cookies_not_supported&code=3ff88346-fc02-4d80-a4c9-87aa921c990e",
       "content_type": "text/html",
-      "content_length": 3038,
-      "title": "Client Challenge",
-      "redirected": false,
+      "content_length": null,
+      "title": "The intelligent fault identification method based on multi-source information fusion and deep learning | Scientific Reports",
+      "redirected": true,
       "redirected_offsite": false,
       "result": "OK_200"
     },
